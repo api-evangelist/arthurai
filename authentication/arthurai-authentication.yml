@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/arthur-engine-openapi.json, openapi/arthur-scope-openapi.json
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: API Key
+  type: http
+  scheme: bearer
+  description: Bearer token authentication with an API key
+  sources:
+  - openapi/arthur-engine-openapi.json
+- name: OAuth2AuthorizationCode
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+    tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+    scopes: 0
+  sources:
+  - openapi/arthur-scope-openapi.json
