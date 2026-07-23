@@ -1,0 +1,2491 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Agents V1 API
+  version: 2.1.688
+tags:
+- name: Agents V1
+paths:
+  /api/v1/organization/unregistered_agents:
+    get:
+      tags:
+      - Agents V1
+      summary: List Organization Unregistered Agents
+      description: 'Lists all unregistered agents across every workspace in the organization. Gate-only: unregistered agents have no model to evaluate, so the org permission gate is the entire access boundary. Requires organization_list_unregistered_agents permission.'
+      operationId: list_unregistered_agents_for_organization
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_unregistered_agents
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgentSort'
+          description: The field to sort the agents by.
+          default: created_at
+        description: The field to sort the agents by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter agents by name.
+          title: Name Filter
+        description: Filter agents by name.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by agent IDs.
+          title: Agent Ids
+        description: Filter agents by agent IDs.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by task IDs.
+          title: Task Ids
+        description: Filter agents by task IDs.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter agents that use any of these sub-agent names.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these tool names.
+          title: Tool Names
+        description: Filter agents that use any of these tool names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these llm model names.
+          title: Llm Model Names
+        description: Filter agents that use any of these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these data source URLs.
+          title: Data Source Urls
+        description: Filter agents that use any of these data source URLs.
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter agents that are muted.
+          title: Show Muted
+        description: Filter agents that are muted.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AgentResponse_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/agent_llm_models:
+    get:
+      tags:
+      - Agents V1
+      summary: List Organization Agent Llm Models
+      description: Lists all registered agent LLM models across every workspace in the organization, filtered to agents whose models the caller can read. Requires organization_list_agent_llm_models permission.
+      operationId: list_agent_llm_models_for_organization
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_agent_llm_models
+      parameters:
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the llm models by.
+          default: desc
+        description: The order to sort the llm models by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter llm models by name.
+          title: Name Filter
+        description: Filter llm models by name.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models by their associated agent names.
+          title: Agent Names
+        description: Filter llm models by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models by their associated agent IDs.
+          title: Agent Ids
+        description: Filter llm models by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models by any model IDs their associated agents are attached to.
+          title: Model Ids
+        description: Filter llm models by any model IDs their associated agents are attached to.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models on their associated task IDs.
+          title: Task Ids
+        description: Filter llm models on their associated task IDs.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on their associated tool names.
+          title: Tool Names
+        description: Filter llm models on their associated tool names.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on agents containing any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter llm models on agents containing any of these sub-agent names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on agents containing any of these data source URLs.
+          title: Data Source Urls
+        description: Filter llm models on agents containing any of these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_LLMModel_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/agent_tools:
+    get:
+      tags:
+      - Agents V1
+      summary: List Organization Agent Tools
+      description: Lists all registered agent tools across every workspace in the organization, filtered to agents whose models the caller can read. Requires organization_list_agent_tools permission.
+      operationId: list_agent_tools_for_organization
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_agent_tools
+      parameters:
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the tools by.
+          default: desc
+        description: The order to sort the tools by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools by name.
+          title: Name Filter
+        description: Filter tools by name.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools by their associated agent names.
+          title: Agent Names
+        description: Filter tools by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools by their associated agent IDs.
+          title: Agent Ids
+        description: Filter tools by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools by any model IDs their associated agents use.
+          title: Model Ids
+        description: Filter tools by any model IDs their associated agents use.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools on their associated task IDs.
+          title: Task Ids
+        description: Filter tools on their associated task IDs.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing these sub-agent names.
+          title: Sub Agent Names
+        description: Filter tools on agents containing these sub-agent names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing these llm model names.
+          title: Llm Model Names
+        description: Filter tools on agents containing these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing these data source URLs.
+          title: Data Source Urls
+        description: Filter tools on agents containing these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Tool_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/agents/registered/{agent_id}:
+    get:
+      tags:
+      - Agents V1
+      summary: Get A Registered Agent By Its Id.
+      description: Get a single registered agent by ID. Requires agent_read permission.
+      operationId: get_registered_agent_by_id
+      security:
+      - OAuth2AuthorizationCode:
+        - agent_read
+      parameters:
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Agent Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/agents/unregistered/{agent_id}:
+    patch:
+      tags:
+      - Agents V1
+      summary: Update An Unregistered Agent.
+      description: Update an unregistered agent. Requires unregistered_agent_patch permission.
+      operationId: update_unregistered_agent
+      security:
+      - OAuth2AuthorizationCode:
+        - unregistered_agent_patch
+      parameters:
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Agent Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUnregisteredAgentRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registered:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Agents For A Workspace.
+      description: List all agents for a workspace. Requires workspace_list_agents permission.
+      operationId: list_agents_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgentSort'
+          description: The field to sort the agents by.
+          default: created_at
+        description: The field to sort the agents by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter agents by name.
+          title: Name Filter
+        description: Filter agents by name.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by agent IDs.
+          title: Agent Ids
+        description: Filter agents by agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by model IDs.
+          title: Model Ids
+        description: Filter agents by model IDs.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by task IDs.
+          title: Task Ids
+        description: Filter agents by task IDs.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter agents that use any of these sub-agent names.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these tool names.
+          title: Tool Names
+        description: Filter agents that use any of these tool names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these llm model names.
+          title: Llm Model Names
+        description: Filter agents that use any of these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these data source URLs.
+          title: Data Source Urls
+        description: Filter agents that use any of these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AgentResponse_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Unregistered Agents For A Workspace.
+      description: List all unregistered agents for a workspace. Requires workspace_list_unregistered_agents permission.
+      operationId: list_unregistered_agents_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgentSort'
+          description: The field to sort the agents by.
+          default: created_at
+        description: The field to sort the agents by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter agents by name.
+          title: Name Filter
+        description: Filter agents by name.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by agent IDs.
+          title: Agent Ids
+        description: Filter agents by agent IDs.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents by task IDs.
+          title: Task Ids
+        description: Filter agents by task IDs.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter agents that use any of these sub-agent names.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these tool names.
+          title: Tool Names
+        description: Filter agents that use any of these tool names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these llm model names.
+          title: Llm Model Names
+        description: Filter agents that use any of these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter agents that use any of these data source URLs.
+          title: Data Source Urls
+        description: Filter agents that use any of these data source URLs.
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter agents that are muted.
+          title: Show Muted
+        description: Filter agents that are muted.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AgentResponse_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registered/tools:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Registered Agent Tools For A Workspace.
+      description: List all tools for a workspace. Requires workspace_list_agent_tools permission.
+      operationId: list_tools_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_agent_tools
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools by name.
+          title: Name Filter
+        description: Filter tools by name.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools by their associated agent names.
+          title: Agent Names
+        description: Filter tools by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools by their associated agent IDs.
+          title: Agent Ids
+        description: Filter tools by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools by any model IDs their associated agents are attached to.
+          title: Model Ids
+        description: Filter tools by any model IDs their associated agents are attached to.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter tools on their associated task IDs.
+          title: Task Ids
+        description: Filter tools on their associated task IDs.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter tools on agents containing any of these sub-agent names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing any of these llm model names.
+          title: Llm Model Names
+        description: Filter tools on agents containing any of these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing any of these data source URLs.
+          title: Data Source Urls
+        description: Filter tools on agents containing any of these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Tool_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registered/subagents:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Registered Agent Sub-Agents For A Workspace.
+      description: List all sub-agents for a workspace. Requires workspace_list_agent_sub_agents permission.
+      operationId: list_sub_agents_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_agent_sub_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter sub-agents by name.
+          title: Name Filter
+        description: Filter sub-agents by name.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter sub-agents by their associated agent names.
+          title: Agent Names
+        description: Filter sub-agents by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter sub-agents by their associated agent IDs.
+          title: Agent Ids
+        description: Filter sub-agents by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter sub-agents by any model IDs their associated agents are attached to.
+          title: Model Ids
+        description: Filter sub-agents by any model IDs their associated agents are attached to.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter sub-agents on their associated task IDs.
+          title: Task Ids
+        description: Filter sub-agents on their associated task IDs.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter sub-agents on their associated tool names.
+          title: Tool Names
+        description: Filter sub-agents on their associated tool names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter tools on agents containing any of these llm model names.
+          title: Llm Model Names
+        description: Filter tools on agents containing any of these llm model names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter sub-agents on agents containing any of these data source URLs.
+          title: Data Source Urls
+        description: Filter sub-agents on agents containing any of these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_SubAgent_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registered/llm_models:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Registered Agent Llm Models For A Workspace.
+      description: List all llm models for a workspace. Requires workspace_list_agent_llm_models permission.
+      operationId: list_llm_models_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_agent_llm_models
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter llm models by name.
+          title: Name Filter
+        description: Filter llm models by name.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models by their associated agent names.
+          title: Agent Names
+        description: Filter llm models by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models by their associated agent IDs.
+          title: Agent Ids
+        description: Filter llm models by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models by any model IDs their associated agents are attached to.
+          title: Model Ids
+        description: Filter llm models by any model IDs their associated agents are attached to.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter llm models on their associated task IDs.
+          title: Task Ids
+        description: Filter llm models on their associated task IDs.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on their associated tool names.
+          title: Tool Names
+        description: Filter llm models on their associated tool names.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on agents containing any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter llm models on agents containing any of these sub-agent names.
+      - name: data_source_urls
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter llm models on agents containing any of these data source URLs.
+          title: Data Source Urls
+        description: Filter llm models on agents containing any of these data source URLs.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_LLMModel_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registered/data_sources:
+    get:
+      tags:
+      - Agents V1
+      summary: List All Registered Agent Data Sources For A Workspace.
+      description: List all data sources for a workspace. Requires workspace_list_agent_data_sources permission.
+      operationId: list_data_sources_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_agent_data_sources
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort the agents by.
+          default: desc
+        description: The order to sort the agents by.
+      - name: name_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter data sources by URL.
+          title: Name Filter
+        description: Filter data sources by URL.
+      - name: agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter data sources by their associated agent names.
+          title: Agent Names
+        description: Filter data sources by their associated agent names.
+      - name: agent_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter data sources by their associated agent IDs.
+          title: Agent Ids
+        description: Filter data sources by their associated agent IDs.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter data sources by any model IDs their associated agents are attached to.
+          title: Model Ids
+        description: Filter data sources by any model IDs their associated agents are attached to.
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter data sources on their associated task IDs.
+          title: Task Ids
+        description: Filter data sources on their associated task IDs.
+      - name: tool_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter data sources on their associated tool names.
+          title: Tool Names
+        description: Filter data sources on their associated tool names.
+      - name: sub_agent_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter data sources on agents containing any of these sub-agent names.
+          title: Sub Agent Names
+        description: Filter data sources on agents containing any of these sub-agent names.
+      - name: llm_model_names
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter data sources on agents containing any of these llm model names.
+          title: Llm Model Names
+        description: Filter data sources on agents containing any of these llm model names.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_DataSource_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents:
+    put:
+      tags:
+      - Agents V1
+      summary: Upsert Agents.
+      description: Create or update agents in the workspace. Deduplicates by (workspace_id, data_plane_id, task_id). Performs full replacement on match. Requires workspace_upsert_agents permission.
+      operationId: put_agents
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_upsert_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutAgents'
+              description: Agents to create or update.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutAgentsResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    AgentCreationSource:
+      anyOf:
+      - $ref: '#/components/schemas/GCPAgentCreationSource'
+      - $ref: '#/components/schemas/OTELAgentCreationSource'
+      - $ref: '#/components/schemas/ManualAgentCreationSource'
+      title: AgentCreationSource
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    LLMModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+      type: object
+      required:
+      - name
+      title: LLMModel
+      description: Model used by an agent.
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    ManualAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: MANUAL
+          title: Type
+          default: MANUAL
+      type: object
+      title: ManualAgentCreationSource
+      description: Creation source for manually created tasks.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    ResourceList_SubAgent_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/SubAgent'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[SubAgent]
+    AgentResponse:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when this agent was created.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Timestamp when this agent was last updated.
+        name:
+          type: string
+          title: Name
+          description: Name of the agent.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: UUID of the data plane where this agent was detected.
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: UUID of the associated task.
+        creation_source:
+          $ref: '#/components/schemas/AgentCreationSource'
+          description: Information about how this agent was created.
+        model_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Model Id
+          description: Optional UUID of the model spec associated with this agent.
+        num_spans:
+          type: integer
+          title: Num Spans
+          description: Number of spans associated with this agent.
+          default: 0
+        is_autocreated:
+          type: boolean
+          title: Is Autocreated
+          description: Whether this agent was auto-created from traces.
+          default: true
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: Rules associated with this agent's task.
+        last_fetched:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Fetched
+          description: Last time traces were fetched for this agent's task.
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: Timestamp until which this agent is muted.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Agent ID.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: UUID of the workspace this agent belongs to.
+        tools:
+          items:
+            $ref: '#/components/schemas/ToolResponse'
+          type: array
+          title: Tools
+          description: Tools used by this agent.
+        sub_agents:
+          items:
+            $ref: '#/components/schemas/SubAgentResponse'
+          type: array
+          title: Sub Agents
+          description: Sub-agents used by this agent.
+        llm_models:
+          items:
+            $ref: '#/components/schemas/LLMModelResponse'
+          type: array
+          title: Llm Models
+          description: LLM models used by this agent.
+        data_sources:
+          items:
+            $ref: '#/components/schemas/DataSourceResponse'
+          type: array
+          title: Data Sources
+          description: Data sources used by this agent.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where this agent is running (derived from creation_source).
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - name
+      - data_plane_id
+      - task_id
+      - creation_source
+      - id
+      - workspace_id
+      - infrastructure
+      title: AgentResponse
+      description: 'Response model for a registered agent.
+
+
+        Extends the structure of EnrichedTaskResponse with agent-specific fields
+
+        and database-assigned IDs for nested entities.'
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    PatchUnregisteredAgentRequest:
+      properties:
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: Timestamp to mute the agent until. Setting a timestamp in the past will instantly unmute this agent.
+      type: object
+      title: PatchUnregisteredAgentRequest
+      description: Request body for partially updating an unregistered agent.
+    AgentSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: AgentSort
+    LLMModelResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the LLM model entry.
+        name:
+          type: string
+          title: Name
+          description: Name of the LLM model.
+      type: object
+      required:
+      - id
+      - name
+      title: LLMModelResponse
+      description: Response model for an LLM model with assigned ID.
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    Agent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the agent.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: UUID of the data plane where this agent was detected.
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: UUID of the associated task.
+        creation_source:
+          $ref: '#/components/schemas/AgentCreationSource'
+          description: Information about how this agent was created.
+        model_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Model Id
+          description: Optional UUID of the model spec associated with this agent.
+        num_spans:
+          type: integer
+          title: Num Spans
+          description: Number of spans associated with this agent.
+          default: 0
+        is_autocreated:
+          type: boolean
+          title: Is Autocreated
+          description: Whether this agent was auto-created from traces.
+          default: true
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: Rules associated with this agent's task.
+        last_fetched:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Fetched
+          description: Last time traces were fetched for this agent's task.
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: Timestamp until which this agent is muted.
+        tools:
+          items:
+            $ref: '#/components/schemas/Tool'
+          type: array
+          title: Tools
+          description: Tools used by this agent.
+        sub_agents:
+          items:
+            $ref: '#/components/schemas/SubAgent'
+          type: array
+          title: Sub Agents
+          description: Sub-agents used by this agent.
+        llm_models:
+          items:
+            $ref: '#/components/schemas/LLMModel'
+          type: array
+          title: Llm Models
+          description: LLM models used by this agent.
+        data_sources:
+          items:
+            $ref: '#/components/schemas/DataSource'
+          type: array
+          title: Data Sources
+          description: Data sources used by this agent.
+      type: object
+      required:
+      - name
+      - data_plane_id
+      - task_id
+      - creation_source
+      title: Agent
+      description: Request model for agent upsert - nested entities without IDs.
+    DataSourceResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data source entry.
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - id
+      - url
+      title: DataSourceResponse
+      description: Response model for a data source with assigned ID.
+    ResourceList_LLMModel_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/LLMModel'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[LLMModel]
+    ResourceList_Tool_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Tool'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Tool]
+    PutAgents:
+      properties:
+        agents:
+          items:
+            $ref: '#/components/schemas/Agent'
+          type: array
+          title: Agents
+          description: List of agents to create or update.
+      type: object
+      required:
+      - agents
+      title: PutAgents
+      description: Request body for creating or updating agents.
+    DataSource:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - url
+      title: DataSource
+      description: Data source used by an agent.
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ToolArgument:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - name
+      - type
+      title: ToolArgument
+      description: Argument definition for a tool.
+    SubAgent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - name
+      title: SubAgent
+      description: Sub-agent definition.
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    SubAgentResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the sub-agent.
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - id
+      - name
+      title: SubAgentResponse
+      description: Response model for a sub-agent with assigned ID.
+    ToolArgumentResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the tool argument.
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - id
+      - name
+      - type
+      title: ToolArgumentResponse
+      description: Response model for a tool argument with assigned ID.
+    OTELAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: OTEL
+          title: Type
+          default: OTEL
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      title: OTELAgentCreationSource
+      description: Creation source for OTEL-discovered agents (auto-created from traces).
+    PutAgentsResponse:
+      properties:
+        agents:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Agents
+          description: List of agents that were created or updated.
+      type: object
+      required:
+      - agents
+      title: PutAgentsResponse
+      description: Response body for creating or updating agents.
+    ResourceList_AgentResponse_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AgentResponse]
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    Tool:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgument'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - name
+      title: Tool
+      description: Tool definition with arguments.
+    ToolResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the tool.
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgumentResponse'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - id
+      - name
+      title: ToolResponse
+      description: Response model for a tool with assigned ID.
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ResourceList_DataSource_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DataSource'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataSource]
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    GCPAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: GCP
+          title: Type
+          default: GCP
+        gcp_project_id:
+          type: string
+          title: Gcp Project Id
+          description: GCP project ID
+        gcp_region:
+          type: string
+          title: Gcp Region
+          description: GCP region
+        gcp_reasoning_engine_id:
+          type: string
+          title: Gcp Reasoning Engine Id
+          description: GCP Vertex AI Reasoning Engine ID
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      required:
+      - gcp_project_id
+      - gcp_region
+      - gcp_reasoning_engine_id
+      title: GCPAgentCreationSource
+      description: Creation source for GCP-discovered agents.
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,1727 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Datasets V1 API
+  version: 2.1.688
+tags:
+- name: Datasets V1
+paths:
+  /api/v1/connectors/{connector_id}/datasets:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Datasets By Connector Id
+      description: Returns a list of configured datasets for the connector. Requires connector_list_datasets permission.
+      operationId: get_connector_datasets
+      security:
+      - OAuth2AuthorizationCode:
+        - connector_list_datasets
+      parameters:
+      - name: connector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Connector Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Dataset_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Datasets V1
+      summary: Create Connector Dataset
+      description: Create connector dataset. Requires connector_create_dataset permission.
+      operationId: post_connector_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - connector_create_dataset
+      parameters:
+      - name: connector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Connector Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDataset'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/connectors/{connector_id}/available_datasets:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Available Datasets By Connector Id
+      description: Returns a list of available datasets for the connector. Requires connector_list_available_datasets permission.
+      operationId: get_connector_available_datasets
+      security:
+      - OAuth2AuthorizationCode:
+        - connector_list_available_datasets
+      parameters:
+      - name: connector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Connector Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AvailableDatasetsSort'
+          description: The field to sort by.
+          default: created_at
+        description: The field to sort by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort by.
+          default: desc
+        description: The order to sort by.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search term to filter by.
+          title: Search
+        description: Search term to filter by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AvailableDataset_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Datasets V1
+      summary: Overwrite Connector Available Datasets
+      description: Overwrite all available datasets for this connector. Requires connector_put_available_datasets permission.
+      operationId: put_connector_available_datasets
+      security:
+      - OAuth2AuthorizationCode:
+        - connector_put_available_datasets
+      parameters:
+      - name: connector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Connector Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutAvailableDatasets'
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Datasets V1
+      summary: Create Single Available Dataset
+      description: Create a single available dataset for this connector. Requires connector_create_available_datasetpermission.
+      operationId: post_available_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - connector_create_available_dataset
+      parameters:
+      - name: connector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Connector Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutAvailableDataset'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/datasets/{dataset_id}:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Dataset By Id
+      description: Returns a single dataset by ID. Requires dataset_read permission.
+      operationId: get_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_read
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Datasets V1
+      summary: Update Dataset
+      description: Update a dataset. Requires dataset_update permission.
+      operationId: patch_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_update
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchDataset'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Datasets V1
+      summary: Delete Dataset
+      description: Delete a dataset. Requires dataset_delete permission.
+      operationId: delete_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_delete
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      responses:
+        '204':
+          description: No Content
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/datasets/{dataset_id}/schema:
+    put:
+      tags:
+      - Datasets V1
+      summary: Update Dataset Schema
+      description: Update a dataset schema. Requires dataset_put_schema permission.
+      operationId: put_dataset_schema
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_put_schema
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutDatasetSchema'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/datasets:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Workspace Datasets.
+      description: Endpoint requires workspace_list_datasets permission. It will only include datasets the user has additional dataset_read permissions on in the response.
+      operationId: get_datasets_in_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_datasets
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/DatasetsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: created_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter the results for datasets that are used by these models. Optional.
+          title: Model Ids
+        description: Filter the results for datasets that are used by these models. Optional.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search for datasets by connector name or dataset name.
+          title: Search
+        description: Search for datasets by connector name or dataset name.
+      - name: connector_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorType'
+          - type: 'null'
+          description: Filter datasets by connector type.
+          title: Connector Type
+        description: Filter datasets by connector type.
+      - name: connector_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter datasets by connector name.
+          title: Connector Name
+        description: Filter datasets by connector name.
+      - name: dataset_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter datasets by dataset name.
+          title: Dataset Name
+        description: Filter datasets by dataset name.
+      - name: joined_datasets
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None.
+          title: Joined Datasets
+        description: Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None.
+      - name: data_plane_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter datasets by the data plane (engine) that backs them.
+          title: Data Plane Id
+        description: Filter datasets by the data plane (engine) that backs them.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Dataset_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/datasets:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Datasets
+      description: Returns a list of configured datasets. Requires project_list_datasets permission.
+      operationId: get_datasets
+      security:
+      - OAuth2AuthorizationCode:
+        - project_list_datasets
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/DatasetsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: created_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: model_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter the results for datasets that are used by these models. Optional.
+          title: Model Ids
+        description: Filter the results for datasets that are used by these models. Optional.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search for datasets by connector name or dataset name.
+          title: Search
+        description: Search for datasets by connector name or dataset name.
+      - name: connector_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorType'
+          - type: 'null'
+          description: Filter datasets by connector type.
+          title: Connector Type
+        description: Filter datasets by connector type.
+      - name: connector_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter datasets by connector name.
+          title: Connector Name
+        description: Filter datasets by connector name.
+      - name: dataset_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter datasets by dataset name.
+          title: Dataset Name
+        description: Filter datasets by dataset name.
+      - name: joined_datasets
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None.
+          title: Joined Datasets
+        description: Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None.
+      - name: data_plane_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter datasets by the data plane (engine) that backs them.
+          title: Data Plane Id
+        description: Filter datasets by the data plane (engine) that backs them.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Dataset_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Datasets V1
+      summary: Create Project Dataset
+      description: Create project dataset. Requires project_create_dataset permission.
+      operationId: post_project_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_dataset
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDataset'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/available_datasets:
+    post:
+      tags:
+      - Datasets V1
+      summary: Create Project Available Dataset
+      description: Create project dataset. Requires project_create_available_dataset permission.
+      operationId: post_project_available_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_available_dataset
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutAvailableDataset'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/available_datasets/{available_dataset_id}:
+    get:
+      tags:
+      - Datasets V1
+      summary: Get Available Dataset By Id
+      description: Returns a single available dataset by ID. Requires available_dataset_read permission.
+      operationId: get_available_dataset
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_read
+      parameters:
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/available_datasets/{available_dataset_id}/schema:
+    put:
+      tags:
+      - Datasets V1
+      summary: Update Available Dataset Schema
+      description: Update a single available dataset schema. Requires available_dataset_put_schema permission.
+      operationId: put_available_dataset_schema
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_put_schema
+      parameters:
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutDatasetSchema'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDataset'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ResourceList_AvailableDataset_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AvailableDataset'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AvailableDataset]
+    JoinedDataset:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of dataset.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of dataset.
+        column_id:
+          type: string
+          format: uuid
+          title: Column Id
+          description: Column ID to use as the join key.
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column used as join key.
+      type: object
+      required:
+      - id
+      - name
+      - column_id
+      - column_name
+      title: JoinedDataset
+    AvailableDataset:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the available dataset.
+        connector_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connector Id
+          description: Connector ID associated with the dataset.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of parent project.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane backing this dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetSchema'
+          - type: 'null'
+          description: Schema definition of the dataset.
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type associated with the dataset.
+        join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        is_static:
+          type: boolean
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+          default: false
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - project_id
+      - data_plane_id
+      title: AvailableDataset
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PostDatasetJoinSpec:
+      properties:
+        left_dataset_id:
+          type: string
+          format: uuid
+          title: Left Dataset Id
+          description: ID of the first dataset.
+        right_dataset_id:
+          type: string
+          format: uuid
+          title: Right Dataset Id
+          description: ID of the second dataset.
+        left_dataset_join_key:
+          type: string
+          format: uuid
+          title: Left Dataset Join Key
+          description: Column ID from the left dataset to use as a join key.
+        right_dataset_join_key:
+          type: string
+          format: uuid
+          title: Right Dataset Join Key
+          description: Column ID from the right dataset to use as a join key.
+        join_type:
+          $ref: '#/components/schemas/DatasetJoinKind'
+          description: Kind of SQL join to perform
+          default: left_outer
+      type: object
+      required:
+      - left_dataset_id
+      - right_dataset_id
+      - left_dataset_join_key
+      - right_dataset_join_key
+      title: PostDatasetJoinSpec
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DatasetSchema:
+      properties:
+        alias_mask:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Alias Mask
+        columns:
+          items:
+            $ref: '#/components/schemas/DatasetColumn'
+          type: array
+          title: Columns
+        column_names:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Column Names
+          readOnly: true
+      type: object
+      required:
+      - alias_mask
+      - columns
+      - column_names
+      title: DatasetSchema
+    DatasetLocator:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/DatasetLocatorField'
+          type: array
+          title: Fields
+          description: Fields directing to the location of the dataset within the connector. Schema defined on connector schema.
+      type: object
+      required:
+      - fields
+      title: DatasetLocator
+    ResourceList_Dataset_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Dataset'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Dataset]
+    DatasetJoinKind:
+      type: string
+      enum:
+      - inner
+      - left_outer
+      - outer
+      - right_outer
+      title: DatasetJoinKind
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PutAvailableDataset:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          anyOf:
+          - $ref: '#/components/schemas/PutDatasetSchema'
+          - type: 'null'
+          description: Schema definition of the dataset.
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type associated with the dataset.
+        dataset_join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/PostDatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        is_static:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+      type: object
+      title: PutAvailableDataset
+    DatasetsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      title: DatasetsSort
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    AvailableDatasetsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - name
+      title: AvailableDatasetsSort
+    DatasetObjectType:
+      properties:
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          default: []
+        nullable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Nullable
+          default: true
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the schema node.
+        object:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/DatasetScalarType'
+            - $ref: '#/components/schemas/DatasetObjectType'
+            - $ref: '#/components/schemas/DatasetListType'
+          type: object
+          title: Object
+      type: object
+      required:
+      - object
+      title: DatasetObjectType
+    DType:
+      type: string
+      enum:
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
+    PatchDataset:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/PatchDatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type associated with the dataset.
+      type: object
+      title: PatchDataset
+    DatasetLocatorField:
+      properties:
+        key:
+          type: string
+          title: Key
+          description: Name of dataset locator field.
+        value:
+          type: string
+          title: Value
+          description: Value of dataset locator field.
+      type: object
+      required:
+      - key
+      - value
+      title: DatasetLocatorField
+    DatasetConnector:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Connector ID associated with the dataset.
+        name:
+          type: string
+          title: Name
+          description: Connector name associated with the dataset.
+        connector_type:
+          $ref: '#/components/schemas/ConnectorType'
+          description: Type of connector associated with the dataset.
+      type: object
+      required:
+      - id
+      - name
+      - connector_type
+      title: DatasetConnector
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    PostDataset:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          anyOf:
+          - $ref: '#/components/schemas/PutDatasetSchema'
+          - type: 'null'
+          description: Schema definition of the dataset.
+        dataset_join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/PostDatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        model_problem_type:
+          $ref: '#/components/schemas/ModelProblemType'
+          description: Model problem type associated with the dataset.
+        is_static:
+          type: boolean
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+          default: false
+      type: object
+      required:
+      - model_problem_type
+      title: PostDataset
+    PutDatasetSchema:
+      properties:
+        alias_mask:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Alias Mask
+        columns:
+          items:
+            $ref: '#/components/schemas/DatasetColumn'
+          type: array
+          title: Columns
+      type: object
+      required:
+      - alias_mask
+      - columns
+      title: PutDatasetSchema
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
+    Dataset:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the dataset.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          $ref: '#/components/schemas/DatasetSchema'
+          description: Schema definition of the dataset.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane backing this dataset.
+        connector:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetConnector'
+          - type: 'null'
+          description: Connector associated with the dataset.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of parent project.
+        join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        model_problem_type:
+          $ref: '#/components/schemas/ModelProblemType'
+          description: Model problem type associated with the dataset.
+        is_static:
+          type: boolean
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+          default: false
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - dataset_locator
+      - dataset_schema
+      - data_plane_id
+      - project_id
+      - model_problem_type
+      title: Dataset
+    DatasetColumn:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the column.
+        source_name:
+          type: string
+          title: Source Name
+        definition:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetScalarType'
+          - $ref: '#/components/schemas/DatasetObjectType'
+          - $ref: '#/components/schemas/DatasetListType'
+          title: Definition
+      type: object
+      required:
+      - source_name
+      - definition
+      title: DatasetColumn
+    DatasetJoinSpec:
+      properties:
+        left_joined_dataset:
+          $ref: '#/components/schemas/JoinedDataset'
+          description: Left dataset in the join.
+        right_joined_dataset:
+          $ref: '#/components/schemas/JoinedDataset'
+          description: Right dataset in the join.
+        join_type:
+          $ref: '#/components/schemas/DatasetJoinKind'
+          description: Kind of SQL join to perform
+          default: left_outer
+      type: object
+      required:
+      - left_joined_dataset
+      - right_joined_dataset
+      title: DatasetJoinSpec
+    DatasetListType:
+      properties:
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          default: []
+        nullable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Nullable
+          default: true
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the schema node.
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetScalarType'
+          - $ref: '#/components/schemas/DatasetObjectType'
+          - $ref: '#/components/schemas/DatasetListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: DatasetListType
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    PatchDatasetLocator:
+      properties:
+        fields:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DatasetLocatorField'
+            type: array
+          - type: 'null'
+          title: Fields
+          description: Fields directing to the location of the dataset within the connector. Schema defined on connector schema.
+      type: object
+      title: PatchDatasetLocator
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    DatasetScalarType:
+      properties:
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          default: []
+        nullable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Nullable
+          default: true
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the schema node.
+        dtype:
+          $ref: '#/components/schemas/DType'
+      type: object
+      required:
+      - dtype
+      title: DatasetScalarType
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+    PutAvailableDatasets:
+      properties:
+        available_datasets:
+          items:
+            $ref: '#/components/schemas/PutAvailableDataset'
+          type: array
+          title: Available Datasets
+          description: List of available datasets to overwrite.
+      type: object
+      required:
+      - available_datasets
+      title: PutAvailableDatasets
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,1212 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Alerts V1 API
+  version: 2.1.688
+tags:
+- name: Alerts V1
+paths:
+  /api/v1/models/{model_id}/alerts:
+    get:
+      tags:
+      - Alerts V1
+      summary: Get Model Alerts
+      description: Returns a list of alerts associated with a model. Requires model_list_alerts permission.
+      operationId: get_model_alerts
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_alerts
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertSort'
+          description: The field to sort by.
+          default: timestamp
+        description: The field to sort by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort by.
+          default: desc
+        description: The order to sort by.
+      - name: alert_rule_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The ID of the alert rule to filter by.
+          title: Alert Rule Ids
+        description: The ID of the alert rule to filter by.
+      - name: bound
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound to filter by.
+        description: The bound to filter by.
+      - name: time_from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The start timestamp to filter by.
+          title: Time From
+        description: The start timestamp to filter by.
+      - name: time_to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The end timestamp to filter by.
+          title: Time To
+        description: The end timestamp to filter by.
+      - name: created_at_from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter alerts created at or after this timestamp.
+          title: Created At From
+        description: Filter alerts created at or after this timestamp.
+      - name: created_at_to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter alerts created at or before this timestamp.
+          title: Created At To
+        description: Filter alerts created at or before this timestamp.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfiniteResourceList_Alert_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Alerts V1
+      summary: Create Model Alerts
+      description: Creates a list of alerts associated with a model. Requires model_create_alert permission.
+      operationId: post_model_alerts
+      security:
+      - OAuth2AuthorizationCode:
+        - model_create_alert
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAlerts'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedAlerts'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/alert_logs:
+    post:
+      tags:
+      - Alerts V1
+      summary: Create Model Alert Logs
+      description: Creates alert rule evaluation logs for a model. Requires model_create_alert permission.
+      operationId: post_model_alert_logs
+      security:
+      - OAuth2AuthorizationCode:
+        - model_create_alert
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAlertLogs'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AlertLog_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Alerts V1
+      summary: Get Model Alert Logs
+      description: Returns alert rule evaluation logs for a model. Requires model_list_alerts permission.
+      operationId: get_model_alert_logs
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_alerts
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: alert_rule_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter by alert rule ID.
+          title: Alert Rule Id
+        description: Filter by alert rule ID.
+      - name: status
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertLogStatus'
+          description: Filter by status.
+        description: Filter by status.
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter logs with bucket timestamp at or after this time.
+          title: Start Time
+        description: Filter logs with bucket timestamp at or after this time.
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter logs with bucket timestamp at or before this time.
+          title: End Time
+        description: Filter logs with bucket timestamp at or before this time.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AlertLog_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/alerts:
+    get:
+      tags:
+      - Alerts V1
+      summary: Get Workspace Alerts.
+      description: Returns alerts from all models in the workspace matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires workspace_list_alerts permission.
+      operationId: get_alerts_in_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_alerts
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: timestamp
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: alert_rule_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The ID of the alert rule to filter by.
+          title: Alert Rule Ids
+        description: The ID of the alert rule to filter by.
+      - name: bound
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound to filter by.
+        description: The bound to filter by.
+      - name: time_from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The start timestamp to filter by.
+          title: Time From
+        description: The start timestamp to filter by.
+      - name: time_to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The end timestamp to filter by.
+          title: Time To
+        description: The end timestamp to filter by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfiniteResourceList_Alert_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/alerts/grouped:
+    get:
+      tags:
+      - Alerts V1
+      summary: Get Workspace Alerts Grouped.
+      description: Returns alerts from all models in the workspace grouped by alert rule. Supports pagination and time range filtering with a default of the last 7 days. Requires workspace_list_alerts permission.
+      operationId: get_grouped_alerts_in_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_alerts
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: timestamp
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: alert_rule_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The ID of the alert rule to filter by.
+          title: Alert Rule Ids
+        description: The ID of the alert rule to filter by.
+      - name: bound
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound to filter by.
+        description: The bound to filter by.
+      - name: time_from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The start timestamp to filter by. Defaults to 7 days ago if not specified.
+          title: Time From
+        description: The start timestamp to filter by. Defaults to 7 days ago if not specified.
+      - name: time_to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: The end timestamp to filter by. Defaults to now if not specified.
+          title: Time To
+        description: The end timestamp to filter by. Defaults to now if not specified.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfiniteResourceList_AlertGroup_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/alerts/{alert_id}:
+    get:
+      tags:
+      - Alerts V1
+      summary: Get Alert By Id
+      description: Returns a single alert by ID. Requires model_alert_read permission.
+      operationId: get_alert
+      security:
+      - OAuth2AuthorizationCode:
+        - model_alert_read
+      parameters:
+      - name: alert_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Alert Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ResourceList_AlertLog_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AlertLog'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AlertLog]
+    InfiniteResourceList_AlertGroup_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AlertGroup'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/InfinitePagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: InfiniteResourceList[AlertGroup]
+    PostAlert:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: The timestamp of the alert.
+        value:
+          type: number
+          title: Value
+          description: The value of the metric that triggered the alert.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that triggered the alert.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        dimensions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Dimensions
+          description: The dimensions of the alert.
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The alert rule id of the alert.
+        job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+          description: The job id that triggered the alert.
+      type: object
+      required:
+      - description
+      - timestamp
+      - value
+      - threshold
+      - bound
+      - interval
+      - dimensions
+      - alert_rule_id
+      title: PostAlert
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreatedAlerts:
+      properties:
+        alerts:
+          items:
+            $ref: '#/components/schemas/Alert'
+          type: array
+          title: Alerts
+          description: The list of created alerts.
+        webhooks_called:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AlertWebhookCalled'
+            type: array
+          - type: 'null'
+          title: Webhooks Called
+          description: The list of webhooks that were triggered by the alerts.
+      type: object
+      required:
+      - alerts
+      title: CreatedAlerts
+    AlertLog:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the alert log entry.
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The ID of the alert rule that was evaluated.
+        model_id:
+          type: string
+          format: uuid
+          title: Model Id
+          description: The ID of the model this evaluation belongs to.
+        job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+          description: The ID of the job that triggered this evaluation.
+        policy_model_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Model Assignment Id
+          description: The ID of the policy model assignment, if this is a policy-managed alert rule.
+        status:
+          $ref: '#/components/schemas/AlertLogStatus'
+          description: The outcome of the alert rule evaluation.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Start timestamp of the evaluation bucket this log covers.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - alert_rule_id
+      - model_id
+      - status
+      - timestamp
+      title: AlertLog
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    InfiniteResourceList_Alert_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Alert'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/InfinitePagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: InfiniteResourceList[Alert]
+    AlertGroup:
+      properties:
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The ID of the alert rule.
+        alert_rule_name:
+          type: string
+          title: Alert Rule Name
+          description: The name of the alert rule.
+        count:
+          type: integer
+          title: Count
+          description: The number of alerts in this group.
+        latest_timestamp:
+          type: string
+          format: date-time
+          title: Latest Timestamp
+          description: The timestamp of the newest alert in this group.
+        model_id:
+          type: string
+          format: uuid
+          title: Model Id
+          description: The model ID associated with this alert rule.
+        model_name:
+          type: string
+          title: Model Name
+          description: The name of the model associated with this alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        alerts:
+          items:
+            $ref: '#/components/schemas/Alert'
+          type: array
+          title: Alerts
+          description: The list of alerts in this group.
+      type: object
+      required:
+      - alert_rule_id
+      - alert_rule_name
+      - count
+      - latest_timestamp
+      - model_id
+      - model_name
+      - bound
+      - alerts
+      title: AlertGroup
+    Alert:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: The timestamp of the alert.
+        value:
+          type: number
+          title: Value
+          description: The value of the metric that triggered the alert.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that triggered the alert.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        dimensions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Dimensions
+          description: The dimensions of the alert.
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The alert rule id of the alert.
+        job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+          description: The job id that triggered the alert.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The id of the alert.
+        model_id:
+          type: string
+          format: uuid
+          title: Model Id
+          description: The model id of the alert.
+        alert_rule_name:
+          type: string
+          title: Alert Rule Name
+          description: The name of the alert rule.
+        alert_rule_metric_name:
+          type: string
+          title: Alert Rule Metric Name
+          description: The name of the metric returned by the alert rule query.
+        is_duplicate_of:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Is Duplicate Of
+          description: The id of the alert this alert is a duplicate of, if any. Duplicate alerts will not be saved.
+      type: object
+      required:
+      - description
+      - timestamp
+      - value
+      - threshold
+      - bound
+      - interval
+      - dimensions
+      - alert_rule_id
+      - created_at
+      - updated_at
+      - id
+      - model_id
+      - alert_rule_name
+      - alert_rule_metric_name
+      title: Alert
+    AlertWebhookCalled:
+      properties:
+        webhook_id:
+          type: string
+          format: uuid
+          title: Webhook Id
+          description: The id of the webhook that was triggered by the alert.
+        webhook_name:
+          type: string
+          title: Webhook Name
+          description: The name of the webhook.
+        webhook_result:
+          $ref: '#/components/schemas/WebhookResult'
+          description: The result of the webhook call.
+      type: object
+      required:
+      - webhook_id
+      - webhook_name
+      - webhook_result
+      title: AlertWebhookCalled
+    InfinitePagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+      type: object
+      title: InfinitePagination
+    PostAlerts:
+      properties:
+        alerts:
+          items:
+            $ref: '#/components/schemas/PostAlert'
+          type: array
+          minItems: 1
+          title: Alerts
+          description: The list of alerts to create.
+      type: object
+      required:
+      - alerts
+      title: PostAlerts
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    AlertSort:
+      type: string
+      enum:
+      - created_at
+      - timestamp
+      title: AlertSort
+    PostAlertLogs:
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/PostAlertLog'
+          type: array
+          title: Logs
+          description: The list of alert rule evaluation logs to create.
+      type: object
+      required:
+      - logs
+      title: PostAlertLogs
+    PostAlertLog:
+      properties:
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The ID of the alert rule that was evaluated.
+        job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+          description: The ID of the job that triggered this evaluation.
+        policy_model_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Model Assignment Id
+          description: The ID of the policy model assignment, if this is a policy-managed alert rule.
+        status:
+          $ref: '#/components/schemas/AlertLogStatus'
+          description: The outcome of the alert rule evaluation.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Start timestamp of the evaluation bucket this log covers.
+      type: object
+      required:
+      - alert_rule_id
+      - status
+      - timestamp
+      title: PostAlertLog
+    WebhookResult:
+      properties:
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        response:
+          anyOf:
+          - $ref: '#/components/schemas/WebhookResponse'
+          - type: 'null'
+      type: object
+      required:
+      - error
+      - response
+      title: WebhookResult
+    AlertBound:
+      type: string
+      enum:
+      - upper_bound
+      - lower_bound
+      title: AlertBound
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    WebhookResponse:
+      properties:
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+        response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Response
+      type: object
+      required:
+      - status_code
+      - response
+      title: WebhookResponse
+    AlertLogStatus:
+      type: string
+      enum:
+      - fired
+      - okay
+      - no_data
+      title: AlertLogStatus
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,553 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Task Based Validation API
+  version: 2.1.688
+  description: Endpoints to validate prompt and response for a task
+tags:
+- name: Task Based Validation
+  description: Endpoints to validate prompt and response for a task
+paths:
+  /api/v2/tasks/{task_id}/validate_prompt:
+    post:
+      tags:
+      - Task Based Validation
+      summary: Validate Prompt Endpoint
+      description: 'Validate a prompt based on the configured rules for this task. Note: Rules related to specific tasks are cached for 60 seconds.'
+      operationId: validate_prompt_endpoint_api_v2_tasks__task_id__validate_prompt_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: traceparent
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional W3C traceparent header. When supplied, the emitted guardrail span joins that trace, nested under its parent span; otherwise a trace is derived from the inference ID. OpenTelemetry-instrumented callers send this automatically.
+          title: Traceparent
+        description: Optional W3C traceparent header. When supplied, the emitted guardrail span joins that trace, nested under its parent span; otherwise a trace is derived from the inference ID. OpenTelemetry-instrumented callers send this automatically.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptValidationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/validate_response/{inference_id}:
+    post:
+      tags:
+      - Task Based Validation
+      summary: Validate Response Endpoint
+      description: 'Validate a response based on the configured rules for this task. Inference ID corresponds to the previously validated associated prompt’s inference id. Must provide context if a Hallucination Rule is an enabled task rule. Note: Rules related to specific tasks are cached for 60 seconds.'
+      operationId: validate_response_endpoint_api_v2_tasks__task_id__validate_response__inference_id__post
+      security:
+      - API Key: []
+      parameters:
+      - name: inference_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Inference Id
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: traceparent
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional W3C traceparent header. When supplied, the emitted guardrail span joins that trace, nested under its parent span; otherwise it joins the trace derived from the inference ID, under its prompt span. OpenTelemetry-instrumented callers send this automatically.
+          title: Traceparent
+        description: Optional W3C traceparent header. When supplied, the emitted guardrail span joins that trace, nested under its parent span; otherwise it joins the trace derived from the inference ID, under its prompt span. OpenTelemetry-instrumented callers send this automatically.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseValidationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HallucinationClaimResponse:
+      properties:
+        claim:
+          type: string
+          title: Claim
+        valid:
+          type: boolean
+          title: Valid
+        reason:
+          type: string
+          title: Reason
+        order_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order Number
+          description: This field is a helper for ordering the claims
+          default: -1
+      type: object
+      required:
+      - claim
+      - valid
+      - reason
+      title: HallucinationClaimResponse
+    KeywordDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        keyword_matches:
+          items:
+            $ref: '#/components/schemas/KeywordSpanResponse'
+          type: array
+          title: Keyword Matches
+          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
+          default: []
+      additionalProperties: false
+      type: object
+      title: KeywordDetailsResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    HTTPError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: HTTPError
+      example:
+        detail: HTTPException raised.
+    HallucinationDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        claims:
+          items:
+            $ref: '#/components/schemas/HallucinationClaimResponse'
+          type: array
+          title: Claims
+      type: object
+      required:
+      - claims
+      title: HallucinationDetailsResponse
+    RuleResultEnum:
+      type: string
+      enum:
+      - Pass
+      - Fail
+      - Skipped
+      - Unavailable
+      - Partially Unavailable
+      - Model Not Available
+      title: RuleResultEnum
+    BaseDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      title: BaseDetailsResponse
+    PromptValidationRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+          description: Prompt to be validated by GenAI Engine
+        conversation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Conversation Id
+          description: The unique conversation ID this prompt belongs to. All prompts and responses from this         conversation can later be reconstructed with this ID.
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: The user ID this prompt belongs to
+      type: object
+      required:
+      - prompt
+      title: PromptValidationRequest
+    ResponseValidationRequest:
+      properties:
+        response:
+          type: string
+          title: Response
+          description: LLM Response to be validated by GenAI Engine
+        context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Context
+          description: Optional data provided as context for the validation.
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version being used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      required:
+      - response
+      title: ResponseValidationRequest
+    PIIEntityTypes:
+      type: string
+      enum:
+      - CREDIT_CARD
+      - CRYPTO
+      - DATE_TIME
+      - EMAIL_ADDRESS
+      - IBAN_CODE
+      - IP_ADDRESS
+      - NRP
+      - LOCATION
+      - PERSON
+      - PHONE_NUMBER
+      - MEDICAL_LICENSE
+      - URL
+      - US_BANK_NUMBER
+      - US_DRIVER_LICENSE
+      - US_ITIN
+      - US_PASSPORT
+      - US_SSN
+      title: PIIEntityTypes
+    ToxicityViolationType:
+      type: string
+      enum:
+      - benign
+      - harmful_request
+      - toxic_content
+      - profanity
+      - unknown
+      title: ToxicityViolationType
+    RegexDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        regex_matches:
+          items:
+            $ref: '#/components/schemas/RegexSpanResponse'
+          type: array
+          title: Regex Matches
+          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
+          default: []
+      additionalProperties: false
+      type: object
+      title: RegexDetailsResponse
+    KeywordSpanResponse:
+      properties:
+        keyword:
+          type: string
+          title: Keyword
+          description: The keyword from the rule that matched within the input string.
+      type: object
+      required:
+      - keyword
+      title: KeywordSpanResponse
+    ExternalRuleResult:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the rule'
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+        rule_type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of the rule
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+          description: Result if the rule
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Duration in millisesconds of rule execution
+        details:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordDetailsResponse'
+          - $ref: '#/components/schemas/RegexDetailsResponse'
+          - $ref: '#/components/schemas/HallucinationDetailsResponse'
+          - $ref: '#/components/schemas/PIIDetailsResponse'
+          - $ref: '#/components/schemas/ToxicityDetailsResponse'
+          - $ref: '#/components/schemas/BaseDetailsResponse'
+          - type: 'null'
+          title: Details
+          description: Details of the rule output
+      type: object
+      required:
+      - id
+      - name
+      - rule_type
+      - scope
+      - result
+      - latency_ms
+      title: ExternalRuleResult
+      example:
+        id: 90f18c69-d793-4913-9bde-a0c7f3643de0
+        name: PII Rule
+        result: Pass
+    RegexSpanResponse:
+      properties:
+        matching_text:
+          type: string
+          title: Matching Text
+          description: The subtext within the input string that matched the regex rule.
+        pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern
+          description: Pattern that yielded the match.
+      type: object
+      required:
+      - matching_text
+      title: RegexSpanResponse
+    PIIDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        pii_entities:
+          items:
+            $ref: '#/components/schemas/PIIEntitySpanResponse'
+          type: array
+          title: Pii Entities
+      type: object
+      required:
+      - pii_entities
+      title: PIIDetailsResponse
+    ValidationResult:
+      properties:
+        inference_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inference Id
+          description: ID of the inference
+        rule_results:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ExternalRuleResult'
+            type: array
+          - type: 'null'
+          title: Rule Results
+          description: List of rule results
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: The user ID this prompt belongs to
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version used for this validation (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      title: ValidationResult
+      example:
+        inference_id: 4dd1fae1-34b9-4aec-8abe-fe7bf12af31d
+        rule_results:
+        - id: 90f18c69-d793-4913-9bde-a0c7f3643de0
+          name: PII Check
+          result: Pass
+        - id: 946c4a44-b367-4229-84d4-1a8e461cb132
+          name: Sensitive Data Check
+          result: Pass
+    ToxicityDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        toxicity_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Toxicity Score
+        toxicity_violation_type:
+          $ref: '#/components/schemas/ToxicityViolationType'
+      additionalProperties: false
+      type: object
+      required:
+      - toxicity_violation_type
+      title: ToxicityDetailsResponse
+    PIIEntitySpanResponse:
+      properties:
+        entity:
+          $ref: '#/components/schemas/PIIEntityTypes'
+        span:
+          type: string
+          title: Span
+          description: The subtext within the input string that was identified as PII.
+        confidence:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence
+          description: Float value representing the confidence score of a given PII identification.
+      type: object
+      required:
+      - entity
+      - span
+      title: PIIEntitySpanResponse
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

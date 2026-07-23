@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Engine Config API
+  version: 2.1.688
+tags:
+- name: Engine Config
+paths:
+  /api/v2/engine-config:
+    get:
+      tags:
+      - Engine Config
+      summary: Get Engine Config
+      description: Returns engine-level configuration for the frontend. Public endpoint — no authentication required.
+      operationId: get_engine_config_api_v2_engine_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EngineConfigResponse'
+components:
+  schemas:
+    EngineConfigResponse:
+      properties:
+        demo_mode:
+          type: boolean
+          title: Demo Mode
+          description: Whether the engine is running in demo mode.
+      type: object
+      required:
+      - demo_mode
+      title: EngineConfigResponse
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

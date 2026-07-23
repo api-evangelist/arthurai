@@ -1,0 +1,448 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Roles V1 API
+  version: 2.1.688
+tags:
+- name: Roles V1
+paths:
+  /api/v1/roles/{role_id}:
+    get:
+      tags:
+      - Roles V1
+      summary: Get Role.
+      description: Fetches role by id. Requires role_read permission.
+      operationId: get_role
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: role_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Role Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedRole'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ResourceKind:
+      type: string
+      enum:
+      - platform
+      - organization
+      - workspace
+      - project
+      - model
+      - connector
+      - available_dataset
+      - dataset
+      - role_binding
+      - role
+      - user
+      - group
+      - data_plane_association
+      - data_plane
+      - alert_rule
+      - webhook
+      - custom_aggregation
+      - custom_aggregation_test
+      - agent
+      - policy
+      - policy_alert_rule
+      - policy_attestation_rule
+      - policy_assignment
+      title: ResourceKind
+    BaseRole:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role this role inherits permissions from.
+        name:
+          type: string
+          title: Name
+          description: Name of the role this role inherits permissions from.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role this role inherits permissions from.
+      type: object
+      required:
+      - id
+      - name
+      - description
+      title: BaseRole
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    Permission:
+      properties:
+        name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Name of permission. Must be unique.
+        description:
+          type: string
+          title: Description
+          description: Description of the permission.
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the permission references.
+      type: object
+      required:
+      - name
+      - description
+      - resource_kind
+      title: Permission
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PermissionName:
+      type: string
+      enum:
+      - organization_read
+      - organization_delete
+      - organization_update
+      - organization_list_workspaces
+      - organization_create_workspace
+      - organization_list_group_memberships
+      - organization_create_user
+      - organization_invite_user
+      - organization_create_service_account
+      - delete_user
+      - user_update
+      - organization_role_binding_delete
+      - organization_create_role_binding
+      - organization_list_role_bindings
+      - organization_list_users
+      - organization_create_group
+      - organization_list_groups
+      - organization_list_roles
+      - group_list_role_bindings
+      - group_read
+      - group_list_users
+      - group_update
+      - group_delete
+      - group_create_group_membership
+      - group_delete_group_membership
+      - user_list_role_bindings
+      - user_regenerate_creds
+      - workspace_read
+      - workspace_update
+      - workspace_delete
+      - workspace_list_projects
+      - workspace_create_project
+      - workspace_create_data_plane
+      - workspace_list_data_planes
+      - workspace_list_data_plane_associations
+      - workspace_create_data_plane_association
+      - workspace_role_binding_delete
+      - workspace_create_role_binding
+      - workspace_list_role_bindings
+      - workspace_create_webhook
+      - workspace_list_webhooks
+      - workspace_test_webhook
+      - workspace_create_custom_aggregation
+      - workspace_create_custom_aggregation_test
+      - workspace_list_custom_aggregation_tests
+      - workspace_validate_custom_aggregation
+      - workspace_list_datasets
+      - workspace_list_models
+      - workspace_list_alerts
+      - workspace_list_alert_rules
+      - workspace_list_custom_aggregations
+      - workspace_list_agents
+      - workspace_list_unregistered_agents
+      - workspace_list_agent_tools
+      - workspace_list_agent_sub_agents
+      - workspace_list_agent_llm_models
+      - workspace_list_agent_data_sources
+      - workspace_get_statistics
+      - workspace_governance_view
+      - workspace_upsert_agents
+      - agent_read
+      - unregistered_agent_patch
+      - project_read
+      - project_update
+      - project_delete
+      - project_list_models
+      - project_create_model
+      - project_list_connectors
+      - project_create_connector
+      - project_list_datasets
+      - project_list_jobs
+      - project_create_job
+      - project_create_dataset
+      - project_create_available_dataset
+      - project_list_data_plane_associations
+      - project_role_binding_delete
+      - project_create_role_binding
+      - project_list_role_bindings
+      - project_generate_metrics_spec
+      - project_create_model_task
+      - project_create_model_link_task
+      - model_read
+      - model_update
+      - model_delete
+      - model_put_metric_config
+      - model_list_metric_versions
+      - model_create_metric_version
+      - model_add_metrics_for_version
+      - model_edit_dashboard
+      - model_create_alert
+      - model_list_alerts
+      - model_create_alert_rule
+      - model_list_alert_rules
+      - model_query_metrics
+      - model_metrics_schedule_update
+      - model_metrics_schedule_delete
+      - model_task_read
+      - model_task_update
+      - model_task_delete
+      - model_task_sync
+      - model_task_put_state_cache
+      - model_task_put_connection_info
+      - model_task_get_connection_info
+      - model_task_delete_connection_info
+      - model_task_regenerate_validation_key
+      - connector_read
+      - connector_update
+      - connector_delete
+      - connector_get_sensitive_fields
+      - connector_put_check_result
+      - connector_list_datasets
+      - connector_create_dataset
+      - connector_list_available_datasets
+      - connector_put_available_datasets
+      - connector_create_available_dataset
+      - available_dataset_read
+      - available_dataset_put_schema
+      - available_dataset_create_data_retrieval
+      - available_dataset_get_data_retrieval
+      - available_dataset_put_data_retrieval
+      - available_dataset_delete_data_retrieval
+      - dataset_read
+      - dataset_update
+      - dataset_put_schema
+      - dataset_delete
+      - dataset_create_data_retrieval
+      - dataset_get_data_retrieval
+      - dataset_put_data_retrieval
+      - dataset_delete_data_retrieval
+      - project_job_read
+      - project_job_update
+      - project_job_put_state
+      - project_job_read_logs
+      - project_job_read_runs
+      - project_job_append_logs
+      - project_job_read_errors
+      - project_job_append_errors
+      - data_plane_delete
+      - data_plane_update
+      - data_plane_read
+      - data_plane_regenerate_creds
+      - data_plane_list_associations
+      - data_plane_jobs_dequeue_next
+      - data_plane_association_delete
+      - alert_rule_read
+      - alert_rule_update
+      - alert_rule_delete
+      - model_alert_read
+      - webhook_read
+      - webhook_update
+      - webhook_delete
+      - role_read
+      - custom_aggregation_read
+      - custom_aggregation_put
+      - custom_aggregation_delete
+      - custom_aggregation_update
+      - custom_aggregation_test_delete
+      - custom_aggregation_test_read
+      - custom_aggregation_test_create_results
+      - custom_aggregation_test_read_results
+      - organization_create_policy
+      - organization_list_policies
+      - policy_read
+      - policy_update
+      - policy_delete
+      - policy_list_assignments
+      - policy_check_compliance
+      - policy_list_compliance_history
+      - policy_list_alert_rules
+      - policy_create_alert_rule
+      - policy_alert_rule_read
+      - policy_alert_rule_update
+      - policy_alert_rule_delete
+      - policy_list_attestation_rules
+      - policy_create_attestation_rule
+      - policy_attestation_rule_read
+      - policy_attestation_rule_update
+      - policy_attestation_rule_delete
+      - policy_assignment_create
+      - policy_assignment_delete
+      - policy_assignment_read
+      - policy_assignment_create_attestation
+      - policy_assignment_list_attestations
+      - policy_assignment_check_compliance
+      - policy_assignment_set_compliance_status
+      - model_assign_policy
+      - model_remove_policy
+      - model_attest
+      - model_list_policy_assignments
+      - model_list_attestations
+      - model_check_compliance
+      - workspace_list_policy_assignments
+      - workspace_list_policy_compliance
+      - workspace_check_all_policies_compliance
+      - organization_list_policy_assignments
+      - organization_list_policy_compliance
+      - organization_list_unregistered_agents
+      - organization_list_agent_tools
+      - organization_list_agent_llm_models
+      - organization_list_models
+      title: PermissionName
+    ExtendedRole:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role.
+        name:
+          type: string
+          title: Name
+          description: Name of the role.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role.
+        organization_bindable:
+          type: boolean
+          title: Organization Bindable
+          description: Whether the role can be bound to an organization.
+        workspace_bindable:
+          type: boolean
+          title: Workspace Bindable
+          description: Whether the role can be bound to a workspace.
+        project_bindable:
+          type: boolean
+          title: Project Bindable
+          description: Whether the role can be bound to a project.
+        data_plane_bindable:
+          type: boolean
+          title: Data Plane Bindable
+          description: Whether the role can be bound to a data plane.
+        permissions:
+          items:
+            $ref: '#/components/schemas/Permission'
+          type: array
+          title: Permissions
+          description: Permissions granted by the role.
+        base_roles:
+          items:
+            $ref: '#/components/schemas/BaseRole'
+          type: array
+          title: Base Roles
+          description: List of IDs of the roles this role inherits permissions from, if any.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - description
+      - organization_bindable
+      - workspace_bindable
+      - project_bindable
+      - data_plane_bindable
+      - permissions
+      - base_roles
+      title: ExtendedRole
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

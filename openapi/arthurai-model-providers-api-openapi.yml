@@ -1,0 +1,358 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Model Providers API
+  version: 2.1.688
+  description: Endpoints for model provider management
+tags:
+- name: Model Providers
+  description: Endpoints for model provider management
+paths:
+  /api/v1/model_providers/{provider}:
+    put:
+      tags:
+      - Model Providers
+      summary: Set the configuration for a model provider.
+      description: Set the configuration for a model provider. Optionally upload GCP service account JSON credentials or bedrock credentials
+      operationId: set_model_provider_api_v1_model_providers__provider__put
+      security:
+      - API Key: []
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ModelProvider'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutModelProviderCredentials'
+      responses:
+        '201':
+          description: Configuration set
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Model Providers
+      summary: Disables the configuration for a model provider.
+      description: Disables the configuration for a model provider
+      operationId: delete_model_provider_api_v1_model_providers__provider__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ModelProvider'
+      responses:
+        '204':
+          description: Provider deleted.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/model_providers:
+    get:
+      tags:
+      - Model Providers
+      summary: List the model providers.
+      description: Shows all model providers and if they're enabled.
+      operationId: get_model_providers_api_v1_model_providers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelProviderList'
+      security:
+      - API Key: []
+  /api/v1/model_providers/{provider}/available_models:
+    get:
+      tags:
+      - Model Providers
+      summary: List the models available from a provider.
+      description: Returns a list of the names of all available models for a provider.
+      operationId: get_model_providers_available_models_api_v1_model_providers__provider__available_models_get
+      security:
+      - API Key: []
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ModelProvider'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelProviderModelList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ModelProviderModelList:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: Provider of the models
+        available_models:
+          items:
+            type: string
+          type: array
+          title: Available Models
+          description: Available models from the provider
+      type: object
+      required:
+      - provider
+      - available_models
+      title: ModelProviderModelList
+    GCPServiceAccountCredentialsRequest:
+      properties:
+        type:
+          type: string
+          format: password
+          title: Type
+          writeOnly: true
+        project_id:
+          type: string
+          format: password
+          title: Project Id
+          writeOnly: true
+        private_key_id:
+          type: string
+          format: password
+          title: Private Key Id
+          writeOnly: true
+        private_key:
+          type: string
+          format: password
+          title: Private Key
+          writeOnly: true
+        client_email:
+          type: string
+          format: password
+          title: Client Email
+          writeOnly: true
+        client_id:
+          type: string
+          format: password
+          title: Client Id
+          writeOnly: true
+        auth_uri:
+          type: string
+          format: password
+          title: Auth Uri
+          writeOnly: true
+        token_uri:
+          type: string
+          format: password
+          title: Token Uri
+          writeOnly: true
+        auth_provider_x509_cert_url:
+          type: string
+          format: password
+          title: Auth Provider X509 Cert Url
+          writeOnly: true
+        client_x509_cert_url:
+          type: string
+          format: password
+          title: Client X509 Cert Url
+          writeOnly: true
+        universe_domain:
+          type: string
+          format: password
+          title: Universe Domain
+          writeOnly: true
+      type: object
+      required:
+      - type
+      - project_id
+      - private_key_id
+      - private_key
+      - client_email
+      - client_id
+      - auth_uri
+      - token_uri
+      - auth_provider_x509_cert_url
+      - client_x509_cert_url
+      - universe_domain
+      title: GCPServiceAccountCredentialsRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    ModelProviderResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: The model provider
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the provider is enabled with credentials
+      type: object
+      required:
+      - provider
+      - enabled
+      title: ModelProviderResponse
+    PutModelProviderCredentials:
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Api Key
+          description: The API key for the provider.
+        project_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+          description: The vertex AI project ID. Will override the project ID in the key file if provided.
+        region:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Region
+          description: The vertex AI region to use
+        aws_access_key_id:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Access Key Id
+          description: The AWS access key ID.
+        aws_secret_access_key:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Secret Access Key
+          description: The AWS secret access key.
+        aws_bedrock_runtime_endpoint:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Bedrock Runtime Endpoint
+          description: The AWS Bedrock runtime endpoint.
+        aws_role_name:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Role Name
+          description: The AWS role name.
+        aws_session_name:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Session Name
+          description: The AWS session name.
+        api_base:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Api Base
+          description: The API base URL. Required for Azure (endpoint URL) and vLLM models.
+        api_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Version
+          description: The API version. Required for Azure (e.g. '2024-02-01').
+        credentials_file:
+          anyOf:
+          - $ref: '#/components/schemas/GCPServiceAccountCredentialsRequest'
+          - type: 'null'
+          description: Optional GCP service account credentials JSON
+      type: object
+      title: PutModelProviderCredentials
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ModelProviderList:
+      properties:
+        providers:
+          items:
+            $ref: '#/components/schemas/ModelProviderResponse'
+          type: array
+          title: Providers
+          description: List of model providers
+      type: object
+      required:
+      - providers
+      title: ModelProviderList
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

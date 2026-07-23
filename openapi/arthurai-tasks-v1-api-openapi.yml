@@ -1,0 +1,1815 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Tasks V1 API
+  version: 2.1.688
+tags:
+- name: Tasks V1
+paths:
+  /api/v1/models/{model_id}/task:
+    patch:
+      tags:
+      - Tasks V1
+      summary: Update A Task
+      description: Submits a job to update the task definition for this model and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_update permission.
+      operationId: patch_task
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_update
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchTaskRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMutationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Tasks V1
+      summary: Delete A Task
+      description: Submits a job to delete the task and the corresponding platform model, and returns the job ID. Requires model_task_delete permission.
+      operationId: delete_task
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_delete
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMutationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Tasks V1
+      summary: Get Cached Task State
+      description: Retrieve the task state cached in the control plane. Requires model_task_read permission.
+      operationId: get_task_state_cache
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_read
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskReadResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/task/sync:
+    post:
+      tags:
+      - Tasks V1
+      summary: Sync A Task
+      description: Submits a job to fetch the latest task state and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_sync permission.
+      operationId: sync_task
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_sync
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMutationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/task/cache:
+    put:
+      tags:
+      - Tasks V1
+      summary: Upload Task State
+      description: Upload a copy of the task state to cache in the control plane. Requires model_task_put_state_cache permission.
+      operationId: put_task_state_cache
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_put_state_cache
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutTaskStateCacheRequest'
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/task/connection_info:
+    put:
+      tags:
+      - Tasks V1
+      summary: Upload Task State
+      description: Upload the task connection information. Requires model_task_put_connection_info permission.
+      operationId: put_task_connection_info
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_put_connection_info
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutTaskConnectionInfo'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskConnectionInfo'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Tasks V1
+      summary: Get Task Connection Info
+      description: Retrieve the task connection information. Requires model_task_get_connection_info permission.
+      operationId: get_task_connection_info
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_get_connection_info
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskConnectionInfo'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Tasks V1
+      summary: Delete Connection Info.
+      description: Deletes connection information for a model. Requires model_task_delete_connection_info permission.
+      operationId: delete_connection_info
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_delete_connection_info
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/task/regenerate_validation_key:
+    post:
+      tags:
+      - Tasks V1
+      summary: Regenerate Task Validation Key
+      description: Regenerate the task validation key. Requires model_task_regenerate_validation_key permission.
+      operationId: post_regenerate_validation_key
+      security:
+      - OAuth2AuthorizationCode:
+        - model_task_regenerate_validation_key
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskValidationKeyRegenerationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/tasks:
+    post:
+      tags:
+      - Tasks V1
+      summary: Create A Task.
+      description: Submits a job to create a task in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_task permission.
+      operationId: project_create_model_task
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_model_task
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTaskRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMutationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/link_task:
+    post:
+      tags:
+      - Tasks V1
+      summary: Link An Existing Task To A New Model.
+      description: Submits a job to link an existing task to a new model in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_link_task permission.
+      operationId: project_create_model_link_task
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_model_link_task
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostLinkTaskRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMutationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AgentMetadataResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadataResponse'
+          - type: 'null'
+          description: Metadata for the agent.
+        service_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Service Names
+          description: List of service names that send traces to this task
+      type: object
+      required:
+      - provider
+      title: AgentMetadataResponse
+      description: Agent metadata for responses.
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    NewRuleRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+          examples:
+          - SSN Regex Rule
+        type:
+          type: string
+          title: Type
+          description: Type of the rule. It can only be one of KeywordRule, RegexRule, ModelSensitiveDataRule, ModelHallucinationRule, ModelHallucinationRuleV2, PromptInjectionRule, PIIDataRule
+          examples:
+          - RegexRule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Boolean value to enable or disable the rule for llm prompt
+          examples:
+          - true
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Boolean value to enable or disable the rule for llm response
+          examples:
+          - false
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      title: NewRuleRequest
+      example1:
+        description: Sensitive Data Example with its required configuration
+        summary: Sensitive Data Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          config:
+            examples:
+            - example: John has O negative blood group
+              result: true
+            - example: Most of the people have A positive blood group
+              result: false
+            hint: specific individual's blood types
+          name: Sensitive Data Rule
+          type: ModelSensitiveDataRule
+      example2:
+        description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+        summary: Regex Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            regex_patterns:
+            - \d{3}-\d{2}-\d{4}
+            - \d{5}-\d{6}-\d{7}
+          name: SSN Regex Rule
+          type: RegexRule
+      example3:
+        description: Keywords Rule Example with its required configuration
+        summary: Keywords Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            keywords:
+            - Blocked_Keyword_1
+            - Blocked_Keyword_2
+          name: Blocked Keywords Rule
+          type: KeywordRule
+      example4:
+        description: Prompt Injection Rule Example, no configuration required
+        summary: Prompt Injection Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          name: Prompt Injection Rule
+          type: PromptInjectionRule
+      example5:
+        description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+        summary: Hallucination Rule V1 Example (Deprecated)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRule
+      example6:
+        description: Hallucination Rule Example, no configuration required
+        summary: Hallucination Rule V2 Example
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV2
+      example7:
+        description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+        summary: Hallucination Rule V3 Example (Beta)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV3
+      example8:
+        description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+        summary: PII Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            allow_list:
+            - arthur.ai
+            - Arthur
+            confidence_threshold: '0.5'
+            disabled_pii_entities:
+            - EMAIL_ADDRESS
+            - PHONE_NUMBER
+          name: PII Rule
+          type: PIIDataRule
+      example9:
+        description: Toxicity Rule Example, no configuration required. Threshold accepted
+        summary: Toxicity Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            threshold: 0.5
+          name: Toxicity Rule
+          type: ToxicityRule
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    PutTaskConnectionInfo:
+      properties:
+        validation_key:
+          $ref: '#/components/schemas/PostTaskValidationAPIKey'
+          description: The information for the API key with validation permissions for the task.
+        api_host:
+          type: string
+          title: Api Host
+          description: Host for the task.
+      type: object
+      required:
+      - validation_key
+      - api_host
+      title: PutTaskConnectionInfo
+    PostTaskValidationAPIKey:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The Shield ID for the API key.
+        name:
+          type: string
+          title: Name
+          description: The user-friendly name of the API key.
+        key:
+          type: string
+          title: Key
+          description: The value of the API key.
+      type: object
+      required:
+      - id
+      - name
+      - key
+      title: PostTaskValidationAPIKey
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    TaskValidationKeyRegenerationResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: Job ID executing the validation key regeneration.
+      type: object
+      required:
+      - job_id
+      title: TaskValidationKeyRegenerationResponse
+    MetricResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Metric
+        name:
+          type: string
+          title: Name
+          description: Name of the Metric
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the Metric
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Metadata of the Metric
+        config:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Config
+          description: JSON-serialized configuration for the Metric
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the Metric was created in unix milliseconds
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the Metric was updated in unix milliseconds
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Whether the Metric is enabled
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - metric_metadata
+      - created_at
+      - updated_at
+      title: MetricResponse
+    ContinuousEvalTransformVariableMappingResponse:
+      properties:
+        transform_variable:
+          type: string
+          title: Transform Variable
+          description: Name of the transform variable.
+        eval_variable:
+          type: string
+          title: Eval Variable
+          description: Name of the eval variable.
+      type: object
+      required:
+      - transform_variable
+      - eval_variable
+      title: ContinuousEvalTransformVariableMappingResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TaskResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the task'
+        name:
+          type: string
+          title: Name
+          description: Name of the task
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the task was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the task was created in unix milliseconds
+        is_agentic:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Agentic
+          description: Whether the task is agentic or not
+        is_system_task:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is System Task
+          description: Whether this is a system-managed task (e.g., for traces without a task_id or service name, or for Arthur-created traces)
+          default: false
+        is_autocreated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Autocreated
+          description: Whether this task was automatically created by Arthur
+          default: false
+        is_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Archived
+          description: Whether this task is archived
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadataResponse'
+          - type: 'null'
+          description: Metadata to describe the creation source/provider for registered agents.
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: List of all the rules for the task.
+        metrics:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MetricResponse'
+            type: array
+          - type: 'null'
+          title: Metrics
+          description: List of all the metrics for the task.
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - rules
+      title: TaskResponse
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    TaskValidationAPIKey:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The Shield ID for the API key.
+        name:
+          type: string
+          title: Name
+          description: The user-friendly name of the API key.
+        key:
+          type: string
+          format: password
+          title: Key
+          description: The value of the API key.
+          writeOnly: true
+      type: object
+      required:
+      - id
+      - name
+      - key
+      title: TaskValidationAPIKey
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    LLMBaseConfigSettings:
+      properties:
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+          description: Request timeout in seconds
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+          description: Sampling temperature (0.0 to 2.0). Higher values make output more random
+        top_p:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Top P
+          description: Top-p sampling parameter (0.0 to 1.0). Alternative to temperature
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+          description: Maximum number of tokens to generate in the response
+        stop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stop
+          description: Stop sequence(s) where the model should stop generating
+        presence_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Presence Penalty
+          description: Presence penalty (-2.0 to 2.0). Positive values penalize new tokens based on their presence
+        frequency_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Frequency Penalty
+          description: Frequency penalty (-2.0 to 2.0). Positive values penalize tokens based on frequency
+        seed:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Seed
+          description: Random seed for reproducible outputs
+        logprobs:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Logprobs
+          description: Whether to return log probabilities of output tokens
+        top_logprobs:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top Logprobs
+          description: Number of most likely tokens to return log probabilities for (1-20)
+        logit_bias:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LogitBiasItem'
+            type: array
+          - type: 'null'
+          title: Logit Bias
+          description: Modify likelihood of specified tokens appearing in completion
+        max_completion_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Completion Tokens
+          description: Maximum number of completion tokens (alternative to max_tokens)
+        reasoning_effort:
+          anyOf:
+          - $ref: '#/components/schemas/ReasoningEffortEnum'
+          - type: 'null'
+          description: Reasoning effort level for models that support it (e.g., OpenAI o1 series)
+        thinking:
+          anyOf:
+          - $ref: '#/components/schemas/AnthropicThinkingParam'
+          - type: 'null'
+          description: Anthropic-specific thinking parameter for Claude models
+      additionalProperties: false
+      type: object
+      title: LLMBaseConfigSettings
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    TraceTransformVariableDefinition:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the variable to extract.
+        span_name:
+          type: string
+          title: Span Name
+          description: Name of the span to extract data from.
+        attribute_path:
+          type: string
+          title: Attribute Path
+          description: Dot-notation path to the attribute within the span (e.g., 'attributes.input.value.sqlQuery').
+        fallback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallback
+          description: Fallback value to use if the attribute is not found.
+      type: object
+      required:
+      - variable_name
+      - span_name
+      - attribute_path
+      title: TraceTransformVariableDefinition
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
+    LogitBiasItem:
+      properties:
+        token_id:
+          type: integer
+          title: Token Id
+          description: Token ID to bias
+        bias:
+          type: number
+          maximum: 100.0
+          minimum: -100.0
+          title: Bias
+          description: Bias value between -100 and 100
+      type: object
+      required:
+      - token_id
+      - bias
+      title: LogitBiasItem
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    Eval:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the llm eval
+        eval_kind:
+          type: string
+          title: Eval Kind
+          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
+          default: llm_as_a_judge
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet'). None for ML evals.
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: 'null'
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). None for ML evals.
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+          description: Instructions for the llm eval. None for ML evals.
+        variables:
+          items:
+            type: string
+          type: array
+          title: Variables
+          description: List of variable names for the llm eval
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: List of tags for this llm eval version
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMBaseConfigSettings'
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: EvalConfig
+          description: Eval configuration. LLMBaseConfigSettings for LLM evals; type-specific dict for ML evals.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the llm eval was created.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Time that this llm eval was deleted
+        version:
+          type: integer
+          title: Version
+          description: Version of the llm eval
+          default: 1
+      type: object
+      required:
+      - name
+      - created_at
+      title: Eval
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
+    PatchTaskRequest:
+      properties:
+        rules_to_enable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Enable
+          description: List of rule IDs to enable on the task.
+        rules_to_disable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Disable
+          description: List of rule IDs to disable on the task.
+        rules_to_archive:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Archive
+          description: List of rule IDs to archive on the task.
+        rules_to_add:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Rules To Add
+          description: List of new rules to add to the task.
+      type: object
+      title: PatchTaskRequest
+    ContinuousEvalResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the transform.
+        name:
+          type: string
+          title: Name
+          description: Name of the continuous eval.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the continuous eval.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the parent task.
+        eval_type:
+          $ref: '#/components/schemas/EvalType'
+          description: 'Type of evaluator: ''llm_eval'' or ''ml_eval''.'
+          default: llm_eval
+        llm_eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Llm Eval Name
+          description: Name of the eval.
+        llm_eval_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Llm Eval Version
+          description: Version of the eval.
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the transform.
+        transform_version_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Transform Version Id
+          description: ID of the pinned transform version. When set, the continuous eval will always execute using this version's configuration snapshot.
+        transform_variable_mapping:
+          items:
+            $ref: '#/components/schemas/ContinuousEvalTransformVariableMappingResponse'
+          type: array
+          title: Transform Variable Mapping
+          description: Mapping of transform variables to eval variables.
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the continuous eval is enabled.
+          default: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp representing the time the transform was added to the llm eval.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Timestamp representing the time the continuous eval was last updated.
+      type: object
+      required:
+      - id
+      - name
+      - task_id
+      - transform_id
+      - created_at
+      - updated_at
+      title: ContinuousEvalResponse
+    PostLinkTaskRequest:
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: The id of the Shield task to link when creating the new model.
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector with the task to link. The connector must be an engine internal connector.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to add to the created model, to make it easy to find after the job completes.
+      type: object
+      required:
+      - task_id
+      - connector_id
+      title: PostLinkTaskRequest
+    AgentMetadata:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadata'
+          - type: 'null'
+          description: Metadata for the agent.
+      type: object
+      required:
+      - provider
+      title: AgentMetadata
+    PutTaskStateCacheRequest:
+      properties:
+        task:
+          $ref: '#/components/schemas/TaskResponse'
+          description: Copy of the task state to cache in the control plane.
+        evals:
+          items:
+            $ref: '#/components/schemas/Eval'
+          type: array
+          title: Evals
+          description: Copy of the eval state for this task in the control plane.
+        continuous_evals:
+          items:
+            $ref: '#/components/schemas/ContinuousEvalResponse'
+          type: array
+          title: Continuous Evals
+          description: Copy of the continuous eval state for this task in the control plane.
+        transforms:
+          items:
+            $ref: '#/components/schemas/TraceTransformResponse'
+          type: array
+          title: Transforms
+          description: Copy of the transform state for this task in the control plane.
+      type: object
+      required:
+      - task
+      title: PutTaskStateCacheRequest
+    TaskMutationResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: Job ID executing the task mutation and retrieval.
+      type: object
+      required:
+      - job_id
+      title: TaskMutationResponse
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    AnthropicThinkingParam:
+      properties:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      additionalProperties: false
+      type: object
+      title: AnthropicThinkingParam
+    TaskConnectionInfo:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        validation_key:
+          $ref: '#/components/schemas/TaskValidationAPIKey'
+          description: The information for the API key with validation permissions for the task.
+        api_host:
+          type: string
+          title: Api Host
+          description: Host for the task.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - validation_key
+      - api_host
+      title: TaskConnectionInfo
+    TraceTransformDefinition:
+      properties:
+        variables:
+          items:
+            $ref: '#/components/schemas/TraceTransformVariableDefinition'
+          type: array
+          title: Variables
+          description: List of variable extraction rules.
+      type: object
+      required:
+      - variables
+      title: TraceTransformDefinition
+    PostTaskRequest:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: The name of the task
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector where the task will be created. The connector must be an engine internal connector.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to add to the created model, to make it easy to find after the job completes.
+        rules_to_add:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Rules To Add
+          description: List of rules to add to the task.
+        is_agentic:
+          type: boolean
+          title: Is Agentic
+          description: Whether this task should be created as an agentic trace task. If True, no rules will be applied to the task.
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata for registered agents.
+      type: object
+      required:
+      - name
+      - connector_id
+      title: PostTaskRequest
+    TraceTransformResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the transform.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the parent task.
+        name:
+          type: string
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Latest version of the transform definition.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp representing the time of transform creation
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Timestamp representing the time of the last transform update
+      type: object
+      required:
+      - id
+      - task_id
+      - name
+      - definition
+      - created_at
+      - updated_at
+      title: TraceTransformResponse
+    GCPAgentMetadataResponse:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadataResponse
+      description: GCP-specific agent metadata for responses.
+    TaskReadResponse:
+      properties:
+        task:
+          anyOf:
+          - $ref: '#/components/schemas/TaskResponse'
+          - type: 'null'
+          description: Cached copy of the task state in the control plane. May be null if it has not been cached yet from the data plane.
+        last_synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Synced At
+          description: Time of last record update. Will be null if the task state has not been cached yet.
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the corresponding scope model for this task.
+        evals:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Eval'
+            type: array
+          - type: 'null'
+          title: Evals
+          description: Copy of the eval state for this task in the control plane. May be null if it has not been cached yet from the data plane.
+        continuous_evals:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ContinuousEvalResponse'
+            type: array
+          - type: 'null'
+          title: Continuous Evals
+          description: Copy of the continuous eval state for this task in the control plane. May be null if it has not been cached yet from the data plane.
+        transforms:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/TraceTransformResponse'
+            type: array
+          - type: 'null'
+          title: Transforms
+          description: Copy of the transform state for this task in the control plane. May be null if it has not been cached yet from the data plane.
+      type: object
+      required:
+      - scope_model_id
+      title: TaskReadResponse
+    GCPAgentMetadata:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadata
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

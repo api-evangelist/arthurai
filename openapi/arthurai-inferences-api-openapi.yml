@@ -1,0 +1,796 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Inferences API
+  version: 2.1.688
+  description: Endpoints for querying past inferences
+tags:
+- name: Inferences
+  description: Endpoints for querying past inferences
+paths:
+  /api/v2/inferences/query:
+    get:
+      tags:
+      - Inferences
+      summary: Query Inferences
+      description: Paginated inference querying. See parameters for available filters. Includes inferences from archived tasks and rules.
+      operationId: query_inferences_api_v2_inferences_query_get
+      security:
+      - API Key: []
+      parameters:
+      - name: task_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Task ID to filter on.
+          default: []
+          title: Task Ids
+        description: Task ID to filter on.
+      - name: task_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Task name to filter on.
+          title: Task Name
+        description: Task name to filter on.
+      - name: conversation_id
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Conversation ID to filter on.
+          title: Conversation Id
+        description: Conversation ID to filter on.
+      - name: inference_id
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Inference ID to filter on.
+          title: Inference Id
+        description: Inference ID to filter on.
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          type: string
+          description: User ID to filter on.
+          title: User Id
+        description: User ID to filter on.
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format.
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format.
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Exclusive end date in ISO8601 string format.
+          title: End Time
+        description: Exclusive end date in ISO8601 string format.
+      - name: rule_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleType'
+          description: List of RuleType to query for. Any inference that ran any rule in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_statuses, will return inferences with rules in the intersection of rule_types and rule_statuses.
+          default: []
+          title: Rule Types
+        description: List of RuleType to query for. Any inference that ran any rule in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_statuses, will return inferences with rules in the intersection of rule_types and rule_statuses.
+      - name: rule_statuses
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleResultEnum'
+          description: List of RuleResultEnum to query for. Any inference with any rule status in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_types, will return inferences with rules in the intersection of rule_statuses and rule_types.
+          default: []
+          title: Rule Statuses
+        description: List of RuleResultEnum to query for. Any inference with any rule status in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_types, will return inferences with rules in the intersection of rule_statuses and rule_types.
+      - name: prompt_statuses
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleResultEnum'
+          description: List of RuleResultEnum to query for at inference prompt stage level. Must be 'Pass' / 'Fail'. Defaults to both.
+          default: []
+          title: Prompt Statuses
+        description: List of RuleResultEnum to query for at inference prompt stage level. Must be 'Pass' / 'Fail'. Defaults to both.
+      - name: response_statuses
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleResultEnum'
+          description: List of RuleResultEnum to query for at inference response stage level. Must be 'Pass' / 'Fail'. Defaults to both. Inferences missing responses will not be affected by this filter.
+          default: []
+          title: Response Statuses
+        description: List of RuleResultEnum to query for at inference response stage level. Must be 'Pass' / 'Fail'. Defaults to both. Inferences missing responses will not be affected by this filter.
+      - name: include_count
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to include the total count of matching inferences. Set to False to improve query performance for large datasets. Count will be returned as -1 if set to False.
+          default: true
+          title: Include Count
+        description: Whether to include the total count of matching inferences. Set to False to improve query performance for large datasets. Count will be returned as -1 if set to False.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryInferencesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HallucinationClaimResponse:
+      properties:
+        claim:
+          type: string
+          title: Claim
+        valid:
+          type: boolean
+          title: Valid
+        reason:
+          type: string
+          title: Reason
+        order_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order Number
+          description: This field is a helper for ordering the claims
+          default: -1
+      type: object
+      required:
+      - claim
+      - valid
+      - reason
+      title: HallucinationClaimResponse
+    KeywordDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        keyword_matches:
+          items:
+            $ref: '#/components/schemas/KeywordSpanResponse'
+          type: array
+          title: Keyword Matches
+          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
+          default: []
+      additionalProperties: false
+      type: object
+      title: KeywordDetailsResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    QueryInferencesResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of inferences matching the query parameters
+        inferences:
+          items:
+            $ref: '#/components/schemas/ExternalInference'
+          type: array
+          title: Inferences
+          description: List of inferences matching the search filters. Length is less than or equal to page_size parameter
+      type: object
+      required:
+      - count
+      - inferences
+      title: QueryInferencesResponse
+      example:
+        count: 1
+        inferences:
+        - conversation_id: 957df309-c907-4b77-abe5-15dd00c08112
+          created_at: 1723204737120
+          id: 957df309-c907-4b77-abe5-15dd00c081f7
+          inference_feedback:
+          - created_at: '2024-08-09T12:08:34.847381'
+            id: 0d602e5c-4ae6-4fc9-a610-68a1d8928ad7
+            inference_id: 957df309-c907-4b77-abe5-15dd00c081f7
+            reason: Perfect answer.
+            score: 100
+            target: context
+            updated_at: '2024-08-09T12:08:34.847386'
+            user_id: 957df309-2137-4b77-abe5-15dd00c081f8
+          inference_prompt:
+            created_at: 1723204737121
+            id: 834f7ebd-cd6b-4691-9473-8bc350f8922c
+            inference_id: 957df309-c907-4b77-abe5-15dd00c081f7
+            message: How many stars are in the solar system?
+            prompt_rule_results:
+            - id: bc599a56-2e31-4cb7-910d-9e5ed6455db2
+              latency_ms: 73
+              name: My_PII_Rule
+              result: Pass
+              rule_type: PIIDataRule
+              scope: default
+            result: Pass
+            tokens: 100
+            updated_at: 1723204737121
+          inference_response:
+            context: Solar system contains one star.
+            created_at: 1723204786599
+            id: ec765a75-1479-4938-8e1c-6334b7deb8ce
+            inference_id: 957df309-c907-4b77-abe5-15dd00c081f7
+            message: There is one star in solar system.
+            response_rule_results:
+            - id: a45267c5-96d9-4de2-a871-debf2c8fdb86
+              latency_ms: 107
+              name: My_another_PII_Rule
+              result: Pass
+              rule_type: PIIDataRule
+              scope: default
+            - details:
+                claims:
+                - claim: There is one star in solar system.
+                  order_number: 0
+                  reason: No hallucination detected!
+                  valid: true
+                message: All claims were supported by the context!
+                pii_entities: []
+                pii_results: []
+                score: true
+              id: 92b7b46e-eaf2-4226-82d4-be12ceb3e4b7
+              latency_ms: 700
+              name: My_Hallucination_Rule
+              result: Pass
+              rule_type: ModelHallucinationRuleV2
+              scope: default
+            result: Pass
+            tokens: 100
+            updated_at: 1723204786599
+          result: Pass
+          task_id: 957df309-c907-4b77-abe5-15dd00c081f8
+          task_name: My task name
+          updated_at: 1723204787050
+          user_id: 957df309-2137-4b77-abe5-15dd00c081f8
+    ExternalInference:
+      properties:
+        id:
+          type: string
+          title: Id
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+        task_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Name
+        conversation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Conversation Id
+        inference_prompt:
+          $ref: '#/components/schemas/ExternalInferencePrompt'
+        inference_response:
+          anyOf:
+          - $ref: '#/components/schemas/ExternalInferenceResponse'
+          - type: 'null'
+        inference_feedback:
+          items:
+            $ref: '#/components/schemas/InferenceFeedbackResponse'
+          type: array
+          title: Inference Feedback
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version used for this inference (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      required:
+      - id
+      - result
+      - created_at
+      - updated_at
+      - inference_prompt
+      - inference_feedback
+      title: ExternalInference
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    ExternalInferencePrompt:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+        message:
+          type: string
+          title: Message
+        prompt_rule_results:
+          items:
+            $ref: '#/components/schemas/ExternalRuleResult'
+          type: array
+          title: Prompt Rule Results
+        tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tokens
+      type: object
+      required:
+      - id
+      - inference_id
+      - result
+      - created_at
+      - updated_at
+      - message
+      - prompt_rule_results
+      title: ExternalInferencePrompt
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    HallucinationDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        claims:
+          items:
+            $ref: '#/components/schemas/HallucinationClaimResponse'
+          type: array
+          title: Claims
+      type: object
+      required:
+      - claims
+      title: HallucinationDetailsResponse
+    InferenceFeedbackTarget:
+      type: string
+      enum:
+      - context
+      - response_results
+      - prompt_results
+      title: InferenceFeedbackTarget
+    RuleResultEnum:
+      type: string
+      enum:
+      - Pass
+      - Fail
+      - Skipped
+      - Unavailable
+      - Partially Unavailable
+      - Model Not Available
+      title: RuleResultEnum
+    BaseDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      title: BaseDetailsResponse
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    PIIEntityTypes:
+      type: string
+      enum:
+      - CREDIT_CARD
+      - CRYPTO
+      - DATE_TIME
+      - EMAIL_ADDRESS
+      - IBAN_CODE
+      - IP_ADDRESS
+      - NRP
+      - LOCATION
+      - PERSON
+      - PHONE_NUMBER
+      - MEDICAL_LICENSE
+      - URL
+      - US_BANK_NUMBER
+      - US_DRIVER_LICENSE
+      - US_ITIN
+      - US_PASSPORT
+      - US_SSN
+      title: PIIEntityTypes
+    ToxicityViolationType:
+      type: string
+      enum:
+      - benign
+      - harmful_request
+      - toxic_content
+      - profanity
+      - unknown
+      title: ToxicityViolationType
+    RegexDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        regex_matches:
+          items:
+            $ref: '#/components/schemas/RegexSpanResponse'
+          type: array
+          title: Regex Matches
+          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
+          default: []
+      additionalProperties: false
+      type: object
+      title: RegexDetailsResponse
+    KeywordSpanResponse:
+      properties:
+        keyword:
+          type: string
+          title: Keyword
+          description: The keyword from the rule that matched within the input string.
+      type: object
+      required:
+      - keyword
+      title: KeywordSpanResponse
+    ExternalRuleResult:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the rule'
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+        rule_type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of the rule
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+          description: Result if the rule
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Duration in millisesconds of rule execution
+        details:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordDetailsResponse'
+          - $ref: '#/components/schemas/RegexDetailsResponse'
+          - $ref: '#/components/schemas/HallucinationDetailsResponse'
+          - $ref: '#/components/schemas/PIIDetailsResponse'
+          - $ref: '#/components/schemas/ToxicityDetailsResponse'
+          - $ref: '#/components/schemas/BaseDetailsResponse'
+          - type: 'null'
+          title: Details
+          description: Details of the rule output
+      type: object
+      required:
+      - id
+      - name
+      - rule_type
+      - scope
+      - result
+      - latency_ms
+      title: ExternalRuleResult
+      example:
+        id: 90f18c69-d793-4913-9bde-a0c7f3643de0
+        name: PII Rule
+        result: Pass
+    RegexSpanResponse:
+      properties:
+        matching_text:
+          type: string
+          title: Matching Text
+          description: The subtext within the input string that matched the regex rule.
+        pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern
+          description: Pattern that yielded the match.
+      type: object
+      required:
+      - matching_text
+      title: RegexSpanResponse
+    PIIDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        pii_entities:
+          items:
+            $ref: '#/components/schemas/PIIEntitySpanResponse'
+          type: array
+          title: Pii Entities
+      type: object
+      required:
+      - pii_entities
+      title: PIIDetailsResponse
+    ToxicityDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        toxicity_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Toxicity Score
+        toxicity_violation_type:
+          $ref: '#/components/schemas/ToxicityViolationType'
+      additionalProperties: false
+      type: object
+      required:
+      - toxicity_violation_type
+      title: ToxicityDetailsResponse
+    InferenceFeedbackResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - inference_id
+      - target
+      - score
+      - created_at
+      - updated_at
+      title: InferenceFeedbackResponse
+    ExternalInferenceResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+        message:
+          type: string
+          title: Message
+        context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Context
+        response_rule_results:
+          items:
+            $ref: '#/components/schemas/ExternalRuleResult'
+          type: array
+          title: Response Rule Results
+        tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tokens
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      required:
+      - id
+      - inference_id
+      - result
+      - created_at
+      - updated_at
+      - message
+      - response_rule_results
+      title: ExternalInferenceResponse
+    PIIEntitySpanResponse:
+      properties:
+        entity:
+          $ref: '#/components/schemas/PIIEntityTypes'
+        span:
+          type: string
+          title: Span
+          description: The subtext within the input string that was identified as PII.
+        confidence:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence
+          description: Float value representing the confidence score of a given PII identification.
+      type: object
+      required:
+      - entity
+      - span
+      title: PIIEntitySpanResponse
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

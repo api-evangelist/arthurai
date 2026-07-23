@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Feature Flags V1 API
+  version: 2.1.688
+tags:
+- name: Feature Flags V1
+paths:
+  /api/v1/feature-flags:
+    get:
+      tags:
+      - Feature Flags V1
+      summary: Get Feature Flags.
+      description: Retrieves all feature flags in the environment.
+      operationId: get_feature_flags
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Get Feature Flags
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

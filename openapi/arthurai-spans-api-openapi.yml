@@ -1,0 +1,2765 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Spans API
+  version: 2.1.688
+tags:
+- name: Spans
+paths:
+  /v1/traces/query:
+    get:
+      tags:
+      - Spans
+      summary: Query Traces
+      description: Query traces with comprehensive filtering. Returns traces containing spans that match the filters, not just the spans themselves.
+      operationId: query_spans_v1_traces_query_get
+      deprecated: true
+      security:
+      - API Key: []
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/TraceSortBy'
+          description: Column to sort results by.
+          default: start_time
+        description: Column to sort results by.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      - name: task_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Task IDs to filter on. At least one is required.
+          title: Task Ids
+        description: Task IDs to filter on. At least one is required.
+      - name: trace_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Trace IDs to filter on. Optional.
+          title: Trace Ids
+        description: Trace IDs to filter on. Optional.
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+          title: End Time
+        description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+      - name: tool_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this tool name.
+          title: Tool Name
+        description: Return only results with this tool name.
+      - name: span_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+          title: Span Types
+        description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+      - name: annotation_score
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1
+          minimum: 0
+          description: Filter by trace annotation score (0 or 1).
+          title: Annotation Score
+        description: Filter by trace annotation score (0 or 1).
+      - name: annotation_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+        description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+      - name: continuous_eval_run_status
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+        description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+      - name: continuous_eval_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter by continuous eval name.
+          title: Continuous Eval Name
+        description: Filter by continuous eval name.
+      - name: span_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Span IDs to filter on. Optional.
+          title: Span Ids
+        description: Span IDs to filter on. Optional.
+      - name: session_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Session IDs to filter on. Optional.
+          title: Session Ids
+        description: Session IDs to filter on. Optional.
+      - name: user_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+          title: User Ids
+        description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+      - name: span_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this span name.
+          title: Span Name
+        description: Return only results with this span name.
+      - name: span_name_contains
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results where span name contains this substring.
+          title: Span Name Contains
+        description: Return only results where span name contains this substring.
+      - name: status_code
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/StatusCodeEnum'
+          - type: 'null'
+          description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+          title: Status Code
+        description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+      - name: query_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Query Relevance Eq
+        description: Equal to this value.
+      - name: query_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Query Relevance Gt
+        description: Greater than this value.
+      - name: query_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Query Relevance Gte
+        description: Greater than or equal to this value.
+      - name: query_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Query Relevance Lt
+        description: Less than this value.
+      - name: query_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Query Relevance Lte
+        description: Less than or equal to this value.
+      - name: response_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Response Relevance Eq
+        description: Equal to this value.
+      - name: response_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Response Relevance Gt
+        description: Greater than this value.
+      - name: response_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Response Relevance Gte
+        description: Greater than or equal to this value.
+      - name: response_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Response Relevance Lt
+        description: Less than this value.
+      - name: response_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Response Relevance Lte
+        description: Less than or equal to this value.
+      - name: tool_selection
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool selection evaluation result.
+        description: Tool selection evaluation result.
+      - name: tool_usage
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool usage evaluation result.
+        description: Tool usage evaluation result.
+      - name: trace_duration_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration exactly equal to this value (seconds).
+          title: Trace Duration Eq
+        description: Duration exactly equal to this value (seconds).
+      - name: trace_duration_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than this value (seconds).
+          title: Trace Duration Gt
+        description: Duration greater than this value (seconds).
+      - name: trace_duration_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than or equal to this value (seconds).
+          title: Trace Duration Gte
+        description: Duration greater than or equal to this value (seconds).
+      - name: trace_duration_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than this value (seconds).
+          title: Trace Duration Lt
+        description: Duration less than this value (seconds).
+      - name: trace_duration_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than or equal to this value (seconds).
+          title: Trace Duration Lte
+        description: Duration less than or equal to this value (seconds).
+      - name: total_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count exactly equal to this value.
+          title: Total Token Count Eq
+        description: Total token count exactly equal to this value.
+      - name: total_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than this value.
+          title: Total Token Count Gt
+        description: Total token count greater than this value.
+      - name: total_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than or equal to this value.
+          title: Total Token Count Gte
+        description: Total token count greater than or equal to this value.
+      - name: total_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than this value.
+          title: Total Token Count Lt
+        description: Total token count less than this value.
+      - name: total_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than or equal to this value.
+          title: Total Token Count Lte
+        description: Total token count less than or equal to this value.
+      - name: prompt_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count exactly equal to this value.
+          title: Prompt Token Count Eq
+        description: Prompt token count exactly equal to this value.
+      - name: prompt_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than this value.
+          title: Prompt Token Count Gt
+        description: Prompt token count greater than this value.
+      - name: prompt_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than or equal to this value.
+          title: Prompt Token Count Gte
+        description: Prompt token count greater than or equal to this value.
+      - name: prompt_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than this value.
+          title: Prompt Token Count Lt
+        description: Prompt token count less than this value.
+      - name: prompt_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than or equal to this value.
+          title: Prompt Token Count Lte
+        description: Prompt token count less than or equal to this value.
+      - name: completion_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count exactly equal to this value.
+          title: Completion Token Count Eq
+        description: Completion token count exactly equal to this value.
+      - name: completion_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than this value.
+          title: Completion Token Count Gt
+        description: Completion token count greater than this value.
+      - name: completion_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than or equal to this value.
+          title: Completion Token Count Gte
+        description: Completion token count greater than or equal to this value.
+      - name: completion_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than this value.
+          title: Completion Token Count Lt
+        description: Completion token count less than this value.
+      - name: completion_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than or equal to this value.
+          title: Completion Token Count Lte
+        description: Completion token count less than or equal to this value.
+      - name: span_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count exactly equal to this value.
+          title: Span Count Eq
+        description: Span count exactly equal to this value.
+      - name: span_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than this value.
+          title: Span Count Gt
+        description: Span count greater than this value.
+      - name: span_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than or equal to this value.
+          title: Span Count Gte
+        description: Span count greater than or equal to this value.
+      - name: span_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than this value.
+          title: Span Count Lt
+        description: Span count less than this value.
+      - name: span_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than or equal to this value.
+          title: Span Count Lte
+        description: Span count less than or equal to this value.
+      - name: include_experiment_traces
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include traces originating from Arthur experiments. Defaults to true.
+          default: true
+          title: Include Experiment Traces
+        description: Include traces originating from Arthur experiments. Defaults to true.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryTracesWithMetricsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/traces/metrics/:
+    get:
+      tags:
+      - Spans
+      summary: Compute Missing Metrics and Query Traces
+      description: Query traces with comprehensive filtering and compute metrics. Returns traces containing spans that match the filters with computed metrics.
+      operationId: query_spans_with_metrics_v1_traces_metrics__get
+      deprecated: true
+      security:
+      - API Key: []
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/TraceSortBy'
+          description: Column to sort results by.
+          default: start_time
+        description: Column to sort results by.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      - name: task_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Task IDs to filter on. At least one is required.
+          title: Task Ids
+        description: Task IDs to filter on. At least one is required.
+      - name: trace_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Trace IDs to filter on. Optional.
+          title: Trace Ids
+        description: Trace IDs to filter on. Optional.
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+          title: End Time
+        description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+      - name: tool_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this tool name.
+          title: Tool Name
+        description: Return only results with this tool name.
+      - name: span_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+          title: Span Types
+        description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+      - name: annotation_score
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1
+          minimum: 0
+          description: Filter by trace annotation score (0 or 1).
+          title: Annotation Score
+        description: Filter by trace annotation score (0 or 1).
+      - name: annotation_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+        description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+      - name: continuous_eval_run_status
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+        description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+      - name: continuous_eval_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter by continuous eval name.
+          title: Continuous Eval Name
+        description: Filter by continuous eval name.
+      - name: span_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Span IDs to filter on. Optional.
+          title: Span Ids
+        description: Span IDs to filter on. Optional.
+      - name: session_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Session IDs to filter on. Optional.
+          title: Session Ids
+        description: Session IDs to filter on. Optional.
+      - name: user_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+          title: User Ids
+        description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+      - name: span_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this span name.
+          title: Span Name
+        description: Return only results with this span name.
+      - name: span_name_contains
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results where span name contains this substring.
+          title: Span Name Contains
+        description: Return only results where span name contains this substring.
+      - name: status_code
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/StatusCodeEnum'
+          - type: 'null'
+          description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+          title: Status Code
+        description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+      - name: query_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Query Relevance Eq
+        description: Equal to this value.
+      - name: query_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Query Relevance Gt
+        description: Greater than this value.
+      - name: query_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Query Relevance Gte
+        description: Greater than or equal to this value.
+      - name: query_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Query Relevance Lt
+        description: Less than this value.
+      - name: query_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Query Relevance Lte
+        description: Less than or equal to this value.
+      - name: response_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Response Relevance Eq
+        description: Equal to this value.
+      - name: response_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Response Relevance Gt
+        description: Greater than this value.
+      - name: response_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Response Relevance Gte
+        description: Greater than or equal to this value.
+      - name: response_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Response Relevance Lt
+        description: Less than this value.
+      - name: response_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Response Relevance Lte
+        description: Less than or equal to this value.
+      - name: tool_selection
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool selection evaluation result.
+        description: Tool selection evaluation result.
+      - name: tool_usage
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool usage evaluation result.
+        description: Tool usage evaluation result.
+      - name: trace_duration_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration exactly equal to this value (seconds).
+          title: Trace Duration Eq
+        description: Duration exactly equal to this value (seconds).
+      - name: trace_duration_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than this value (seconds).
+          title: Trace Duration Gt
+        description: Duration greater than this value (seconds).
+      - name: trace_duration_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than or equal to this value (seconds).
+          title: Trace Duration Gte
+        description: Duration greater than or equal to this value (seconds).
+      - name: trace_duration_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than this value (seconds).
+          title: Trace Duration Lt
+        description: Duration less than this value (seconds).
+      - name: trace_duration_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than or equal to this value (seconds).
+          title: Trace Duration Lte
+        description: Duration less than or equal to this value (seconds).
+      - name: total_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count exactly equal to this value.
+          title: Total Token Count Eq
+        description: Total token count exactly equal to this value.
+      - name: total_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than this value.
+          title: Total Token Count Gt
+        description: Total token count greater than this value.
+      - name: total_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than or equal to this value.
+          title: Total Token Count Gte
+        description: Total token count greater than or equal to this value.
+      - name: total_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than this value.
+          title: Total Token Count Lt
+        description: Total token count less than this value.
+      - name: total_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than or equal to this value.
+          title: Total Token Count Lte
+        description: Total token count less than or equal to this value.
+      - name: prompt_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count exactly equal to this value.
+          title: Prompt Token Count Eq
+        description: Prompt token count exactly equal to this value.
+      - name: prompt_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than this value.
+          title: Prompt Token Count Gt
+        description: Prompt token count greater than this value.
+      - name: prompt_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than or equal to this value.
+          title: Prompt Token Count Gte
+        description: Prompt token count greater than or equal to this value.
+      - name: prompt_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than this value.
+          title: Prompt Token Count Lt
+        description: Prompt token count less than this value.
+      - name: prompt_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than or equal to this value.
+          title: Prompt Token Count Lte
+        description: Prompt token count less than or equal to this value.
+      - name: completion_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count exactly equal to this value.
+          title: Completion Token Count Eq
+        description: Completion token count exactly equal to this value.
+      - name: completion_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than this value.
+          title: Completion Token Count Gt
+        description: Completion token count greater than this value.
+      - name: completion_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than or equal to this value.
+          title: Completion Token Count Gte
+        description: Completion token count greater than or equal to this value.
+      - name: completion_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than this value.
+          title: Completion Token Count Lt
+        description: Completion token count less than this value.
+      - name: completion_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than or equal to this value.
+          title: Completion Token Count Lte
+        description: Completion token count less than or equal to this value.
+      - name: span_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count exactly equal to this value.
+          title: Span Count Eq
+        description: Span count exactly equal to this value.
+      - name: span_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than this value.
+          title: Span Count Gt
+        description: Span count greater than this value.
+      - name: span_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than or equal to this value.
+          title: Span Count Gte
+        description: Span count greater than or equal to this value.
+      - name: span_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than this value.
+          title: Span Count Lt
+        description: Span count less than this value.
+      - name: span_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than or equal to this value.
+          title: Span Count Lte
+        description: Span count less than or equal to this value.
+      - name: include_experiment_traces
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include traces originating from Arthur experiments. Defaults to true.
+          default: true
+          title: Include Experiment Traces
+        description: Include traces originating from Arthur experiments. Defaults to true.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryTracesWithMetricsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/spans/query:
+    get:
+      tags:
+      - Spans
+      summary: Query Spans By Type
+      description: Query spans filtered by span type. Task IDs are required. Returns spans with any existing metrics but does not compute new ones.
+      operationId: query_spans_by_type_v1_spans_query_get
+      deprecated: true
+      security:
+      - API Key: []
+      parameters:
+      - name: task_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Task IDs to filter on. At least one is required.
+          title: Task Ids
+        description: Task IDs to filter on. At least one is required.
+      - name: span_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+          title: Span Types
+        description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+          title: End Time
+        description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuerySpansResponse'
+        '400':
+          description: Invalid span types, parameters, or validation error
+        '404':
+          description: No spans found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/span/{span_id}/metrics:
+    get:
+      tags:
+      - Spans
+      summary: Compute Metrics for Span
+      description: Compute metrics for a single span. Validates that the span is an LLM span.
+      operationId: compute_span_metrics_v1_span__span_id__metrics_get
+      deprecated: true
+      security:
+      - API Key: []
+      parameters:
+      - name: span_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Span Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpanWithMetricsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/spans:
+    get:
+      tags:
+      - Spans
+      summary: List Span Metadata with Filtering
+      description: Get lightweight span metadata with comprehensive filtering support. Returns individual spans that match filtering criteria with the same filtering capabilities as trace filtering. Supports trace-level filters, span-level filters, and metric filters.
+      operationId: list_spans_metadata_api_v1_traces_spans_get
+      security:
+      - API Key: []
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/TraceSortBy'
+          description: Column to sort results by.
+          default: start_time
+        description: Column to sort results by.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      - name: task_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Task IDs to filter on. At least one is required.
+          title: Task Ids
+        description: Task IDs to filter on. At least one is required.
+      - name: trace_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Trace IDs to filter on. Optional.
+          title: Trace Ids
+        description: Trace IDs to filter on. Optional.
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+          title: End Time
+        description: Exclusive end date in ISO8601 string format. Use local time (not UTC).
+      - name: tool_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this tool name.
+          title: Tool Name
+        description: Return only results with this tool name.
+      - name: span_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+          title: Span Types
+        description: 'Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN'
+      - name: annotation_score
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1
+          minimum: 0
+          description: Filter by trace annotation score (0 or 1).
+          title: Annotation Score
+        description: Filter by trace annotation score (0 or 1).
+      - name: annotation_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+        description: Filter by trace annotation type (i.e. 'human' or 'continuous_eval').
+      - name: continuous_eval_run_status
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+        description: Filter by trace annotation run status (e.g. 'passed', 'failed', etc.).
+      - name: continuous_eval_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter by continuous eval name.
+          title: Continuous Eval Name
+        description: Filter by continuous eval name.
+      - name: span_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Span IDs to filter on. Optional.
+          title: Span Ids
+        description: Span IDs to filter on. Optional.
+      - name: session_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Session IDs to filter on. Optional.
+          title: Session Ids
+        description: Session IDs to filter on. Optional.
+      - name: user_ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+          title: User Ids
+        description: User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional.
+      - name: span_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results with this span name.
+          title: Span Name
+        description: Return only results with this span name.
+      - name: span_name_contains
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Return only results where span name contains this substring.
+          title: Span Name Contains
+        description: Return only results where span name contains this substring.
+      - name: status_code
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/StatusCodeEnum'
+          - type: 'null'
+          description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+          title: Status Code
+        description: 'Status codes to filter on. Optional. Valid values: Ok, Error, Unset.'
+      - name: query_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Query Relevance Eq
+        description: Equal to this value.
+      - name: query_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Query Relevance Gt
+        description: Greater than this value.
+      - name: query_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Query Relevance Gte
+        description: Greater than or equal to this value.
+      - name: query_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Query Relevance Lt
+        description: Less than this value.
+      - name: query_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Query Relevance Lte
+        description: Less than or equal to this value.
+      - name: response_relevance_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Equal to this value.
+          title: Response Relevance Eq
+        description: Equal to this value.
+      - name: response_relevance_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than this value.
+          title: Response Relevance Gt
+        description: Greater than this value.
+      - name: response_relevance_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Greater than or equal to this value.
+          title: Response Relevance Gte
+        description: Greater than or equal to this value.
+      - name: response_relevance_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than this value.
+          title: Response Relevance Lt
+        description: Less than this value.
+      - name: response_relevance_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+          description: Less than or equal to this value.
+          title: Response Relevance Lte
+        description: Less than or equal to this value.
+      - name: tool_selection
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool selection evaluation result.
+        description: Tool selection evaluation result.
+      - name: tool_usage
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ToolClassEnum'
+          description: Tool usage evaluation result.
+        description: Tool usage evaluation result.
+      - name: trace_duration_eq
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration exactly equal to this value (seconds).
+          title: Trace Duration Eq
+        description: Duration exactly equal to this value (seconds).
+      - name: trace_duration_gt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than this value (seconds).
+          title: Trace Duration Gt
+        description: Duration greater than this value (seconds).
+      - name: trace_duration_gte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration greater than or equal to this value (seconds).
+          title: Trace Duration Gte
+        description: Duration greater than or equal to this value (seconds).
+      - name: trace_duration_lt
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than this value (seconds).
+          title: Trace Duration Lt
+        description: Duration less than this value (seconds).
+      - name: trace_duration_lte
+        in: query
+        required: false
+        schema:
+          type: number
+          minimum: 0
+          description: Duration less than or equal to this value (seconds).
+          title: Trace Duration Lte
+        description: Duration less than or equal to this value (seconds).
+      - name: total_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count exactly equal to this value.
+          title: Total Token Count Eq
+        description: Total token count exactly equal to this value.
+      - name: total_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than this value.
+          title: Total Token Count Gt
+        description: Total token count greater than this value.
+      - name: total_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count greater than or equal to this value.
+          title: Total Token Count Gte
+        description: Total token count greater than or equal to this value.
+      - name: total_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than this value.
+          title: Total Token Count Lt
+        description: Total token count less than this value.
+      - name: total_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Total token count less than or equal to this value.
+          title: Total Token Count Lte
+        description: Total token count less than or equal to this value.
+      - name: prompt_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count exactly equal to this value.
+          title: Prompt Token Count Eq
+        description: Prompt token count exactly equal to this value.
+      - name: prompt_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than this value.
+          title: Prompt Token Count Gt
+        description: Prompt token count greater than this value.
+      - name: prompt_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count greater than or equal to this value.
+          title: Prompt Token Count Gte
+        description: Prompt token count greater than or equal to this value.
+      - name: prompt_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than this value.
+          title: Prompt Token Count Lt
+        description: Prompt token count less than this value.
+      - name: prompt_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Prompt token count less than or equal to this value.
+          title: Prompt Token Count Lte
+        description: Prompt token count less than or equal to this value.
+      - name: completion_token_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count exactly equal to this value.
+          title: Completion Token Count Eq
+        description: Completion token count exactly equal to this value.
+      - name: completion_token_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than this value.
+          title: Completion Token Count Gt
+        description: Completion token count greater than this value.
+      - name: completion_token_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count greater than or equal to this value.
+          title: Completion Token Count Gte
+        description: Completion token count greater than or equal to this value.
+      - name: completion_token_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than this value.
+          title: Completion Token Count Lt
+        description: Completion token count less than this value.
+      - name: completion_token_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Completion token count less than or equal to this value.
+          title: Completion Token Count Lte
+        description: Completion token count less than or equal to this value.
+      - name: span_count_eq
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count exactly equal to this value.
+          title: Span Count Eq
+        description: Span count exactly equal to this value.
+      - name: span_count_gt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than this value.
+          title: Span Count Gt
+        description: Span count greater than this value.
+      - name: span_count_gte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count greater than or equal to this value.
+          title: Span Count Gte
+        description: Span count greater than or equal to this value.
+      - name: span_count_lt
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than this value.
+          title: Span Count Lt
+        description: Span count less than this value.
+      - name: span_count_lte
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Span count less than or equal to this value.
+          title: Span Count Lte
+        description: Span count less than or equal to this value.
+      - name: include_experiment_traces
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include traces originating from Arthur experiments. Defaults to true.
+          default: true
+          title: Include Experiment Traces
+        description: Include traces originating from Arthur experiments. Defaults to true.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpanListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/spans/unregistered:
+    get:
+      tags:
+      - Spans
+      summary: Get Unregistered Root Spans
+      description: Get grouped root spans for traces without task_id. Groups are ordered by count descending. Supports pagination. Time bounds (start_time/end_time) are recommended for performance on large datasets.
+      operationId: get_unregistered_root_spans_api_v1_traces_spans_unregistered_get
+      security:
+      - API Key: []
+      parameters:
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format. Use local time (not UTC).
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Inclusive end date in ISO8601 string format. Use local time (not UTC).
+          title: End Time
+        description: Inclusive end date in ISO8601 string format. Use local time (not UTC).
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnregisteredRootSpansResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/spans/{span_id}:
+    get:
+      tags:
+      - Spans
+      summary: Get Single Span
+      description: Get single span with existing metrics (no computation). Returns full span object with any existing metrics.
+      operationId: get_span_by_id_api_v1_traces_spans__span_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: span_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Span Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpanWithMetricsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/spans/{span_id}/metrics:
+    get:
+      tags:
+      - Spans
+      summary: Compute Missing Span Metrics
+      description: Compute all missing metrics for a single span on-demand. Returns span with computed metrics.
+      operationId: compute_span_metrics_api_v1_traces_spans__span_id__metrics_get
+      security:
+      - API Key: []
+      parameters:
+      - name: span_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Span Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpanWithMetricsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    QueryTracesWithMetricsResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of spans matching the query parameters
+        traces:
+          items:
+            $ref: '#/components/schemas/TraceResponse'
+          type: array
+          title: Traces
+          description: List of traces containing nested spans matching the search filters
+      type: object
+      required:
+      - count
+      - traces
+      title: QueryTracesWithMetricsResponse
+      description: New response format that groups spans into traces with nested structure
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UnregisteredRootSpansResponse:
+      properties:
+        groups:
+          items:
+            $ref: '#/components/schemas/UnregisteredRootSpanGroup'
+          type: array
+          title: Groups
+          description: List of grouped root spans, ordered by count descending
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of root spans (and traces) across all groups
+      type: object
+      required:
+      - groups
+      - total_count
+      title: UnregisteredRootSpansResponse
+      description: Response for unregistered root spans endpoint
+    ToolClassEnum:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      title: ToolClassEnum
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UnregisteredRootSpanGroup:
+      properties:
+        span_name:
+          type: string
+          title: Span Name
+          description: Name of the root span
+        count:
+          type: integer
+          title: Count
+          description: Number of root spans (and traces) in this group
+      type: object
+      required:
+      - span_name
+      - count
+      title: UnregisteredRootSpanGroup
+      description: Group of root spans with the same span_name for unregistered traces
+    SpanMetadataResponse:
+      properties:
+        prompt_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Token Count
+          description: Number of prompt tokens
+        completion_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Token Count
+          description: Number of completion tokens
+        total_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Token Count
+          description: Total number of tokens
+        prompt_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Prompt Token Cost
+          description: Cost of prompt tokens in USD
+        completion_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Completion Token Cost
+          description: Cost of completion tokens in USD
+        total_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Token Cost
+          description: Total cost in USD
+        id:
+          type: string
+          title: Id
+          description: Internal database ID
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the parent trace
+        span_id:
+          type: string
+          title: Span Id
+          description: OpenTelemetry span ID
+        parent_span_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Span Id
+          description: Parent span ID
+        span_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Kind
+          description: Type of span (LLM, TOOL, etc.)
+        span_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Name
+          description: Human-readable span name
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Span start time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          description: Span end time
+        duration_ms:
+          type: number
+          title: Duration Ms
+          description: Span duration in milliseconds
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+          description: Task ID this span belongs to
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: User ID if available
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+          description: Session ID if available
+        status_code:
+          type: string
+          title: Status Code
+          description: Status code (Unset, Error, Ok)
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the span was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: When the span was updated
+        input_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Content
+          description: Span input value from raw_data.attributes.input.value
+        output_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Content
+          description: Span output value from raw_data.attributes.output.value
+      type: object
+      required:
+      - id
+      - trace_id
+      - span_id
+      - start_time
+      - end_time
+      - duration_ms
+      - status_code
+      - created_at
+      - updated_at
+      title: SpanMetadataResponse
+      description: Lightweight span metadata for list operations
+    MetricResultResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the metric result
+        metric_type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric
+        details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Details
+          description: JSON-serialized metric details
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          description: Number of prompt tokens used
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          description: Number of completion tokens used
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Latency in milliseconds
+        span_id:
+          type: string
+          title: Span Id
+          description: ID of the span this result belongs to
+        metric_id:
+          type: string
+          title: Metric Id
+          description: ID of the metric that generated this result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the result was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the result was last updated
+      type: object
+      required:
+      - id
+      - metric_type
+      - prompt_tokens
+      - completion_tokens
+      - latency_ms
+      - span_id
+      - metric_id
+      - created_at
+      - updated_at
+      title: MetricResultResponse
+    AgenticAnnotationResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the annotation
+        annotation_type:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Type of annotation
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace this annotation belongs to
+        continuous_eval_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Id
+          description: ID of the continuous eval this annotation belongs to
+        continuous_eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Name
+          description: Name of the continuous eval this annotation belongs to
+        eval_type:
+          anyOf:
+          - $ref: '#/components/schemas/EvalType'
+          - type: 'null'
+          description: 'Type of eval: ''llm_eval'' or ''ml_eval'''
+        eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eval Name
+          description: Name of the eval the continuous eval used when scoring
+        eval_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Eval Version
+          description: Version of the eval the continuous eval used when scoring
+        annotation_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Annotation Score
+          description: Binary score for a positive or negative annotation.
+        annotation_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Annotation Description
+          description: Description of the annotation.
+        input_variables:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/VariableTemplateValue'
+            type: array
+          - type: 'null'
+          title: Input Variables
+          description: Input variables for the continuous eval
+        run_status:
+          anyOf:
+          - $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          - type: 'null'
+          description: Status of the continuous eval run
+        cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cost
+          description: Cost of the continuous eval run
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the annotation was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the annotation was last updated
+      type: object
+      required:
+      - id
+      - annotation_type
+      - trace_id
+      - created_at
+      - updated_at
+      title: AgenticAnnotationResponse
+    QuerySpansResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of spans matching the query parameters
+        spans:
+          items:
+            $ref: '#/components/schemas/SpanWithMetricsResponse'
+          type: array
+          title: Spans
+          description: List of spans with metrics matching the search filters
+      type: object
+      required:
+      - count
+      - spans
+      title: QuerySpansResponse
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    SpanListResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: Total number of spans matching filters
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        spans:
+          items:
+            $ref: '#/components/schemas/SpanMetadataResponse'
+          type: array
+          title: Spans
+          description: List of span metadata
+      type: object
+      required:
+      - count
+      - spans
+      title: SpanListResponse
+      description: Response for span list endpoint
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
+    TraceResponse:
+      properties:
+        prompt_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Token Count
+          description: Number of prompt tokens
+        completion_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Token Count
+          description: Number of completion tokens
+        total_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Token Count
+          description: Total number of tokens
+        prompt_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Prompt Token Cost
+          description: Cost of prompt tokens in USD
+        completion_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Completion Token Cost
+          description: Cost of completion tokens in USD
+        total_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Token Cost
+          description: Total cost in USD
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Start time of the earliest span in this trace
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          description: End time of the latest span in this trace
+        input_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Content
+          description: Root span input value from trace metadata
+        output_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Content
+          description: Root span output value from trace metadata
+        root_spans:
+          items:
+            $ref: '#/components/schemas/NestedSpanWithMetricsResponse'
+          type: array
+          title: Root Spans
+          description: Root spans (spans with no parent) in this trace, with children nested
+          default: []
+        annotations:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AgenticAnnotationResponse'
+            type: array
+          - type: 'null'
+          title: Annotations
+          description: Annotations for this trace.
+      type: object
+      required:
+      - trace_id
+      - start_time
+      - end_time
+      title: TraceResponse
+      description: Response model for a single trace containing nested spans
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    TraceSortBy:
+      type: string
+      enum:
+      - start_time
+      - total_token_count
+      - total_token_cost
+      - span_count
+      title: TraceSortBy
+    NestedSpanWithMetricsResponse:
+      properties:
+        prompt_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Token Count
+          description: Number of prompt tokens
+        completion_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Token Count
+          description: Number of completion tokens
+        total_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Token Count
+          description: Total number of tokens
+        prompt_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Prompt Token Cost
+          description: Cost of prompt tokens in USD
+        completion_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Completion Token Cost
+          description: Cost of completion tokens in USD
+        total_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Token Cost
+          description: Total cost in USD
+        id:
+          type: string
+          title: Id
+        trace_id:
+          type: string
+          title: Trace Id
+        span_id:
+          type: string
+          title: Span Id
+        parent_span_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Span Id
+        span_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Kind
+        span_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Name
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status_code:
+          type: string
+          title: Status Code
+          description: Status code for the span (Unset, Error, Ok)
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        raw_data:
+          additionalProperties: true
+          type: object
+          title: Raw Data
+        input_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Content
+          description: Span input value from raw_data.attributes.input.value
+        output_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Content
+          description: Span output value from raw_data.attributes.output.value
+        metric_results:
+          items:
+            $ref: '#/components/schemas/MetricResultResponse'
+          type: array
+          title: Metric Results
+          description: List of metric results for this span
+          default: []
+        children:
+          items:
+            $ref: '#/components/schemas/NestedSpanWithMetricsResponse'
+          type: array
+          title: Children
+          description: Child spans nested under this span
+          default: []
+      type: object
+      required:
+      - id
+      - trace_id
+      - span_id
+      - start_time
+      - end_time
+      - status_code
+      - created_at
+      - updated_at
+      - raw_data
+      title: NestedSpanWithMetricsResponse
+      description: Nested span response with children for building span trees
+    StatusCodeEnum:
+      type: string
+      enum:
+      - Ok
+      - Error
+      - Unset
+      title: StatusCodeEnum
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    SpanWithMetricsResponse:
+      properties:
+        prompt_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Token Count
+          description: Number of prompt tokens
+        completion_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Token Count
+          description: Number of completion tokens
+        total_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Token Count
+          description: Total number of tokens
+        prompt_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Prompt Token Cost
+          description: Cost of prompt tokens in USD
+        completion_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Completion Token Cost
+          description: Cost of completion tokens in USD
+        total_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Token Cost
+          description: Total cost in USD
+        id:
+          type: string
+          title: Id
+        trace_id:
+          type: string
+          title: Trace Id
+        span_id:
+          type: string
+          title: Span Id
+        parent_span_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Span Id
+        span_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Kind
+        span_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Name
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status_code:
+          type: string
+          title: Status Code
+          description: Status code for the span (Unset, Error, Ok)
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        raw_data:
+          additionalProperties: true
+          type: object
+          title: Raw Data
+        input_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Content
+          description: Span input value from raw_data.attributes.input.value
+        output_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Content
+          description: Span output value from raw_data.attributes.output.value
+        metric_results:
+          items:
+            $ref: '#/components/schemas/MetricResultResponse'
+          type: array
+          title: Metric Results
+          description: List of metric results for this span
+          default: []
+      type: object
+      required:
+      - id
+      - trace_id
+      - span_id
+      - start_time
+      - end_time
+      - status_code
+      - created_at
+      - updated_at
+      - raw_data
+      title: SpanWithMetricsResponse
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

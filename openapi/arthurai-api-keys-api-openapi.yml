@@ -1,0 +1,237 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery API Keys API
+  version: 2.1.688
+  description: Endpoints for API keys management
+tags:
+- name: API Keys
+  description: Endpoints for API keys management
+paths:
+  /auth/api_keys/:
+    get:
+      tags:
+      - API Keys
+      summary: Get All Active Api Keys
+      operationId: get_all_active_api_keys_auth_api_keys__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiKeyResponse'
+                type: array
+                title: Response Get All Active Api Keys Auth Api Keys  Get
+      security:
+      - API Key: []
+    post:
+      tags:
+      - API Keys
+      summary: Create Api Key
+      description: 'Generates a new API key. Up to 1000 active keys can exist at the same time by default. Contact your system administrator if you need more. Allowed roles are: DEFAULT-RULE-ADMIN, TASK-ADMIN, VALIDATION-USER, ORG-AUDITOR, ORG-ADMIN.'
+      operationId: create_api_key_auth_api_keys__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+  /auth/api_keys/{api_key_id}:
+    get:
+      tags:
+      - API Keys
+      summary: Get Api Key
+      operationId: get_api_key_auth_api_keys__api_key_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: api_key_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Api Key Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /auth/api_keys/deactivate/{api_key_id}:
+    delete:
+      tags:
+      - API Keys
+      summary: Deactivate Api Key
+      operationId: deactivate_api_key_auth_api_keys_deactivate__api_key_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: api_key_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Api Key Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ApiKeyResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the key
+        key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key
+          description: The generated GenAI Engine API key. The key is displayed on key creation request only.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the API key
+        is_active:
+          type: boolean
+          title: Is Active
+          description: Status of the key.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Creation time of the key
+        deactivated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deactivated At
+          description: Deactivation time of the key
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: Optional Message
+        roles:
+          items:
+            type: string
+          type: array
+          title: Roles
+          description: Roles of the API key
+          default: []
+      type: object
+      required:
+      - id
+      - is_active
+      - created_at
+      title: ApiKeyResponse
+    NewApiKeyRequest:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the API key. Optional.
+        roles:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/APIKeysRolesEnum'
+            type: array
+          - type: 'null'
+          title: Roles
+          description: 'Role that will be assigned to API key. Allowed values: [<APIKeysRolesEnum.DEFAULT_RULE_ADMIN: ''DEFAULT-RULE-ADMIN''>, <APIKeysRolesEnum.TASK_ADMIN: ''TASK-ADMIN''>, <APIKeysRolesEnum.VALIDATION_USER: ''VALIDATION-USER''>, <APIKeysRolesEnum.ORG_AUDITOR: ''ORG-AUDITOR''>, <APIKeysRolesEnum.ORG_ADMIN: ''ORG-ADMIN''>, <APIKeysRolesEnum.TENANT_USER: ''TENANT-USER''>]'
+          default:
+          - VALIDATION-USER
+      type: object
+      title: NewApiKeyRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    APIKeysRolesEnum:
+      type: string
+      enum:
+      - DEFAULT-RULE-ADMIN
+      - TASK-ADMIN
+      - VALIDATION-USER
+      - ORG-AUDITOR
+      - ORG-ADMIN
+      - TENANT-USER
+      title: APIKeysRolesEnum
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

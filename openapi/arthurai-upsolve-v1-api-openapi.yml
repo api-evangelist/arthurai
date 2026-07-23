@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Upsolve V1 API
+  version: 2.1.688
+tags:
+- name: Upsolve V1
+paths:
+  /api/v1/upsolve-ai/tenant/token:
+    post:
+      tags:
+      - Upsolve V1
+      summary: Retrieve Jwt For Upsolve Ai Dashboards
+      description: Authenticates and authorizes user with Upsolve AI and returns Upsolve JWT.
+      operationId: post_tenant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUpsolveTenant'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsolveToken'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode: []
+components:
+  schemas:
+    ResourceKind:
+      type: string
+      enum:
+      - platform
+      - organization
+      - workspace
+      - project
+      - model
+      - connector
+      - available_dataset
+      - dataset
+      - role_binding
+      - role
+      - user
+      - group
+      - data_plane_association
+      - data_plane
+      - alert_rule
+      - webhook
+      - custom_aggregation
+      - custom_aggregation_test
+      - agent
+      - policy
+      - policy_alert_rule
+      - policy_attestation_rule
+      - policy_assignment
+      title: ResourceKind
+    PostUpsolveTenant:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: ID of the resource.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      title: PostUpsolveTenant
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    UpsolveToken:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: JWT for use with Upsolve API.
+      type: object
+      required:
+      - token
+      title: UpsolveToken
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

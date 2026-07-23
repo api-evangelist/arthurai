@@ -1,0 +1,119 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Registration V1 API
+  version: 2.1.688
+tags:
+- name: Registration V1
+paths:
+  /api/v1/sign-up:
+    post:
+      tags:
+      - Registration V1
+      summary: Sign Up New User.
+      description: Signs up a new user and creates default resources. Triggers invitation to user email. Account creation feature flag must be enabled to use this endpoint.
+      operationId: post_sign_up_user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    RegisterUser:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+          description: The user's email.
+        recaptcha_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Recaptcha Token
+          description: reCAPTCHA Enterprise token obtained client-side. Required when reCAPTCHA is configured server-side; ignored otherwise.
+      type: object
+      required:
+      - email
+      title: RegisterUser
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

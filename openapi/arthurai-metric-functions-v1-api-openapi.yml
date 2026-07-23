@@ -1,0 +1,417 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Metric Functions V1 API
+  version: 2.1.688
+tags:
+- name: Metric Functions V1
+paths:
+  /api/v1/metric_functions/aggregations:
+    get:
+      tags:
+      - Metric Functions V1
+      summary: Get Aggregations Catalog
+      description: Get aggregations catalog.
+      operationId: get_metric_functions_aggregations
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AggregationSpecSchema_'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      security:
+      - OAuth2AuthorizationCode: []
+components:
+  schemas:
+    MetricsLiteralParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: literal
+          title: Parameter Type
+          default: literal
+        parameter_dtype:
+          $ref: '#/components/schemas/DType'
+          description: Data type of the parameter.
+        optional:
+          type: boolean
+          title: Optional
+          description: Boolean denoting if the parameter is optional.
+          default: false
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - parameter_dtype
+      title: MetricsLiteralParameterSchema
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ResourceList_AggregationSpecSchema_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AggregationSpecSchema'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AggregationSpecSchema]
+    AggregationSpecSchema:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the aggregation function.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique identifier of the aggregation function.
+        description:
+          type: string
+          title: Description
+          description: Description of the aggregation function and what it aggregates.
+        metric_type:
+          $ref: '#/components/schemas/AggregationMetricType'
+          description: Return type of the aggregations aggregate function.
+        init_args:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/MetricsDatasetParameterSchema'
+            - $ref: '#/components/schemas/MetricsLiteralParameterSchema'
+            - $ref: '#/components/schemas/MetricsColumnParameterSchema'
+            - $ref: '#/components/schemas/MetricsColumnListParameterSchema'
+          type: array
+          title: Init Args
+          description: List of parameters to the aggregation's init function.
+        aggregate_args:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/MetricsDatasetParameterSchema'
+            - $ref: '#/components/schemas/MetricsLiteralParameterSchema'
+            - $ref: '#/components/schemas/MetricsColumnParameterSchema'
+            - $ref: '#/components/schemas/MetricsColumnListParameterSchema'
+          type: array
+          title: Aggregate Args
+          description: List of parameters to the aggregation's aggregate function.
+        reported_aggregations:
+          items:
+            $ref: '#/components/schemas/BaseReportedAggregation'
+          type: array
+          title: Reported Aggregations
+          description: List of aggregations reported by the metric.
+      type: object
+      required:
+      - name
+      - id
+      - description
+      - metric_type
+      - init_args
+      - aggregate_args
+      - reported_aggregations
+      title: AggregationSpecSchema
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
+    DType:
+      type: string
+      enum:
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
+    ListType:
+      properties:
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/ScalarType'
+          - $ref: '#/components/schemas/ObjectType'
+          - $ref: '#/components/schemas/ListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: ListType
+    MetricsColumnParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          description: List of tags that are applicable to this parameter. Datasets with columns that have matching tags can be inferred this way.
+          default: []
+        source_dataset_parameter_key:
+          type: string
+          title: Source Dataset Parameter Key
+          description: Name of the parameter that provides the dataset to be used for this column.
+        allowed_column_types:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ScalarType'
+              - $ref: '#/components/schemas/ObjectType'
+              - $ref: '#/components/schemas/ListType'
+            type: array
+          - type: 'null'
+          title: Allowed Column Types
+          description: List of column types applicable to this parameter
+        allow_any_column_type:
+          type: boolean
+          title: Allow Any Column Type
+          description: Indicates if this metric parameter can accept any column type.
+          default: false
+        parameter_type:
+          type: string
+          const: column
+          title: Parameter Type
+          default: column
+        optional:
+          type: boolean
+          title: Optional
+          description: Boolean denoting if the parameter is optional.
+          default: false
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - source_dataset_parameter_key
+      title: MetricsColumnParameterSchema
+    MetricsDatasetParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: dataset
+          title: Parameter Type
+          default: dataset
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type of the parameter. If not set, any model problem type is allowed.
+        optional:
+          type: boolean
+          title: Optional
+          description: Boolean denoting if the parameter is optional.
+          default: false
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      title: MetricsDatasetParameterSchema
+    MetricsColumnListParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          description: List of tags that are applicable to this parameter. Datasets with columns that have matching tags can be inferred this way.
+          default: []
+        source_dataset_parameter_key:
+          type: string
+          title: Source Dataset Parameter Key
+          description: Name of the parameter that provides the dataset to be used for this column.
+        allowed_column_types:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ScalarType'
+              - $ref: '#/components/schemas/ObjectType'
+              - $ref: '#/components/schemas/ListType'
+            type: array
+          - type: 'null'
+          title: Allowed Column Types
+          description: List of column types applicable to this parameter
+        allow_any_column_type:
+          type: boolean
+          title: Allow Any Column Type
+          description: Indicates if this metric parameter can accept any column type.
+          default: false
+        optional:
+          type: boolean
+          title: Optional
+          description: Boolean denoting if the parameter is optional.
+          default: false
+        parameter_type:
+          type: string
+          const: column_list
+          title: Parameter Type
+          default: column_list
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - source_dataset_parameter_key
+      title: MetricsColumnListParameterSchema
+    ScalarType:
+      properties:
+        dtype:
+          $ref: '#/components/schemas/DType'
+      type: object
+      required:
+      - dtype
+      title: ScalarType
+    BaseReportedAggregation:
+      properties:
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the reported aggregation metric.
+        description:
+          type: string
+          title: Description
+          description: Description of the reported aggregation metric and what it aggregates.
+      type: object
+      required:
+      - metric_name
+      - description
+      title: BaseReportedAggregation
+    AggregationMetricType:
+      type: string
+      enum:
+      - sketch
+      - numeric
+      title: AggregationMetricType
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    ObjectType:
+      properties:
+        object:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/ScalarType'
+            - $ref: '#/components/schemas/ObjectType'
+            - $ref: '#/components/schemas/ListType'
+          type: object
+          title: Object
+      type: object
+      required:
+      - object
+      title: ObjectType
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

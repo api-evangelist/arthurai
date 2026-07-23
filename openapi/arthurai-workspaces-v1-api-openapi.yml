@@ -1,0 +1,511 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Workspaces V1 API
+  version: 2.1.688
+tags:
+- name: Workspaces V1
+paths:
+  /api/v1/workspaces/{workspace_id}:
+    get:
+      tags:
+      - Workspaces V1
+      summary: Get Workspace.
+      description: Requires workspace_read permission.
+      operationId: get_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_read
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Workspaces V1
+      summary: Patch Workspace.
+      description: Requires workspace_update permission.
+      operationId: patch_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_update
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchWorkspace'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Workspaces V1
+      summary: Delete Workspace.
+      description: Requires workspace_delete permission.
+      operationId: delete_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_delete
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/statistics:
+    get:
+      tags:
+      - Workspaces V1
+      summary: Get Workspace Statistics
+      description: Gets workspace information for data plane, projects, custom aggregations, and user count. Requires workspace_get_statistics permission
+      operationId: workspace_get_statistics
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_get_statistics
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceStatistics'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/workspaces:
+    post:
+      tags:
+      - Workspaces V1
+      summary: Post Workspace.
+      description: Requires organization_create_workspace permission.
+      operationId: post_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_create_workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWorkspace'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Workspaces V1
+      summary: Get Workspaces.
+      description: Requires organization_list_workspaces permission.
+      operationId: get_workspaces
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_workspaces
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/WorkspaceSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: name
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: asc
+        description: Override the sort order used. Optional.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search term to filter workspaces by name.
+          title: Name
+        description: Search term to filter workspaces by name.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Workspace_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    WorkspaceSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: WorkspaceSort
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PostWorkspace:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+      type: object
+      required:
+      - name
+      title: PostWorkspace
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    WorkspaceStatistics:
+      properties:
+        active_engine_count:
+          type: integer
+          title: Active Engine Count
+        total_engine_count:
+          type: integer
+          title: Total Engine Count
+        projects_count:
+          type: integer
+          title: Projects Count
+        custom_agg_count:
+          type: integer
+          title: Custom Agg Count
+        workspace_user_count:
+          type: integer
+          title: Workspace User Count
+      type: object
+      required:
+      - active_engine_count
+      - total_engine_count
+      - projects_count
+      - custom_agg_count
+      - workspace_user_count
+      title: WorkspaceStatistics
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Workspace:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the workspace.
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+          description: ID of the parent organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - organization_id
+      title: Workspace
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ResourceList_Workspace_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Workspace'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Workspace]
+    PatchWorkspace:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+      type: object
+      required:
+      - name
+      title: PatchWorkspace
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

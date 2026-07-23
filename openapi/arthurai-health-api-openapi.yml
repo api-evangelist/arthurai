@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Health API
+  version: 2.1.688
+tags:
+- name: Health
+paths:
+  /api/health:
+    get:
+      summary: Health Check
+      description: Confirms the API is healthy and responsive.
+      operationId: Health_check_api_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      tags:
+      - Health
+components:
+  schemas:
+    HealthStatus:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Successful health check message.
+          default: ok
+        build_version:
+          type: string
+          title: Build Version
+          description: Application build version.
+        release_version:
+          type: string
+          title: Release Version
+          description: Platform release version.
+      type: object
+      title: HealthStatus
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

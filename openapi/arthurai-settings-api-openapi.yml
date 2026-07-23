@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Settings API
+  version: 2.1.688
+tags:
+- name: Settings
+paths:
+  /api/v2/display-settings:
+    get:
+      tags:
+      - Settings
+      summary: Get Display Settings
+      description: Get display settings (e.g. default currency for cost formatting).
+      operationId: get_display_settings_api_v2_display_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisplaySettingsResponse'
+components:
+  schemas:
+    DisplaySettingsResponse:
+      properties:
+        default_currency:
+          type: string
+          title: Default Currency
+          default: USD
+        chatbot_enabled:
+          type: boolean
+          title: Chatbot Enabled
+          default: true
+        scope_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope Url
+      type: object
+      title: DisplaySettingsResponse
+      description: Public display settings (e.g. default currency for cost formatting).
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

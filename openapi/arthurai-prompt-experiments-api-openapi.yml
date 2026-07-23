@@ -1,0 +1,1372 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Prompt Experiments API
+  version: 2.1.688
+  description: Endpoints for managing prompt experiments
+tags:
+- name: Prompt Experiments
+  description: Endpoints for managing prompt experiments
+paths:
+  /api/v1/tasks/{task_id}/prompt_experiments:
+    get:
+      tags:
+      - Prompt Experiments
+      summary: List prompt experiments
+      description: List all prompt experiments for a task with optional filtering and pagination
+      operationId: list_prompt_experiments_api_v1_tasks__task_id__prompt_experiments_get
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search text to filter experiments by name, description, prompt name, or dataset name
+          title: Search
+        description: Search text to filter experiments by name, description, prompt name, or dataset name
+      - name: dataset_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter experiments by dataset ID
+          title: Dataset Id
+        description: Filter experiments by dataset ID
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptExperimentListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Prompt Experiments
+      summary: Create and run a prompt experiment
+      description: Create a new prompt experiment and initiate execution
+      operationId: create_prompt_experiment_api_v1_tasks__task_id__prompt_experiments_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePromptExperimentRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptExperimentSummary'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/prompt_experiments/{experiment_id}:
+    get:
+      tags:
+      - Prompt Experiments
+      summary: Get prompt experiment details
+      description: Get detailed information about a specific prompt experiment including summary results
+      operationId: get_prompt_experiment_api_v1_prompt_experiments__experiment_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment ID
+          description: The ID of the experiment to retrieve
+        description: The ID of the experiment to retrieve
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptExperimentDetail'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Prompt Experiments
+      summary: Delete prompt experiment
+      description: Delete a prompt experiment and all its associated data
+      operationId: delete_prompt_experiment_api_v1_prompt_experiments__experiment_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment ID
+          description: The ID of the experiment to delete
+        description: The ID of the experiment to delete
+      responses:
+        '204':
+          description: Experiment deleted successfully.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/prompt_experiments/{experiment_id}/test_cases:
+    get:
+      tags:
+      - Prompt Experiments
+      summary: Get experiment test cases
+      description: Get paginated list of test case results for a prompt experiment
+      operationId: get_experiment_test_cases_api_v1_prompt_experiments__experiment_id__test_cases_get
+      security:
+      - API Key: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment ID
+          description: The ID of the experiment
+        description: The ID of the experiment
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/prompt_experiments/{experiment_id}/prompts/{prompt_key}/results:
+    get:
+      tags:
+      - Prompt Experiments
+      summary: Get prompt results
+      description: Get paginated list of results for a specific prompt within an experiment (supports both saved and unsaved prompts)
+      operationId: get_prompt_version_results_api_v1_prompt_experiments__experiment_id__prompts__prompt_key__results_get
+      security:
+      - API Key: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment ID
+          description: The ID of the experiment
+        description: The ID of the experiment
+      - name: prompt_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Prompt Key
+          description: 'The prompt key (format: ''saved:name:version'' or ''unsaved:auto_name''). URL-encode colons as %3A'
+        description: 'The prompt key (format: ''saved:name:version'' or ''unsaved:auto_name''). URL-encode colons as %3A'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptVersionResultListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/prompt_experiments/{experiment_id}/notebook:
+    patch:
+      tags:
+      - Prompt Experiments
+      summary: Attach notebook to experiment
+      description: Attach a notebook to an existing experiment
+      operationId: attach_notebook_to_experiment_api_v1_prompt_experiments__experiment_id__notebook_patch
+      security:
+      - API Key: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: ID of the experiment
+          title: Experiment Id
+        description: ID of the experiment
+      - name: notebook_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: ID of the notebook to attach
+          title: Notebook Id
+        description: ID of the notebook to attach
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptExperimentSummary'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TestCaseStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - evaluating
+      - failed
+      - completed
+      title: TestCaseStatus
+      description: Status of a test case
+    EvalVariableMapping-Input:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    NewDatasetVersionRowColumnItemRequest:
+      properties:
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column.
+        column_value:
+          type: string
+          title: Column Value
+          description: Value of column for the row.
+      type: object
+      required:
+      - column_name
+      - column_value
+      title: NewDatasetVersionRowColumnItemRequest
+      description: Represents a single column-value pair in a dataset row.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SummaryResults:
+      properties:
+        prompt_eval_summaries:
+          items:
+            $ref: '#/components/schemas/PromptEvalResultSummaries'
+          type: array
+          title: Prompt Eval Summaries
+          description: Summary for each prompt version tested
+      type: object
+      required:
+      - prompt_eval_summaries
+      title: SummaryResults
+      description: Summary results across all prompt versions and evaluations
+    PromptExperimentListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/PromptExperimentSummary'
+          type: array
+          title: Data
+          description: List of prompt experiment summaries
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: PromptExperimentListResponse
+      description: Paginated list of prompt experiments
+    DatasetRef:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dataset ID
+        version:
+          type: integer
+          title: Version
+          description: Dataset version number
+        name:
+          type: string
+          title: Name
+          description: Dataset name
+      type: object
+      required:
+      - id
+      - version
+      - name
+      title: DatasetRef
+      description: Reference to a dataset and version (with name)
+    PromptVersionResultListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/PromptVersionResult'
+          type: array
+          title: Data
+          description: List of results for the prompt version
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: PromptVersionResultListResponse
+      description: Paginated list of results for a specific prompt version
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    InputVariable:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - variable_name
+      - value
+      title: InputVariable
+      description: Input variable for a test case
+    EvalExecution:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        eval_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Eval Input Variables
+          description: Input variables used for the eval
+        eval_results:
+          anyOf:
+          - $ref: '#/components/schemas/EvalExecutionResult'
+          - type: 'null'
+          description: Results from the eval (None if not yet executed)
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - eval_input_variables
+      title: EvalExecution
+      description: Details of an eval execution
+    ChatCompletionMessageToolCall:
+      properties: {}
+      additionalProperties: true
+      type: object
+      title: ChatCompletionMessageToolCall
+    DatasetRefInput:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dataset ID
+        version:
+          type: integer
+          title: Version
+          description: Dataset version number
+      type: object
+      required:
+      - id
+      - version
+      title: DatasetRefInput
+      description: Reference to a dataset and version for input (without name)
+    PromptResult:
+      properties:
+        evals:
+          items:
+            $ref: '#/components/schemas/EvalExecution'
+          type: array
+          title: Evals
+          description: Evaluation results for this execution
+        prompt_key:
+          type: string
+          title: Prompt Key
+          description: 'Prompt key: ''saved:name:version'' or ''unsaved:auto_name'''
+        prompt_type:
+          type: string
+          title: Prompt Type
+          description: 'Type: ''saved'' or ''unsaved'''
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the prompt (for saved prompts)
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+          description: Version of the prompt (for saved prompts)
+        rendered_prompt:
+          type: string
+          title: Rendered Prompt
+          description: Prompt with variables replaced
+        output:
+          anyOf:
+          - $ref: '#/components/schemas/PromptOutput'
+          - type: 'null'
+          description: Output from the prompt (None if not yet executed)
+      type: object
+      required:
+      - evals
+      - prompt_key
+      - prompt_type
+      - rendered_prompt
+      title: PromptResult
+      description: Results from a prompt execution with evals
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    ExperimentOutputVariableSource:
+      properties:
+        type:
+          type: string
+          const: experiment_output
+          title: Type
+          description: 'Type of source: ''experiment_output'''
+        experiment_output:
+          $ref: '#/components/schemas/ExperimentOutputSource'
+          description: Experiment output source
+      type: object
+      required:
+      - type
+      - experiment_output
+      title: ExperimentOutputVariableSource
+      description: Variable source from experiment output
+    PromptVariableMapping-Input:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the prompt variable
+        source:
+          $ref: '#/components/schemas/DatasetColumnVariableSource'
+          description: Dataset column source
+      type: object
+      required:
+      - variable_name
+      - source
+      title: PromptVariableMapping
+      description: Mapping of a prompt variable to a dataset column source
+    DatasetColumnVariableSource:
+      properties:
+        type:
+          type: string
+          const: dataset_column
+          title: Type
+          description: 'Type of source: ''dataset_column'''
+        dataset_column:
+          $ref: '#/components/schemas/DatasetColumnSource'
+          description: Dataset column source
+      type: object
+      required:
+      - type
+      - dataset_column
+      title: DatasetColumnVariableSource
+      description: Variable source from a dataset column
+    PromptExperimentSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the experiment
+        name:
+          type: string
+          title: Name
+          description: Name of the experiment
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the experiment
+        created_at:
+          type: string
+          title: Created At
+          description: ISO timestamp when experiment was created
+        finished_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finished At
+          description: ISO timestamp when experiment finished
+        status:
+          $ref: '#/components/schemas/ExperimentStatus'
+          description: Current status of the experiment
+        dataset_id:
+          type: string
+          format: uuid
+          title: Dataset Id
+          description: ID of the dataset used
+        dataset_name:
+          type: string
+          title: Dataset Name
+          description: Name of the dataset used
+        dataset_version:
+          type: integer
+          title: Dataset Version
+          description: Version of the dataset used
+        total_rows:
+          type: integer
+          title: Total Rows
+          description: Total number of test rows in the experiment
+        completed_rows:
+          type: integer
+          title: Completed Rows
+          description: Number of test rows completed successfully
+        failed_rows:
+          type: integer
+          title: Failed Rows
+          description: Number of test rows that failed
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost of running the experiment
+        prompt_configs:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SavedPromptConfig'
+            - $ref: '#/components/schemas/UnsavedPromptConfig'
+            discriminator:
+              propertyName: type
+              mapping:
+                saved: '#/components/schemas/SavedPromptConfig'
+                unsaved: '#/components/schemas/UnsavedPromptConfig'
+          type: array
+          title: Prompt Configs
+          description: List of prompts being tested
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - status
+      - dataset_id
+      - dataset_name
+      - dataset_version
+      - total_rows
+      - completed_rows
+      - failed_rows
+      - prompt_configs
+      title: PromptExperimentSummary
+      description: Summary of a prompt experiment
+    TestCase:
+      properties:
+        status:
+          $ref: '#/components/schemas/TestCaseStatus'
+          description: Status of the test case
+        dataset_row_id:
+          type: string
+          title: Dataset Row Id
+          description: ID of the dataset row
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost for this test case
+        prompt_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Prompt Input Variables
+          description: Input variables for the prompt
+        prompt_results:
+          items:
+            $ref: '#/components/schemas/PromptResult'
+          type: array
+          title: Prompt Results
+          description: Results for each prompt version tested
+      type: object
+      required:
+      - status
+      - dataset_row_id
+      - prompt_input_variables
+      - prompt_results
+      title: TestCase
+      description: Individual test case result
+    EvalRef-Output:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Output'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
+      type: object
+      required:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    UnsavedPromptConfig:
+      properties:
+        type:
+          type: string
+          const: unsaved
+          title: Type
+          default: unsaved
+        auto_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Auto Name
+          description: Auto-generated name (set by backend)
+        messages:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Messages
+          description: Prompt messages
+        model_name:
+          type: string
+          title: Model Name
+          description: LLM model name
+        model_provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: LLM provider
+        tools:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Available tools
+        config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Config
+          description: LLM config settings
+        variables:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Variables
+          description: Variables (auto-detected if not provided)
+      type: object
+      required:
+      - messages
+      - model_name
+      - model_provider
+      title: UnsavedPromptConfig
+      description: Configuration for an unsaved prompt
+    EvalVariableMapping-Output:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    ExperimentStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - failed
+      - completed
+      title: ExperimentStatus
+      description: Status of an experiment
+    PromptVariableMapping-Output:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the prompt variable
+        source:
+          $ref: '#/components/schemas/DatasetColumnVariableSource'
+          description: Dataset column source
+      type: object
+      required:
+      - variable_name
+      - source
+      title: PromptVariableMapping
+      description: Mapping of a prompt variable to a dataset column source
+    PromptOutput:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Content of the prompt response
+        tool_calls:
+          items:
+            $ref: '#/components/schemas/ChatCompletionMessageToolCall'
+          type: array
+          title: Tool Calls
+          description: Tool calls made by the prompt
+        cost:
+          type: string
+          title: Cost
+          description: Cost of the prompt execution
+      type: object
+      required:
+      - content
+      - cost
+      title: PromptOutput
+      description: Output from a prompt execution
+    SavedPromptConfig:
+      properties:
+        type:
+          type: string
+          const: saved
+          title: Type
+          default: saved
+        name:
+          type: string
+          title: Name
+          description: Name of the saved prompt
+        version:
+          type: integer
+          title: Version
+          description: Version of the saved prompt
+      type: object
+      required:
+      - name
+      - version
+      title: SavedPromptConfig
+      description: Configuration for a saved prompt
+    PromptExperimentDetail:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the experiment
+        name:
+          type: string
+          title: Name
+          description: Name of the experiment
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the experiment
+        created_at:
+          type: string
+          title: Created At
+          description: ISO timestamp when experiment was created
+        finished_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finished At
+          description: ISO timestamp when experiment finished
+        status:
+          $ref: '#/components/schemas/ExperimentStatus'
+          description: Current status of the experiment
+        total_rows:
+          type: integer
+          title: Total Rows
+          description: Total number of test rows in the experiment
+        completed_rows:
+          type: integer
+          title: Completed Rows
+          description: Number of test rows completed successfully
+        failed_rows:
+          type: integer
+          title: Failed Rows
+          description: Number of test rows that failed
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost of running the experiment
+        dataset_ref:
+          $ref: '#/components/schemas/DatasetRef'
+          description: Reference to the dataset used
+        dataset_row_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Dataset Row Filter
+          description: Optional list of column name and value filters applied to dataset rows. Only rows matching ALL specified column name-value pairs (AND condition) were included in the experiment.
+        notebook_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notebook Id
+          description: Optional notebook ID this experiment is linked to
+        eval_list:
+          items:
+            $ref: '#/components/schemas/EvalRef-Output'
+          type: array
+          title: Eval List
+          description: List of evaluations being run
+        prompt_configs:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SavedPromptConfig'
+            - $ref: '#/components/schemas/UnsavedPromptConfig'
+            discriminator:
+              propertyName: type
+              mapping:
+                saved: '#/components/schemas/SavedPromptConfig'
+                unsaved: '#/components/schemas/UnsavedPromptConfig'
+          type: array
+          title: Prompt Configs
+          description: List of prompts being tested
+        prompt_variable_mapping:
+          items:
+            $ref: '#/components/schemas/PromptVariableMapping-Output'
+          type: array
+          title: Prompt Variable Mapping
+          description: Shared variable mapping for all prompts
+        summary_results:
+          $ref: '#/components/schemas/SummaryResults'
+          description: Summary of results across all test cases
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - status
+      - total_rows
+      - completed_rows
+      - failed_rows
+      - dataset_ref
+      - eval_list
+      - prompt_configs
+      - prompt_variable_mapping
+      - summary_results
+      title: PromptExperimentDetail
+      description: Detailed information about a prompt experiment
+    CreatePromptExperimentRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name for the experiment
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the experiment
+        dataset_ref:
+          $ref: '#/components/schemas/DatasetRefInput'
+          description: Reference to the dataset to use
+        eval_list:
+          items:
+            $ref: '#/components/schemas/EvalRef-Input'
+          type: array
+          title: Eval List
+          description: List of evaluations to run
+        dataset_row_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Dataset Row Filter
+          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included in the experiment. If not specified, all rows from the dataset will be used.
+        prompt_configs:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SavedPromptConfig'
+            - $ref: '#/components/schemas/UnsavedPromptConfig'
+            discriminator:
+              propertyName: type
+              mapping:
+                saved: '#/components/schemas/SavedPromptConfig'
+                unsaved: '#/components/schemas/UnsavedPromptConfig'
+          type: array
+          title: Prompt Configs
+          description: List of prompt configurations (saved or unsaved)
+        prompt_variable_mapping:
+          items:
+            $ref: '#/components/schemas/PromptVariableMapping-Input'
+          type: array
+          title: Prompt Variable Mapping
+          description: Shared variable mapping for all prompts
+      type: object
+      required:
+      - name
+      - dataset_ref
+      - eval_list
+      - prompt_configs
+      - prompt_variable_mapping
+      title: CreatePromptExperimentRequest
+      description: Request to create a new prompt experiment
+    PromptVersionResult:
+      properties:
+        status:
+          $ref: '#/components/schemas/TestCaseStatus'
+          description: Status of the test case
+        dataset_row_id:
+          type: string
+          title: Dataset Row Id
+          description: ID of the dataset row
+        evals:
+          items:
+            $ref: '#/components/schemas/EvalExecution'
+          type: array
+          title: Evals
+          description: Evaluation results for this specific config
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost for this config test case execution
+        prompt_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Prompt Input Variables
+          description: Input variables for the prompt
+        rendered_prompt:
+          type: string
+          title: Rendered Prompt
+          description: Prompt with variables replaced
+        output:
+          anyOf:
+          - $ref: '#/components/schemas/PromptOutput'
+          - type: 'null'
+          description: Output from the prompt (None if not yet executed)
+      type: object
+      required:
+      - status
+      - dataset_row_id
+      - evals
+      - prompt_input_variables
+      - rendered_prompt
+      title: PromptVersionResult
+      description: Result for a specific prompt version within a test case
+    DatasetColumnSource:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset column
+      type: object
+      required:
+      - name
+      title: DatasetColumnSource
+      description: Reference to a dataset column
+    PromptEvalResultSummaries:
+      properties:
+        prompt_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Key
+          description: 'Prompt key: ''saved:name:version'' or ''unsaved:auto_name'''
+        prompt_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Type
+          description: 'Type: ''saved'' or ''unsaved'''
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Name
+          description: Name of the prompt (for saved prompts, or auto_name for unsaved)
+        prompt_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Version
+          description: Version of the prompt (for saved prompts only)
+        eval_results:
+          items:
+            $ref: '#/components/schemas/EvalResultSummary'
+          type: array
+          title: Eval Results
+          description: Results for each evaluation run on this prompt version
+      type: object
+      required:
+      - eval_results
+      title: PromptEvalResultSummaries
+      description: Summary of evaluation results for a prompt version
+    EvalExecutionResult:
+      properties:
+        score:
+          type: number
+          title: Score
+          description: Score from the evaluation
+        explanation:
+          type: string
+          title: Explanation
+          description: Explanation of the score
+        cost:
+          type: string
+          title: Cost
+          description: Cost of the evaluation
+      type: object
+      required:
+      - score
+      - explanation
+      - cost
+      title: EvalExecutionResult
+      description: Results from an eval execution
+    EvalResultSummary:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        pass_count:
+          type: integer
+          title: Pass Count
+          description: Number of test cases that passed
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of test cases evaluated
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - pass_count
+      - total_count
+      title: EvalResultSummary
+      description: Results for a single eval
+    EvalRef-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Input'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
+      type: object
+      required:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    ExperimentOutputSource:
+      properties:
+        json_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Json Path
+          description: Optional JSON path to extract from experiment output. Should use dot notation for array indexing (eg. response.objects.0.properties.category)
+      type: object
+      title: ExperimentOutputSource
+      description: Reference to experiment output
+    TestCaseListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/TestCase'
+          type: array
+          title: Data
+          description: List of test cases
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: TestCaseListResponse
+      description: Paginated list of test cases
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

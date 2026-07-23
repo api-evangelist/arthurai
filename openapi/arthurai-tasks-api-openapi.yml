@@ -1,0 +1,1737 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Tasks API
+  version: 2.1.688
+  description: Endpoints to manage tasks and their rules
+tags:
+- name: Tasks
+  description: Endpoints to manage tasks and their rules
+paths:
+  /api/v2/tasks:
+    get:
+      tags:
+      - Tasks
+      summary: Get All Tasks
+      description: '[Deprecated] Use /tasks/search endpoint. This endpoint will be removed in a future release.'
+      operationId: get_all_tasks_api_v2_tasks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TaskResponse'
+                type: array
+                title: Response Get All Tasks Api V2 Tasks Get
+      deprecated: true
+      security:
+      - API Key: []
+    post:
+      tags:
+      - Tasks
+      summary: Create Task
+      description: Register a new task. When a new task is created, all existing default rules will be auto-applied for this new task. Optionally specify if the task is agentic.
+      operationId: create_task_api_v2_tasks_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+  /api/v2/tasks/{task_id}:
+    delete:
+      tags:
+      - Tasks
+      summary: Archive Task
+      description: Archive task. Also archives all task-scoped rules. Associated default rules are unaffected.
+      operationId: archive_task_api_v2_tasks__task_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Tasks
+      summary: Get Task
+      description: Get tasks.
+      operationId: get_task_api_v2_tasks__task_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/unarchive:
+    post:
+      tags:
+      - Tasks
+      summary: Unarchive Task
+      description: Unarchive a previously archived task. Also unarchives all task-scoped rules and metrics that were archived with it.
+      operationId: unarchive_task_api_v2_tasks__task_id__unarchive_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/agent-tasks:
+    get:
+      tags:
+      - Tasks
+      summary: Get Agent Tasks
+      description: Get agentic tasks with enriched agent metadata (tools, sub-agents, models). Returns only agentic tasks.
+      operationId: get_agent_tasks_api_v2_agent_tasks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/EnrichedTaskResponse'
+                type: array
+                title: Response Get Agent Tasks Api V2 Agent Tasks Get
+      security:
+      - API Key: []
+  /api/v2/task:
+    post:
+      tags:
+      - Tasks
+      summary: Redirect To Tasks
+      description: Redirect to /tasks endpoint.
+      operationId: redirect_to_tasks_api_v2_task_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v2/tasks/search:
+    post:
+      tags:
+      - Tasks
+      summary: Search Tasks
+      description: Search tasks. Can filter by task IDs, task name substring, and agentic status.
+      operationId: search_tasks_api_v2_tasks_search_post
+      security:
+      - API Key: []
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchTasksRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchTasksResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/rules:
+    post:
+      tags:
+      - Tasks
+      summary: Create Task Rule
+      description: 'Create a rule to be applied only to this task. Available rule types are KeywordRule, ModelHallucinationRuleV2, ModelSensitiveDataRule, PIIDataRule, PromptInjectionRule, RegexRule, ToxicityRule.Note: The rules are cached by the validation endpoints for 60 seconds.'
+      operationId: create_task_rule_api_v2_tasks__task_id__rules_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRuleRequest'
+            examples:
+              example1:
+                summary: Sensitive Data Example
+                description: Sensitive Data Example with its required configuration
+                value:
+                  name: Sensitive Data Rule
+                  type: ModelSensitiveDataRule
+                  apply_to_prompt: true
+                  apply_to_response: false
+                  config:
+                    examples:
+                    - example: John has O negative blood group
+                      result: true
+                    - example: Most of the people have A positive blood group
+                      result: false
+                    hint: specific individual's blood types
+              example2:
+                summary: Regex Example
+                description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+                value:
+                  name: SSN Regex Rule
+                  type: RegexRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    regex_patterns:
+                    - \d{3}-\d{2}-\d{4}
+                    - \d{5}-\d{6}-\d{7}
+              example3:
+                summary: Keywords Rule Example
+                description: Keywords Rule Example with its required configuration
+                value:
+                  name: Blocked Keywords Rule
+                  type: KeywordRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    keywords:
+                    - Blocked_Keyword_1
+                    - Blocked_Keyword_2
+              example4:
+                summary: Prompt Injection Rule Example
+                description: Prompt Injection Rule Example, no configuration required
+                value:
+                  name: Prompt Injection Rule
+                  type: PromptInjectionRule
+                  apply_to_prompt: true
+                  apply_to_response: false
+              example5:
+                summary: Hallucination Rule V1 Example (Deprecated)
+                description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRule
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example6:
+                summary: Hallucination Rule V2 Example
+                description: Hallucination Rule Example, no configuration required
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRuleV2
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example7:
+                summary: Hallucination Rule V3 Example (Beta)
+                description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRuleV3
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example8:
+                summary: PII Rule Example
+                description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+                value:
+                  name: PII Rule
+                  type: PIIDataRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    disabled_pii_entities:
+                    - EMAIL_ADDRESS
+                    - PHONE_NUMBER
+                    confidence_threshold: '0.5'
+                    allow_list:
+                    - arthur.ai
+                    - Arthur
+              example9:
+                summary: Toxicity Rule Example
+                description: Toxicity Rule Example, no configuration required. Threshold accepted
+                value:
+                  name: Toxicity Rule
+                  type: ToxicityRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    threshold: 0.5
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/rules/{rule_id}:
+    patch:
+      tags:
+      - Tasks
+      summary: Update Task Rules
+      description: Enable or disable an existing rule for this task including the default rules.
+      operationId: update_task_rules_api_v2_tasks__task_id__rules__rule_id__patch
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRuleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Tasks
+      summary: Archive Task Rule
+      description: Archive an existing rule for this task.
+      operationId: archive_task_rule_api_v2_tasks__task_id__rules__rule_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/metrics:
+    post:
+      tags:
+      - Tasks
+      summary: Create Task Metric
+      description: Create metrics for a task. Only agentic tasks can have metrics.
+      operationId: create_task_metric_api_v2_tasks__task_id__metrics_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMetricRequest'
+            examples:
+              example1:
+                type: QueryRelevance
+                name: My User Query Relevance
+                metric_metadata: This is a test metric metadata
+              example2:
+                type: QueryRelevance
+                name: My User Query Relevance with Config
+                metric_metadata: This is a test metric metadata
+                config:
+                  relevance_threshold: 0.8
+                  use_llm_judge: false
+              example3:
+                type: ResponseRelevance
+                name: My Response Relevance
+                metric_metadata: This is a test metric metadata
+                config:
+                  use_llm_judge: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/tasks/{task_id}/metrics/{metric_id}:
+    patch:
+      tags:
+      - Tasks
+      summary: Update Task Metric
+      description: Update a task metric.
+      operationId: update_task_metric_api_v2_tasks__task_id__metrics__metric_id__patch
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: metric_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Metric Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMetricRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Tasks
+      summary: Archive Task Metric
+      description: Archive a task metric.
+      operationId: archive_task_metric_api_v2_tasks__task_id__metrics__metric_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: metric_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Metric Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/tasks/{task_id}/demos/chatbot/stream:
+    post:
+      tags:
+      - Tasks
+      summary: Stream Demo Chatbot
+      description: Stream a demo chatbot response.
+      operationId: stream_demo_chatbot_api_v1_tasks__task_id__demos_chatbot_stream_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatbotRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AgentMetadataResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadataResponse'
+          - type: 'null'
+          description: Metadata for the agent.
+        service_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Service Names
+          description: List of service names that send traces to this task
+      type: object
+      required:
+      - provider
+      title: AgentMetadataResponse
+      description: Agent metadata for responses.
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    NewRuleRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+          examples:
+          - SSN Regex Rule
+        type:
+          type: string
+          title: Type
+          description: Type of the rule. It can only be one of KeywordRule, RegexRule, ModelSensitiveDataRule, ModelHallucinationRule, ModelHallucinationRuleV2, PromptInjectionRule, PIIDataRule
+          examples:
+          - RegexRule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Boolean value to enable or disable the rule for llm prompt
+          examples:
+          - true
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Boolean value to enable or disable the rule for llm response
+          examples:
+          - false
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      title: NewRuleRequest
+      example1:
+        description: Sensitive Data Example with its required configuration
+        summary: Sensitive Data Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          config:
+            examples:
+            - example: John has O negative blood group
+              result: true
+            - example: Most of the people have A positive blood group
+              result: false
+            hint: specific individual's blood types
+          name: Sensitive Data Rule
+          type: ModelSensitiveDataRule
+      example2:
+        description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+        summary: Regex Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            regex_patterns:
+            - \d{3}-\d{2}-\d{4}
+            - \d{5}-\d{6}-\d{7}
+          name: SSN Regex Rule
+          type: RegexRule
+      example3:
+        description: Keywords Rule Example with its required configuration
+        summary: Keywords Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            keywords:
+            - Blocked_Keyword_1
+            - Blocked_Keyword_2
+          name: Blocked Keywords Rule
+          type: KeywordRule
+      example4:
+        description: Prompt Injection Rule Example, no configuration required
+        summary: Prompt Injection Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          name: Prompt Injection Rule
+          type: PromptInjectionRule
+      example5:
+        description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+        summary: Hallucination Rule V1 Example (Deprecated)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRule
+      example6:
+        description: Hallucination Rule Example, no configuration required
+        summary: Hallucination Rule V2 Example
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV2
+      example7:
+        description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+        summary: Hallucination Rule V3 Example (Beta)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV3
+      example8:
+        description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+        summary: PII Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            allow_list:
+            - arthur.ai
+            - Arthur
+            confidence_threshold: '0.5'
+            disabled_pii_entities:
+            - EMAIL_ADDRESS
+            - PHONE_NUMBER
+          name: PII Rule
+          type: PIIDataRule
+      example9:
+        description: Toxicity Rule Example, no configuration required. Threshold accepted
+        summary: Toxicity Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            threshold: 0.5
+          name: Toxicity Rule
+          type: ToxicityRule
+    AgentCreationSource:
+      anyOf:
+      - $ref: '#/components/schemas/GCPAgentCreationSource'
+      - $ref: '#/components/schemas/OTELAgentCreationSource'
+      - $ref: '#/components/schemas/ManualAgentCreationSource'
+      title: AgentCreationSource
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    LLMModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+      type: object
+      required:
+      - name
+      title: LLMModel
+      description: Model used by an agent.
+    UpdateRuleRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: 'Boolean value to enable or disable the rule. '
+      type: object
+      required:
+      - enabled
+      title: UpdateRuleRequest
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    MetricResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Metric
+        name:
+          type: string
+          title: Name
+          description: Name of the Metric
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the Metric
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Metadata of the Metric
+        config:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Config
+          description: JSON-serialized configuration for the Metric
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the Metric was created in unix milliseconds
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the Metric was updated in unix milliseconds
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Whether the Metric is enabled
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - metric_metadata
+      - created_at
+      - updated_at
+      title: MetricResponse
+    ManualAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: MANUAL
+          title: Type
+          default: MANUAL
+      type: object
+      title: ManualAgentCreationSource
+      description: Creation source for manually created tasks.
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
+    TaskResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the task'
+        name:
+          type: string
+          title: Name
+          description: Name of the task
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the task was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the task was created in unix milliseconds
+        is_agentic:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Agentic
+          description: Whether the task is agentic or not
+        is_system_task:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is System Task
+          description: Whether this is a system-managed task (e.g., for traces without a task_id or service name, or for Arthur-created traces)
+          default: false
+        is_autocreated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Autocreated
+          description: Whether this task was automatically created by Arthur
+          default: false
+        is_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Archived
+          description: Whether this task is archived
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadataResponse'
+          - type: 'null'
+          description: Metadata to describe the creation source/provider for registered agents.
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: List of all the rules for the task.
+        metrics:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MetricResponse'
+            type: array
+          - type: 'null'
+          title: Metrics
+          description: List of all the metrics for the task.
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - rules
+      title: TaskResponse
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    EnrichedTaskResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Task ID
+        name:
+          type: string
+          title: Name
+          description: Task name
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Task creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Task last update timestamp
+        is_autocreated:
+          type: boolean
+          title: Is Autocreated
+          description: Whether this task was auto-created (vs manually created)
+          default: false
+        creation_source:
+          anyOf:
+          - $ref: '#/components/schemas/AgentCreationSource'
+          - type: 'null'
+          description: Information about how this task/agent was created
+        last_fetched:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Fetched
+          description: Last time traces were fetched for this task (from task_polling_state)
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Tool'
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Tools used by this agent (computed from spans)
+        sub_agents:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SubAgent'
+            type: array
+          - type: 'null'
+          title: Sub Agents
+          description: Sub-agents used by this agent (computed from spans)
+        models:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LLMModel'
+            type: array
+          - type: 'null'
+          title: Models
+          description: Models used by this agent (computed from spans)
+        data_sources:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DataSource'
+            type: array
+          - type: 'null'
+          title: Data Sources
+          description: Data sources used by this agent (computed from spans)
+        num_spans:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Spans
+          description: Number of spans associated with this task
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: Rules associated with this task
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      title: EnrichedTaskResponse
+      description: Response model for agent-tasks endpoint with enriched metadata.
+    ToolCallFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the function to call
+        arguments:
+          type: string
+          title: Arguments
+          description: JSON string of function arguments
+      type: object
+      required:
+      - name
+      - arguments
+      title: ToolCallFunction
+    ImageURL:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL of the image
+      type: object
+      required:
+      - url
+      title: ImageURL
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+          description: Base64 encoded audio data
+        format:
+          type: string
+          title: Format
+          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
+      type: object
+      required:
+      - data
+      - format
+      title: InputAudio
+    OpenAIMessageItem:
+      properties:
+        type:
+          $ref: '#/components/schemas/OpenAIMessageType'
+          description: Type of the message (either 'text', 'image_url', or 'input_audio')
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+          description: Text content of the message if type is 'text'
+        image_url:
+          anyOf:
+          - $ref: '#/components/schemas/ImageURL'
+          - type: 'null'
+          description: Image URL content of the message if type is 'image_url'
+        input_audio:
+          anyOf:
+          - $ref: '#/components/schemas/InputAudio'
+          - type: 'null'
+          description: Input audio content of the message if type is 'input_audio'
+      type: object
+      required:
+      - type
+      title: OpenAIMessageItem
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    RelevanceMetricConfig:
+      properties:
+        relevance_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relevance Threshold
+          description: Threshold for determining relevance when not using LLM judge
+        use_llm_judge:
+          type: boolean
+          title: Use Llm Judge
+          description: Whether to use LLM as a judge for relevance scoring
+          default: true
+      type: object
+      title: RelevanceMetricConfig
+      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
+    NewTaskRequest:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Name of the task.
+        is_agentic:
+          type: boolean
+          title: Is Agentic
+          description: Whether the task is agentic or not.
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata to describe the creation source/provider for registered agents.
+      type: object
+      required:
+      - name
+      title: NewTaskRequest
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    OpenAIMessage-Input:
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+          description: Role of the message
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/OpenAIMessageItem'
+            type: array
+          - type: 'null'
+          title: Content
+          description: Content of the message
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+          description: Tool calls made by assistant
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+          description: ID of the tool call this message is responding to
+      type: object
+      required:
+      - role
+      title: OpenAIMessage
+      description: 'The message schema class for the prompts playground.
+
+        This class adheres to OpenAI''s message schema.'
+    UpdateMetricRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: 'Boolean value to enable or disable the metric. '
+      type: object
+      required:
+      - enabled
+      title: UpdateMetricRequest
+    MessageRole:
+      type: string
+      enum:
+      - developer
+      - system
+      - user
+      - assistant
+      - tool
+      title: MessageRole
+    AgentMetadata:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadata'
+          - type: 'null'
+          description: Metadata for the agent.
+      type: object
+      required:
+      - provider
+      title: AgentMetadata
+    DataSource:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - url
+      title: DataSource
+      description: Data source used by an agent.
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    NewMetricRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
+          examples:
+          - UserQueryRelevance
+        name:
+          type: string
+          title: Name
+          description: Name of metric
+          examples:
+          - My User Query Relevance
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Additional metadata for the metric
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - type: 'null'
+          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+      type: object
+      required:
+      - type
+      - name
+      - metric_metadata
+      title: NewMetricRequest
+      example1:
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance
+        type: QueryRelevance
+      example2:
+        config:
+          relevance_threshold: 0.8
+          use_llm_judge: false
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance with Config
+        type: QueryRelevance
+      example3:
+        config:
+          use_llm_judge: true
+        metric_metadata: This is a test metric metadata
+        name: My Response Relevance
+        type: ResponseRelevance
+    ToolArgument:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - name
+      - type
+      title: ToolArgument
+      description: Argument definition for a tool.
+    SubAgent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - name
+      title: SubAgent
+      description: Sub-agent definition.
+    SearchTasksRequest:
+      properties:
+        task_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Task Ids
+          description: List of tasks to query for.
+        task_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Name
+          description: Task name substring search string.
+        is_agentic:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Agentic
+          description: Filter tasks by agentic status. If not provided, returns both agentic and non-agentic tasks.
+        include_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Include Archived
+          description: Include archived tasks in results. True returns both active and archived tasks, False or None returns only active tasks. If only_archived is True, this flag is ignored.
+        only_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Only Archived
+          description: Return only archived tasks. True returns exclusively archived tasks, False or None has no effect. Takes precedence over include_archived when both are set.
+      type: object
+      title: SearchTasksRequest
+    ChatbotRequest:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/OpenAIMessage-Input'
+          type: array
+          title: History
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+      type: object
+      required:
+      - history
+      title: ChatbotRequest
+    ToolCall:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool call. Currently the only type supported is 'function'.
+          default: function
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the tool call
+        function:
+          $ref: '#/components/schemas/ToolCallFunction'
+          description: Function details
+      type: object
+      required:
+      - id
+      - function
+      title: ToolCall
+    OpenAIMessageType:
+      type: string
+      enum:
+      - text
+      - image_url
+      - input_audio
+      title: OpenAIMessageType
+    GCPAgentMetadataResponse:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadataResponse
+      description: GCP-specific agent metadata for responses.
+    OTELAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: OTEL
+          title: Type
+          default: OTEL
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      title: OTELAgentCreationSource
+      description: Creation source for OTEL-discovered agents (auto-created from traces).
+    GCPAgentMetadata:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadata
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    Tool:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgument'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - name
+      title: Tool
+      description: Tool definition with arguments.
+    SearchTasksResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of tasks matching the parameters
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskResponse'
+          type: array
+          title: Tasks
+          description: List of tasks matching the search filters. Length is less than or equal to page_size parameter
+      type: object
+      required:
+      - count
+      - tasks
+      title: SearchTasksResponse
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    GCPAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: GCP
+          title: Type
+          default: GCP
+        gcp_project_id:
+          type: string
+          title: Gcp Project Id
+          description: GCP project ID
+        gcp_region:
+          type: string
+          title: Gcp Region
+          description: GCP region
+        gcp_reasoning_engine_id:
+          type: string
+          title: Gcp Reasoning Engine Id
+          description: GCP Vertex AI Reasoning Engine ID
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      required:
+      - gcp_project_id
+      - gcp_region
+      - gcp_reasoning_engine_id
+      title: GCPAgentCreationSource
+      description: Creation source for GCP-discovered agents.
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

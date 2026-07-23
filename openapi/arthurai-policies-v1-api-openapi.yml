@@ -1,0 +1,4555 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Policies V1 API
+  version: 2.1.688
+tags:
+- name: Policies V1
+paths:
+  /api/v1/models/{model_id}/assignments:
+    get:
+      tags:
+      - Policies V1
+      summary: List Model Policy Assignments
+      description: Lists all policy assignments for an application including policy summary and compliance status. Requires model_list_policy_assignments permission.
+      operationId: list_model_policy_assignments
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_policy_assignments
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: assignment_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Optional assignment ID to filter by.
+          title: Assignment Id
+        description: Optional assignment ID to filter by.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by policy name (case-insensitive partial match).
+          title: Name
+        description: Filter by policy name (case-insensitive partial match).
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAssignment_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/check_compliance:
+    post:
+      tags:
+      - Policies V1
+      summary: Check Model Compliance
+      description: Enqueues a Metrics → Alerts → Compliance chain for all assignments on this model. The window is taken from the request body's start_timestamp / end_timestamp. Requires model_check_compliance permission.
+      operationId: check_model_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - model_check_compliance
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsCalculationJobSpec'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsBatch'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/attestations:
+    get:
+      tags:
+      - Policies V1
+      summary: List Model Attestations
+      description: Lists all attestations across all policy assignments for an application. Requires model_list_attestations permission.
+      operationId: list_model_attestations
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_attestations
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: latest
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, only return the most recent attestation for each rule.
+          default: false
+          title: Latest
+        description: If true, only return the most recent attestation for each rule.
+      - name: valid
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, only return attestations that have not expired.
+          default: false
+          title: Valid
+        description: If true, only return attestations that have not expired.
+      - name: policy_assignment_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Optional policy assignment ID to filter attestations by.
+          title: Policy Assignment Id
+        description: Optional policy assignment ID to filter attestations by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AttestationRecord_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/policy_assignments:
+    get:
+      tags:
+      - Policies V1
+      summary: List Workspace Policy Assignments
+      description: Lists all policy assignments within a workspace, filtered to applications the caller can access. Requires workspace_list_policy_assignments permission.
+      operationId: list_workspace_policy_assignments
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_policy_assignments
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: policy_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter by policy ID.
+          title: Policy Id
+        description: Filter by policy ID.
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceStatus'
+          - type: 'null'
+          description: Filter by compliance status.
+          title: Compliance Status
+        description: Filter by compliance status.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by policy name (case-insensitive partial match).
+          title: Name
+        description: Filter by policy name (case-insensitive partial match).
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAssignment_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/compliance:
+    get:
+      tags:
+      - Policies V1
+      summary: List Workspace Compliance
+      description: Returns a flat compliance table with per-rule, per-model status across all policies in a workspace. Requires workspace_list_policy_compliance permission.
+      operationId: list_workspace_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_policy_compliance
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleStatusFilter'
+          - type: 'null'
+          description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+          title: Compliance Status
+        description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to a specific model.
+          title: Model Id
+        description: Filter to a specific model.
+      - name: policy_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to a specific policy.
+          title: Policy Id
+        description: Filter to a specific policy.
+      - name: rule_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleType'
+          - type: 'null'
+          description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+          title: Rule Type
+        description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+      - name: rule_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to rows for a specific rule.
+          title: Rule Id
+        description: Filter to rows for a specific rule.
+      - name: frequency
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Filter attestation rules by validity period in days.
+          title: Frequency
+        description: Filter attestation rules by validity period in days.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 200
+          - type: 'null'
+          description: Search across rule, model, and policy names (case-insensitive).
+          title: Search
+        description: Search across rule, model, and policy names (case-insensitive).
+      - name: sort
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+          title: Sort
+        description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+      - name: order
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/SortOrder'
+          - type: 'null'
+          description: 'Sort order: asc or desc.'
+          title: Order
+        description: 'Sort order: asc or desc.'
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/check_compliance:
+    post:
+      tags:
+      - Policies V1
+      summary: Check Workspace Policies Compliance
+      description: Enqueues a Metrics → Alerts → Compliance chain for every model with policy assignments in the workspace. Returns one job per model. Requires workspace_check_all_policies_compliance permission.
+      operationId: check_workspace_policies_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_check_all_policies_compliance
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsCalculationJobSpec'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsBatch'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/policy_assignments:
+    get:
+      tags:
+      - Policies V1
+      summary: List Organization Policy Assignments
+      description: Lists all policy assignments across every workspace in the organization, filtered to applications the caller can access. Requires organization_list_policy_assignments permission.
+      operationId: list_organization_policy_assignments
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_policy_assignments
+      parameters:
+      - name: policy_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter by policy ID.
+          title: Policy Id
+        description: Filter by policy ID.
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceStatus'
+          - type: 'null'
+          description: Filter by compliance status.
+          title: Compliance Status
+        description: Filter by compliance status.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by policy name (case-insensitive partial match).
+          title: Name
+        description: Filter by policy name (case-insensitive partial match).
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAssignment_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/compliance:
+    get:
+      tags:
+      - Policies V1
+      summary: List Organization Compliance
+      description: Returns a flat compliance table with per-rule, per-model status across all policies in every workspace in the organization. Requires organization_list_policy_compliance permission.
+      operationId: list_organization_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_policy_compliance
+      parameters:
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleStatusFilter'
+          - type: 'null'
+          description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+          title: Compliance Status
+        description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to a specific model.
+          title: Model Id
+        description: Filter to a specific model.
+      - name: policy_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to a specific policy.
+          title: Policy Id
+        description: Filter to a specific policy.
+      - name: rule_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleType'
+          - type: 'null'
+          description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+          title: Rule Type
+        description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+      - name: rule_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to rows for a specific rule.
+          title: Rule Id
+        description: Filter to rows for a specific rule.
+      - name: frequency
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Filter attestation rules by validity period in days.
+          title: Frequency
+        description: Filter attestation rules by validity period in days.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 200
+          - type: 'null'
+          description: Search across rule, model, and policy names (case-insensitive).
+          title: Search
+        description: Search across rule, model, and policy names (case-insensitive).
+      - name: sort
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+          title: Sort
+        description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+      - name: order
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/SortOrder'
+          - type: 'null'
+          description: 'Sort order: asc or desc.'
+          title: Order
+        description: 'Sort order: asc or desc.'
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/policies:
+    post:
+      tags:
+      - Policies V1
+      summary: Create Policy
+      description: Creates a new policy with inline rules for the organization. At least one alert or attestation rule is required. Requires organization_create_policy permission.
+      operationId: create_policy
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_create_policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPolicy'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicySummary'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Policies V1
+      summary: List Policies
+      description: Lists all policies for the organization. Requires organization_list_policies permission.
+      operationId: list_policies
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_policies
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PolicySort'
+          description: Override the field used for sorting the returned list.
+          default: created_at
+        description: Override the field used for sorting the returned list.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used.
+          default: desc
+        description: Override the sort order used.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter policies by name (case-insensitive partial match).
+          title: Name
+        description: Filter policies by name (case-insensitive partial match).
+      - name: owner_group_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter policies by owner group ID.
+          title: Owner Group Id
+        description: Filter policies by owner group ID.
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceStatus'
+          - type: 'null'
+          description: Filter by compliance status. Returns policies with at least one assignment matching this status.
+          title: Compliance Status
+        description: Filter by compliance status. Returns policies with at least one assignment matching this status.
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter by assigned application/model ID.
+          title: Model Id
+        description: Filter by assigned application/model ID.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Policy_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}:
+    get:
+      tags:
+      - Policies V1
+      summary: Get Policy
+      description: Returns a single policy by ID including nested alert rules and attestation rules. Requires policy_read permission.
+      operationId: get_policy
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_read
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Policies V1
+      summary: Update Policy
+      description: Updates a policy's metadata or enforcement delay. Requires policy_update permission.
+      operationId: update_policy
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_update
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPolicy'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Policies V1
+      summary: Delete Policy
+      description: Deletes a policy and cascades to all assignments, materialized rules, and attestation records. Requires policy_delete permission.
+      operationId: delete_policy
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_delete
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}/alert_rules:
+    post:
+      tags:
+      - Policies V1
+      summary: Create Policy Alert Rule
+      description: Creates a new alert rule for a policy. Propagates to all assigned applications. Requires policy_create_alert_rule permission.
+      operationId: create_policy_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_create_alert_rule
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPolicyAlertRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Policies V1
+      summary: List Policy Alert Rules
+      description: Lists alert rules for a policy. Requires policy_list_alert_rules permission.
+      operationId: list_policy_alert_rules
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_list_alert_rules
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Page Size
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PolicySort'
+          default: created_at
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          default: desc
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by name (partial match).
+          title: Name
+        description: Filter by name (partial match).
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAlertRule_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}/attestation_rules:
+    post:
+      tags:
+      - Policies V1
+      summary: Create Policy Attestation Rule
+      description: Creates a new attestation rule for a policy. Requires policy_create_attestation_rule permission.
+      operationId: create_policy_attestation_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_create_attestation_rule
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPolicyAttestationRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAttestationRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Policies V1
+      summary: List Policy Attestation Rules
+      description: Lists attestation rules for a policy. Requires policy_list_attestation_rules permission.
+      operationId: list_policy_attestation_rules
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_list_attestation_rules
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Page Size
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PolicySort'
+          default: created_at
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          default: desc
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by name (partial match).
+          title: Name
+        description: Filter by name (partial match).
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAttestationRule_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}/assignments:
+    post:
+      tags:
+      - Policies V1
+      summary: Create Policy Assignments
+      description: Applies a policy to one or more applications. Requires policy_assignment_create permission on the policy and model_assign_policy permission on each target application.
+      operationId: create_policy_assignments
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_create
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePolicyAssignmentsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAssignment_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Policies V1
+      summary: List Policy Assignments
+      description: Lists all assignments for a policy, filtered to applications the caller can access. Requires policy_list_assignments permission.
+      operationId: list_policy_assignments
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_list_assignments
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceStatus'
+          - type: 'null'
+          description: Filter by compliance status.
+          title: Compliance Status
+        description: Filter by compliance status.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by policy name (case-insensitive partial match).
+          title: Name
+        description: Filter by policy name (case-insensitive partial match).
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_PolicyAssignment_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}/check_compliance:
+    post:
+      tags:
+      - Policies V1
+      summary: Check Policy Compliance
+      description: Enqueues a Metrics → Alerts → Compliance chain for every assignment in this policy. The window is taken from the request body's start_timestamp / end_timestamp. Requires policy_check_compliance permission.
+      operationId: check_policy_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_check_compliance
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsCalculationJobSpec'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsBatch'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policies/{policy_id}/compliance_history:
+    get:
+      tags:
+      - Policies V1
+      summary: List Policy Compliance History
+      description: Returns the full rule compliance evaluation history for a policy, filtered to applications the caller can access. Requires policy_list_compliance_history permission.
+      operationId: list_policy_compliance_history
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_list_compliance_history
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Policy Id
+      - name: compliance_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleStatusFilter'
+          - type: 'null'
+          description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+          title: Compliance Status
+        description: 'Filter by rule compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to a specific model.
+          title: Model Id
+        description: Filter to a specific model.
+      - name: rule_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceRuleType'
+          - type: 'null'
+          description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+          title: Rule Type
+        description: 'Filter by rule type: ''alert_rule'' or ''attestation_rule''.'
+      - name: rule_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter to rows for a specific rule.
+          title: Rule Id
+        description: Filter to rows for a specific rule.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+          title: Sort
+        description: 'Sort field: rule_name, rule_type, compliance_status, updated_at, created_at.'
+      - name: order
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/SortOrder'
+          - type: 'null'
+          description: 'Sort order: asc or desc.'
+          title: Order
+        description: 'Sort order: asc or desc.'
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfiniteResourceList_ComplianceRow_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_alert_rules/{rule_id}:
+    get:
+      tags:
+      - Policies V1
+      summary: Get Policy Alert Rule
+      description: Returns a single policy alert rule by ID. Requires policy_alert_rule_read permission.
+      operationId: get_policy_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_alert_rule_read
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Policies V1
+      summary: Update Policy Alert Rule
+      description: Updates a policy alert rule. Propagates to materialized rules on all assigned applications. Requires policy_alert_rule_update permission.
+      operationId: update_policy_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_alert_rule_update
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPolicyAlertRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Policies V1
+      summary: Delete Policy Alert Rule
+      description: Deletes a policy alert rule. CASCADE deletes materialized rules. Rejected if this is the last rule on an applied policy. Requires policy_alert_rule_delete permission.
+      operationId: delete_policy_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_alert_rule_delete
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_attestation_rules/{rule_id}:
+    get:
+      tags:
+      - Policies V1
+      summary: Get Policy Attestation Rule
+      description: Returns a single policy attestation rule by ID. Requires policy_attestation_rule_read permission.
+      operationId: get_policy_attestation_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_attestation_rule_read
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAttestationRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Policies V1
+      summary: Update Policy Attestation Rule
+      description: Updates a policy attestation rule. Requires policy_attestation_rule_update permission.
+      operationId: update_policy_attestation_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_attestation_rule_update
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPolicyAttestationRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAttestationRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Policies V1
+      summary: Delete Policy Attestation Rule
+      description: Deletes a policy attestation rule. Rejected if this is the last rule on an applied policy. Requires policy_attestation_rule_delete permission.
+      operationId: delete_policy_attestation_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_attestation_rule_delete
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictError'
+          description: Conflict
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_assignments/{assignment_id}:
+    get:
+      tags:
+      - Policies V1
+      summary: Get Policy Assignment
+      description: Returns a single policy assignment with full policy and model detail. Requires policy_assignment_read permission.
+      operationId: get_policy_assignment
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_read
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAssignmentDetail'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Policies V1
+      summary: Delete Policy Assignment
+      description: Unapplies a policy from an application. Cascades to materialized alert rules and attestation records. Requires policy_assignment_delete permission.
+      operationId: delete_policy_assignment
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_delete
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_assignments/{assignment_id}/check_compliance:
+    post:
+      tags:
+      - Policies V1
+      summary: Check Assignment Compliance
+      description: Enqueues a Metrics → Alerts → Compliance chain scoped to a specific assignment. The window is taken from the request body's start_timestamp / end_timestamp. Requires policy_assignment_check_compliance permission.
+      operationId: check_assignment_compliance
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_check_compliance
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsCalculationJobSpec'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsBatch'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_assignments/{assignment_id}/attestations:
+    post:
+      tags:
+      - Policies V1
+      summary: Create Attestation
+      description: Submits an attestation for a policy assignment. Requires policy_assignment_create_attestation permission.
+      operationId: create_attestation
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_create_attestation
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAttestationRecord'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationRecord'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Policies V1
+      summary: List Assignment Attestations
+      description: Lists attestation history for a policy assignment. Requires policy_assignment_list_attestations permission.
+      operationId: list_assignment_attestations
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_list_attestations
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AttestationRecord_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_assignments/{assignment_id}/compliance_status:
+    put:
+      tags:
+      - Policies V1
+      summary: Set Compliance Status
+      description: Sets the compliance status for a policy assignment. Called by the data-plane compliance check executor. Requires policy_assignment_set_compliance_status permission.
+      operationId: set_compliance_status
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_set_compliance_status
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetComplianceStatusRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAssignment'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/policy_assignments/{assignment_id}/job_chain:
+    patch:
+      tags:
+      - Policies V1
+      summary: Update Assignment Job Chain
+      description: Sparse update for the downstream job IDs in the compliance chain (alerts_check_job_id, compliance_job_id). Called by the data-plane executors as the chain advances. metrics_calc_job_id is set by the operator at chain submission and is not accepted here. Requires policy_assignment_set_compliance_status permission.
+      operationId: update_assignment_job_chain
+      security:
+      - OAuth2AuthorizationCode:
+        - policy_assignment_set_compliance_status
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Assignment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyAssignmentJobChainPatch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAssignmentDetail'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    JobsBatch:
+      properties:
+        jobs:
+          items:
+            $ref: '#/components/schemas/Job'
+          type: array
+          title: Jobs
+          description: List of jobs.
+      type: object
+      required:
+      - jobs
+      title: JobsBatch
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeleteModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: delete_model_task
+          title: Job Type
+          default: delete_model_task
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to delete.
+      type: object
+      required:
+      - scope_model_id
+      title: DeleteModelTaskJobSpec
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    CompliancePolicyCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: compliance_policy_check
+          title: Job Type
+          default: compliance_policy_check
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to run compliance policy checks on.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: Start of the window the compliance check evaluates.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: End of the window the compliance check evaluates.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional id of a specific policy assignment to check. If omitted, all assignments for the model are checked.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: CompliancePolicyCheckJobSpec
+    JobPriority:
+      type: integer
+      enum:
+      - 100
+      - 200
+      - 300
+      - 400
+      title: JobPriority
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    NonCompliantAttestationRuleStatus:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the attestation rule.
+        name:
+          type: string
+          title: Name
+          description: The name of the attestation rule.
+      type: object
+      required:
+      - id
+      - name
+      title: NonCompliantAttestationRuleStatus
+    PolicyAlertRule:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the policy alert rule.
+        policy_id:
+          type: string
+          format: uuid
+          title: Policy Id
+          description: The ID of the parent policy.
+        name:
+          type: string
+          title: Name
+          description: The name of the policy alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        query:
+          type: string
+          title: Query
+          description: The SQL query for the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The evaluation interval for the alert rule.
+        dependent_resource:
+          anyOf:
+          - $ref: '#/components/schemas/PolicyAlertGuardrailRule'
+          - type: 'null'
+          description: The resource that this alert rule is dependent on.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - policy_id
+      - name
+      - threshold
+      - bound
+      - query
+      - metric_name
+      - interval
+      title: PolicyAlertRule
+    ResourceList_PolicyAttestationRule_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/PolicyAttestationRule'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[PolicyAttestationRule]
+    Job:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: UUID of the job.
+        kind:
+          $ref: '#/components/schemas/JobKind'
+          description: Type of job.
+        job_spec:
+          anyOf:
+          - $ref: '#/components/schemas/FetchDataJobSpec'
+          - $ref: '#/components/schemas/MetricsCalculationJobSpec'
+          - $ref: '#/components/schemas/SchemaInspectionJobSpec'
+          - $ref: '#/components/schemas/ConnectorCheckJobSpec'
+          - $ref: '#/components/schemas/ListDatasetsJobSpec'
+          - $ref: '#/components/schemas/ScheduleJobsJobSpec'
+          - $ref: '#/components/schemas/AlertCheckJobSpec'
+          - $ref: '#/components/schemas/CreateModelTaskJobSpec'
+          - $ref: '#/components/schemas/UpdateModelTaskRulesJobSpec'
+          - $ref: '#/components/schemas/DeleteModelTaskJobSpec'
+          - $ref: '#/components/schemas/FetchModelTaskJobSpec'
+          - $ref: '#/components/schemas/RegenerateTaskValidationKeyJobSpec'
+          - $ref: '#/components/schemas/CreateModelLinkTaskJobSpec'
+          - $ref: '#/components/schemas/TestCustomAggregationJobSpec'
+          - $ref: '#/components/schemas/DiscoverAgentsJobSpec'
+          - $ref: '#/components/schemas/CompliancePolicyCheckJobSpec'
+          title: Job Spec
+          description: Job specification for the job kind.
+        state:
+          $ref: '#/components/schemas/JobState'
+          description: Current state of the job.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of parent project.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: UUID of the data plane that executed the job or null if not picked up by data plane yet.
+        queued_at:
+          type: string
+          format: date-time
+          title: Queued At
+          description: ISO 8601 timestamp when the job was queued.
+        ready_at:
+          type: string
+          format: date-time
+          title: Ready At
+          description: ISO 8601 timestamp of the earliest time the job can be executed.
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+          description: ISO 8601 timestamp when the job started or null if not started yet.
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+          description: ISO 8601 timestamp when the job finished or null if not finished yet.
+        duration_sec:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Sec
+          description: Duration of the job in seconds or null if not finished yet.
+        error_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Error Count
+          description: Count of errors the job flagged or null if not finished yet.
+        trigger_type:
+          $ref: '#/components/schemas/JobTrigger'
+          description: Type of trigger.
+        triggered_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: User object that triggered the job, null if trigger_type is not 'user'.
+        schedule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Schedule Id
+          description: ID of the schedule this job should follow.
+        attempts:
+          type: integer
+          title: Attempts
+          description: Number of times the job was attempted.
+        max_attempts:
+          type: integer
+          title: Max Attempts
+          description: Max number of times the job can fail and be retried.
+        nonce:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nonce
+          description: Optional job nonce for ensuring exactly once execution.
+        memory_requirements_mb:
+          type: integer
+          title: Memory Requirements Mb
+          description: Memory requirements for the job in megabytes.
+        job_priority:
+          $ref: '#/components/schemas/JobPriority'
+          description: Priority of the job.
+      type: object
+      required:
+      - id
+      - kind
+      - job_spec
+      - state
+      - project_id
+      - queued_at
+      - ready_at
+      - trigger_type
+      - attempts
+      - max_attempts
+      - memory_requirements_mb
+      - job_priority
+      title: Job
+    PatchPolicyAlertRule:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the policy alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy alert rule.
+        threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          anyOf:
+          - $ref: '#/components/schemas/AlertBound'
+          - type: 'null'
+          description: The bound of the alert rule.
+        query:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: The SQL query for the alert rule.
+        metric_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Metric Name
+          description: The name of the metric returned by the query.
+        interval:
+          anyOf:
+          - $ref: '#/components/schemas/AlertRuleInterval'
+          - type: 'null'
+          description: The evaluation interval for the alert rule.
+        dependent_resource:
+          anyOf:
+          - $ref: '#/components/schemas/PolicyAlertGuardrailRule'
+          - type: 'null'
+          description: The resource that this alert rule is dependent on.
+      type: object
+      title: PatchPolicyAlertRule
+    CompliantAlertRuleStatus:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the alert rule.
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+      type: object
+      required:
+      - id
+      - name
+      title: CompliantAlertRuleStatus
+    CompliancePolicySummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The policy ID.
+        name:
+          type: string
+          title: Name
+          description: The policy name.
+      type: object
+      required:
+      - id
+      - name
+      title: CompliancePolicySummary
+    UpdateModelTaskRulesJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: update_model_task_rules
+          title: Job Type
+          default: update_model_task_rules
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to update the task rules.
+        rules_to_enable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Enable
+          description: The list of rule IDs to enable on the task.
+        rules_to_disable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Disable
+          description: The list of rule IDs to disable on the task.
+        rules_to_archive:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Archive
+          description: The list of rule IDs to archive on the task.
+        rules_to_add:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Rules To Add
+          description: The new rules to add to the task.
+      type: object
+      required:
+      - scope_model_id
+      title: UpdateModelTaskRulesJobSpec
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DataResultFilter:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+          description: Field name to use for filtering data.
+        op:
+          $ref: '#/components/schemas/DataResultFilterOp'
+          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - field_name
+      - op
+      - value
+      title: DataResultFilter
+    AttestationRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the attestation record.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        policy_attestation_rule_id:
+          type: string
+          format: uuid
+          title: Policy Attestation Rule Id
+          description: The ID of the attestation rule.
+        policy_model_assignment_id:
+          type: string
+          format: uuid
+          title: Policy Model Assignment Id
+          description: The ID of the policy assignment.
+        model_id:
+          type: string
+          format: uuid
+          title: Model Id
+          description: The ID of the model.
+        attested_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: The user who submitted the attestation.
+        notes:
+          type: string
+          title: Notes
+          description: Notes from the reviewer.
+        attested_at:
+          type: string
+          format: date-time
+          title: Attested At
+          description: When the attestation was submitted.
+        next_attestation_due:
+          type: string
+          format: date-time
+          title: Next Attestation Due
+          description: When the next attestation is due.
+      type: object
+      required:
+      - id
+      - created_at
+      - policy_attestation_rule_id
+      - policy_model_assignment_id
+      - model_id
+      - notes
+      - attested_at
+      - next_attestation_due
+      title: AttestationRecord
+    ComplianceResponse:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/ComplianceRow'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+        summary:
+          $ref: '#/components/schemas/ComplianceSummary'
+          description: Rollup counts across all filtered rows.
+      type: object
+      required:
+      - records
+      - pagination
+      - summary
+      title: ComplianceResponse
+    ComplianceStatusDetail:
+      properties:
+        status:
+          $ref: '#/components/schemas/ComplianceStatus'
+          description: The overall compliance status.
+        alert_rules:
+          $ref: '#/components/schemas/ComplianceAlertRuleResults'
+          description: Alert rule compliance breakdown.
+        attestation_rules:
+          $ref: '#/components/schemas/ComplianceAttestationRuleResults'
+          description: Attestation rule compliance breakdown.
+      type: object
+      required:
+      - status
+      - alert_rules
+      - attestation_rules
+      title: ComplianceStatusDetail
+    ComplianceAttestationRuleResults:
+      properties:
+        compliant:
+          items:
+            $ref: '#/components/schemas/CompliantAttestationRuleStatus'
+          type: array
+          title: Compliant
+          description: Attestation rules with valid attestations.
+        non_compliant:
+          items:
+            $ref: '#/components/schemas/NonCompliantAttestationRuleStatus'
+          type: array
+          title: Non Compliant
+          description: Attestation rules that are missing or lapsed.
+      type: object
+      title: ComplianceAttestationRuleResults
+    ComplianceRuleSummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The policy rule definition ID (policy_alert_rules or policy_attestation_rules).
+        materialized_rule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Materialized Rule Id
+          description: The materialized alert rule ID on the model (fetchable via GET /v1/alert_rules/{id}). Null for attestation rules.
+        name:
+          type: string
+          title: Name
+          description: The rule name.
+      type: object
+      required:
+      - id
+      - name
+      title: ComplianceRuleSummary
+    ListDatasetsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: list_datasets
+          title: Job Type
+          default: list_datasets
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+      type: object
+      required:
+      - connector_id
+      title: ListDatasetsJobSpec
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    PostAttestationRecord:
+      properties:
+        attestation_rule_id:
+          type: string
+          format: uuid
+          title: Attestation Rule Id
+          description: The ID of the attestation rule this attestation satisfies.
+        notes:
+          type: string
+          title: Notes
+          description: Notes from the reviewer.
+      type: object
+      required:
+      - attestation_rule_id
+      - notes
+      title: PostAttestationRecord
+    PolicyAttestationRule:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the attestation rule.
+        policy_id:
+          type: string
+          format: uuid
+          title: Policy Id
+          description: The ID of the parent policy.
+        name:
+          type: string
+          title: Name
+          description: The name of the attestation rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the attestation rule.
+        validity_period_days:
+          type: integer
+          title: Validity Period Days
+          description: The validity period in days for attestation.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - policy_id
+      - name
+      - validity_period_days
+      title: PolicyAttestationRule
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
+    FetchDataJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_data
+          title: Job Type
+          default: fetch_data
+        dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Dataset Id
+          description: The id of the dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+        available_dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Available Dataset Id
+          description: The id of the available dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        operation_id:
+          type: string
+          format: uuid
+          title: Operation Id
+          description: The id of the data retrieval operation.
+        data_filters:
+          items:
+            $ref: '#/components/schemas/DataResultFilter'
+          type: array
+          title: Data Filters
+          description: Filters to apply to the metrics data.
+        pagination_options:
+          $ref: '#/components/schemas/ConnectorPaginationOptions'
+          description: Pagination options to use for fetching data.
+      type: object
+      required:
+      - start_timestamp
+      - end_timestamp
+      - operation_id
+      - data_filters
+      - pagination_options
+      title: FetchDataJobSpec
+    Policy:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the policy.
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+          description: The ID of the organization.
+        name:
+          type: string
+          title: Name
+          description: The name of the policy.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy.
+        owner_group_id:
+          type: string
+          format: uuid
+          title: Owner Group Id
+          description: The ID of the group that owns this policy.
+        webhook_id:
+          type: string
+          format: uuid
+          title: Webhook Id
+          description: The ID of the notification webhook.
+        enforcement_delay_days:
+          type: integer
+          title: Enforcement Delay Days
+          description: The number of days for the enforcement delay.
+        alert_rules:
+          items:
+            $ref: '#/components/schemas/PolicyAlertRule'
+          type: array
+          title: Alert Rules
+          description: Alert rules attached to this policy.
+        attestation_rules:
+          items:
+            $ref: '#/components/schemas/PolicyAttestationRule'
+          type: array
+          title: Attestation Rules
+          description: Attestation rules attached to this policy.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: The user who last updated the policy.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - organization_id
+      - name
+      - owner_group_id
+      - webhook_id
+      - enforcement_delay_days
+      - alert_rules
+      - attestation_rules
+      title: Policy
+    AlertCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: alert_check
+          title: Job Type
+          default: alert_check
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to check alerts.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: The start timestamp to use for checking the alerts on the data.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: The end timestamp to use for checking the alerts on the data.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional policy assignment id propagated to the trailing compliance check job. When set, only this assignment is evaluated for compliance.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: AlertCheckJobSpec
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    PostPolicy:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the policy.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy.
+        owner_group_id:
+          type: string
+          format: uuid
+          title: Owner Group Id
+          description: The ID of the group that owns this policy.
+        webhook_id:
+          type: string
+          format: uuid
+          title: Webhook Id
+          description: The ID of the notification webhook.
+        enforcement_delay_days:
+          type: integer
+          title: Enforcement Delay Days
+          description: The number of days for the enforcement delay.
+        alert_rules:
+          items:
+            $ref: '#/components/schemas/PostPolicyAlertRule'
+          type: array
+          title: Alert Rules
+          description: Alert rules to create with the policy.
+        attestation_rules:
+          items:
+            $ref: '#/components/schemas/PostPolicyAttestationRule'
+          type: array
+          title: Attestation Rules
+          description: Attestation rules to create with the policy.
+      type: object
+      required:
+      - name
+      - owner_group_id
+      - webhook_id
+      - enforcement_delay_days
+      title: PostPolicy
+    InfinitePagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+      type: object
+      title: InfinitePagination
+    InfiniteResourceList_ComplianceRow_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/ComplianceRow'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/InfinitePagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: InfiniteResourceList[ComplianceRow]
+    AgentMetadata:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadata'
+          - type: 'null'
+          description: Metadata for the agent.
+      type: object
+      required:
+      - provider
+      title: AgentMetadata
+    PolicyAssignment:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the policy assignment.
+        policy:
+          $ref: '#/components/schemas/PolicySummary'
+          description: Summary of the assigned policy.
+        model:
+          $ref: '#/components/schemas/ModelSummary'
+          description: Summary of the assigned model.
+        applied_at:
+          type: string
+          format: date-time
+          title: Applied At
+          description: When the policy was applied to the model.
+        applied_by_user_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Applied By User Id
+          description: The ID of the user who applied the policy.
+        enforcement_starts_at:
+          type: string
+          format: date-time
+          title: Enforcement Starts At
+          description: When enforcement starts.
+        compliance_status:
+          $ref: '#/components/schemas/ComplianceStatusDetail'
+          description: Current compliance status.
+        metrics_calc_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Metrics calculation job at the head of the compliance chain, or null if no chain has run yet.
+        alerts_check_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Alert check job in the middle of the compliance chain, or null if the chain has not advanced past metrics calculation.
+        compliance_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Compliance policy check job at the tail of the chain, or null if the chain has not yet enqueued compliance evaluation.
+        last_violation_notified_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Violation Notified At
+          description: When the last non-compliance webhook was fired for this assignment.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - policy
+      - model
+      - applied_at
+      - enforcement_starts_at
+      - compliance_status
+      title: PolicyAssignment
+    ResourceList_PolicyAlertRule_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/PolicyAlertRule'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[PolicyAlertRule]
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    PolicySort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: PolicySort
+    ConnectorCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: connector_check
+          title: Job Type
+          default: connector_check
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to check.
+      type: object
+      required:
+      - connector_id
+      title: ConnectorCheckJobSpec
+    PostPolicyAlertRule:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the policy alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        query:
+          type: string
+          title: Query
+          description: The SQL query for the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The evaluation interval for the alert rule.
+          default:
+            unit: days
+            count: 1
+        dependent_resource:
+          anyOf:
+          - $ref: '#/components/schemas/PolicyAlertGuardrailRule'
+          - type: 'null'
+          description: The resource that this alert rule is dependent on.
+      type: object
+      required:
+      - name
+      - threshold
+      - bound
+      - query
+      - metric_name
+      title: PostPolicyAlertRule
+    CreateModelLinkTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: link_model_task
+          title: Job Type
+          default: link_model_task
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: The id of the Shield task to link when creating the new model.
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the engine internal connector to use to link the task.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+      type: object
+      required:
+      - task_id
+      - connector_id
+      title: CreateModelLinkTaskJobSpec
+    PatchPolicy:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the policy.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy.
+        owner_group_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Owner Group Id
+          description: The ID of the group that owns this policy.
+        webhook_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Webhook Id
+          description: The ID of the notification webhook.
+        enforcement_delay_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Enforcement Delay Days
+          description: The number of days for the enforcement delay.
+      type: object
+      title: PatchPolicy
+    ComplianceAlertSummary:
+      properties:
+        description:
+          type: string
+          title: Description
+          description: Description of the triggering alert.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the alert.
+      type: object
+      required:
+      - description
+      - id
+      title: ComplianceAlertSummary
+    ResourceList_Policy_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Policy'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Policy]
+    JobKind:
+      type: string
+      enum:
+      - metrics_calculation
+      - connector_check
+      - list_datasets
+      - schema_inspection
+      - fetch_data
+      - alert_check
+      - schedule_jobs
+      - create_model_task
+      - create_model_link_task
+      - update_model_task_rules
+      - delete_model_task
+      - fetch_model_task
+      - regenerate_task_validation_key
+      - test_custom_aggregation
+      - discover_agents
+      - compliance_policy_check
+      title: JobKind
+    AlertBound:
+      type: string
+      enum:
+      - upper_bound
+      - lower_bound
+      title: AlertBound
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    CompliantAttestationRuleStatus:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the attestation rule.
+        name:
+          type: string
+          title: Name
+          description: The name of the attestation rule.
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+          description: Notes from the attestation.
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+          description: When the attestation expires.
+      type: object
+      required:
+      - id
+      - name
+      title: CompliantAttestationRuleStatus
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    FetchModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_model_task
+          title: Job Type
+          default: fetch_model_task
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to fetch its corresponding task.
+      type: object
+      required:
+      - scope_model_id
+      title: FetchModelTaskJobSpec
+    PostPolicyAttestationRule:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the attestation rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the attestation rule.
+        validity_period_days:
+          type: integer
+          title: Validity Period Days
+          description: The validity period in days for attestation.
+      type: object
+      required:
+      - name
+      - validity_period_days
+      title: PostPolicyAttestationRule
+    PatchPolicyAttestationRule:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the attestation rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the attestation rule.
+        validity_period_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Validity Period Days
+          description: The validity period in days for attestation.
+      type: object
+      title: PatchPolicyAttestationRule
+    ResourceList_PolicyAssignment_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/PolicyAssignment'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[PolicyAssignment]
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    SchemaInspectionJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: schema_inspection
+          title: Job Type
+          default: schema_inspection
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+        available_dataset_id:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+          description: The id of the dataset within the connector to inspect the schema.
+      type: object
+      required:
+      - connector_id
+      - available_dataset_id
+      title: SchemaInspectionJobSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreatePolicyAssignmentsRequest:
+      properties:
+        model_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Model Ids
+          description: List of model IDs to apply the policy to.
+      type: object
+      required:
+      - model_ids
+      title: CreatePolicyAssignmentsRequest
+    ConflictError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Conflict
+      type: object
+      title: ConflictError
+    PolicyAssignmentDetail:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the policy assignment.
+        policy:
+          $ref: '#/components/schemas/Policy'
+          description: Full policy details.
+        model:
+          $ref: '#/components/schemas/ModelSummary'
+          description: Summary of the assigned model.
+        applied_at:
+          type: string
+          format: date-time
+          title: Applied At
+          description: When the policy was applied to the model.
+        applied_by_user_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Applied By User Id
+          description: The ID of the user who applied the policy.
+        enforcement_starts_at:
+          type: string
+          format: date-time
+          title: Enforcement Starts At
+          description: When enforcement starts.
+        compliance_status:
+          $ref: '#/components/schemas/ComplianceStatusDetail'
+          description: Current compliance status.
+        metrics_calc_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Metrics calculation job at the head of the compliance chain, or null if no chain has run yet.
+        alerts_check_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Alert check job in the middle of the compliance chain, or null if the chain has not advanced past metrics calculation.
+        compliance_job:
+          anyOf:
+          - $ref: '#/components/schemas/Job'
+          - type: 'null'
+          description: Compliance policy check job at the tail of the chain, or null if the chain has not yet enqueued compliance evaluation.
+        last_violation_notified_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Violation Notified At
+          description: When the last non-compliance webhook was fired for this assignment.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - policy
+      - model
+      - applied_at
+      - enforcement_starts_at
+      - compliance_status
+      title: PolicyAssignmentDetail
+    CreateModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: create_model_task
+          title: Job Type
+          default: create_model_task
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the engine internal connector to use to create the task.
+        task_name:
+          type: string
+          title: Task Name
+          description: The name of the task.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+        initial_rules:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Initial Rules
+          description: The initial rules to apply to the created model.
+        task_type:
+          $ref: '#/components/schemas/TaskType'
+          description: The type of task to create.
+          default: traditional
+        initial_metrics:
+          items:
+            $ref: '#/components/schemas/NewMetricRequest'
+          type: array
+          title: Initial Metrics
+          description: The initial metrics to apply to agentic tasks.
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata for registered agents.
+      type: object
+      required:
+      - connector_id
+      - task_name
+      - initial_rules
+      - initial_metrics
+      title: CreateModelTaskJobSpec
+    TestCustomAggregationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: test_custom_aggregation
+          title: Job Type
+          default: test_custom_aggregation
+        test_custom_aggregation_id:
+          type: string
+          format: uuid
+          title: Test Custom Aggregation Id
+          description: The id of the custom aggregation test.
+      type: object
+      required:
+      - test_custom_aggregation_id
+      title: TestCustomAggregationJobSpec
+    ScheduleJobsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: schedule_jobs
+          title: Job Type
+          default: schedule_jobs
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the model to source the schedule from.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Inclusive timestamp marking the start of the job series.
+      type: object
+      required:
+      - scope_model_id
+      - start_timestamp
+      title: ScheduleJobsJobSpec
+    ResourceList_AttestationRecord_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AttestationRecord'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AttestationRecord]
+    ComplianceRow:
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+          title: Assignment Id
+          description: The policy-model assignment ID.
+        rule_type:
+          $ref: '#/components/schemas/ComplianceRuleType'
+          description: Whether this is an alert rule or attestation rule.
+        rule:
+          $ref: '#/components/schemas/ComplianceRuleSummary'
+          description: The rule.
+        model:
+          $ref: '#/components/schemas/ComplianceModelSummary'
+          description: The assigned model.
+        policy:
+          $ref: '#/components/schemas/CompliancePolicySummary'
+          description: The policy.
+        compliance_status:
+          $ref: '#/components/schemas/ComplianceStatus'
+          description: 'Rule-level compliance status: ''COMPLIANT'' or ''NON_COMPLIANT''.'
+        approved_by:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: The user who last attested (attestation rules only).
+        next_due:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Due
+          description: 'When the next check is due. For attestation rules: next attestation due date. For alert rules: next compliance job run (tomorrow).'
+        frequency_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Frequency Days
+          description: Attestation validity period in days (attestation rules only).
+        alert:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceAlertSummary'
+          - type: 'null'
+          description: The triggering alert (non-compliant alert rules only).
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+          description: The error message that caused the violation when no triggering alert exists (e.g. missing guardrail).
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+          description: When this compliance evaluation was recorded.
+      type: object
+      required:
+      - assignment_id
+      - rule_type
+      - rule
+      - model
+      - policy
+      - compliance_status
+      title: ComplianceRow
+    JobTrigger:
+      type: string
+      enum:
+      - user
+      - schedule
+      - event
+      title: JobTrigger
+    ComplianceRuleType:
+      type: string
+      enum:
+      - alert_rule
+      - attestation_rule
+      title: ComplianceRuleType
+    JobState:
+      type: string
+      enum:
+      - queued
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobState
+    ComplianceStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLIANT
+      - NON_COMPLIANT
+      - NEEDS_ATTENTION
+      title: ComplianceStatus
+    GCPAgentMetadata:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadata
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    ComplianceSummary:
+      properties:
+        total:
+          type: integer
+          title: Total
+          description: Total number of rule-assignment rows.
+        compliant:
+          type: integer
+          title: Compliant
+          description: Number of compliant rows.
+        non_compliant:
+          type: integer
+          title: Non Compliant
+          description: Number of non-compliant rows.
+      type: object
+      required:
+      - total
+      - compliant
+      - non_compliant
+      title: ComplianceSummary
+    NewRuleRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+          examples:
+          - SSN Regex Rule
+        type:
+          type: string
+          title: Type
+          description: Type of the rule. It can only be one of KeywordRule, RegexRule, ModelSensitiveDataRule, ModelHallucinationRule, ModelHallucinationRuleV2, PromptInjectionRule, PIIDataRule
+          examples:
+          - RegexRule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Boolean value to enable or disable the rule for llm prompt
+          examples:
+          - true
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Boolean value to enable or disable the rule for llm response
+          examples:
+          - false
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      title: NewRuleRequest
+      example1:
+        description: Sensitive Data Example with its required configuration
+        summary: Sensitive Data Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          config:
+            examples:
+            - example: John has O negative blood group
+              result: true
+            - example: Most of the people have A positive blood group
+              result: false
+            hint: specific individual's blood types
+          name: Sensitive Data Rule
+          type: ModelSensitiveDataRule
+      example2:
+        description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+        summary: Regex Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            regex_patterns:
+            - \d{3}-\d{2}-\d{4}
+            - \d{5}-\d{6}-\d{7}
+          name: SSN Regex Rule
+          type: RegexRule
+      example3:
+        description: Keywords Rule Example with its required configuration
+        summary: Keywords Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            keywords:
+            - Blocked_Keyword_1
+            - Blocked_Keyword_2
+          name: Blocked Keywords Rule
+          type: KeywordRule
+      example4:
+        description: Prompt Injection Rule Example, no configuration required
+        summary: Prompt Injection Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          name: Prompt Injection Rule
+          type: PromptInjectionRule
+      example5:
+        description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+        summary: Hallucination Rule V1 Example (Deprecated)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRule
+      example6:
+        description: Hallucination Rule Example, no configuration required
+        summary: Hallucination Rule V2 Example
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV2
+      example7:
+        description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+        summary: Hallucination Rule V3 Example (Beta)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV3
+      example8:
+        description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+        summary: PII Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            allow_list:
+            - arthur.ai
+            - Arthur
+            confidence_threshold: '0.5'
+            disabled_pii_entities:
+            - EMAIL_ADDRESS
+            - PHONE_NUMBER
+          name: PII Rule
+          type: PIIDataRule
+      example9:
+        description: Toxicity Rule Example, no configuration required. Threshold accepted
+        summary: Toxicity Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            threshold: 0.5
+          name: Toxicity Rule
+          type: ToxicityRule
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    PolicyAssignmentJobChainPatch:
+      properties:
+        alerts_check_job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Alerts Check Job Id
+          description: ID of the AlertCheck job spawned for this assignment.
+        compliance_job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Compliance Job Id
+          description: ID of the CompliancePolicyCheck job spawned for this assignment.
+      type: object
+      title: PolicyAssignmentJobChainPatch
+      description: 'Sparse update from ml-engine to stamp downstream chain jobs.
+
+
+        metrics_calc_job_id is set by the operator at chain submission, so it is
+
+        not accepted here — only the AlertCheck and CompliancePolicyCheck job IDs
+
+        are stampable from the executor side.'
+    ModelSummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the model.
+        name:
+          type: string
+          title: Name
+          description: The name of the model.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: The ID of the project the model belongs to.
+      type: object
+      required:
+      - id
+      - name
+      - project_id
+      title: ModelSummary
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    NonCompliantAlertRuleStatus:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the alert rule.
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+        alert:
+          anyOf:
+          - $ref: '#/components/schemas/ComplianceAlertSummary'
+          - type: 'null'
+          description: The alert that caused the violation.
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+          description: The error message that caused the violation.
+      type: object
+      required:
+      - id
+      - name
+      title: NonCompliantAlertRuleStatus
+    RelevanceMetricConfig:
+      properties:
+        relevance_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relevance Threshold
+          description: Threshold for determining relevance when not using LLM judge
+        use_llm_judge:
+          type: boolean
+          title: Use Llm Judge
+          description: Whether to use LLM as a judge for relevance scoring
+          default: true
+      type: object
+      title: RelevanceMetricConfig
+      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
+    RegenerateTaskValidationKeyJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: regenerate_validation_key
+          title: Job Type
+          default: regenerate_validation_key
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the model to regenerate the validation key for.
+      type: object
+      required:
+      - scope_model_id
+      title: RegenerateTaskValidationKeyJobSpec
+    DiscoverAgentsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: discover_agents
+          title: Job Type
+          default: discover_agents
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: The ID of the workspace to discover agents for.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: The ID of the data plane to scan for agents.
+        project_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Project Id
+          description: Optional ID of the "Registered Applications" project for filtering against existing models.
+        lookback_hours:
+          type: integer
+          title: Lookback Hours
+          description: 'Number of hours to look back in trace history (default: 720 hours = 30 days).'
+          default: 720
+      type: object
+      required:
+      - workspace_id
+      - data_plane_id
+      title: DiscoverAgentsJobSpec
+    NewMetricRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
+          examples:
+          - UserQueryRelevance
+        name:
+          type: string
+          title: Name
+          description: Name of metric
+          examples:
+          - My User Query Relevance
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Additional metadata for the metric
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - type: 'null'
+          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+      type: object
+      required:
+      - type
+      - name
+      - metric_metadata
+      title: NewMetricRequest
+      example1:
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance
+        type: QueryRelevance
+      example2:
+        config:
+          relevance_threshold: 0.8
+          use_llm_judge: false
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance with Config
+        type: QueryRelevance
+      example3:
+        config:
+          use_llm_judge: true
+        metric_metadata: This is a test metric metadata
+        name: My Response Relevance
+        type: ResponseRelevance
+    SetComplianceStatusRequest:
+      properties:
+        compliance_status:
+          $ref: '#/components/schemas/ComplianceStatusDetail'
+          description: The new compliance status with detailed rule results.
+      type: object
+      required:
+      - compliance_status
+      title: SetComplianceStatusRequest
+    ComplianceAlertRuleResults:
+      properties:
+        compliant:
+          items:
+            $ref: '#/components/schemas/CompliantAlertRuleStatus'
+          type: array
+          title: Compliant
+          description: Alert rules that are passing.
+        non_compliant:
+          items:
+            $ref: '#/components/schemas/NonCompliantAlertRuleStatus'
+          type: array
+          title: Non Compliant
+          description: Alert rules that are in violation.
+      type: object
+      title: ComplianceAlertRuleResults
+    PolicyAlertGuardrailRule:
+      properties:
+        resource_type:
+          type: string
+          const: guardrail
+          title: Resource Type
+          default: guardrail
+        resource_name:
+          $ref: '#/components/schemas/RuleType'
+      type: object
+      required:
+      - resource_name
+      title: PolicyAlertGuardrailRule
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    PolicySummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The ID of the policy.
+        name:
+          type: string
+          title: Name
+          description: The name of the policy.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the policy.
+      type: object
+      required:
+      - id
+      - name
+      title: PolicySummary
+    TaskType:
+      type: string
+      enum:
+      - traditional
+      - agentic
+      title: TaskType
+    ComplianceRuleStatusFilter:
+      type: string
+      enum:
+      - COMPLIANT
+      - NON_COMPLIANT
+      title: ComplianceRuleStatusFilter
+    ComplianceModelSummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The model ID.
+        name:
+          type: string
+          title: Name
+          description: The model name.
+      type: object
+      required:
+      - id
+      - name
+      title: ComplianceModelSummary
+    MetricsCalculationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: metrics_calculation
+          title: Job Type
+          default: metrics_calculation
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to calculate metrics.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional policy assignment id propagated through the Metrics → Alerts → Compliance chain. When set, the trailing compliance check evaluates only this assignment.
+      type: object
+      required:
+      - scope_model_id
+      - start_timestamp
+      - end_timestamp
+      title: MetricsCalculationJobSpec
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery OAuth V1 API
+  version: 2.1.688
+tags:
+- name: OAuth V1
+paths:
+  /api/v1/auth/oidc/.well-known/openid-configuration:
+    get:
+      tags:
+      - OAuth V1
+      summary: Get Openid Configuration Metadata
+      description: Returns well-known openid configuration for Arthur auth server
+      operationId: get_openid_configuration
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Get Openid Configuration
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

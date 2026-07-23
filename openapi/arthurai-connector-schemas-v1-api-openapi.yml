@@ -1,0 +1,317 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Connector Schemas V1 API
+  version: 2.1.688
+tags:
+- name: Connector Schemas V1
+paths:
+  /api/v1/connector_schemas/connector_types:
+    get:
+      tags:
+      - Connector Schemas V1
+      summary: Get Available Connector Types
+      description: Returns all Arthur-supported connector types.
+      operationId: get_connector_types
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_ConnectorType_'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      security:
+      - OAuth2AuthorizationCode: []
+  /api/v1/connector_schemas/{connector_type}:
+    get:
+      tags:
+      - Connector Schemas V1
+      summary: Get Connector Schema By Type
+      description: Returns a connector schema by type.
+      operationId: get_connector_schema_by_type
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: connector_type
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ConnectorType'
+          description: The type of the connector schema to fetch.
+        description: The type of the connector schema to fetch.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorSpecSchema'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DatasetLocatorFieldDataType:
+      type: string
+      enum:
+      - UUID
+      - string
+      - enum
+      - regex_string
+      title: DatasetLocatorFieldDataType
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    DatasetLocatorSchema:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/DatasetLocatorSchemaField'
+          type: array
+          title: Fields
+          description: Schema for dataset locator fields for all datasets using the connector type.
+      type: object
+      required:
+      - fields
+      title: DatasetLocatorSchema
+    ConnectorFieldDataType:
+      type: string
+      enum:
+      - string
+      - dict
+      - enum
+      - int
+      title: ConnectorFieldDataType
+    ConnectorSpecSchemaField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of connector field.
+        is_sensitive:
+          type: boolean
+          title: Is Sensitive
+          description: If field stores sensitive data.
+        is_optional:
+          type: boolean
+          title: Is Optional
+          description: If field is optional or required.
+        d_type:
+          $ref: '#/components/schemas/ConnectorFieldDataType'
+          description: Data type of the value stored by the field.
+        description:
+          type: string
+          title: Description
+          description: Description of connector field.
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+          description: List of allowed values for field. Relevant to enum data type fields.
+      type: object
+      required:
+      - name
+      - is_sensitive
+      - is_optional
+      - d_type
+      - description
+      title: ConnectorSpecSchemaField
+    ConnectorSpecSchema:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        connector_type:
+          $ref: '#/components/schemas/ConnectorType'
+          description: Connector type for the schema. Must be unique.
+        fields:
+          items:
+            $ref: '#/components/schemas/ConnectorSpecSchemaField'
+          type: array
+          title: Fields
+          description: Metadata for optional and required connector fields.
+        dataset_locator_schema:
+          $ref: '#/components/schemas/DatasetLocatorSchema'
+          description: Schema with dataset locator metadata for all datasets using the connector type.
+        supports_dataset_listing:
+          type: boolean
+          title: Supports Dataset Listing
+          description: Indicates whether this connector supports listing available datasets.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - connector_type
+      - fields
+      - dataset_locator_schema
+      - supports_dataset_listing
+      title: ConnectorSpecSchema
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceList_ConnectorType_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/ConnectorType'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[ConnectorType]
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    DatasetLocatorSchemaField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of dataset locator field.
+        d_type:
+          $ref: '#/components/schemas/DatasetLocatorFieldDataType'
+          description: Data type of the value stored by the field.
+        is_optional:
+          type: boolean
+          title: Is Optional
+          description: If field is optional or required.
+        description:
+          type: string
+          title: Description
+          description: Description of dataset locator schema field.
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+          description: List of allowed values for field. Relevant to enum data type fields.
+      type: object
+      required:
+      - name
+      - d_type
+      - is_optional
+      - description
+      title: DatasetLocatorSchemaField
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

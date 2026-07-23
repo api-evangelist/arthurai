@@ -1,0 +1,154 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery API
+  version: 2.1.688
+tags:
+- name: Agent Discovery
+paths:
+  /api/v1/tasks/{task_id}/agent-polling/execute:
+    post:
+      tags:
+      - Agent Discovery
+      summary: Execute Agent Polling
+      description: Manually trigger a polling job for a task. Does not require any particular state — admins can use this to force an immediate poll outside the normal loop cadence.
+      operationId: execute_agent_polling_api_v1_tasks__task_id__agent_polling_execute_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePollingResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/agent-polling/execute-all:
+    post:
+      tags:
+      - Agent Discovery
+      summary: Execute All Agent Polling
+      description: Manually trigger a full agent discovery and polling cycle. Discovers new GCP agents and enqueues trace-fetch jobs for all eligible tasks. Use wait_for_completion=true to block until all polling jobs finish.
+      operationId: execute_all_agent_polling_api_v1_agent_polling_execute_all_post
+      security:
+      - API Key: []
+      parameters:
+      - name: wait_for_completion
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Wait For Completion
+      - name: timeout
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          title: Timeout
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverAndPollResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ExecutePollingResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Status of the operation
+        task_id:
+          type: string
+          title: Task Id
+          description: Task ID that was enqueued
+      type: object
+      required:
+      - status
+      - task_id
+      title: ExecutePollingResponse
+      description: Response model for the single-task agent polling endpoint.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DiscoverAndPollResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Status of the operation
+        discovered:
+          type: integer
+          title: Discovered
+          description: Number of new agent tasks created
+        traces_fetched:
+          type: integer
+          title: Traces Fetched
+          description: Total number of traces fetched across all tasks (0 in async mode)
+      type: object
+      required:
+      - status
+      - discovered
+      - traces_fetched
+      title: DiscoverAndPollResponse
+      description: Response model for the execute-all agent polling endpoint.
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

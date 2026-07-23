@@ -1,0 +1,1383 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Models V1 API
+  version: 2.1.688
+tags:
+- name: Models V1
+paths:
+  /api/v1/models/{model_id}:
+    patch:
+      tags:
+      - Models V1
+      summary: Update Model
+      description: Updates a single model. Requires model_update permission.
+      operationId: patch_model
+      security:
+      - OAuth2AuthorizationCode:
+        - model_update
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Models V1
+      summary: Get Model By Id
+      description: Returns a single model by ID. Requires model_read permission.
+      operationId: get_model
+      security:
+      - OAuth2AuthorizationCode:
+        - model_read
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Models V1
+      summary: Delete Model By Id
+      description: Deletes a single model. Requires model_delete permission.
+      operationId: delete_model
+      security:
+      - OAuth2AuthorizationCode:
+        - model_delete
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '204':
+          description: No Content
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/metric_config:
+    put:
+      tags:
+      - Models V1
+      summary: Update Model Metric Configuration By Model Id
+      description: Returns a single model metric spec. Requires model_put_metric_config permission.
+      operationId: put_model_metric_config
+      security:
+      - OAuth2AuthorizationCode:
+        - model_put_metric_config
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutModelMetricSpec'
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/schedule:
+    put:
+      tags:
+      - Models V1
+      summary: Update Model Metrics Schedule
+      description: Creates or overwrites the model metrics job schedule. Requires model_metrics_schedule_update permission.
+      operationId: put_model_metrics_schedule
+      security:
+      - OAuth2AuthorizationCode:
+        - model_metrics_schedule_update
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutModelMetricsSchedule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Models V1
+      summary: Delete Model Metrics Schedule
+      description: Deletes metrics job schedule. Requires model_metrics_schedule_delete permission.
+      operationId: delete_model_metrics_schedule
+      security:
+      - OAuth2AuthorizationCode:
+        - model_metrics_schedule_delete
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/models:
+    get:
+      tags:
+      - Models V1
+      summary: Get Workspace Models.
+      description: Returns the applications the requesting user has access to across all projects in the workspace, matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires the workspace_list_models permission (granted by the Workspace Reader role); results are further limited to the projects in which the user has access to models.
+      operationId: get_models_in_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_models
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ModelsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: created_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: dataset_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter for models based on a specific dataset ID.
+          title: Dataset Id
+        description: Filter for models based on a specific dataset ID.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter for models with a name similar to this name.
+          title: Name
+        description: Filter for models with a name similar to this name.
+      - name: onboarding_identifier
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter for models whose 'onboarding_identifier' matches the provided string.
+          title: Onboarding Identifier
+        description: Filter for models whose 'onboarding_identifier' matches the provided string.
+      - name: infrastructure
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/Infrastructure'
+          - type: 'null'
+          description: Filter for models by infrastructure type.
+          title: Infrastructure
+        description: Filter for models by infrastructure type.
+      - name: model_problem_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Filter for models by problem type.
+          title: Model Problem Type
+        description: Filter for models by problem type.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Model_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/models:
+    get:
+      tags:
+      - Models V1
+      summary: Get Organization Models.
+      description: Returns all models (applications) across every workspace in the organization, matching the filter and sorting criteria. If multiple filters are specified, only results matching all criteria are returned. Requires the organization_list_models permission; results are further limited to the projects in which the caller has access to models.
+      operationId: get_organization_models
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_models
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ModelsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: created_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: dataset_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter for models based on a specific dataset ID.
+          title: Dataset Id
+        description: Filter for models based on a specific dataset ID.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter for models with a name similar to this name.
+          title: Name
+        description: Filter for models with a name similar to this name.
+      - name: onboarding_identifier
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter for models whose 'onboarding_identifier' matches the provided string.
+          title: Onboarding Identifier
+        description: Filter for models whose 'onboarding_identifier' matches the provided string.
+      - name: infrastructure
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/Infrastructure'
+          - type: 'null'
+          description: Filter for models by infrastructure type.
+          title: Infrastructure
+        description: Filter for models by infrastructure type.
+      - name: model_problem_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Filter for models by problem type.
+          title: Model Problem Type
+        description: Filter for models by problem type.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Model_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/models:
+    post:
+      tags:
+      - Models V1
+      summary: Create Model
+      description: Creates a single model. Requires project_create_model permission.
+      operationId: post_model
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_model
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Models V1
+      summary: List Models
+      description: Returns models matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires project_list_models permission.
+      operationId: get_models
+      security:
+      - OAuth2AuthorizationCode:
+        - project_list_models
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ModelsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: created_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: dataset_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter the results for the models that are based on this dataset id. Optional.
+          title: Dataset Id
+        description: Filter the results for the models that are based on this dataset id. Optional.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter the results for the models with a name similar to this name. Optional.
+          title: Name
+        description: Filter the results for the models with a name similar to this name. Optional.
+      - name: onboarding_identifier
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter the results for models whose 'onboarding_identifier' matches the provided string.
+          title: Onboarding Identifier
+        description: Filter the results for models whose 'onboarding_identifier' matches the provided string.
+      - name: infrastructure
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/Infrastructure'
+          - type: 'null'
+          description: Filter for models by infrastructure type.
+          title: Infrastructure
+        description: Filter for models by infrastructure type.
+      - name: model_problem_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Filter for models by problem type.
+          title: Model Problem Type
+        description: Filter for models by problem type.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Model_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/generate_metrics_spec:
+    post:
+      tags:
+      - Models V1
+      summary: Generates A Metrics Spec.
+      description: Generates a metric spec for a model based on one or several datasets. Requires project_generate_metrics_spec permission.
+      operationId: generate_metrics_spec
+      security:
+      - OAuth2AuthorizationCode:
+        - project_generate_metrics_spec
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateMetricsSpecRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutModelMetricSpec'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ModelsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - name
+      title: ModelsSort
+    DatasetReference:
+      properties:
+        dataset_id:
+          type: string
+          format: uuid
+          title: Dataset Id
+          description: ID of the dataset.
+        dataset_name:
+          type: string
+          title: Dataset Name
+          description: Name of the dataset.
+        dataset_connector_type:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorType'
+          - type: 'null'
+          description: Type of connector associated with the dataset. If None, dataset is a joined dataset.
+      type: object
+      required:
+      - dataset_id
+      - dataset_name
+      - dataset_connector_type
+      title: DatasetReference
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of model.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+            maxLength: 1024
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An optional label to help identify the model. Used by the task creation onboarding flow.
+        metric_config:
+          anyOf:
+          - $ref: '#/components/schemas/PutModelMetricSpec'
+          - type: 'null'
+          description: Metric configuration of the model. If left undefined, one will be derived
+        dataset_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Dataset Ids
+          description: IDs of datasets for the model.
+      type: object
+      required:
+      - name
+      - dataset_ids
+      title: PostModel
+    PutModelMetricsSchedule:
+      properties:
+        cron:
+          type: string
+          title: Cron
+          description: Cron expression defining a cadence to run the model's metrics job on. Must specify a period greater than or equal to 5 minutes.
+        lookback_period_seconds:
+          type: integer
+          title: Lookback Period Seconds
+          description: Lookback period of the scheduled job.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Optional name of the schedule.
+      type: object
+      required:
+      - cron
+      - lookback_period_seconds
+      title: PutModelMetricsSchedule
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    DataPlane:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane.
+        name:
+          type: string
+          title: Name
+          description: Name of data plane.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        description:
+          type: string
+          title: Description
+          description: Description of data plane.
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: ID of the data plane's underlying user.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        last_check_in_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Check In Time
+          description: Last time the data plane was confirmed to be connected.
+        capabilities:
+          $ref: '#/components/schemas/DataPlaneCapabilities'
+          description: Capabilities for this data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - description
+      - user_id
+      - infrastructure
+      - last_check_in_time
+      - capabilities
+      title: DataPlane
+    ModelMetricSpec:
+      properties:
+        aggregation_specs:
+          items:
+            $ref: '#/components/schemas/AggregationSpec'
+          type: array
+          title: Aggregation Specs
+          description: List of aggregations configured for the metric spec.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the metric spec.
+      type: object
+      required:
+      - aggregation_specs
+      - id
+      title: ModelMetricSpec
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    ModelMetricsSchedule:
+      properties:
+        cron:
+          type: string
+          title: Cron
+          description: Cron expression defining a cadence to run the model's metrics job on. Must specify a period greater than or equal to 5 minutes.
+        lookback_period_seconds:
+          type: integer
+          title: Lookback Period Seconds
+          description: Lookback period of the scheduled job.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Optional name of the schedule.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique id of the schedule.
+      type: object
+      required:
+      - cron
+      - lookback_period_seconds
+      - id
+      title: ModelMetricsSchedule
+    AggregationKind:
+      type: string
+      enum:
+      - default
+      - custom
+      title: AggregationKind
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    PutModelMetricSpec:
+      properties:
+        aggregation_specs:
+          items:
+            $ref: '#/components/schemas/AggregationSpec'
+          type: array
+          title: Aggregation Specs
+          description: List of aggregations configured for the metric spec.
+      type: object
+      required:
+      - aggregation_specs
+      title: PutModelMetricSpec
+    Model:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the model.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the parent project.
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of model.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An optional label to help identify the model. Used by the task creation onboarding flow.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for user who last updated the connector.
+        metric_config:
+          $ref: '#/components/schemas/ModelMetricSpec'
+          description: Metric configuration of the model.
+        schedule:
+          anyOf:
+          - $ref: '#/components/schemas/ModelMetricsSchedule'
+          - type: 'null'
+          description: Schedule used to automatically enqueue jobs.
+        model_problem_types:
+          items:
+            $ref: '#/components/schemas/ModelProblemType'
+          type: array
+          title: Model Problem Types
+          description: Unique model problem types of associated datasets.
+        datasets:
+          items:
+            $ref: '#/components/schemas/DatasetReference'
+          type: array
+          title: Datasets
+          description: Datasets for the model.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane backing this model.
+        data_plane:
+          $ref: '#/components/schemas/DataPlane'
+          description: Data plane backing this model.
+        agent_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Agent Id
+          description: ID of the agent registered with this model.
+        project_name:
+          type: string
+          title: Project Name
+          description: Name of the parent project.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - project_id
+      - name
+      - description
+      - metric_config
+      - model_problem_types
+      - datasets
+      - data_plane_id
+      - data_plane
+      - project_name
+      title: Model
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    PatchModel:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the model.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of model.
+        dataset_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Dataset Ids
+          description: IDs of datasets for the model.
+        agent_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Agent Id
+          description: ID of the unregistered agent to register with this model.
+      type: object
+      title: PatchModel
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    GenerateMetricsSpecRequest:
+      properties:
+        dataset_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Dataset Ids
+          description: List of dataset IDs for which to generate a model metrics spec. Datasets must be in the project in the path.
+      type: object
+      required:
+      - dataset_ids
+      title: GenerateMetricsSpecRequest
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    ResourceList_Model_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Model'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Model]
+    MetricsArgSpec:
+      properties:
+        arg_key:
+          type: string
+          title: Arg Key
+          description: Name of the argument.
+        arg_value:
+          title: Arg Value
+          description: Value of the argument.
+      type: object
+      required:
+      - arg_key
+      - arg_value
+      title: MetricsArgSpec
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+    AggregationSpec:
+      properties:
+        aggregation_id:
+          type: string
+          format: uuid
+          title: Aggregation Id
+          description: Unique identifier of the aggregation.
+        aggregation_init_args:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Init Args
+          description: List of arguments to the aggregation's init function.
+        aggregation_args:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Args
+          description: List of arguments to the aggregation's aggregate function.
+        aggregation_kind:
+          $ref: '#/components/schemas/AggregationKind'
+          description: Type of aggregation to use for the metric spec.
+          default: default
+        aggregation_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Aggregation Version
+          description: Version of the custom aggregation to use for the metric spec.
+      type: object
+      required:
+      - aggregation_id
+      - aggregation_init_args
+      - aggregation_args
+      title: AggregationSpec
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,386 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Feedback API
+  version: 2.1.688
+  description: Endpoints to manage user feedback on inferences
+tags:
+- name: Feedback
+  description: Endpoints to manage user feedback on inferences
+paths:
+  /api/v2/feedback/{inference_id}:
+    post:
+      tags:
+      - Feedback
+      summary: Post Feedback
+      description: Post feedback for LLM Application.
+      operationId: post_feedback_api_v2_feedback__inference_id__post
+      security:
+      - API Key: []
+      parameters:
+      - name: inference_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Inference Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceFeedbackResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/feedback/query:
+    get:
+      tags:
+      - Feedback
+      summary: Query Feedback
+      description: Paginated feedback querying. See parameters for available filters. Includes feedback from archived tasks and rules.
+      operationId: query_feedback_api_v2_feedback_query_get
+      security:
+      - API Key: []
+      parameters:
+      - name: start_time
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Inclusive start date in ISO8601 string format
+          title: Start Time
+        description: Inclusive start date in ISO8601 string format
+      - name: end_time
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Exclusive end date in ISO8601 string format
+          title: End Time
+        description: Exclusive end date in ISO8601 string format
+      - name: feedback_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Feedback ID to filter on
+          title: Feedback Id
+        description: Feedback ID to filter on
+      - name: inference_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Inference ID to filter on
+          title: Inference Id
+        description: Inference ID to filter on
+      - name: target
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceFeedbackTarget'
+          - type: array
+            items:
+              $ref: '#/components/schemas/InferenceFeedbackTarget'
+          - type: 'null'
+          description: Target of the feedback. Must be one of ['context', 'response_results', 'prompt_results']
+          title: Target
+        description: Target of the feedback. Must be one of ['context', 'response_results', 'prompt_results']
+      - name: score
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Score of the feedback. Must be an integer.
+          title: Score
+        description: Score of the feedback. Must be an integer.
+      - name: feedback_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User ID of the user giving feedback to filter on (query will perform fuzzy search)
+          title: Feedback User Id
+        description: User ID of the user giving feedback to filter on (query will perform fuzzy search)
+      - name: conversation_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Conversation ID to filter on
+          title: Conversation Id
+        description: Conversation ID to filter on
+      - name: task_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Task ID to filter on
+          title: Task Id
+        description: Task ID to filter on
+      - name: inference_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User ID of the user who created the inferences to filter on (query will perform fuzzy search)
+          title: Inference User Id
+        description: User ID of the user who created the inferences to filter on (query will perform fuzzy search)
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryFeedbackResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InferenceFeedbackTarget:
+      type: string
+      enum:
+      - context
+      - response_results
+      - prompt_results
+      title: InferenceFeedbackTarget
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FeedbackRequest:
+      properties:
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      type: object
+      required:
+      - target
+      - score
+      - reason
+      title: FeedbackRequest
+    QueryFeedbackResponse:
+      properties:
+        feedback:
+          items:
+            $ref: '#/components/schemas/InferenceFeedbackResponse'
+          type: array
+          title: Feedback
+          description: List of inferences matching the search filters. Length is less than or equal to page_size parameter
+        page:
+          type: integer
+          title: Page
+          description: The current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: The number of feedback items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: The total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: The total number of feedback items matching the query parameters
+      type: object
+      required:
+      - feedback
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: QueryFeedbackResponse
+      example:
+        feedback:
+        - created_at: '2024-06-06T06:37:46.123-04:00'
+          id: 90f18c69-d793-4913-9bde-a0c7f3643de0
+          inference_id: 81437d71-9557-4611-981b-9283d1c98643
+          reason: good reason
+          score: '0'
+          target: context
+          updated_at: '2024-06-06T06:37:46.123-04:00'
+          user_id: user_1
+        - created_at: '2023-05-05T05:26:35.987-04:00'
+          id: 248381c2-543b-4de0-98cd-d7511fee6241
+          inference_id: bcbc7ca0-4cfc-4f67-9cf8-26cb2291ba33
+          reason: some reason
+          score: '1'
+          target: response_results
+          updated_at: '2023-05-05T05:26:35.987-04:00'
+          user_id: user_2
+        page: 1
+        page_size: 10
+        total_count: 2
+        total_pages: 1
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InferenceFeedbackResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - inference_id
+      - target
+      - score
+      - created_at
+      - updated_at
+      title: InferenceFeedbackResponse
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

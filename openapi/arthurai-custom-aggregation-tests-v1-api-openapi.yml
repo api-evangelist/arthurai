@@ -1,0 +1,1223 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Custom Aggregation Tests V1 API
+  version: 2.1.688
+tags:
+- name: Custom Aggregation Tests V1
+paths:
+  /api/v1/workspaces/{workspace_id}/custom_aggregation_tests:
+    post:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Post Custom Aggregation Test.
+      description: Requires workspace_create_custom_aggregation_test permission. Will queue an async job to test the configured custom aggregation for the dataset. Requires dataset_create_data_retrieval on the dataset the test is configured to run against.
+      operationId: post_custom_aggregation_test
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_create_custom_aggregation_test
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCustomAggregationTest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAggregationTestSpec'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Get Custom Aggregation Tests.
+      description: Requires workspace_list_custom_aggregation_tests permission.
+      operationId: get_custom_aggregation_tests_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_custom_aggregation_tests
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: The page number to fetch.
+          default: 1
+          title: Page
+        description: The page number to fetch.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: The number of items per page.
+          default: 10
+          title: Page Size
+        description: The number of items per page.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search for custom aggregation tests by aggregation name or description.
+          title: Search
+        description: Search for custom aggregation tests by aggregation name or description.
+      - name: dataset_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter for tests using a specific dataset.
+          title: Dataset Id
+        description: Filter for tests using a specific dataset.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_CustomAggregationTestSpec_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/custom_aggregation_tests/{custom_aggregation_test_id}:
+    delete:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Delete Custom Aggregation Test.
+      description: Requires custom_aggregation_test_delete permission.
+      operationId: delete_custom_aggregation_test
+      security:
+      - OAuth2AuthorizationCode:
+        - custom_aggregation_test_delete
+      parameters:
+      - name: custom_aggregation_test_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Custom Aggregation Test Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Get Custom Aggregation Test By Id.
+      description: Requires custom_aggregation_test_read permission.
+      operationId: get_custom_aggregation_test
+      security:
+      - OAuth2AuthorizationCode:
+        - custom_aggregation_test_read
+      parameters:
+      - name: custom_aggregation_test_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Custom Aggregation Test Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAggregationTestSpec'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/custom_aggregation_tests/{custom_aggregation_test_id}/results:
+    post:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Post Custom Aggregation Test Results.
+      description: Requires custom_aggregation_test_create_results permission.
+      operationId: post_custom_aggregation_test_results
+      security:
+      - OAuth2AuthorizationCode:
+        - custom_aggregation_test_create_results
+      parameters:
+      - name: custom_aggregation_test_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Custom Aggregation Test Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsUpload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsUploadResult'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Custom Aggregation Tests V1
+      summary: Get Custom Aggregation Test Results By Id.
+      description: Requires custom_aggregation_test_read_results permission. Also requires dataset_get_data_retrieval on the dataset the custom aggregation test is configured against.
+      operationId: get_custom_aggregation_test_results
+      security:
+      - OAuth2AuthorizationCode:
+        - custom_aggregation_test_read_results
+      parameters:
+      - name: custom_aggregation_test_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Custom Aggregation Test Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: The page number to fetch.
+          default: 1
+          title: Page
+        description: The page number to fetch.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: The number of items per page.
+          default: 10
+          title: Page Size
+        description: The number of items per page.
+      - name: time_range_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter results to only include metrics with timestamp after this time.
+          title: Time Range After
+        description: Filter results to only include metrics with timestamp after this time.
+      - name: time_range_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter results to only include metrics with timestamp before this time.
+          title: Time Range Before
+        description: Filter results to only include metrics with timestamp before this time.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_CustomAggregationTestResult_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    BaseDatasetParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: dataset
+          title: Parameter Type
+          default: dataset
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type of the parameter. If not set, any model problem type is allowed.
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      title: BaseDatasetParameterSchema
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricsUpload:
+      properties:
+        metrics:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumericMetric'
+            - $ref: '#/components/schemas/SketchMetric'
+          type: array
+          title: Metrics
+          description: List of metrics to upload.
+      type: object
+      required:
+      - metrics
+      title: MetricsUpload
+      description: 'The set of metrics that are available to submit via the PostMetrics API
+
+        Notably, this does not include systems metrics jobs'
+    NumericPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: number
+          title: Value
+          description: Floating point value for the metric.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: NumericPoint
+    Dimension:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dimension.
+        value:
+          type: string
+          title: Value
+          description: Value of the dimension.
+      type: object
+      required:
+      - name
+      - value
+      title: Dimension
+    MetricsUploadResult:
+      properties:
+        total_metrics:
+          type: integer
+          title: Total Metrics
+          description: Total number of metrics uploaded.
+        num_counter_metrics:
+          type: integer
+          title: Num Counter Metrics
+          description: Number of counter type metrics uploaded.
+        num_sketch_metrics:
+          type: integer
+          title: Num Sketch Metrics
+          description: Number of sketch type metrics uploaded.
+        num_series:
+          type: integer
+          title: Num Series
+          description: Number of series uploaded.
+      type: object
+      required:
+      - total_metrics
+      - num_counter_metrics
+      - num_sketch_metrics
+      - num_series
+      title: MetricsUploadResult
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScalarType:
+      properties:
+        dtype:
+          $ref: '#/components/schemas/DType'
+      type: object
+      required:
+      - dtype
+      title: ScalarType
+    NumericTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/NumericPoint'
+          type: array
+          title: Values
+          description: List of numeric time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: NumericTimeSeries
+    CustomAggregationTestSpec:
+      properties:
+        reported_aggregations:
+          items:
+            $ref: '#/components/schemas/ReportedCustomAggregation'
+          type: array
+          title: Reported Aggregations
+          description: Metadata for every aggregation the custom aggregation reports.
+        aggregate_args:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/BaseDatasetParameterSchema'
+            - $ref: '#/components/schemas/BaseLiteralParameterSchema'
+            - $ref: '#/components/schemas/BaseColumnParameterSchema'
+            title: CustomAggregationVersionSpecSchemaAggregateArgsInner
+          type: array
+          title: Aggregate Args
+          description: List of parameters to the custom aggregation's query function.
+        sql:
+          type: string
+          title: Sql
+          description: DuckDBSQL query for the custom aggregation.
+        name:
+          type: string
+          title: Name
+          description: Name of the custom aggregation function.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the custom aggregation function and what it aggregates.
+        aggregation_arg_configuration:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Arg Configuration
+          description: List of argument values for the aggregation's aggregate function.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        dataset_id:
+          type: string
+          format: uuid
+          title: Dataset Id
+          description: ID of the dataset to use for the custom aggregation test.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the custom aggregation test.
+        authored_by:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: User who authored this custom aggregation test. Will only be None if the author user has been deleted.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace the test was executed in.
+        test_status:
+          $ref: '#/components/schemas/CustomAggregationTestStatus'
+          description: Status of custom aggregation test. Deprecated, should not be used. Status should be inferred from the status of the linked job.
+          deprecated: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of custom aggregation test creation.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: ID of the job created for the test execution. Can be polled to check job status.
+      type: object
+      required:
+      - reported_aggregations
+      - aggregate_args
+      - sql
+      - name
+      - aggregation_arg_configuration
+      - start_timestamp
+      - end_timestamp
+      - dataset_id
+      - id
+      - authored_by
+      - workspace_id
+      - test_status
+      - created_at
+      - job_id
+      title: CustomAggregationTestSpec
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    CustomAggregationTestStatus:
+      type: string
+      enum:
+      - completed
+      - queued
+      title: CustomAggregationTestStatus
+    DType:
+      type: string
+      enum:
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
+    SketchMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        sketch_series:
+          items:
+            $ref: '#/components/schemas/SketchTimeSeries'
+          type: array
+          title: Sketch Series
+          description: List of sketch-based time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - sketch_series
+      title: SketchMetric
+    AggregationMetricType:
+      type: string
+      enum:
+      - sketch
+      - numeric
+      title: AggregationMetricType
+    ObjectType:
+      properties:
+        object:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/ScalarType'
+            - $ref: '#/components/schemas/ObjectType'
+            - $ref: '#/components/schemas/ListType'
+          type: object
+          title: Object
+      type: object
+      required:
+      - object
+      title: ObjectType
+    ReportedCustomAggregation:
+      properties:
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the reported aggregation metric.
+        description:
+          type: string
+          title: Description
+          description: Description of the reported aggregation metric and what it aggregates.
+        value_column:
+          type: string
+          title: Value Column
+          description: Name of the column returned from the SQL query holding the metric value.
+        timestamp_column:
+          type: string
+          title: Timestamp Column
+          description: Name of the column returned from the SQL query holding the timestamp buckets.
+        metric_kind:
+          $ref: '#/components/schemas/AggregationMetricType'
+          description: Return type of the reported aggregation metric value.
+        dimension_columns:
+          items:
+            type: string
+          type: array
+          title: Dimension Columns
+          description: Name of any dimension columns returned from the SQL query. Max length is 1.
+      type: object
+      required:
+      - metric_name
+      - description
+      - value_column
+      - timestamp_column
+      - metric_kind
+      - dimension_columns
+      title: ReportedCustomAggregation
+    PostCustomAggregationTest:
+      properties:
+        reported_aggregations:
+          items:
+            $ref: '#/components/schemas/ReportedCustomAggregation'
+          type: array
+          title: Reported Aggregations
+          description: Metadata for every aggregation the custom aggregation reports.
+        aggregate_args:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/BaseDatasetParameterSchema'
+            - $ref: '#/components/schemas/BaseLiteralParameterSchema'
+            - $ref: '#/components/schemas/BaseColumnParameterSchema'
+            title: CustomAggregationVersionSpecSchemaAggregateArgsInner
+          type: array
+          title: Aggregate Args
+          description: List of parameters to the custom aggregation's query function.
+        sql:
+          type: string
+          title: Sql
+          description: DuckDBSQL query for the custom aggregation.
+        name:
+          type: string
+          title: Name
+          description: Name of the custom aggregation function.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the custom aggregation function and what it aggregates.
+        aggregation_arg_configuration:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Arg Configuration
+          description: List of argument values for the aggregation's aggregate function.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        dataset_id:
+          type: string
+          format: uuid
+          title: Dataset Id
+          description: ID of the dataset to use for the custom aggregation test.
+      type: object
+      required:
+      - reported_aggregations
+      - aggregate_args
+      - sql
+      - name
+      - aggregation_arg_configuration
+      - start_timestamp
+      - end_timestamp
+      - dataset_id
+      title: PostCustomAggregationTest
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
+    SketchCustomAggregationTestResult:
+      properties:
+        metric_kind:
+          type: string
+          const: sketch
+          title: Metric Kind
+          default: sketch
+        row_count:
+          type: integer
+          title: Row Count
+          description: Count of rows the sketch saw.
+        min:
+          type: number
+          title: Min
+          description: Minimum value seen in the sketch metric.
+        max:
+          type: number
+          title: Max
+          description: Maximum value seen in the sketch metric.
+        q1:
+          type: number
+          title: Q1
+          description: Q1 value of the sketch metric.
+        q3:
+          type: number
+          title: Q3
+          description: Q3 value of the sketch metric.
+      type: object
+      required:
+      - row_count
+      - min
+      - max
+      - q1
+      - q3
+      title: SketchCustomAggregationTestResult
+    SketchTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/SketchPoint'
+          type: array
+          title: Values
+          description: List of sketch-based time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: SketchTimeSeries
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    NumericCustomAggregationTestResult:
+      properties:
+        metric_kind:
+          type: string
+          const: numeric
+          title: Metric Kind
+          default: numeric
+        value:
+          type: number
+          title: Value
+          description: Value of the time series metric.
+      type: object
+      required:
+      - value
+      title: NumericCustomAggregationTestResult
+    ResourceList_CustomAggregationTestResult_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/CustomAggregationTestResult'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[CustomAggregationTestResult]
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    BaseLiteralParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: literal
+          title: Parameter Type
+          default: literal
+        parameter_dtype:
+          $ref: '#/components/schemas/DType'
+          description: Data type of the parameter.
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - parameter_dtype
+      title: BaseLiteralParameterSchema
+    SketchPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: string
+          title: Value
+          description: Base64-encoded string representation of a sketch.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: SketchPoint
+    BaseColumnParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          description: List of tags that are applicable to this parameter. Datasets with columns that have matching tags can be inferred this way.
+          default: []
+        source_dataset_parameter_key:
+          type: string
+          title: Source Dataset Parameter Key
+          description: Name of the parameter that provides the dataset to be used for this column.
+        allowed_column_types:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ScalarType'
+              - $ref: '#/components/schemas/ObjectType'
+              - $ref: '#/components/schemas/ListType'
+            type: array
+          - type: 'null'
+          title: Allowed Column Types
+          description: List of column types applicable to this parameter
+        allow_any_column_type:
+          type: boolean
+          title: Allow Any Column Type
+          description: Indicates if this metric parameter can accept any column type.
+          default: false
+        parameter_type:
+          type: string
+          const: column
+          title: Parameter Type
+          default: column
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - source_dataset_parameter_key
+      title: BaseColumnParameterSchema
+    ListType:
+      properties:
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/ScalarType'
+          - $ref: '#/components/schemas/ObjectType'
+          - $ref: '#/components/schemas/ListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: ListType
+    NumericMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        numeric_series:
+          items:
+            $ref: '#/components/schemas/NumericTimeSeries'
+          type: array
+          title: Numeric Series
+          description: List of numeric time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - numeric_series
+      title: NumericMetric
+    MetricsArgSpec:
+      properties:
+        arg_key:
+          type: string
+          title: Arg Key
+          description: Name of the argument.
+        arg_value:
+          title: Arg Value
+          description: Value of the argument.
+      type: object
+      required:
+      - arg_key
+      - arg_value
+      title: MetricsArgSpec
+    ResourceList_CustomAggregationTestSpec_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/CustomAggregationTestSpec'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[CustomAggregationTestSpec]
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    CustomAggregationTestResult:
+      properties:
+        test_run_id:
+          type: string
+          format: uuid
+          title: Test Run Id
+          description: ID of the custom aggregation test run.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the generated metric.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp for the time bucket the aggregation value is for.
+        value:
+          anyOf:
+          - $ref: '#/components/schemas/NumericCustomAggregationTestResult'
+          - $ref: '#/components/schemas/SketchCustomAggregationTestResult'
+          title: Value
+          description: Number or data sketch values representing the aggregation.
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the value.
+      type: object
+      required:
+      - test_run_id
+      - metric_name
+      - timestamp
+      - value
+      - dimensions
+      title: CustomAggregationTestResult
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

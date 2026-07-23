@@ -1,0 +1,1042 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Alert Rules V1 API
+  version: 2.1.688
+tags:
+- name: Alert Rules V1
+paths:
+  /api/v1/models/{model_id}/alert_rules:
+    get:
+      tags:
+      - Alert Rules V1
+      summary: Get Model Alert Rules
+      description: Returns a list of alert rules associated with a model. Requires model_list_alert_rules permission.
+      operationId: get_model_alert_rules
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_alert_rules
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertRuleSort'
+          description: The field to sort by.
+          default: created_at
+        description: The field to sort by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort by.
+          default: desc
+        description: The order to sort by.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The name of the alert rule to search by.
+          title: Name
+        description: The name of the alert rule to search by.
+      - name: bound
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound to filter by.
+        description: The bound to filter by.
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The query to filter by.
+          title: Query
+        description: The query to filter by.
+      - name: threshold_less_than
+        in: query
+        required: false
+        schema:
+          type: number
+          description: The threshold to filter by, less than.
+          title: Threshold Less Than
+        description: The threshold to filter by, less than.
+      - name: threshold_greater_than
+        in: query
+        required: false
+        schema:
+          type: number
+          description: The threshold to filter by, greater than.
+          title: Threshold Greater Than
+        description: The threshold to filter by, greater than.
+      - name: metric_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The name of the alert rule query metric to search by.
+          title: Metric Name
+        description: The name of the alert rule query metric to search by.
+      - name: policy_model_assignment_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Optional policy model assignment ID to filter alert rules by.
+          title: Policy Model Assignment Id
+        description: Optional policy model assignment ID to filter alert rules by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AlertRule_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Alert Rules V1
+      summary: Create Model Alert Rule
+      description: Creates an alert rule. Requires model_create_alert_rule permission.
+      operationId: post_model_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - model_create_alert_rule
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAlertRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/alert_rule_query_validation:
+    post:
+      tags:
+      - Alert Rules V1
+      summary: Validate A Model Alert Rule Query
+      description: Validates an alert rule query. Requires model_create_alert_rule permission.
+      operationId: post_alert_rule_query_validation
+      security:
+      - OAuth2AuthorizationCode:
+        - model_create_alert_rule
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateAlertRuleQueryReq'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRuleSQLValidationResp'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/alert_rules:
+    get:
+      tags:
+      - Alert Rules V1
+      summary: Get Workspace Alert Rules.
+      description: Returns alert rules across all models in the workspace, including rules attached indirectly via policy assignments. Applies the caller's per-model RBAC. Requires workspace_list_alert_rules permission.
+      operationId: get_alert_rules_in_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_alert_rules
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertRuleSort'
+          description: The field to sort by.
+          default: created_at
+        description: The field to sort by.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: The order to sort by.
+          default: desc
+        description: The order to sort by.
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Optional filter to alert rules of a single model.
+          title: Model Id
+        description: Optional filter to alert rules of a single model.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The name of the alert rule to search by.
+          title: Name
+        description: The name of the alert rule to search by.
+      - name: bound
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound to filter by.
+        description: The bound to filter by.
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The query to filter by.
+          title: Query
+        description: The query to filter by.
+      - name: threshold_less_than
+        in: query
+        required: false
+        schema:
+          type: number
+          description: The threshold to filter by, less than.
+          title: Threshold Less Than
+        description: The threshold to filter by, less than.
+      - name: threshold_greater_than
+        in: query
+        required: false
+        schema:
+          type: number
+          description: The threshold to filter by, greater than.
+          title: Threshold Greater Than
+        description: The threshold to filter by, greater than.
+      - name: metric_name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The name of the alert rule query metric to search by.
+          title: Metric Name
+        description: The name of the alert rule query metric to search by.
+      - name: policy_model_assignment_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Optional policy model assignment ID to filter alert rules by.
+          title: Policy Model Assignment Id
+        description: Optional policy model assignment ID to filter alert rules by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_AlertRule_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/alert_rules/validate_query:
+    post:
+      tags:
+      - Alert Rules V1
+      summary: Validate An Alert Rule Query (Static)
+      description: Performs static validation of an alert rule SQL query without requiring a model. Checks syntax, allowed tables, allowed functions, clause restrictions, and template presence. Does not execute the query.
+      operationId: post_alert_rule_query_validation_static
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateAlertRuleQueryReq'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRuleSQLValidationResp'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode: []
+  /api/v1/alert_rules/{alert_rule_id}:
+    get:
+      tags:
+      - Alert Rules V1
+      summary: Get Alert Rule By Id
+      description: Returns a single alert rule by ID. Requires alert_rule_read permission.
+      operationId: get_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - alert_rule_read
+      parameters:
+      - name: alert_rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Alert Rules V1
+      summary: Update Model Alert Rule
+      description: Updates an alert rule. Requires alert_rule_update permission.
+      operationId: patch_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - alert_rule_update
+      parameters:
+      - name: alert_rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAlertRule'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Alert Rules V1
+      summary: Delete Alert Rule By Id
+      description: Deletes a single alert rule by ID. Requires alert_rule_delete permission.
+      operationId: delete_alert_rule
+      security:
+      - OAuth2AuthorizationCode:
+        - alert_rule_delete
+      parameters:
+      - name: alert_rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    AlertRuleSQLValidationResp:
+      properties:
+        has_metric_timestamp_col:
+          type: boolean
+          title: Has Metric Timestamp Col
+          description: The name of the metric returned by the alert rule query.
+        has_metric_value_col:
+          type: boolean
+          title: Has Metric Value Col
+          description: The name of the metric returned by the alert rule query.
+        has_time_templates:
+          type: boolean
+          title: Has Time Templates
+          description: The name of the metric returned by the alert rule query.
+        has_interval_templates:
+          type: boolean
+          title: Has Interval Templates
+          description: The name of the metric returned by the alert rule query.
+      type: object
+      required:
+      - has_metric_timestamp_col
+      - has_metric_value_col
+      - has_time_templates
+      - has_interval_templates
+      title: AlertRuleSQLValidationResp
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    AlertRuleSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: AlertRuleSort
+    ValidateAlertRuleQueryReq:
+      properties:
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+      type: object
+      required:
+      - query
+      title: ValidateAlertRuleQueryReq
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    AlertRule:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The id of the alert rule.
+        model_id:
+          type: string
+          format: uuid
+          title: Model Id
+          description: The model id of the alert rule.
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for user who last updated the alert rule.
+        notification_webhooks:
+          items:
+            $ref: '#/components/schemas/AlertRuleNotificationWebhook'
+          type: array
+          title: Notification Webhooks
+          description: Notification webhooks configured for the alert rule.
+        policy_alert_rule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Alert Rule Id
+          description: The ID of the policy alert rule this alert rule was created from, or null if not policy-managed.
+        policy_model_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Model Assignment Id
+          description: The ID of the policy model assignment this alert rule belongs to, or null if not policy-managed.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - model_id
+      - name
+      - threshold
+      - bound
+      - query
+      - metric_name
+      - interval
+      - notification_webhooks
+      title: AlertRule
+    AlertRuleNotificationWebhook:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Webhook ID.
+        name:
+          type: string
+          title: Name
+          description: Webhook name.
+      type: object
+      required:
+      - id
+      - name
+      title: AlertRuleNotificationWebhook
+    AlertBound:
+      type: string
+      enum:
+      - upper_bound
+      - lower_bound
+      title: AlertBound
+    ResourceList_AlertRule_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AlertRule'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AlertRule]
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    PatchAlertRule:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          anyOf:
+          - $ref: '#/components/schemas/AlertBound'
+          - type: 'null'
+          description: The bound of the alert rule.
+        query:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: The query of the alert rule.
+        metric_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          anyOf:
+          - $ref: '#/components/schemas/AlertRuleInterval'
+          - type: 'null'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        notification_webhook_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Notification Webhook Ids
+          description: The notification webhook IDs where the alert rule will send alert notification.
+      type: object
+      title: PatchAlertRule
+    PostAlertRule:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        notification_webhook_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Notification Webhook Ids
+          description: The notification webhook IDs where the alert rule will send alert notification.
+          default: []
+      type: object
+      required:
+      - name
+      - threshold
+      - bound
+      - query
+      - metric_name
+      - interval
+      title: PostAlertRule
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

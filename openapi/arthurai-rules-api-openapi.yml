@@ -1,0 +1,682 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Rules API
+  version: 2.1.688
+  description: Endpoints to manage rules
+tags:
+- name: Rules
+  description: Endpoints to manage rules
+paths:
+  /api/v2/default_rules:
+    get:
+      tags:
+      - Rules
+      summary: Get Default Rules
+      description: Get default rules.
+      operationId: get_default_rules_api_v2_default_rules_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/RuleResponse'
+                type: array
+                title: Response Get Default Rules Api V2 Default Rules Get
+      security:
+      - API Key: []
+    post:
+      tags:
+      - Rules
+      summary: Create Default Rule
+      description: 'Create a default rule. Default rules are applied universally across existing tasks, subsequently created new tasks, and any non-task related requests. Once a rule is created, it is immutable. Available rules are ''KeywordRule'', ''ModelHallucinationRuleV2'', ''ModelSensitiveDataRule'', ''PIIDataRule'', ''PromptInjectionRule'', ''RegexRule'', ''ToxicityRule''. Note: The rules are cached by the validation endpoints for 60 seconds.'
+      operationId: create_default_rule_api_v2_default_rules_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRuleRequest'
+            examples:
+              example1:
+                summary: Sensitive Data Example
+                description: Sensitive Data Example with its required configuration
+                value:
+                  name: Sensitive Data Rule
+                  type: ModelSensitiveDataRule
+                  apply_to_prompt: true
+                  apply_to_response: false
+                  config:
+                    examples:
+                    - example: John has O negative blood group
+                      result: true
+                    - example: Most of the people have A positive blood group
+                      result: false
+                    hint: specific individual's blood types
+              example2:
+                summary: Regex Example
+                description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+                value:
+                  name: SSN Regex Rule
+                  type: RegexRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    regex_patterns:
+                    - \d{3}-\d{2}-\d{4}
+                    - \d{5}-\d{6}-\d{7}
+              example3:
+                summary: Keywords Rule Example
+                description: Keywords Rule Example with its required configuration
+                value:
+                  name: Blocked Keywords Rule
+                  type: KeywordRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    keywords:
+                    - Blocked_Keyword_1
+                    - Blocked_Keyword_2
+              example4:
+                summary: Prompt Injection Rule Example
+                description: Prompt Injection Rule Example, no configuration required
+                value:
+                  name: Prompt Injection Rule
+                  type: PromptInjectionRule
+                  apply_to_prompt: true
+                  apply_to_response: false
+              example5:
+                summary: Hallucination Rule V1 Example (Deprecated)
+                description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRule
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example6:
+                summary: Hallucination Rule V2 Example
+                description: Hallucination Rule Example, no configuration required
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRuleV2
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example7:
+                summary: Hallucination Rule V3 Example (Beta)
+                description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+                value:
+                  name: Hallucination Rule
+                  type: ModelHallucinationRuleV3
+                  apply_to_prompt: false
+                  apply_to_response: true
+              example8:
+                summary: PII Rule Example
+                description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+                value:
+                  name: PII Rule
+                  type: PIIDataRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    disabled_pii_entities:
+                    - EMAIL_ADDRESS
+                    - PHONE_NUMBER
+                    confidence_threshold: '0.5'
+                    allow_list:
+                    - arthur.ai
+                    - Arthur
+              example9:
+                summary: Toxicity Rule Example
+                description: Toxicity Rule Example, no configuration required. Threshold accepted
+                value:
+                  name: Toxicity Rule
+                  type: ToxicityRule
+                  apply_to_prompt: true
+                  apply_to_response: true
+                  config:
+                    threshold: 0.5
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+  /api/v2/default_rules/{rule_id}:
+    delete:
+      tags:
+      - Rules
+      summary: Archive Default Rule
+      description: Archive existing default rule.
+      operationId: archive_default_rule_api_v2_default_rules__rule_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v2/rules/search:
+    post:
+      tags:
+      - Rules
+      summary: Search Rules
+      description: Search default and/or task rules.
+      operationId: search_rules_api_v2_rules_search_post
+      security:
+      - API Key: []
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRulesRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRulesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    NewRuleRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+          examples:
+          - SSN Regex Rule
+        type:
+          type: string
+          title: Type
+          description: Type of the rule. It can only be one of KeywordRule, RegexRule, ModelSensitiveDataRule, ModelHallucinationRule, ModelHallucinationRuleV2, PromptInjectionRule, PIIDataRule
+          examples:
+          - RegexRule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Boolean value to enable or disable the rule for llm prompt
+          examples:
+          - true
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Boolean value to enable or disable the rule for llm response
+          examples:
+          - false
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      title: NewRuleRequest
+      example1:
+        description: Sensitive Data Example with its required configuration
+        summary: Sensitive Data Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          config:
+            examples:
+            - example: John has O negative blood group
+              result: true
+            - example: Most of the people have A positive blood group
+              result: false
+            hint: specific individual's blood types
+          name: Sensitive Data Rule
+          type: ModelSensitiveDataRule
+      example2:
+        description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+        summary: Regex Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            regex_patterns:
+            - \d{3}-\d{2}-\d{4}
+            - \d{5}-\d{6}-\d{7}
+          name: SSN Regex Rule
+          type: RegexRule
+      example3:
+        description: Keywords Rule Example with its required configuration
+        summary: Keywords Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            keywords:
+            - Blocked_Keyword_1
+            - Blocked_Keyword_2
+          name: Blocked Keywords Rule
+          type: KeywordRule
+      example4:
+        description: Prompt Injection Rule Example, no configuration required
+        summary: Prompt Injection Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          name: Prompt Injection Rule
+          type: PromptInjectionRule
+      example5:
+        description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+        summary: Hallucination Rule V1 Example (Deprecated)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRule
+      example6:
+        description: Hallucination Rule Example, no configuration required
+        summary: Hallucination Rule V2 Example
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV2
+      example7:
+        description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+        summary: Hallucination Rule V3 Example (Beta)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV3
+      example8:
+        description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+        summary: PII Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            allow_list:
+            - arthur.ai
+            - Arthur
+            confidence_threshold: '0.5'
+            disabled_pii_entities:
+            - EMAIL_ADDRESS
+            - PHONE_NUMBER
+          name: PII Rule
+          type: PIIDataRule
+      example9:
+        description: Toxicity Rule Example, no configuration required. Threshold accepted
+        summary: Toxicity Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            threshold: 0.5
+          name: Toxicity Rule
+          type: ToxicityRule
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    SearchRulesRequest:
+      properties:
+        rule_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Rule Ids
+          description: List of rule IDs to search for.
+        rule_scopes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RuleScope'
+            type: array
+          - type: 'null'
+          title: Rule Scopes
+          description: List of rule scopes to search for.
+        prompt_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Prompt Enabled
+          description: Include or exclude prompt-enabled rules.
+        response_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Response Enabled
+          description: Include or exclude response-enabled rules.
+        rule_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RuleType'
+            type: array
+          - type: 'null'
+          title: Rule Types
+          description: List of rule types to search for.
+      type: object
+      title: SearchRulesRequest
+    SearchRulesResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of rules matching the parameters
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: List of rules matching the search filters. Length is less than or equal to page_size parameter
+      type: object
+      required:
+      - count
+      - rules
+      title: SearchRulesResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

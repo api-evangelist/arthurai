@@ -1,0 +1,730 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Metrics V1 API
+  version: 2.1.688
+tags:
+- name: Metrics V1
+paths:
+  /api/v1/models/{model_id}/metrics/versions:
+    get:
+      tags:
+      - Metrics V1
+      summary: Get Metric Versions
+      description: Get metric versions for a model. Requires model_list_metric_versions permission.
+      operationId: get_model_metrics_versions
+      security:
+      - OAuth2AuthorizationCode:
+        - model_list_metric_versions
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/MetricsVersionsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: range_end
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_MetricsVersion_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Metrics V1
+      summary: Create A Metric Version
+      description: Creates a new version for metrics to be uploaded for this model. Requires model_create_metric_version permission.
+      operationId: post_model_metrics_version
+      security:
+      - OAuth2AuthorizationCode:
+        - model_create_metric_version
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMetricsVersions'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsVersion'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/metrics/versions/{metric_version_num}:
+    post:
+      tags:
+      - Metrics V1
+      summary: Upload Metrics For Version
+      description: Adds metrics for a model by version. This will create the version if it does not exist. Requires model_add_metrics_for_version permission.
+      operationId: post_model_metrics_by_version
+      security:
+      - OAuth2AuthorizationCode:
+        - model_add_metrics_for_version
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      - name: metric_version_num
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The version number for the metrics being uploaded. Should be an integer.
+          title: Metric Version Num
+        description: The version number for the metrics being uploaded. Should be an integer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsUpload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsUploadResult'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/models/{model_id}/metrics/query:
+    post:
+      tags:
+      - Metrics V1
+      summary: Query Model Metrics
+      description: Queries metrics for a model. Requires model_query_metrics permission.
+      operationId: post_model_metrics_query
+      security:
+      - OAuth2AuthorizationCode:
+        - model_query_metrics
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Model Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMetricsQuery'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsQueryResult'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    PostMetricsQueryResultFilterOrGroup:
+      properties:
+        or:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterOrGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterAndGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilter'
+          type: array
+          title: Or
+          description: List of filters to apply with OR operator. Needs to be provided if `and` is empty.
+      type: object
+      required:
+      - or
+      title: PostMetricsQueryResultFilterOrGroup
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    MetricsVersion:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        version_num:
+          type: integer
+          title: Version Num
+          description: Version id for the set of metrics for this model.
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: Model id of the model for this metric version.
+        range_start:
+          type: string
+          format: date-time
+          title: Range Start
+          description: Start timestamp of the metrics range included in this metric version.
+        range_end:
+          type: string
+          format: date-time
+          title: Range End
+          description: End timestamp of the metrics range included in this metric version.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - version_num
+      - scope_model_id
+      - range_start
+      - range_end
+      title: MetricsVersion
+    MetricsResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: MetricsResultFilterOp
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricsQueryResult:
+      properties:
+        results:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Results
+          description: Results of the metrics query.
+      type: object
+      required:
+      - results
+      title: MetricsQueryResult
+    MetricsUpload:
+      properties:
+        metrics:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumericMetric'
+            - $ref: '#/components/schemas/SketchMetric'
+          type: array
+          title: Metrics
+          description: List of metrics to upload.
+      type: object
+      required:
+      - metrics
+      title: MetricsUpload
+      description: 'The set of metrics that are available to submit via the PostMetrics API
+
+        Notably, this does not include systems metrics jobs'
+    NumericPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: number
+          title: Value
+          description: Floating point value for the metric.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: NumericPoint
+    Dimension:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dimension.
+        value:
+          type: string
+          title: Value
+          description: Value of the dimension.
+      type: object
+      required:
+      - name
+      - value
+      title: Dimension
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    MetricsUploadResult:
+      properties:
+        total_metrics:
+          type: integer
+          title: Total Metrics
+          description: Total number of metrics uploaded.
+        num_counter_metrics:
+          type: integer
+          title: Num Counter Metrics
+          description: Number of counter type metrics uploaded.
+        num_sketch_metrics:
+          type: integer
+          title: Num Sketch Metrics
+          description: Number of sketch type metrics uploaded.
+        num_series:
+          type: integer
+          title: Num Series
+          description: Number of series uploaded.
+      type: object
+      required:
+      - total_metrics
+      - num_counter_metrics
+      - num_sketch_metrics
+      - num_series
+      title: MetricsUploadResult
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostMetricsVersions:
+      properties:
+        range_start:
+          type: string
+          format: date-time
+          title: Range Start
+          description: Start timestamp of the metrics range included in this metric version.
+        range_end:
+          type: string
+          format: date-time
+          title: Range End
+          description: End timestamp of the metrics range included in this metric version.
+      type: object
+      required:
+      - range_start
+      - range_end
+      title: PostMetricsVersions
+    NumericTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/NumericPoint'
+          type: array
+          title: Values
+          description: List of numeric time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: NumericTimeSeries
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    ResourceList_MetricsVersion_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/MetricsVersion'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[MetricsVersion]
+    SketchMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        sketch_series:
+          items:
+            $ref: '#/components/schemas/SketchTimeSeries'
+          type: array
+          title: Sketch Series
+          description: List of sketch-based time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - sketch_series
+      title: SketchMetric
+    PostMetricsQueryResultFilterAndGroup:
+      properties:
+        and:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterAndGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterOrGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilter'
+          type: array
+          title: And
+          description: List of filters to apply with AND operator. Needs to be provided if `or` is empty.
+      type: object
+      required:
+      - and
+      title: PostMetricsQueryResultFilterAndGroup
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SketchTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/SketchPoint'
+          type: array
+          title: Values
+          description: List of sketch-based time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: SketchTimeSeries
+    PostMetricsQuery:
+      properties:
+        query:
+          type: string
+          title: Query
+          description: Query for retrieving the metrics.
+        time_range:
+          $ref: '#/components/schemas/PostMetricsQueryTimeRange'
+          description: Time range to filter the metrics by.
+        interval:
+          anyOf:
+          - $ref: '#/components/schemas/AlertRuleInterval'
+          - type: 'null'
+          description: Interval for the metrics aggregation. Example '1 day'.
+        limit:
+          type: integer
+          title: Limit
+          description: Limit the number of metrics returned. Defaults to 50.
+          default: 50
+        result_filter:
+          anyOf:
+          - $ref: '#/components/schemas/PostMetricsQueryResultFilter'
+          - $ref: '#/components/schemas/PostMetricsQueryResultFilterAndGroup'
+          - $ref: '#/components/schemas/PostMetricsQueryResultFilterOrGroup'
+          - type: 'null'
+          title: Result Filter
+          description: Filter to apply to the query results.
+      type: object
+      required:
+      - query
+      - time_range
+      title: PostMetricsQuery
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    PostMetricsQueryTimeRange:
+      properties:
+        start:
+          type: string
+          format: date-time
+          title: Start
+          description: Start timestamp of the metrics range.
+        end:
+          type: string
+          format: date-time
+          title: End
+          description: End timestamp of the metrics range.
+      type: object
+      required:
+      - start
+      - end
+      title: PostMetricsQueryTimeRange
+    SketchPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: string
+          title: Value
+          description: Base64-encoded string representation of a sketch.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: SketchPoint
+    NumericMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        numeric_series:
+          items:
+            $ref: '#/components/schemas/NumericTimeSeries'
+          type: array
+          title: Numeric Series
+          description: List of numeric time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - numeric_series
+      title: NumericMetric
+    MetricsVersionsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - range_start
+      - range_end
+      title: MetricsVersionsSort
+    PostMetricsQueryResultFilter:
+      properties:
+        column:
+          type: string
+          title: Column
+          description: Column name to use for filtering metrics.
+        op:
+          $ref: '#/components/schemas/MetricsResultFilterOp'
+          description: Operation to filter metrics. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - column
+      - op
+      - value
+      title: PostMetricsQueryResultFilter
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

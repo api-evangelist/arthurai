@@ -1,0 +1,723 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Transforms API
+  version: 2.1.688
+tags:
+- name: Transforms
+paths:
+  /api/v1/tasks/{task_id}/traces/transforms:
+    get:
+      tags:
+      - Transforms
+      summary: List Transforms For Task
+      description: List all transforms for a task.
+      operationId: list_transforms_for_task_api_v1_tasks__task_id__traces_transforms_get
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationSortMethod'
+          description: Sort the results (asc/desc)
+          default: desc
+        description: Sort the results (asc/desc)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+          default: 10
+          title: Page Size
+        description: Page size. Default is 10. Must be greater than 0 and less than 5000.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Page number
+          default: 0
+          title: Page
+        description: Page number
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Name of the transform to filter on using partial matching.
+          title: Name
+        description: Name of the transform to filter on using partial matching.
+      - name: created_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC).
+          title: Created After
+        description: Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC).
+      - name: created_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC).
+          title: Created Before
+        description: Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC).
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTraceTransformsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Transforms
+      summary: Create Transform For Task
+      description: Create a new transform for a task.
+      operationId: create_transform_for_task_api_v1_tasks__task_id__traces_transforms_post
+      security:
+      - API Key: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Task Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTraceTransformRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceTransformResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/transforms/{transform_id}:
+    get:
+      tags:
+      - Transforms
+      summary: Get Transform
+      description: Get a specific transform.
+      operationId: get_transform_api_v1_traces_transforms__transform_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform to fetch.
+          title: Transform Id
+        description: ID of the transform to fetch.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceTransformResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Transforms
+      summary: Update Transform
+      description: Update a transform.
+      operationId: update_transform_api_v1_traces_transforms__transform_id__patch
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform to update.
+          title: Transform Id
+        description: ID of the transform to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraceTransformUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceTransformResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Transforms
+      summary: Delete Transform
+      description: Delete a transform. Returns 409 if the transform is referenced by continuous evals, agentic experiments, or agentic notebooks.
+      operationId: delete_transform_api_v1_traces_transforms__transform_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform to delete.
+          title: Transform Id
+        description: ID of the transform to delete.
+      responses:
+        '204':
+          description: Successful Response
+        '409':
+          description: Transform has dependent resources that must be removed first.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/transforms/{transform_id}/dependents:
+    get:
+      tags:
+      - Transforms
+      summary: Get Transform Dependents
+      description: Get resources that depend on this transform.
+      operationId: get_transform_dependents_api_v1_traces_transforms__transform_id__dependents_get
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform.
+          title: Transform Id
+        description: ID of the transform.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformDependents'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/transforms/{transform_id}/versions:
+    get:
+      tags:
+      - Transforms
+      summary: List Transform Versions
+      description: List all version snapshots for a transform, ordered by version number descending.
+      operationId: list_transform_versions_api_v1_traces_transforms__transform_id__versions_get
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform.
+          title: Transform Id
+        description: ID of the transform.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTraceTransformVersionsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/transforms/{transform_id}/versions/{version_id}:
+    get:
+      tags:
+      - Transforms
+      summary: Get Transform Version
+      description: Get a specific version snapshot of a transform.
+      operationId: get_transform_version_api_v1_traces_transforms__transform_id__versions__version_id__get
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform.
+          title: Transform Id
+        description: ID of the transform.
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the version to fetch.
+          title: Version Id
+        description: ID of the version to fetch.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceTransformVersionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Transforms
+      summary: Delete Transform Version
+      description: Delete a specific version of a transform. Returns 409 if it is the only version or is pinned by a continuous eval.
+      operationId: delete_transform_version_api_v1_traces_transforms__transform_id__versions__version_id__delete
+      security:
+      - API Key: []
+      parameters:
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform.
+          title: Transform Id
+        description: ID of the transform.
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the version to delete.
+          title: Version Id
+        description: ID of the version to delete.
+      responses:
+        '204':
+          description: Successful Response
+        '409':
+          description: Version is the only one remaining or is pinned by a continuous eval.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/traces/{trace_id}/transforms/{transform_id}/extractions:
+    post:
+      tags:
+      - Transforms
+      summary: Execute Trace Transform Extraction
+      description: Execute a transform against a trace to extract variables.
+      operationId: execute_trace_transform_extraction_api_v1_traces__trace_id__transforms__transform_id__extractions_post
+      security:
+      - API Key: []
+      parameters:
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: ID of the trace to execute the transform against.
+          title: Trace Id
+        description: ID of the trace to execute the transform against.
+      - name: transform_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the transform to execute.
+          title: Transform Id
+        description: ID of the transform to execute.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformExtractionResponseList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TraceTransformDefinition:
+      properties:
+        variables:
+          items:
+            $ref: '#/components/schemas/TraceTransformVariableDefinition'
+          type: array
+          title: Variables
+          description: List of variable extraction rules.
+      type: object
+      required:
+      - variables
+      title: TraceTransformDefinition
+    TraceTransformVersionResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the version.
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the parent transform.
+        version_number:
+          type: integer
+          title: Version Number
+          description: Monotonically increasing version number.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Snapshot of the transform definition at the time of this version.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when this version was created.
+      type: object
+      required:
+      - id
+      - transform_id
+      - version_number
+      - definition
+      - created_at
+      title: TraceTransformVersionResponse
+    TransformExtractionResponseList:
+      properties:
+        variables:
+          items:
+            $ref: '#/components/schemas/VariableTemplateValue'
+          type: array
+          title: Variables
+          description: List of extracted variables.
+        missing_variables:
+          items:
+            type: string
+          type: array
+          title: Missing Variables
+          description: List of variable names that had missing values (no matching span or attribute path).
+        missing_spans:
+          items:
+            type: string
+          type: array
+          title: Missing Spans
+          description: List of matching spans for the variables.
+      type: object
+      required:
+      - variables
+      - missing_variables
+      - missing_spans
+      title: TransformExtractionResponseList
+    ListTraceTransformsResponse:
+      properties:
+        transforms:
+          items:
+            $ref: '#/components/schemas/TraceTransformResponse'
+          type: array
+          title: Transforms
+          description: List of transforms for the task.
+        count:
+          type: integer
+          title: Count
+          description: Total number of transforms matching filters
+      type: object
+      required:
+      - transforms
+      - count
+      title: ListTraceTransformsResponse
+    TraceTransformResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the transform.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the parent task.
+        name:
+          type: string
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Latest version of the transform definition.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp representing the time of transform creation
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Timestamp representing the time of the last transform update
+      type: object
+      required:
+      - id
+      - task_id
+      - name
+      - definition
+      - created_at
+      - updated_at
+      title: TraceTransformResponse
+    NewTraceTransformRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Transform definition specifying extraction rules.
+      type: object
+      required:
+      - name
+      - definition
+      title: NewTraceTransformRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TraceTransformVariableDefinition:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the variable to extract.
+        span_name:
+          type: string
+          title: Span Name
+          description: Name of the span to extract data from.
+        attribute_path:
+          type: string
+          title: Attribute Path
+          description: Dot-notation path to the attribute within the span (e.g., 'attributes.input.value.sqlQuery').
+        fallback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallback
+          description: Fallback value to use if the attribute is not found.
+      type: object
+      required:
+      - variable_name
+      - span_name
+      - attribute_path
+      title: TraceTransformVariableDefinition
+    ListTraceTransformVersionsResponse:
+      properties:
+        versions:
+          items:
+            $ref: '#/components/schemas/TraceTransformVersionResponse'
+          type: array
+          title: Versions
+          description: List of versions for the transform, ordered by version_number descending.
+        count:
+          type: integer
+          title: Count
+          description: Total number of versions.
+      type: object
+      required:
+      - versions
+      - count
+      title: ListTraceTransformVersionsResponse
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TransformDependents:
+      properties:
+        continuous_evals:
+          items:
+            $ref: '#/components/schemas/TransformDependentRef'
+          type: array
+          title: Continuous Evals
+          description: Continuous evals that reference this transform.
+        agentic_experiments:
+          items:
+            $ref: '#/components/schemas/TransformDependentRef'
+          type: array
+          title: Agentic Experiments
+          description: Agentic experiments that reference this transform.
+        agentic_notebooks:
+          items:
+            $ref: '#/components/schemas/TransformDependentRef'
+          type: array
+          title: Agentic Notebooks
+          description: Agentic notebooks that reference this transform.
+      type: object
+      title: TransformDependents
+    TransformDependentRef:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the dependent resource.
+        name:
+          type: string
+          title: Name
+          description: Name of the dependent resource.
+      type: object
+      required:
+      - id
+      - name
+      title: TransformDependentRef
+    TraceTransformUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          anyOf:
+          - $ref: '#/components/schemas/TraceTransformDefinition'
+          - type: 'null'
+          description: Transform definition specifying extraction rules.
+      type: object
+      title: TraceTransformUpdateRequest
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

@@ -1,0 +1,1552 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Authorization V1 API
+  version: 2.1.688
+tags:
+- name: Authorization V1
+paths:
+  /api/v1/workspaces/{workspace_id}/role_bindings:
+    post:
+      tags:
+      - Authorization V1
+      summary: Post Workspace Role Binding.
+      description: Creates new workspace role binding. Requires workspace_create_role_binding permission.
+      operationId: post_workspace_role_binding
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_create_role_binding
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRoleBinding'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleBinding'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Authorization V1
+      summary: List Workspace Role Bindings.
+      description: Fetches all workspace role bindings. Requires workspace_list_role_bindings permission.
+      operationId: list_workspace_role_bindings
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_role_bindings
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search for role bindings by user name, group name, role name, user ID or group ID.
+          title: Search
+        description: Search for role bindings by user name, group name, role name, user ID or group ID.
+      - name: bound_member_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/BoundMemberKind'
+          description: Filter the list of role bindings by the kind of the bound member. Optional.
+        description: Filter the list of role bindings by the kind of the bound member. Optional.
+      - name: user_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserType'
+          description: Limits the results to a specific set of user types. Only applies to user role bindings.
+          default:
+          - user
+          - service_account
+          title: User Types
+        description: Limits the results to a specific set of user types. Only applies to user role bindings.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_RoleBinding_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/roles:
+    get:
+      tags:
+      - Authorization V1
+      summary: List Roles
+      description: Fetches all roles. Requires organization_list_roles permission.
+      operationId: list_roles
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_roles
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/RoleSort'
+          description: Override the field used for sorting. Optional.
+          default: name
+        description: Override the field used for sorting. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order of the returned list. Optional.
+          default: asc
+        description: Override the sort order of the returned list. Optional.
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter the list of roles by name. Optional.
+          title: Name
+        description: Filter the list of roles by name. Optional.
+      - name: organization_bindable
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Filter the list of roles by organization bindable. Optional.
+          title: Organization Bindable
+        description: Filter the list of roles by organization bindable. Optional.
+      - name: workspace_bindable
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Filter the list of roles by workspace bindable. Optional.
+          title: Workspace Bindable
+        description: Filter the list of roles by workspace bindable. Optional.
+      - name: project_bindable
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Filter the list of roles by project bindable. Optional.
+          title: Project Bindable
+        description: Filter the list of roles by project bindable. Optional.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Role_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/role_bindings:
+    post:
+      tags:
+      - Authorization V1
+      summary: Post Organization Role Binding.
+      description: Creates new organization role binding. Requires organization_create_role_binding permission.
+      operationId: post_org_role_binding
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_create_role_binding
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRoleBinding'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleBinding'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Authorization V1
+      summary: List Organization Role Bindings.
+      description: Fetches all organization role bindings. Requires organization_list_role_bindings permission.
+      operationId: list_org_role_bindings
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_role_bindings
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search for role bindings by user name, group name, role name, user ID or group ID.
+          title: Search
+        description: Search for role bindings by user name, group name, role name, user ID or group ID.
+      - name: bound_member_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/BoundMemberKind'
+          description: Filter the list of role bindings by the kind of the bound member. Optional.
+        description: Filter the list of role bindings by the kind of the bound member. Optional.
+      - name: user_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserType'
+          description: Limits the results to a specific set of user types. Only applies to user role bindings.
+          default:
+          - user
+          - service_account
+          title: User Types
+        description: Limits the results to a specific set of user types. Only applies to user role bindings.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_RoleBinding_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/role_bindings:
+    post:
+      tags:
+      - Authorization V1
+      summary: Post Project Role Binding
+      description: Creates new project role binding. Requires project_create_role_binding permission.
+      operationId: post_project_role_binding
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_role_binding
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRoleBinding'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleBinding'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Authorization V1
+      summary: List Project Role Bindings.
+      description: Fetches all project role bindings. Requires project_list_role_bindings permission.
+      operationId: list_project_role_bindings
+      security:
+      - OAuth2AuthorizationCode:
+        - project_list_role_bindings
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search for role bindings by user name, group name, role name, parent workspace name or ID, user ID or group ID.
+          title: Search
+        description: Search for role bindings by user name, group name, role name, parent workspace name or ID, user ID or group ID.
+      - name: bound_member_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/BoundMemberKind'
+          description: Filter the list of role bindings by the kind of the bound member. Optional.
+        description: Filter the list of role bindings by the kind of the bound member. Optional.
+      - name: user_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserType'
+          description: Limits the results to a specific set of user types. Only applies to user role bindings.
+          default:
+          - user
+          - service_account
+          title: User Types
+        description: Limits the results to a specific set of user types. Only applies to user role bindings.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_RoleBinding_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/users/{user_id}/role_bindings:
+    get:
+      tags:
+      - Authorization V1
+      summary: Get User Role Bindings.
+      description: Lists all role bindings for the user. Requires user_list_role_bindings permission.
+      operationId: list_user_role_bindings
+      security:
+      - OAuth2AuthorizationCode:
+        - user_list_role_bindings
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search for role bindings by workspace name, project name, role name, workspace ID, or project ID.
+          title: Search
+        description: Search for role bindings by workspace name, project name, role name, workspace ID, or project ID.
+      - name: bound_resource_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/BoundResourceKind'
+          description: Filter the list of role bindings by the kind of the bound resource. Optional.
+        description: Filter the list of role bindings by the kind of the bound resource. Optional.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_RoleBinding_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/groups/{group_id}/role_bindings:
+    get:
+      tags:
+      - Authorization V1
+      summary: Get Group Role Bindings.
+      description: Lists all role bindings for the group. Requires group_list_role_bindings permission.
+      operationId: list_group_role_bindings
+      security:
+      - OAuth2AuthorizationCode:
+        - group_list_role_bindings
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Group Id
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Search for role bindings by workspace name, project name, role name, workspace ID, or project ID.
+          title: Search
+        description: Search for role bindings by workspace name, project name, role name, workspace ID, or project ID.
+      - name: bound_resource_kind
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/BoundResourceKind'
+          description: Filter the list of role bindings by the kind of the bound resource. Optional.
+        description: Filter the list of role bindings by the kind of the bound resource. Optional.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_RoleBinding_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/role_bindings/{role_binding_id}:
+    delete:
+      tags:
+      - Authorization V1
+      summary: Delete Role Binding.
+      description: Deletes role binding by id. Permission required depends on the role binding type. Deleting an organization role binding requires organization_role_binding_delete permission. Deleting a workspace role binding requires workspace_role_binding_delete permission. Deleting a project role binding requires project_role_binding_delete permission.
+      operationId: delete_role_binding
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: role_binding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Role Binding Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/permissions:
+    get:
+      tags:
+      - Authorization V1
+      summary: List Permissions
+      description: Returns list of available permissions.
+      operationId: list_permissions_library
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: search_string
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: String to search on. Will perform a substring match of name and description.
+          title: Search String
+        description: String to search on. Will perform a substring match of name and description.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Permission_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/permissions/check:
+    post:
+      tags:
+      - Authorization V1
+      summary: Check Permissions
+      description: Check given permissions and returns a list of allowed and not allowed permissions.
+      operationId: check_permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode: []
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Permission:
+      properties:
+        name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Name of permission. Must be unique.
+        description:
+          type: string
+          title: Description
+          description: Description of the permission.
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the permission references.
+      type: object
+      required:
+      - name
+      - description
+      - resource_kind
+      title: Permission
+    BoundMember:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Id of the bound member.
+        name:
+          type: string
+          title: Name
+          description: Name of the bound member.
+      type: object
+      required:
+      - id
+      - name
+      title: BoundMember
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BoundMemberKind:
+      type: string
+      enum:
+      - user
+      - group
+      title: BoundMemberKind
+    BoundResource:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the bound resource.
+        name:
+          type: string
+          title: Name
+          description: Name of the bound resource.
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/ProjectBoundResourceMetadata'
+          - type: 'null'
+          description: Metadata specific to the type of the bound resource.
+      type: object
+      required:
+      - id
+      - name
+      title: BoundResource
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    PermissionsRequest:
+      properties:
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionRequestItem'
+          type: array
+          maxItems: 100
+          minItems: 1
+          title: Permissions
+          description: List of checked permissions with their respective values. At least 1 permissions needs to be provided and 100 at most.
+      type: object
+      required:
+      - permissions
+      title: PermissionsRequest
+    ProjectBoundResourceMetadata:
+      properties:
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        workspace_name:
+          type: string
+          title: Workspace Name
+          description: Name of the parent workspace.
+      type: object
+      required:
+      - workspace_id
+      - workspace_name
+      title: ProjectBoundResourceMetadata
+    ResourceList_Role_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Role'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Role]
+    BoundResourceKind:
+      type: string
+      enum:
+      - organization
+      - workspace
+      - project
+      - data_plane
+      title: BoundResourceKind
+    ResourceList_Permission_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Permission'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Permission]
+    ResourceKind:
+      type: string
+      enum:
+      - platform
+      - organization
+      - workspace
+      - project
+      - model
+      - connector
+      - available_dataset
+      - dataset
+      - role_binding
+      - role
+      - user
+      - group
+      - data_plane_association
+      - data_plane
+      - alert_rule
+      - webhook
+      - custom_aggregation
+      - custom_aggregation_test
+      - agent
+      - policy
+      - policy_alert_rule
+      - policy_attestation_rule
+      - policy_assignment
+      title: ResourceKind
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    RoleSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: RoleSort
+    ResourceList_RoleBinding_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/RoleBinding'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[RoleBinding]
+    RoleBinding:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role binding.
+        role:
+          $ref: '#/components/schemas/BoundRole'
+          description: Bound role.
+        bound_resource_kind:
+          $ref: '#/components/schemas/BoundResourceKind'
+          description: Kind of the bound resource.
+        bound_resource:
+          $ref: '#/components/schemas/BoundResource'
+          description: Bound resource.
+        bound_member_kind:
+          $ref: '#/components/schemas/BoundMemberKind'
+          description: Kind of the bound member.
+        bound_member:
+          $ref: '#/components/schemas/BoundMember'
+          description: Bound member.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - role
+      - bound_resource_kind
+      - bound_resource
+      - bound_member_kind
+      - bound_member
+      title: RoleBinding
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    PostRoleBinding:
+      properties:
+        role_id:
+          type: string
+          format: uuid
+          title: Role Id
+          description: ID of the bound role.
+        user_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: User Id
+          description: ID of the bound user. Exactly one of user or group will be set.
+        group_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Group Id
+          description: ID of the bound group. Exactly one of user or group will be set.
+      type: object
+      required:
+      - role_id
+      title: PostRoleBinding
+    Role:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role.
+        name:
+          type: string
+          title: Name
+          description: Name of the role.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role.
+        organization_bindable:
+          type: boolean
+          title: Organization Bindable
+          description: Whether the role can be bound to an organization.
+        workspace_bindable:
+          type: boolean
+          title: Workspace Bindable
+          description: Whether the role can be bound to a workspace.
+        project_bindable:
+          type: boolean
+          title: Project Bindable
+          description: Whether the role can be bound to a project.
+        data_plane_bindable:
+          type: boolean
+          title: Data Plane Bindable
+          description: Whether the role can be bound to a data plane.
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionName'
+          type: array
+          title: Permissions
+          description: Permissions granted by the role.
+        base_role_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Base Role Ids
+          description: List of IDs of the roles this role inherits permissions from, if any.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - description
+      - organization_bindable
+      - workspace_bindable
+      - project_bindable
+      - data_plane_bindable
+      - permissions
+      - base_role_ids
+      title: Role
+    PermissionResponseItem:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Resource kind to check.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: Resource id to check permission for.
+        permission_name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Permission name to check on the given resource.
+        allowed:
+          type: boolean
+          title: Allowed
+          description: Value indicating wheter the requested permission is allowed.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      - permission_name
+      - allowed
+      title: PermissionResponseItem
+    PermissionRequestItem:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Resource kind to check.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: Resource id to check permission for.
+        permission_name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Permission name to check on the given resource.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      - permission_name
+      title: PermissionRequestItem
+    PermissionsResponse:
+      properties:
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionResponseItem'
+          type: array
+          title: Permissions
+      type: object
+      required:
+      - permissions
+      title: PermissionsResponse
+    BoundRole:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the bound role.
+        name:
+          type: string
+          title: Name
+          description: Name of the role.
+      type: object
+      required:
+      - id
+      - name
+      title: BoundRole
+    PermissionName:
+      type: string
+      enum:
+      - organization_read
+      - organization_delete
+      - organization_update
+      - organization_list_workspaces
+      - organization_create_workspace
+      - organization_list_group_memberships
+      - organization_create_user
+      - organization_invite_user
+      - organization_create_service_account
+      - delete_user
+      - user_update
+      - organization_role_binding_delete
+      - organization_create_role_binding
+      - organization_list_role_bindings
+      - organization_list_users
+      - organization_create_group
+      - organization_list_groups
+      - organization_list_roles
+      - group_list_role_bindings
+      - group_read
+      - group_list_users
+      - group_update
+      - group_delete
+      - group_create_group_membership
+      - group_delete_group_membership
+      - user_list_role_bindings
+      - user_regenerate_creds
+      - workspace_read
+      - workspace_update
+      - workspace_delete
+      - workspace_list_projects
+      - workspace_create_project
+      - workspace_create_data_plane
+      - workspace_list_data_planes
+      - workspace_list_data_plane_associations
+      - workspace_create_data_plane_association
+      - workspace_role_binding_delete
+      - workspace_create_role_binding
+      - workspace_list_role_bindings
+      - workspace_create_webhook
+      - workspace_list_webhooks
+      - workspace_test_webhook
+      - workspace_create_custom_aggregation
+      - workspace_create_custom_aggregation_test
+      - workspace_list_custom_aggregation_tests
+      - workspace_validate_custom_aggregation
+      - workspace_list_datasets
+      - workspace_list_models
+      - workspace_list_alerts
+      - workspace_list_alert_rules
+      - workspace_list_custom_aggregations
+      - workspace_list_agents
+      - workspace_list_unregistered_agents
+      - workspace_list_agent_tools
+      - workspace_list_agent_sub_agents
+      - workspace_list_agent_llm_models
+      - workspace_list_agent_data_sources
+      - workspace_get_statistics
+      - workspace_governance_view
+      - workspace_upsert_agents
+      - agent_read
+      - unregistered_agent_patch
+      - project_read
+      - project_update
+      - project_delete
+      - project_list_models
+      - project_create_model
+      - project_list_connectors
+      - project_create_connector
+      - project_list_datasets
+      - project_list_jobs
+      - project_create_job
+      - project_create_dataset
+      - project_create_available_dataset
+      - project_list_data_plane_associations
+      - project_role_binding_delete
+      - project_create_role_binding
+      - project_list_role_bindings
+      - project_generate_metrics_spec
+      - project_create_model_task
+      - project_create_model_link_task
+      - model_read
+      - model_update
+      - model_delete
+      - model_put_metric_config
+      - model_list_metric_versions
+      - model_create_metric_version
+      - model_add_metrics_for_version
+      - model_edit_dashboard
+      - model_create_alert
+      - model_list_alerts
+      - model_create_alert_rule
+      - model_list_alert_rules
+      - model_query_metrics
+      - model_metrics_schedule_update
+      - model_metrics_schedule_delete
+      - model_task_read
+      - model_task_update
+      - model_task_delete
+      - model_task_sync
+      - model_task_put_state_cache
+      - model_task_put_connection_info
+      - model_task_get_connection_info
+      - model_task_delete_connection_info
+      - model_task_regenerate_validation_key
+      - connector_read
+      - connector_update
+      - connector_delete
+      - connector_get_sensitive_fields
+      - connector_put_check_result
+      - connector_list_datasets
+      - connector_create_dataset
+      - connector_list_available_datasets
+      - connector_put_available_datasets
+      - connector_create_available_dataset
+      - available_dataset_read
+      - available_dataset_put_schema
+      - available_dataset_create_data_retrieval
+      - available_dataset_get_data_retrieval
+      - available_dataset_put_data_retrieval
+      - available_dataset_delete_data_retrieval
+      - dataset_read
+      - dataset_update
+      - dataset_put_schema
+      - dataset_delete
+      - dataset_create_data_retrieval
+      - dataset_get_data_retrieval
+      - dataset_put_data_retrieval
+      - dataset_delete_data_retrieval
+      - project_job_read
+      - project_job_update
+      - project_job_put_state
+      - project_job_read_logs
+      - project_job_read_runs
+      - project_job_append_logs
+      - project_job_read_errors
+      - project_job_append_errors
+      - data_plane_delete
+      - data_plane_update
+      - data_plane_read
+      - data_plane_regenerate_creds
+      - data_plane_list_associations
+      - data_plane_jobs_dequeue_next
+      - data_plane_association_delete
+      - alert_rule_read
+      - alert_rule_update
+      - alert_rule_delete
+      - model_alert_read
+      - webhook_read
+      - webhook_update
+      - webhook_delete
+      - role_read
+      - custom_aggregation_read
+      - custom_aggregation_put
+      - custom_aggregation_delete
+      - custom_aggregation_update
+      - custom_aggregation_test_delete
+      - custom_aggregation_test_read
+      - custom_aggregation_test_create_results
+      - custom_aggregation_test_read_results
+      - organization_create_policy
+      - organization_list_policies
+      - policy_read
+      - policy_update
+      - policy_delete
+      - policy_list_assignments
+      - policy_check_compliance
+      - policy_list_compliance_history
+      - policy_list_alert_rules
+      - policy_create_alert_rule
+      - policy_alert_rule_read
+      - policy_alert_rule_update
+      - policy_alert_rule_delete
+      - policy_list_attestation_rules
+      - policy_create_attestation_rule
+      - policy_attestation_rule_read
+      - policy_attestation_rule_update
+      - policy_attestation_rule_delete
+      - policy_assignment_create
+      - policy_assignment_delete
+      - policy_assignment_read
+      - policy_assignment_create_attestation
+      - policy_assignment_list_attestations
+      - policy_assignment_check_compliance
+      - policy_assignment_set_compliance_status
+      - model_assign_policy
+      - model_remove_policy
+      - model_attest
+      - model_list_policy_assignments
+      - model_list_attestations
+      - model_check_compliance
+      - workspace_list_policy_assignments
+      - workspace_list_policy_compliance
+      - workspace_check_all_policies_compliance
+      - organization_list_policy_assignments
+      - organization_list_policy_compliance
+      - organization_list_unregistered_agents
+      - organization_list_agent_tools
+      - organization_list_agent_llm_models
+      - organization_list_models
+      title: PermissionName
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

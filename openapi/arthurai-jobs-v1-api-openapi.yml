@@ -1,0 +1,2348 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Jobs V1 API
+  version: 2.1.688
+tags:
+- name: Jobs V1
+paths:
+  /api/v1/jobs/{job_id}:
+    get:
+      tags:
+      - Jobs V1
+      summary: Get Job By Id
+      description: Returns a single job by ID. Requires project_job_read permission.
+      operationId: get_job
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_read
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Jobs V1
+      summary: Update Job By Id
+      description: Updates a single job by ID. Requires project_job_update permission.
+      operationId: update_job
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_update
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchJob'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/jobs/{job_id}/state:
+    put:
+      tags:
+      - Jobs V1
+      summary: Update Job State
+      description: Update job state. Requires project_job_put_state permission.
+      operationId: put_job_state
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_put_state
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Job run ID associated with the state update.
+          title: Job Run Id
+        description: Job run ID associated with the state update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutJobState'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/jobs/{job_id}/runs:
+    get:
+      tags:
+      - Jobs V1
+      summary: Get Job Runs
+      description: Get Job runs. Required project_job_read_runs permission.
+      operationId: get_job_runs
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_read_runs
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_JobRun_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/jobs/{job_id}/runs/{job_run_id}/logs:
+    post:
+      tags:
+      - Jobs V1
+      summary: Append To Job Logs
+      description: Append job logs. Requires project_job_append_logs permission.
+      operationId: post_job_logs
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_append_logs
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The job run associated with the logs. Should be formatted as a UUID.
+          title: Job Run Id
+        description: The job run associated with the logs. Should be formatted as a UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobLogs'
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Jobs V1
+      summary: Get Job Logs
+      description: Get job logs for a run. Requires project_job_read_logs permission.
+      operationId: get_job_logs
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_read_logs
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The job run associated with the logs. Should be formatted as a UUID.
+          title: Job Run Id
+        description: The job run associated with the logs. Should be formatted as a UUID.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: asc
+        description: Override the sort order used. Optional.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_JobLog_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/jobs/{job_id}/runs/{job_run_id}/errors:
+    post:
+      tags:
+      - Jobs V1
+      summary: Append To Job Errors
+      description: Append job errors. Requires project_job_append_errors permission.
+      operationId: post_job_errors
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_append_errors
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The job run associated with the errors. Should be formatted as a UUID.
+          title: Job Run Id
+        description: The job run associated with the errors. Should be formatted as a UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobErrors'
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Jobs V1
+      summary: Get Job Errors
+      description: Get job errors. Requires project_job_read_errors permission.
+      operationId: get_job_errors
+      security:
+      - OAuth2AuthorizationCode:
+        - project_job_read_errors
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The job run associated with the errors. Should be formatted as a UUID.
+          title: Job Run Id
+        description: The job run associated with the errors. Should be formatted as a UUID.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_JobError_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/projects/{project_id}/jobs:
+    get:
+      tags:
+      - Jobs V1
+      summary: List Jobs
+      description: 'Returns jobs in the project matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires project_list_jobs permission. Note: exclude_kinds takes precedence over kinds and will exclude jobs even if they are in kinds.'
+      operationId: get_jobs
+      security:
+      - OAuth2AuthorizationCode:
+        - project_list_jobs
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/JobsSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: queued_at
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: desc
+        description: Override the sort order used. Optional.
+      - name: duration_sec_greater_than
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Filter the results for jobs that ran for greater than or equal to this number of seconds. Optional.
+          title: Duration Sec Greater Than
+        description: Filter the results for jobs that ran for greater than or equal to this number of seconds. Optional.
+      - name: duration_sec_less_than
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Filter the results for the jobs that ran for less than or equal to this number of seconds. Optional.
+          title: Duration Sec Less Than
+        description: Filter the results for the jobs that ran for less than or equal to this number of seconds. Optional.
+      - name: started_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that started before this timestamp. Optional.
+          title: Started Before
+        description: Filter the results for the jobs that started before this timestamp. Optional.
+      - name: started_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that started after this timestamp. Optional.
+          title: Started After
+        description: Filter the results for the jobs that started after this timestamp. Optional.
+      - name: queued_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that were queued before this timestamp. Optional.
+          title: Queued Before
+        description: Filter the results for the jobs that were queued before this timestamp. Optional.
+      - name: queued_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that were queued after this timestamp. Optional.
+          title: Queued After
+        description: Filter the results for the jobs that were queued after this timestamp. Optional.
+      - name: ready_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that are ready before this timestamp. Optional.
+          title: Ready Before
+        description: Filter the results for the jobs that are ready before this timestamp. Optional.
+      - name: ready_before_current_time
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, filters jobs ready before the current server time. Takes precedence over ready_before. Optional.
+          default: false
+          title: Ready Before Current Time
+        description: When true, filters jobs ready before the current server time. Takes precedence over ready_before. Optional.
+      - name: ready_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that are ready after this timestamp. Optional.
+          title: Ready After
+        description: Filter the results for the jobs that are ready after this timestamp. Optional.
+      - name: ready_after_current_time
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, filters jobs ready after the current server time. Takes precedence over ready_after. Optional.
+          default: false
+          title: Ready After Current Time
+        description: When true, filters jobs ready after the current server time. Takes precedence over ready_after. Optional.
+      - name: finished_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that finished before this timestamp. Optional.
+          title: Finished Before
+        description: Filter the results for the jobs that finished before this timestamp. Optional.
+      - name: finished_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          description: Filter the results for the jobs that finished after this timestamp. Optional.
+          title: Finished After
+        description: Filter the results for the jobs that finished after this timestamp. Optional.
+      - name: kinds
+        in: query
+        required: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobKind'
+          description: Filter the results for the jobs of this kind. Optional.
+          title: Kinds
+        description: Filter the results for the jobs of this kind. Optional.
+      - name: exclude_kinds
+        in: query
+        required: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobKind'
+          description: Exclude jobs of these kinds. Takes precedence over kinds.
+          title: Exclude Kinds
+        description: Exclude jobs of these kinds. Takes precedence over kinds.
+      - name: states
+        in: query
+        required: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobState'
+          description: Filter the results for jobs in these states. Optional.
+          title: States
+        description: Filter the results for jobs in these states. Optional.
+      - name: error_count_above
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Filter the results for the jobs that had greater than or equal to this many errors. Optional.
+          title: Error Count Above
+        description: Filter the results for the jobs that had greater than or equal to this many errors. Optional.
+      - name: data_plane_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter the results for the jobs that were ran on this dataplane. Optional.
+          title: Data Plane Id
+        description: Filter the results for the jobs that were ran on this dataplane. Optional.
+      - name: schedule_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter the results for jobs associated with this schedule ID. Optional.
+          title: Schedule Id
+        description: Filter the results for jobs associated with this schedule ID. Optional.
+      - name: trigger_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/JobTrigger'
+          description: Filter the results for the jobs that were started by this trigger type. Optional.
+        description: Filter the results for the jobs that were started by this trigger type. Optional.
+      - name: triggered_by_user_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter the results for the jobs that started by this user id. Only valid when trigger_type = 'user'. Optional.
+          title: Triggered By User Id
+        description: Filter the results for the jobs that started by this user id. Only valid when trigger_type = 'user'. Optional.
+      - name: triggered_by_user_email
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter the results for the jobs that started by this user email. Only valid when trigger_type = 'user'. Optional.
+          format: email
+          title: Triggered By User Email
+        description: Filter the results for the jobs that started by this user email. Only valid when trigger_type = 'user'. Optional.
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+          description: Filter the results for jobs associated with this model ID. Includes jobs associated with datasets used by the model. Optional.
+          title: Model Id
+        description: Filter the results for jobs associated with this model ID. Includes jobs associated with datasets used by the model. Optional.
+      - name: nonce
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter the results for jobs that match a job nonce used to ensure exactly once execution.
+          title: Nonce
+        description: Filter the results for jobs that match a job nonce used to ensure exactly once execution.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfiniteResourceList_Job_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Jobs V1
+      summary: Submit Jobs Batch
+      description: Submit new jobs to run. Requires project_create_job permission.
+      operationId: post_submit_jobs_batch
+      security:
+      - OAuth2AuthorizationCode:
+        - project_create_job
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostJobBatch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsBatch'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/data_planes/{data_plane_id}/jobs/next:
+    post:
+      tags:
+      - Jobs V1
+      summary: Dequeue Job
+      description: Returns the next available job for processing from the data plane's job queue. Requires data_plane_jobs_dequeue_next permission.
+      operationId: post_dequeue_job
+      security:
+      - OAuth2AuthorizationCode:
+        - data_plane_jobs_dequeue_next
+      parameters:
+      - name: data_plane_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Data Plane Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobDequeueParameters'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobRun'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '204':
+          description: No Content
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    NewRuleRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+          examples:
+          - SSN Regex Rule
+        type:
+          type: string
+          title: Type
+          description: Type of the rule. It can only be one of KeywordRule, RegexRule, ModelSensitiveDataRule, ModelHallucinationRule, ModelHallucinationRuleV2, PromptInjectionRule, PIIDataRule
+          examples:
+          - RegexRule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Boolean value to enable or disable the rule for llm prompt
+          examples:
+          - true
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Boolean value to enable or disable the rule for llm response
+          examples:
+          - false
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      title: NewRuleRequest
+      example1:
+        description: Sensitive Data Example with its required configuration
+        summary: Sensitive Data Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          config:
+            examples:
+            - example: John has O negative blood group
+              result: true
+            - example: Most of the people have A positive blood group
+              result: false
+            hint: specific individual's blood types
+          name: Sensitive Data Rule
+          type: ModelSensitiveDataRule
+      example2:
+        description: Regex Example with its required configuration. Be sure to properly encode requests using JSON libraries. For example, the regex provided encodes to a different string when encoded to account for escape characters.
+        summary: Regex Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            regex_patterns:
+            - \d{3}-\d{2}-\d{4}
+            - \d{5}-\d{6}-\d{7}
+          name: SSN Regex Rule
+          type: RegexRule
+      example3:
+        description: Keywords Rule Example with its required configuration
+        summary: Keywords Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            keywords:
+            - Blocked_Keyword_1
+            - Blocked_Keyword_2
+          name: Blocked Keywords Rule
+          type: KeywordRule
+      example4:
+        description: Prompt Injection Rule Example, no configuration required
+        summary: Prompt Injection Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: false
+          name: Prompt Injection Rule
+          type: PromptInjectionRule
+      example5:
+        description: Hallucination Rule Example, no configuration required (This rule is deprecated. Use ModelHallucinationRuleV2 instead.)
+        summary: Hallucination Rule V1 Example (Deprecated)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRule
+      example6:
+        description: Hallucination Rule Example, no configuration required
+        summary: Hallucination Rule V2 Example
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV2
+      example7:
+        description: Hallucination Rule Example, no configuration required. This rule is in beta and must be enabled by the system administrator.
+        summary: Hallucination Rule V3 Example (Beta)
+        value:
+          apply_to_prompt: false
+          apply_to_response: true
+          name: Hallucination Rule
+          type: ModelHallucinationRuleV3
+      example8:
+        description: PII Rule Example, no configuration required. "disabled_pii_entities", "confidence_threshold", and "allow_list" accepted. Valid value for "confidence_threshold" is 0.0-1.0. Valid values for "disabled_pii_entities" are CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN
+        summary: PII Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            allow_list:
+            - arthur.ai
+            - Arthur
+            confidence_threshold: '0.5'
+            disabled_pii_entities:
+            - EMAIL_ADDRESS
+            - PHONE_NUMBER
+          name: PII Rule
+          type: PIIDataRule
+      example9:
+        description: Toxicity Rule Example, no configuration required. Threshold accepted
+        summary: Toxicity Rule Example
+        value:
+          apply_to_prompt: true
+          apply_to_response: true
+          config:
+            threshold: 0.5
+          name: Toxicity Rule
+          type: ToxicityRule
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    PostJobBatch:
+      properties:
+        jobs:
+          items:
+            $ref: '#/components/schemas/PostJob'
+          type: array
+          title: Jobs
+          description: List of jobs to create.
+      type: object
+      required:
+      - jobs
+      title: PostJobBatch
+    JobsBatch:
+      properties:
+        jobs:
+          items:
+            $ref: '#/components/schemas/Job'
+          type: array
+          title: Jobs
+          description: List of jobs.
+      type: object
+      required:
+      - jobs
+      title: JobsBatch
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PatchJob:
+      properties:
+        max_attempts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Attempts
+          description: Max number of times the job can fail and be retried. Adjusting this number will only affect jobs in the Queued or Running states. Jobs in the Failed state will not be retried further by adjusting this number.
+      type: object
+      required:
+      - max_attempts
+      title: PatchJob
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
+    FetchModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_model_task
+          title: Job Type
+          default: fetch_model_task
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to fetch its corresponding task.
+      type: object
+      required:
+      - scope_model_id
+      title: FetchModelTaskJobSpec
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    JobLogLevel:
+      type: string
+      enum:
+      - debug
+      - info
+      - warning
+      - error
+      - critical
+      title: JobLogLevel
+    FetchDataJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_data
+          title: Job Type
+          default: fetch_data
+        dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Dataset Id
+          description: The id of the dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+        available_dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Available Dataset Id
+          description: The id of the available dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        operation_id:
+          type: string
+          format: uuid
+          title: Operation Id
+          description: The id of the data retrieval operation.
+        data_filters:
+          items:
+            $ref: '#/components/schemas/DataResultFilter'
+          type: array
+          title: Data Filters
+          description: Filters to apply to the metrics data.
+        pagination_options:
+          $ref: '#/components/schemas/ConnectorPaginationOptions'
+          description: Pagination options to use for fetching data.
+      type: object
+      required:
+      - start_timestamp
+      - end_timestamp
+      - operation_id
+      - data_filters
+      - pagination_options
+      title: FetchDataJobSpec
+    ResourceList_JobRun_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobRun'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobRun]
+    PutJobState:
+      properties:
+        job_state:
+          $ref: '#/components/schemas/JobState'
+          description: JobState to update the job to.
+      type: object
+      required:
+      - job_state
+      title: PutJobState
+    SchemaInspectionJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: schema_inspection
+          title: Job Type
+          default: schema_inspection
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+        available_dataset_id:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+          description: The id of the dataset within the connector to inspect the schema.
+      type: object
+      required:
+      - connector_id
+      - available_dataset_id
+      title: SchemaInspectionJobSpec
+    PostJobKind:
+      type: string
+      enum:
+      - metrics_calculation
+      - connector_check
+      - list_datasets
+      - schema_inspection
+      - alert_check
+      - schedule_jobs
+      - discover_agents
+      - compliance_policy_check
+      title: PostJobKind
+      description: 'The set of jobs that are available to submit via the PostJobs API
+
+        Notably, this does not include the fetch_data or test_custom_aggregation jobs, as there are
+
+        dedicated endpoints for those'
+    DeleteModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: delete_model_task
+          title: Job Type
+          default: delete_model_task
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to delete.
+      type: object
+      required:
+      - scope_model_id
+      title: DeleteModelTaskJobSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    JobLog:
+      properties:
+        log_level:
+          $ref: '#/components/schemas/JobLogLevel'
+          description: Log level of the log.
+        log:
+          type: string
+          title: Log
+          description: Text of the log.
+        log_timestamp:
+          type: string
+          format: date-time
+          title: Log Timestamp
+          description: Timestamp of the log occurence.
+      type: object
+      required:
+      - log_level
+      - log
+      - log_timestamp
+      title: JobLog
+    CompliancePolicyCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: compliance_policy_check
+          title: Job Type
+          default: compliance_policy_check
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to run compliance policy checks on.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: Start of the window the compliance check evaluates.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: End of the window the compliance check evaluates.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional id of a specific policy assignment to check. If omitted, all assignments for the model are checked.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: CompliancePolicyCheckJobSpec
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    JobPriority:
+      type: integer
+      enum:
+      - 100
+      - 200
+      - 300
+      - 400
+      title: JobPriority
+    CreateModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: create_model_task
+          title: Job Type
+          default: create_model_task
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the engine internal connector to use to create the task.
+        task_name:
+          type: string
+          title: Task Name
+          description: The name of the task.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+        initial_rules:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Initial Rules
+          description: The initial rules to apply to the created model.
+        task_type:
+          $ref: '#/components/schemas/TaskType'
+          description: The type of task to create.
+          default: traditional
+        initial_metrics:
+          items:
+            $ref: '#/components/schemas/NewMetricRequest'
+          type: array
+          title: Initial Metrics
+          description: The initial metrics to apply to agentic tasks.
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata for registered agents.
+      type: object
+      required:
+      - connector_id
+      - task_name
+      - initial_rules
+      - initial_metrics
+      title: CreateModelTaskJobSpec
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    AlertCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: alert_check
+          title: Job Type
+          default: alert_check
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to check alerts.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: The start timestamp to use for checking the alerts on the data.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: The end timestamp to use for checking the alerts on the data.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional policy assignment id propagated to the trailing compliance check job. When set, only this assignment is evaluated for compliance.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: AlertCheckJobSpec
+    TestCustomAggregationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: test_custom_aggregation
+          title: Job Type
+          default: test_custom_aggregation
+        test_custom_aggregation_id:
+          type: string
+          format: uuid
+          title: Test Custom Aggregation Id
+          description: The id of the custom aggregation test.
+      type: object
+      required:
+      - test_custom_aggregation_id
+      title: TestCustomAggregationJobSpec
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    ScheduleJobsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: schedule_jobs
+          title: Job Type
+          default: schedule_jobs
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the model to source the schedule from.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Inclusive timestamp marking the start of the job series.
+      type: object
+      required:
+      - scope_model_id
+      - start_timestamp
+      title: ScheduleJobsJobSpec
+    RelevanceMetricConfig:
+      properties:
+        relevance_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relevance Threshold
+          description: Threshold for determining relevance when not using LLM judge
+        use_llm_judge:
+          type: boolean
+          title: Use Llm Judge
+          description: Whether to use LLM as a judge for relevance scoring
+          default: true
+      type: object
+      title: RelevanceMetricConfig
+      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
+    ListDatasetsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: list_datasets
+          title: Job Type
+          default: list_datasets
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+      type: object
+      required:
+      - connector_id
+      title: ListDatasetsJobSpec
+    JobRun:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The unique ID for the job run.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: The parent job for this job run.
+        state:
+          $ref: '#/components/schemas/JobState'
+          description: Current state of the job run.
+        job_attempt:
+          type: integer
+          title: Job Attempt
+          description: The attempt number of the job.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The timestamp this job run was started.
+        end_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: End Timestamp
+          description: The timestamp this job run ended.
+      type: object
+      required:
+      - id
+      - job_id
+      - state
+      - job_attempt
+      - start_timestamp
+      title: JobRun
+    RegenerateTaskValidationKeyJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: regenerate_validation_key
+          title: Job Type
+          default: regenerate_validation_key
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the model to regenerate the validation key for.
+      type: object
+      required:
+      - scope_model_id
+      title: RegenerateTaskValidationKeyJobSpec
+    InfinitePagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+      type: object
+      title: InfinitePagination
+    JobsSort:
+      type: string
+      enum:
+      - queued_at
+      - started_at
+      - finished_at
+      title: JobsSort
+    Job:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: UUID of the job.
+        kind:
+          $ref: '#/components/schemas/JobKind'
+          description: Type of job.
+        job_spec:
+          anyOf:
+          - $ref: '#/components/schemas/FetchDataJobSpec'
+          - $ref: '#/components/schemas/MetricsCalculationJobSpec'
+          - $ref: '#/components/schemas/SchemaInspectionJobSpec'
+          - $ref: '#/components/schemas/ConnectorCheckJobSpec'
+          - $ref: '#/components/schemas/ListDatasetsJobSpec'
+          - $ref: '#/components/schemas/ScheduleJobsJobSpec'
+          - $ref: '#/components/schemas/AlertCheckJobSpec'
+          - $ref: '#/components/schemas/CreateModelTaskJobSpec'
+          - $ref: '#/components/schemas/UpdateModelTaskRulesJobSpec'
+          - $ref: '#/components/schemas/DeleteModelTaskJobSpec'
+          - $ref: '#/components/schemas/FetchModelTaskJobSpec'
+          - $ref: '#/components/schemas/RegenerateTaskValidationKeyJobSpec'
+          - $ref: '#/components/schemas/CreateModelLinkTaskJobSpec'
+          - $ref: '#/components/schemas/TestCustomAggregationJobSpec'
+          - $ref: '#/components/schemas/DiscoverAgentsJobSpec'
+          - $ref: '#/components/schemas/CompliancePolicyCheckJobSpec'
+          title: Job Spec
+          description: Job specification for the job kind.
+        state:
+          $ref: '#/components/schemas/JobState'
+          description: Current state of the job.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of parent project.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: UUID of the data plane that executed the job or null if not picked up by data plane yet.
+        queued_at:
+          type: string
+          format: date-time
+          title: Queued At
+          description: ISO 8601 timestamp when the job was queued.
+        ready_at:
+          type: string
+          format: date-time
+          title: Ready At
+          description: ISO 8601 timestamp of the earliest time the job can be executed.
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+          description: ISO 8601 timestamp when the job started or null if not started yet.
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+          description: ISO 8601 timestamp when the job finished or null if not finished yet.
+        duration_sec:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Sec
+          description: Duration of the job in seconds or null if not finished yet.
+        error_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Error Count
+          description: Count of errors the job flagged or null if not finished yet.
+        trigger_type:
+          $ref: '#/components/schemas/JobTrigger'
+          description: Type of trigger.
+        triggered_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: User object that triggered the job, null if trigger_type is not 'user'.
+        schedule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Schedule Id
+          description: ID of the schedule this job should follow.
+        attempts:
+          type: integer
+          title: Attempts
+          description: Number of times the job was attempted.
+        max_attempts:
+          type: integer
+          title: Max Attempts
+          description: Max number of times the job can fail and be retried.
+        nonce:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nonce
+          description: Optional job nonce for ensuring exactly once execution.
+        memory_requirements_mb:
+          type: integer
+          title: Memory Requirements Mb
+          description: Memory requirements for the job in megabytes.
+        job_priority:
+          $ref: '#/components/schemas/JobPriority'
+          description: Priority of the job.
+      type: object
+      required:
+      - id
+      - kind
+      - job_spec
+      - state
+      - project_id
+      - queued_at
+      - ready_at
+      - trigger_type
+      - attempts
+      - max_attempts
+      - memory_requirements_mb
+      - job_priority
+      title: Job
+    DiscoverAgentsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: discover_agents
+          title: Job Type
+          default: discover_agents
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: The ID of the workspace to discover agents for.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: The ID of the data plane to scan for agents.
+        project_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Project Id
+          description: Optional ID of the "Registered Applications" project for filtering against existing models.
+        lookback_hours:
+          type: integer
+          title: Lookback Hours
+          description: 'Number of hours to look back in trace history (default: 720 hours = 30 days).'
+          default: 720
+      type: object
+      required:
+      - workspace_id
+      - data_plane_id
+      title: DiscoverAgentsJobSpec
+    AgentMetadata:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadata'
+          - type: 'null'
+          description: Metadata for the agent.
+      type: object
+      required:
+      - provider
+      title: AgentMetadata
+    JobTrigger:
+      type: string
+      enum:
+      - user
+      - schedule
+      - event
+      title: JobTrigger
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    JobLogs:
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/JobLog'
+          type: array
+          title: Logs
+          description: List of log statements pertaining to the job execution.
+      type: object
+      required:
+      - logs
+      title: JobLogs
+    JobState:
+      type: string
+      enum:
+      - queued
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobState
+    ConnectorCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: connector_check
+          title: Job Type
+          default: connector_check
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to check.
+      type: object
+      required:
+      - connector_id
+      title: ConnectorCheckJobSpec
+    NewMetricRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
+          examples:
+          - UserQueryRelevance
+        name:
+          type: string
+          title: Name
+          description: Name of metric
+          examples:
+          - My User Query Relevance
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Additional metadata for the metric
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - type: 'null'
+          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+      type: object
+      required:
+      - type
+      - name
+      - metric_metadata
+      title: NewMetricRequest
+      example1:
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance
+        type: QueryRelevance
+      example2:
+        config:
+          relevance_threshold: 0.8
+          use_llm_judge: false
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance with Config
+        type: QueryRelevance
+      example3:
+        config:
+          use_llm_judge: true
+        metric_metadata: This is a test metric metadata
+        name: My Response Relevance
+        type: ResponseRelevance
+    ResourceList_JobLog_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobLog'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobLog]
+    InfiniteResourceList_Job_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Job'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/InfinitePagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: InfiniteResourceList[Job]
+    JobErrors:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/JobError'
+          type: array
+          title: Errors
+          description: List of errors encountered during the job execution.
+      type: object
+      required:
+      - errors
+      title: JobErrors
+    UpdateModelTaskRulesJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: update_model_task_rules
+          title: Job Type
+          default: update_model_task_rules
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to update the task rules.
+        rules_to_enable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Enable
+          description: The list of rule IDs to enable on the task.
+        rules_to_disable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Disable
+          description: The list of rule IDs to disable on the task.
+        rules_to_archive:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Archive
+          description: The list of rule IDs to archive on the task.
+        rules_to_add:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Rules To Add
+          description: The new rules to add to the task.
+      type: object
+      required:
+      - scope_model_id
+      title: UpdateModelTaskRulesJobSpec
+    CreateModelLinkTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: link_model_task
+          title: Job Type
+          default: link_model_task
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: The id of the Shield task to link when creating the new model.
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the engine internal connector to use to link the task.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+      type: object
+      required:
+      - task_id
+      - connector_id
+      title: CreateModelLinkTaskJobSpec
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    JobError:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Details of the error encountered.
+      type: object
+      required:
+      - error
+      title: JobError
+    JobKind:
+      type: string
+      enum:
+      - metrics_calculation
+      - connector_check
+      - list_datasets
+      - schema_inspection
+      - fetch_data
+      - alert_check
+      - schedule_jobs
+      - create_model_task
+      - create_model_link_task
+      - update_model_task_rules
+      - delete_model_task
+      - fetch_model_task
+      - regenerate_task_validation_key
+      - test_custom_aggregation
+      - discover_agents
+      - compliance_policy_check
+      title: JobKind
+    DataResultFilter:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+          description: Field name to use for filtering data.
+        op:
+          $ref: '#/components/schemas/DataResultFilterOp'
+          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - field_name
+      - op
+      - value
+      title: DataResultFilter
+    TaskType:
+      type: string
+      enum:
+      - traditional
+      - agentic
+      title: TaskType
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    GCPAgentMetadata:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadata
+    JobDequeueParameters:
+      properties:
+        memory_limit_mb:
+          type: integer
+          title: Memory Limit Mb
+          description: Available memory in megabytes for job execution
+      type: object
+      required:
+      - memory_limit_mb
+      title: JobDequeueParameters
+    PostJob:
+      properties:
+        kind:
+          $ref: '#/components/schemas/PostJobKind'
+          description: Type of job.
+        job_spec:
+          anyOf:
+          - $ref: '#/components/schemas/MetricsCalculationJobSpec'
+          - $ref: '#/components/schemas/SchemaInspectionJobSpec'
+          - $ref: '#/components/schemas/ConnectorCheckJobSpec'
+          - $ref: '#/components/schemas/ListDatasetsJobSpec'
+          - $ref: '#/components/schemas/ScheduleJobsJobSpec'
+          - $ref: '#/components/schemas/AlertCheckJobSpec'
+          - $ref: '#/components/schemas/DiscoverAgentsJobSpec'
+          - $ref: '#/components/schemas/CompliancePolicyCheckJobSpec'
+          title: Post Job Spec
+          description: Job specification for the job kind.
+        schedule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Schedule Id
+          description: ID of the schedule this job should follow.
+        ready_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Ready At
+          description: ISO 8601 timestamp indicating the earliest time the job should be executed. Defaults to the current time if not supplied.
+        nonce:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nonce
+          description: Optional job nonce for ensuring exactly once execution. Ignored for jobs that can be repeated like metric calculations, connector checks, listing datasets, schema inspection.
+        job_priority:
+          anyOf:
+          - $ref: '#/components/schemas/JobPriority'
+          - type: 'null'
+          description: Priority of the job.
+      type: object
+      required:
+      - kind
+      - job_spec
+      title: PostJob
+    ResourceList_JobError_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobError'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobError]
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    MetricsCalculationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: metrics_calculation
+          title: Job Type
+          default: metrics_calculation
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to calculate metrics.
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional policy assignment id propagated through the Metrics → Alerts → Compliance chain. When set, the trailing compliance check evaluates only this assignment.
+      type: object
+      required:
+      - scope_model_id
+      - start_timestamp
+      - end_timestamp
+      title: MetricsCalculationJobSpec
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer

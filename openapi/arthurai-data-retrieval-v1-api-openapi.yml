@@ -1,0 +1,606 @@
+openapi: 3.1.0
+info:
+  title: Arthur GenAI Engine Agent Discovery Data Retrieval V1 API
+  version: 2.1.688
+tags:
+- name: Data Retrieval V1
+paths:
+  /api/v1/datasets/{dataset_id}/data_retrieval:
+    post:
+      tags:
+      - Data Retrieval V1
+      summary: Create Raw Data Operation
+      description: Creates a new raw data operation. Requires the dataset_create_data_retrieval permission.
+      operationId: post_data_retrieval_operation
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_create_data_retrieval
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDataRetrievalOperation'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRetrievalOperation'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/datasets/{dataset_id}/data_retrieval/{operation_id}:
+    get:
+      tags:
+      - Data Retrieval V1
+      summary: Gets Raw Data Operation Data
+      description: Gets the data retrieved by raw data operation. Requires the dataset_get_data_retrieval permission.
+      operationId: get_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_get_data_retrieval
+      parameters:
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRetrievalOperation'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Data Retrieval V1
+      summary: Put Retrieved Data
+      description: Place raw data for returning. Requires the dataset_put_data_retrieval permission.
+      operationId: put_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_put_data_retrieval
+      parameters:
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutRetrievedData'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Data Retrieval V1
+      summary: Delete Retrieved Data
+      description: Deletes retrieved data living in memory. A new operation will need to be created to retrieve the data again. Requires the dataset_delete_data_retrieval permission.
+      operationId: delete_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - dataset_delete_data_retrieval
+      parameters:
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dataset Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/available_dataset/{available_dataset_id}/data_retrieval:
+    post:
+      tags:
+      - Data Retrieval V1
+      summary: Create Raw Data Operation
+      description: Creates a new raw data operation. Requires the available_dataset_create_data_retrieval permission.
+      operationId: post_available_data_retrieval_operation
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_create_data_retrieval
+      parameters:
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDataRetrievalOperation'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRetrievalOperation'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/available_dataset/{available_dataset_id}/data_retrieval/{operation_id}:
+    get:
+      tags:
+      - Data Retrieval V1
+      summary: Gets Raw Data Operation Data
+      description: Gets the data retrieved by raw data operation. Requires the available_dataset_get_data_retrieval permission.
+      operationId: get_available_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_get_data_retrieval
+      parameters:
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRetrievalOperation'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Data Retrieval V1
+      summary: Put Retrieved Data
+      description: Place raw data for returning. Requires the available_dataset_put_data_retrieval permission.
+      operationId: put_available_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_put_data_retrieval
+      parameters:
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutRetrievedData'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Data Retrieval V1
+      summary: Delete Retrieved Data
+      description: Deletes retrieved data living in memory. A new operation will need to be created to retrieve the data again. Requires the available_dataset_delete_data_retrieval permission.
+      operationId: delete_available_data_retrieval_data
+      security:
+      - OAuth2AuthorizationCode:
+        - available_dataset_delete_data_retrieval
+      parameters:
+      - name: operation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Operation ID of the raw data operation.
+          title: Operation Id
+        description: Operation ID of the raw data operation.
+      - name: available_dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DataRetrievalData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+        data_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data Schema
+          description: Schema of the read dataset. Optional for available datasets, required for datasets.
+      type: object
+      required:
+      - content
+      - data_schema
+      title: DataRetrievalData
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    DataResultFilter:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+          description: Field name to use for filtering data.
+        op:
+          $ref: '#/components/schemas/DataResultFilterOp'
+          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - field_name
+      - op
+      - value
+      title: DataResultFilter
+    PostDataRetrievalOperation:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start timestamp to retrieve data for.
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End timestamp to retrieve data for.
+        data_retrieval_filters:
+          items:
+            $ref: '#/components/schemas/DataResultFilter'
+          type: array
+          title: Data Retrieval Filters
+          description: Filters to apply to retrieved data
+          default: []
+        pagination_options:
+          $ref: '#/components/schemas/ConnectorPaginationOptions'
+          description: Pagination options to apply to retrieved data
+      type: object
+      required:
+      - start_timestamp
+      - end_timestamp
+      title: PostDataRetrievalOperation
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DataRetrievalStatus:
+      type: string
+      enum:
+      - pending_load
+      - loaded
+      - expired
+      title: DataRetrievalStatus
+    PutRetrievedData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+      type: object
+      required:
+      - content
+      title: PutRetrievedData
+    DataRetrievalOperation:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Operation ID used for tracking the state of the operation.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: Job ID executing the data retrieval.
+        status:
+          $ref: '#/components/schemas/DataRetrievalStatus'
+          description: Current status of the retrieval operation.
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/DataRetrievalData'
+          - type: 'null'
+          description: Data page of the read dataset. Null if data is not yet available or has expired.
+      type: object
+      required:
+      - id
+      - job_id
+      - status
+      title: DataRetrievalOperation
+  securitySchemes:
+    API Key:
+      type: http
+      description: Bearer token authentication with an API key
+      scheme: bearer
