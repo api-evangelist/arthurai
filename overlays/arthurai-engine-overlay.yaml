@@ -1,0 +1,15 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Arthur GenAI Engine
+  version: 1.0.0
+extends: openapi/arthur-engine-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: arthurai
+    x-apievangelist-service: arthur-genai-engine
+    x-apievangelist-auth: http-bearer-api-key
+- target: $.servers
+  update:
+  - url: https://engine.platform.arthur.ai
+    description: Arthur GenAI Engine production API (added by API Evangelist; absent from source spec)

@@ -1,0 +1,133 @@
+# The Arthur Platform Documentation
+
+> Documentation for The Arthur Platform
+
+## Guides
+- [What Is Arthur AI?](https://docs.arthur.ai/docs/overview.md)
+- [Quickstart: Evaluate Your First LLM Call](https://docs.arthur.ai/docs/quickstart-eval.md)
+- [Connect Your Application](https://docs.arthur.ai/docs/getting-started.md)
+- [Authentication](https://docs.arthur.ai/docs/authentication.md): Authentication is required for all requests to the Arthur AI platform API. This page explains how to authenticate your requests and manage your credentials securely.
+- [Self-Host the Arthur Engine](https://docs.arthur.ai/docs/engine-setup-guide.md)
+- [User & Organization Management](https://docs.arthur.ai/docs/user-management-guide.md)
+- [Traces Overview](https://docs.arthur.ai/docs/traces-guide.md): A **trace** in Arthur is a complete, end-to-end record of a single request flowing through your AI application — and the instrumentation structure you should use depends on the complexity of that request: wrap the entire request in a **trace**, break meaningful units of work inside it into **spans**, and group related traces together under a **session**. This page walks you from concept to working code, so you know exactly what to instrument and why.
+- [Data Connectors](https://docs.arthur.ai/docs/connectors-guide.md): Arthur's Data Connectors let you point Arthur at your existing data warehouse or object storage — BigQuery, AWS S3, or Google Cloud Storage — so Arthur can read inference data, ground truth labels, and reference datasets directly from where they already live. You never need to migrate or duplicate data into Arthur's own storage.
+- [Observe & Dashboard](https://docs.arthur.ai/docs/platform-ui.md): Arthur's observability interface is organized as a three-level hierarchy: **Workspace → Project → Application**. Each level gives you a progressively narrower, more detailed view of your AI systems. This page orients you to that hierarchy, walks you through each level in order, and explains the key metrics you'll encounter along the way. By the end, you'll know exactly where to look — whether you're checking overall system health or drilling into a single application's traces.
+- [Prompts](https://docs.arthur.ai/docs/prompts.md)
+- [Transforms](https://docs.arthur.ai/docs/transforms-guide.md)
+- [Datasets](https://docs.arthur.ai/docs/datasets-guide.md)
+- [Default Metrics](https://docs.arthur.ai/docs/default-metrics.md)
+- [Metrics Overview & Data Model](https://docs.arthur.ai/docs/metrics-data-model.md)
+- [Basic Metric Query Patterns](https://docs.arthur.ai/docs/metrics-basic-queries.md)
+- [Advanced SQL Patterns & Sketch Functions](https://docs.arthur.ai/docs/metrics-advanced-queries.md)
+- [Metrics Query Best Practices & Troubleshooting](https://docs.arthur.ai/docs/metrics-best-practices.md)
+- [Metrics Versioning](https://docs.arthur.ai/docs/metrics-versioning.md)
+- [Dashboard](https://docs.arthur.ai/docs/dashboard-guide.md)
+- [Alerts & Alert Rules](https://docs.arthur.ai/docs/alerts-guide.md)
+- [Webhooks & Notifications](https://docs.arthur.ai/docs/webhooks-guide.md): How do you configure webhooks to send Arthur alerts to Slack, Jira, or your own incident management system? You create a webhook in Arthur that points to your destination URL, optionally customize the payload using Jinja2 templates, and Arthur will POST alert data to that endpoint every time an alert fires. This page walks you through the complete setup for both Slack and Jira, including working payload examples and template syntax.
+- [LLM Evaluators](https://docs.arthur.ai/docs/llm-eval-guide.md): How do you create LLM-as-a-judge evaluators using custom prompts to automatically score model outputs? Arthur's LLM Evaluators let you define a judge prompt — a rubric written in natural language — that a capable LLM uses to score your agent's outputs on any dimension you care about: coherence, relevance, factual accuracy, tone, or anything else that rule-based metrics can't capture. This page walks you through creating your first evaluator, configuring score ranges, using Arthur's built-in templates, and wiring results into the continuous evaluation system.
+- [Continuous Evals](https://docs.arthur.ai/docs/evaluate-guide.md)
+- [RAG](https://docs.arthur.ai/docs/rag-guide.md)
+- [Datasets (Engine)](https://docs.arthur.ai/docs/engine-datasets-guide.md)
+- [Policies & Governance](https://docs.arthur.ai/docs/policies-governance.md): If you manage dozens of AI applications across your organization, you need a way to set organization-wide monitoring requirements that automatically apply across all applications and alert you to compliance gaps — without manually configuring the same alert rules for every new model you deploy. Arthur's **Policies** feature solves exactly this: define your monitoring standards once at the organization level, and Arthur materializes them as concrete alert rules on every application, surfacing gaps wherever requirements aren't met.
+- [Agent Discovery](https://docs.arthur.ai/docs/agent-discovery.md): Automatically scan your infrastructure to find unregistered AI agents running outside your governance controls, then register or mute them.
+- [Agent Tool Kit Settings](https://docs.arthur.ai/docs/settings-guide.md): The Agent Tool Kit's settings are accessible from the **gear icon (⚙)** in the top-right corner of the UI. Clicking it opens a dropdown with four items: **Settings**, **Model Providers**, **API Keys**, and **Preferences**.
+- [Agentic Test](https://docs.arthur.ai/docs/test-guide.md)
+- [Groups, Roles & Permissions](https://docs.arthur.ai/docs/groups-roles-permissions.md): Roles, groups, and permissions in Arthur work through a hierarchical role-based access control (RBAC) model — and if your organization uses an identity provider (IDP) like Okta or Azure AD, you can configure IDP group mapping so that adding a user to an IDP group automatically grants them the correct Arthur access, with no manual steps required inside Arthur. This page explains how the permission model works, what roles are available, and how to configure IDP-managed group membership for your organization.
+- [SSO & Identity Provider Setup](https://docs.arthur.ai/docs/sso-guide.md)
+- [Arthur + Claude Code](https://docs.arthur.ai/docs/integrate-claude-code.md): Instrument your Claude Code sessions with end-to-end tracing
+- [Claude Code Skill (/arthur-onboard)](https://docs.arthur.ai/docs/integrate-arthur-onboard-skill.md): Automated Arthur Instrumentation using Claude Code Skill
+- [Truefoundry](https://docs.arthur.ai/docs/truefoundry.md): Use Arthur AI as a custom guardrail on TrueFoundry AI Gateway to validate LLM prompts and completions before they reach or leave the model.
+- [Get Started with Arthur Platform](https://docs.arthur.ai/docs/welcome-to-arthur-quick-start.md): A step-by-step guide to setting up Arthur Platform with a Gen AI applications in minutes.
+- [How to Sign in and Access Arthur?](https://docs.arthur.ai/docs/how-to-sign-in-and-access-arthur.md)
+- [How to Add New Users to Arthur?](https://docs.arthur.ai/docs/how-to-add-new-users-to-arthur.md): This section describes how to invite a new user.
+- [How to Add New Project to Arthur?](https://docs.arthur.ai/docs/creating-project-copy.md): This section describes how to create a new project for a workspace.
+- [How to Use Tables?](https://docs.arthur.ai/docs/table-options.md): This section describes how to use tables.
+- [Terminology](https://docs.arthur.ai/docs/terminology.md)
+- [Quickstart](https://docs.arthur.ai/docs/quickstart.md): Get started onboarding an engine
+- [Evals Engine Overview](https://docs.arthur.ai/docs/onboarding-a-new-engine.md): What is the Arthur Evals Engine?
+- [Engine Creation and Deployment](https://docs.arthur.ai/docs/creating-engine.md): This section describes how to create a new engine for a workspace.
+- [Deployment with AWS](https://docs.arthur.ai/docs/deployment-with-aws.md): This is the recommended option for scalable, production-grade deployments in AWS environments.
+- [Deployment with Kubernetes](https://docs.arthur.ai/docs/deployment-with-kubernetes.md): Recommended for cloud-agnostic, orchestrated, and advanced use-cases, especially for teams using Kubernetes (EKS, etc.).
+- [Deployment Guide for Arthur GenAI Engine](https://docs.arthur.ai/docs/arthur-genai-engine-docker-compose-deployment-guide.md): This section describes how to start your own Arthur Engine with Docker.
+- [Create Task](https://docs.arthur.ai/docs/create-a-task.md): This section describes how to create a new task in Arthur GenAI Engine.
+- [Configure Model Provider](https://docs.arthur.ai/docs/configure-model-provider.md): This section describes how to configure Model Provider in Arthur GenAI Engine.
+- [Get Started with Tracing](https://docs.arthur.ai/docs/get-started-with-tracing.md): This section describes how to send traces in Arthur GenAI Engine.
+- [Traces](https://docs.arthur.ai/docs/traces.md): This section describes how to view you traces.
+- [Prompt Notebooks](https://docs.arthur.ai/docs/overview-2.md): This section describes how to use Prompt Notebooks and Prompt Playground. Prompt Notebooks are persistent workspaces for developing prompts and running experiments. They provide a flexible environment where you can iterate on prompts, configure experiments, and track your work over time. This guide helps you understand how to use notebooks for prompt development and experimentation.
+- [Offline Evaluation Guide: Prompt Playground](https://docs.arthur.ai/docs/offline-evaluation-guide-prompt-playground.md): This section describes how to work with Prompts.
+- [Prompt Management](https://docs.arthur.ai/docs/get-started-with-prompt-management.md): This section describes how to use Prompt Management.
+- [Prompt Experiments Overview](https://docs.arthur.ai/docs/prompt-experiments.md): Prompt Experiments enable systematic testing and comparison of prompts against datasets with automated evaluations. This guide helps you understand how to use experiments for prompt A/B testing, improvement, and quality assurance.
+- [Prompt Experiments Workflow](https://docs.arthur.ai/docs/prompt-experiments-workflow.md): This section describes how to use Prompt Experiments.
+- [Offline Evaluation Guide: Running a Prompt Experiment](https://docs.arthur.ai/docs/offline-evaluation-guide-running-a-prompt-experiment.md): This section describes how to run Prompt Experiment in Arthur GenAI Engine.
+- [RAG Experiments and RAG Notebooks](https://docs.arthur.ai/docs/rag-experiments-and-rag-notebooks.md): This section describes how to use RAG Experiments and RAG Notebooks in Arthur GenAI Engine.
+- [Get Started With LLM Evals](https://docs.arthur.ai/docs/get-started-with-llm-evals.md): This section describes how to use LLM Evals in Arthur GenAI Engine.
+- [Evals Management](https://docs.arthur.ai/docs/evaluations.md): This section describes how to use Evals Management.
+- [Get Started With Continuous Evals](https://docs.arthur.ai/docs/get-started-with-continuous-evals.md): This section describes how to use Continuous Evals in Arthur GenAI Engine.
+- [Offline Evaluation Guide: Creating a Dataset](https://docs.arthur.ai/docs/offline-evaluation-guide-creating-a-dataset.md): This section describes how to create a dataset in Arthur GenAI Engine.
+- [Get Started With Transforms](https://docs.arthur.ai/docs/get-started-with-transforms.md): This section describes how to use Transforms in Arthur GenAI Engine.
+- [Agentic Experiments and Agentic Notebooks](https://docs.arthur.ai/docs/agentic-experiments-and-agentic-notebooks.md): This section describes how to use Agentic Experiments and Agentic Notebooks in Arthur GenAI Engine.
+- [API Keys Management](https://docs.arthur.ai/docs/api-keys-management.md): This section describes how to create and manage API keys for accessing the GenAI Engine.
+- [Customize Your Dashboard](https://docs.arthur.ai/docs/customize-your-dashboard.md)
+- [How to Set Up and Track Metrics by Version](https://docs.arthur.ai/docs/how-to-set-up-and-track-metrics-by-version.md): The Model Versioning feature lets you segment your metrics by model version so you can track and compare performance over time.
+- [Metrics & Querying Overview](https://docs.arthur.ai/docs/metrics-querying-overview-1.md)
+- [Custom Metrics](https://docs.arthur.ai/docs/custom-metrics.md): This document provides an overview of the custom metrics feature in Arthur. For additional information on querying metrics and the storage of metrics in Arthur, see the Metrics & Querying Overview guide.
+- [Classification Metrics Overview](https://docs.arthur.ai/docs/classification-metrics-overview.md): Arthur’s Classification Metrics framework provides a structured way to evaluate binary and multiclass models using families of related metric “buckets.
+- [Positive-Class Error Profile](https://docs.arthur.ai/docs/positive-class-error-profile.md): Quantifies where and how your model makes mistakes on the positive class, highlighting false positives, false negatives, and error concentration across score ranges.
+- [Detection & Acceptance Profile](https://docs.arthur.ai/docs/detection-acceptance-profile.md): Maps out how recall, precision, accuracy, and acceptance rate trade off as you move the decision threshold, so you can pick operating points aligned with business goals.
+- [Subgroup Rate Comparison](https://docs.arthur.ai/docs/subgroup-rate-comparison.md): Compares key metrics (e.g., acceptance, error, detection) across segments or cohorts to surface fairness issues and performance gaps between subgroups.
+- [Curve-Based Discrimination](https://docs.arthur.ai/docs/curve-based-discrimination.md): Uses ROC, AUC, KS, Gini, and related curves to measure how well the model separates positives from negatives across the full score distribution.
+- [Rank Association Profile](https://docs.arthur.ai/docs/rank-association-profile.md): Evaluates how well the model’s scores rank-order outcomes using rank-based correlation metrics (e.g., Spearman, Kendall), especially for prioritization and triage use cases.
+- [Gini Coefficient (Single-Threshold Metric)](https://docs.arthur.ai/docs/example-4-gini-coefficient.md): This document provides an example of the metric Gini Coefficient.
+- [Population Stability Index (PSI) Metrics](https://docs.arthur.ai/docs/population-stability-index-psi-metrics.md): Population Stability Index (PSI) metrics let you quantify how much a feature’s distribution has shifted over time by comparing it either to a fixed reference dataset (like training data) or to a recent rolling baseline (e.g., last 30 days), with PSI scores computed per time bucket so you can detect both long-term drift and short-term anomalies in production.
+- [Setting Up GenAI Metrics](https://docs.arthur.ai/docs/how-to-add-metrics-to-the-model.md): Learn how to configure built-in and custom metrics that evaluate your GenAI model’s prompts and outputs for safety, compliance, and quality.
+- [Hallucination](https://docs.arthur.ai/docs/hallucination.md): Hallucinations are generated responses characterized as incorrect or unfaithful responses given a user input and source knowledge.
+- [Prompt Injection](https://docs.arthur.ai/docs/prompt-injection.md): Prompt Injection is the attempt by a malicious user to manipulate the behavior of an LLM or an LLM application using strategic prompting techniques to produce undesirable responses.
+- [Toxicity](https://docs.arthur.ai/docs/toxicity.md): Detecting harmful and abusive language
+- [Sensitive Data Leakage](https://docs.arthur.ai/docs/sensitive-data-leakage.md)
+- [PII Leakage](https://docs.arthur.ai/docs/pii-leakage.md)
+- [Custom Rules](https://docs.arthur.ai/docs/custom-rules.md)
+- [Agentic Metrics Quickstart](https://docs.arthur.ai/docs/agent-quickstart.md): Quick start guides that will help you setup Agentic metrics and tracing on Arthur with popular AI Agent frameworks.
+- [Getting Started with Monitoring CrewAI Agents](https://docs.arthur.ai/docs/crewai-agents.md)
+- [Guardrails Configuration Guide](https://docs.arthur.ai/docs/guardrails-configuration-guide.md)
+- [How do groups work in Arthur?](https://docs.arthur.ai/docs/groups-in-arthur.md)
+- [How to create a group?](https://docs.arthur.ai/docs/how-to-create-a-group.md): This section describes how to create a group.
+- [How to add user or assignment to the group?](https://docs.arthur.ai/docs/how-to-add-user-or-assignment-to-the-group.md): This section describes how to add more users or assignment to the group.
+- [Roles in Arthur](https://docs.arthur.ai/docs/roles-in-arthur.md)
+- [Role Limitations and Examples](https://docs.arthur.ai/docs/role-limitations-and-examples.md)
+- [Evals Engine Roles](https://docs.arthur.ai/docs/genai-eval-engine-roles.md)
+- [What's the difference between an organization or project?](https://docs.arthur.ai/docs/are-you-adding-a-user-to-an-organization-or-project-whats-the-difference.md)
+- [Authorization in Arthur: How Access Control Works](https://docs.arthur.ai/docs/authorization-in-arthur-how-access-control-works.md)
+- [  What are Webhooks?](https://docs.arthur.ai/docs/what-are-webhooks.md)
+- [How Do Webhooks Work in Arthur?](https://docs.arthur.ai/docs/how-do-webhooks-work-in-arthur.md)
+- [How to integrate Slack via Webhooks?](https://docs.arthur.ai/docs/how-to-integrate-slack-via-webhooks.md)
+- [How to integrate Jira via Webhooks?](https://docs.arthur.ai/docs/how-to-integrate-jira-via-webhooks.md)
+- [Creating Alert Rules](https://docs.arthur.ai/docs/creating-alert-rules.md)
+- [Using the Python SDK](https://docs.arthur.ai/docs/using-the-python-sdk.md)
+- [Supported Connectors](https://docs.arthur.ai/docs/supported-connectors.md)
+- [OIDC Configuration Requirements](https://docs.arthur.ai/docs/oidc-configuration-requirements.md)
+- [Model Access & Credentials](https://docs.arthur.ai/docs/model-access-credentials.md)
+- [Infrastructure Access & Network Requirements](https://docs.arthur.ai/docs/infrastructure-access-network-requirements.md)
+- [Documentation Overview](https://docs.arthur.ai/docs/documentation-overview.md)
+- [Document Creation Best Practices](https://docs.arthur.ai/docs/document-creation-best-practices.md): This guide provides recommendations for authoring documents optimized for ingestion and retrieval by OpenWebUI, ensuring that only the most relevant content is processed and minimizing retrieval inaccuracies.
+- [Content Retrieval Management](https://docs.arthur.ai/docs/content-retreival-management.md): When splitting extracted text into chunks for embedding and retrieval, you can work in **characters** or **tokens**. Below are guidelines for both approaches, along with a brief on how they differ.
+- [Integrations](https://docs.arthur.ai/docs/integrations.md): Enhance your deployment by connecting it with external services. This section covers available integrations and step-by-step setup guides.
+- [Google Drive Integration](https://docs.arthur.ai/docs/google-drive-integration.md): Enable users to access and upload Google Drive files (docs, slides, sheets, etc.) directly through the chat interface.
+- [Google Programmable Search Engine (PSE) Integration](https://docs.arthur.ai/docs/google-programmable-search-engine-pse-integration.md): Integrate Google PSE to enable powerful, scoped web search capabilities from the chat interface.
+- [SAML Integration via Keycloak](https://docs.arthur.ai/docs/saml-integration-via-keycloak.md): This document provides end-to-end instructions for integrating **Google Workspace (SAML)** with **Arthur’s Keycloak**.
+- [Google Workspace Setup for OpenWebUI](https://docs.arthur.ai/docs/google-workspace-setup-for-open-webui-saml-integration-via-keycloak.md): This guide explains how to configure **Google Workspace** as the **Identity Provider (IdP)** for **Arthur’s Keycloak**, which brokers authentication into **Open WebUI**.
+- [Okta Setup for OpenWebUI](https://docs.arthur.ai/docs/okta-setup-for-openwebui.md): This document explains how an **Okta administrator** can configure Okta as a **SAML Identity Provider (IdP)** for Arthur’s **Keycloak**, which brokers authentication into **Open WebUI**.
+- [High Level Architecture](https://docs.arthur.ai/docs/high-level-architecture.md)
+- [Naming Nomenclature](https://docs.arthur.ai/docs/naming-nomenclature.md)
+- [Identity & Access Management](https://docs.arthur.ai/docs/identity-access-management.md)
+- [Networking](https://docs.arthur.ai/docs/networking.md)
+- [Compute and Container Services](https://docs.arthur.ai/docs/compute-and-container-services.md)
+- [Database Services](https://docs.arthur.ai/docs/database-services.md)
+- [DevOps: CI/CD](https://docs.arthur.ai/docs/devops-cicd.md)
+- [Logging and Monitoring Setup](https://docs.arthur.ai/docs/logging-and-monitoring-setup.md)
+
+## Changelog
+- [June 2026 Release Notes](https://docs.arthur.ai/changelog/june-2026-release-notes.md)
+- [May 2026 Release Notes](https://docs.arthur.ai/changelog/may-2026-release-notes.md)
+- [April 2026 Release Notes](https://docs.arthur.ai/changelog/april-2026-release-notes.md)
+- [February 2026 Release Notes](https://docs.arthur.ai/changelog/february-2026-release-notes.md)
+- [January 2026 Release Notes](https://docs.arthur.ai/changelog/january-2026-release-notes.md)

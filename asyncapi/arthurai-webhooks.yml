@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.arthur.ai/docs/webhooks-guide, openapi/arthur-scope-openapi.json
+spec_type: Webhooks
+summary: >-
+  Arthur emits OUTBOUND alert webhooks. When an alert rule fires, Arthur POSTs
+  the alert payload to a configured destination URL. Payloads are customizable
+  with Jinja2 templates. Documented destinations are Slack and Jira, plus any
+  custom incident-management endpoint. The Arthur Scope OpenAPI models this via
+  the AlertRuleNotificationWebhook schema on alert rules.
+direction: outbound
+transport: http-post
+events:
+- name: alert.fired
+  description: An alert rule threshold was breached; Arthur POSTs the alert to the destination URL.
+  destinations:
+  - slack
+  - jira
+  - custom-url
+payload:
+  templating: jinja2
+  detail: Payload body can be customized per webhook using Jinja2 templates (Slack/Jira examples in docs).
+schema_ref: openapi/arthur-scope-openapi.json#/components/schemas/AlertRuleNotificationWebhook
+notes: >-
+  This is a webhook (event-push) surface, not a published AsyncAPI document.
+  No AsyncAPI spec is published by Arthur; do not fabricate one.

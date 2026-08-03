@@ -1,0 +1,16 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Arthur Scope
+  version: 1.0.0
+extends: openapi/arthur-scope-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: arthurai
+    x-apievangelist-service: arthur-scope
+    x-apievangelist-auth: oauth2-authorization-code
+    x-apievangelist-idp: https://platform-auth.arthur.ai/realms/arthur
+- target: $.servers
+  update:
+  - url: https://platform.arthur.ai/api
+    description: Arthur Scope production API (added by API Evangelist; absent from source spec)

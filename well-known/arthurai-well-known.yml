@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: searched
+hosts:
+- host: https://arthur.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://platform.arthur.ai
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: host returns SPA HTML shell (soft 404), not an OIDC discovery document
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    note: host returns SPA HTML shell (soft 404)
+- host: https://engine.platform.arthur.ai
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+- host: https://docs.arthur.ai
+  documents:
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://platform-auth.arthur.ai/realms/arthur
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: arthurai-openid-configuration.json
+    note: Keycloak realm OIDC discovery document (RFC 8414 / OpenID Connect Discovery)
+result: >-
+  No /.well-known documents are published on the product/docs hosts, but the
+  Keycloak OAuth2/OIDC authorization server at
+  https://platform-auth.arthur.ai/realms/arthur publishes a full
+  openid-configuration (issuer, authorization/token/jwks endpoints, 9 grant
+  types incl. authorization_code + token-exchange, 14 scopes). This is the
+  identity backbone for the Arthur Scope OAuth2 authorization-code flow.

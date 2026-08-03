@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/arthur-scope-openapi.json, openapi/arthur-engine-openapi.json
+format: json
+envelope:
+  note: >-
+    Both APIs are FastAPI services. 4xx/5xx bodies use the FastAPI default
+    envelope {"detail": ...}; 422 validation errors return the FastAPI
+    HTTPValidationError shape {"detail": [{"loc": [...], "msg": "...",
+    "type": "..."}]}. Content-Type is application/json (not
+    application/problem+json / RFC 9457).
+  primary_field: detail
+problems:
+- status: 400
+  title: Bad Request
+  meaning: The request was malformed or failed a precondition check.
+- status: 404
+  title: Not Found
+  meaning: The referenced resource (task, connector, dataset, agent, inference, span) does not exist.
+- status: 409
+  title: Conflict
+  meaning: >-
+    The request conflicts with current state, e.g. a resource has dependent
+    resources that must be removed first (transforms/connectors).
+- status: 422
+  title: Validation Error
+  meaning: Request body/params failed schema validation; body is a FastAPI HTTPValidationError list.
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side error (observed in Arthur Scope responses).

@@ -1,0 +1,40 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/arthur-scope-openapi.json, openapi/arthur-engine-openapi.json, https://docs.arthur.ai/docs/authentication
+authentication:
+  scope_api:
+    style: oauth2-authorization-code
+    idp: https://platform-auth.arthur.ai/realms/arthur
+    scheme: OAuth2AuthorizationCode
+  engine_api:
+    style: http-bearer
+    detail: API key passed as a Bearer token; keys managed via the API Keys surface (Settings > API Keys).
+idempotency:
+  supported: false
+  detail: No Idempotency-Key header or idempotency contract is documented or present in either OpenAPI.
+pagination:
+  style: page-number
+  params:
+  - page_size
+  detail: >-
+    List/query endpoints expose a page_size parameter (page-number style
+    pagination). No cursor/token pagination observed.
+streaming:
+  supported: true
+  detail: >-
+    Select Arthur GenAI Engine endpoints emit text/event-stream (Server-Sent
+    Events) responses, e.g. streaming validation/eval output.
+versioning:
+  style: uri-path
+  detail: /api/v2/ (Engine), /api/ (Scope), some /v1/ tracing endpoints.
+error_envelope:
+  format: json
+  primary_field: detail
+  detail: 'FastAPI default {"detail": ...}; 422 uses HTTPValidationError. See errors/arthurai-problem-types.yml.'
+rate_limiting:
+  documented: false
+cross_links:
+  authentication: authentication/arthurai-authentication.yml
+  scopes: scopes/arthurai-scopes.yml
+  errors: errors/arthurai-problem-types.yml
+  lifecycle: lifecycle/arthurai-lifecycle.yml

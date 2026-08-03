@@ -1,0 +1,55 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/arthur-scope-openapi.json, openapi/arthur-engine-openapi.json
+summary: >-
+  Derived entity graph from OpenAPI component schemas and path structure across
+  the two Arthur services. Arthur Scope centers on observability/governance
+  (agents, connectors, datasets, metrics, alert rules, policies); Arthur GenAI
+  Engine centers on GenAI guardrails (tasks, rules, inferences, feedback).
+entities:
+- name: Agent
+  service: scope
+  description: A discovered/registered AI agent under governance.
+- name: Connector
+  service: scope
+  description: A data connector (BigQuery, S3, GCS) that exposes datasets to Arthur.
+- name: Dataset
+  service: scope
+  belongs_to: Connector
+  via: connector_id
+- name: Metric
+  service: scope
+  description: A default or custom metric evaluated over inference data.
+- name: AlertRule
+  service: scope
+  description: A rule that fires alerts; may carry a notification webhook.
+  has_many: [AlertLog]
+- name: Policy
+  service: scope
+  description: An organization-level governance standard that materializes alert rules across applications.
+  has_many: [AlertRule]
+- name: Task
+  service: engine
+  description: A governed GenAI application to which rules and metrics attach.
+  has_many: [Rule, Metric, Inference]
+- name: Rule
+  service: engine
+  belongs_to: Task
+  via: task_id
+  description: A guardrail rule validated against prompts/responses (default or task-scoped).
+- name: Inference
+  service: engine
+  belongs_to: Task
+  via: task_id
+  description: A recorded prompt/response validated by the engine; carries feedback.
+- name: Feedback
+  service: engine
+  belongs_to: Inference
+  via: inference_id
+relationships:
+- {from: Dataset, to: Connector, kind: belongs_to, via: connector_id}
+- {from: AlertRule, to: Policy, kind: belongs_to, via: policy_id}
+- {from: Rule, to: Task, kind: belongs_to, via: task_id}
+- {from: Metric, to: Task, kind: belongs_to, via: task_id}
+- {from: Inference, to: Task, kind: belongs_to, via: task_id}
+- {from: Feedback, to: Inference, kind: belongs_to, via: inference_id}

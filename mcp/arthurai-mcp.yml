@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/arthur-engine-openapi.json
+notes: >-
+  No official hosted/remote Arthur MCP server was found published (no
+  @arthur-ai MCP package on npm, no documented mcp.arthur.ai endpoint). Arthur
+  itself GOVERNS MCP traffic (agent discovery across MCP) rather than shipping a
+  provider MCP server. Arthur does publish an official Claude Code Skill
+  (/arthur-onboard) and a Claude Code integration for tracing — see skills/.
+  The tool list below is a DERIVED candidate mapping of high-value Arthur GenAI
+  Engine operations to MCP tools, not a published server.
+server:
+  name: arthur-engine
+  transport: http
+  base_url: https://engine.platform.arthur.ai
+tools:
+- name: create_task
+  description: Create an Arthur task (a governed GenAI application) to attach rules and metrics to
+  source_operation: openapi/arthur-engine-openapi.json#create_task_api_v2_tasks_post
+- name: create_task_rule
+  description: Attach a guardrail rule to a task
+  source_operation: openapi/arthur-engine-openapi.json#create_task_rule_api_v2_tasks__task_id__rules_post
+- name: validate_prompt
+  description: Validate an inbound prompt against a task's rules before it reaches the model
+  source_operation: openapi/arthur-engine-openapi.json#validate_prompt_endpoint_api_v2_tasks__task_id__validate_prompt_post
+- name: validate_response
+  description: Validate a model response against a task's rules before it returns to the user
+  source_operation: openapi/arthur-engine-openapi.json#validate_response_endpoint_api_v2_tasks__task_id__validate_response__inference_id__post
+- name: search_rules
+  description: Search configured rules
+  source_operation: openapi/arthur-engine-openapi.json#search_rules_api_v2_rules_search_post
+- name: query_inferences
+  description: Query recorded inferences for observability
+  source_operation: openapi/arthur-engine-openapi.json#query_inferences_api_v2_inferences_query_get
+- name: post_feedback
+  description: Record feedback on a scored inference
+  source_operation: openapi/arthur-engine-openapi.json#post_feedback_api_v2_feedback__inference_id__post

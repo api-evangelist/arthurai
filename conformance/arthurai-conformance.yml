@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/arthur-scope-openapi.json, openapi/arthur-engine-openapi.json
+standards:
+- id: oauth2
+  conforms: true
+  evidence: Arthur Scope declares an oauth2 authorizationCode securityScheme (Keycloak realm arthur)
+- id: oidc
+  conforms: true
+  evidence: platform-auth.arthur.ai/realms/arthur publishes an OpenID Connect discovery document
+- id: openapi-3.1
+  conforms: true
+  evidence: both published specs are OpenAPI 3.1.0
+- id: http-bearer
+  conforms: true
+  evidence: Arthur GenAI Engine uses http bearer (API Key) authentication
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error responses use application/json (FastAPI default envelope), not application/problem+json
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: no /.well-known/security.txt published
+- id: fhir-r4
+  conforms: false
+- id: fapi
+  conforms: false
+- id: scim
+  conforms: false
