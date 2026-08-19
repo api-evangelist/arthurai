@@ -1,0 +1,236 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Tasks V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tasks V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Cached Task State",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the task state cached in the control plane. Requires model_task_read permission."
+        },
+        {
+          "info": {
+            "name": "Update A Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a job to update the task definition for this model and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete A Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Submits a job to delete the task and the corresponding platform model, and returns the job ID. Requires model_task_delete permission."
+        },
+        {
+          "info": {
+            "name": "Sync A Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/sync",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Submits a job to fetch the latest task state and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_sync permission."
+        },
+        {
+          "info": {
+            "name": "Upload Task State",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/cache",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload a copy of the task state to cache in the control plane. Requires model_task_put_state_cache permission."
+        },
+        {
+          "info": {
+            "name": "Get Task Connection Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/connection_info",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the task connection information. Requires model_task_get_connection_info permission."
+        },
+        {
+          "info": {
+            "name": "Upload Task State",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/connection_info",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload the task connection information. Requires model_task_put_connection_info permission."
+        },
+        {
+          "info": {
+            "name": "Delete Connection Info.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/connection_info",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes connection information for a model. Requires model_task_delete_connection_info permission."
+        },
+        {
+          "info": {
+            "name": "Regenerate Task Validation Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/task/regenerate_validation_key",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Regenerate the task validation key. Requires model_task_regenerate_validation_key permission."
+        },
+        {
+          "info": {
+            "name": "Create A Task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/tasks",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a job to create a task in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_task permission."
+        },
+        {
+          "info": {
+            "name": "Link An Existing Task To A New Model.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/link_task",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a job to link an existing task to a new model in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_link_task permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

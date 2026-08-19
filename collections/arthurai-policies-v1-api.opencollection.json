@@ -1,0 +1,1094 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Policies V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policies V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Model Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/assignments",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional assignment ID to filter by."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy name (case-insensitive partial match)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all policy assignments for an application including policy summary and compliance status. Requires model_list_policy_assignments permission."
+        },
+        {
+          "info": {
+            "name": "Check Model Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/check_compliance",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enqueues a Metrics → Alerts → Compliance chain for all assignments on this model. The window is taken from the request body's start_timestamp / end_timestamp. Requires model_check_compliance permission."
+        },
+        {
+          "info": {
+            "name": "List Model Attestations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/attestations",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "If true, only return the most recent attestation for each rule."
+              },
+              {
+                "name": "valid",
+                "value": "",
+                "type": "query",
+                "description": "If true, only return attestations that have not expired."
+              },
+              {
+                "name": "policy_assignment_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional policy assignment ID to filter attestations by."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all attestations across all policy assignments for an application. Requires model_list_attestations permission."
+        },
+        {
+          "info": {
+            "name": "List Workspace Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/policy_assignments",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy ID."
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by compliance status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy name (case-insensitive partial match)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all policy assignments within a workspace, filtered to applications the caller can access. Requires workspace_list_policy_assignments permission."
+        },
+        {
+          "info": {
+            "name": "List Workspace Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/compliance",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule compliance status: 'COMPLIANT' or 'NON_COMPLIANT'."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific model."
+              },
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific policy."
+              },
+              {
+                "name": "rule_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule type: 'alert_rule' or 'attestation_rule'."
+              },
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to rows for a specific rule."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Filter attestation rules by validity period in days."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search across rule, model, and policy names (case-insensitive)."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field: rule_name, rule_type, compliance_status, updated_at, created_at."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order: asc or desc."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a flat compliance table with per-rule, per-model status across all policies in a workspace. Requires workspace_list_policy_compliance permission."
+        },
+        {
+          "info": {
+            "name": "Check Workspace Policies Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/check_compliance",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enqueues a Metrics → Alerts → Compliance chain for every model with policy assignments in the workspace. Returns one job per model. Requires workspace_check_all_policies_compliance permission."
+        },
+        {
+          "info": {
+            "name": "List Organization Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/policy_assignments",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy ID."
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by compliance status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy name (case-insensitive partial match)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all policy assignments across every workspace in the organization, filtered to applications the caller can access. Requires organization_list_policy_assignments permission."
+        },
+        {
+          "info": {
+            "name": "List Organization Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/compliance",
+            "params": [
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule compliance status: 'COMPLIANT' or 'NON_COMPLIANT'."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific model."
+              },
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific policy."
+              },
+              {
+                "name": "rule_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule type: 'alert_rule' or 'attestation_rule'."
+              },
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to rows for a specific rule."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Filter attestation rules by validity period in days."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search across rule, model, and policy names (case-insensitive)."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field: rule_name, rule_type, compliance_status, updated_at, created_at."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order: asc or desc."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a flat compliance table with per-rule, per-model status across all policies in every workspace in the organization. Requires organization_list_policy_compliance permission."
+        },
+        {
+          "info": {
+            "name": "List Policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/policies",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by name (case-insensitive partial match)."
+              },
+              {
+                "name": "owner_group_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by owner group ID."
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by compliance status. Returns policies with at least one assignment matching this status."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by assigned application/model ID."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all policies for the organization. Requires organization_list_policies permission."
+        },
+        {
+          "info": {
+            "name": "Create Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/policies",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new policy with inline rules for the organization. At least one alert or attestation rule is required. Requires organization_create_policy permission."
+        },
+        {
+          "info": {
+            "name": "Get Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single policy by ID including nested alert rules and attestation rules. Requires policy_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a policy's metadata or enforcement delay. Requires policy_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a policy and cascades to all assignments, materialized rules, and attestation records. Requires policy_delete permission."
+        },
+        {
+          "info": {
+            "name": "List Policy Alert Rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/alert_rules",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name (partial match)."
+              }
+            ]
+          },
+          "docs": "Lists alert rules for a policy. Requires policy_list_alert_rules permission."
+        },
+        {
+          "info": {
+            "name": "Create Policy Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/alert_rules",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new alert rule for a policy. Propagates to all assigned applications. Requires policy_create_alert_rule permission."
+        },
+        {
+          "info": {
+            "name": "List Policy Attestation Rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/attestation_rules",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name (partial match)."
+              }
+            ]
+          },
+          "docs": "Lists attestation rules for a policy. Requires policy_list_attestation_rules permission."
+        },
+        {
+          "info": {
+            "name": "Create Policy Attestation Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/attestation_rules",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new attestation rule for a policy. Requires policy_create_attestation_rule permission."
+        },
+        {
+          "info": {
+            "name": "List Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/assignments",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by compliance status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by policy name (case-insensitive partial match)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all assignments for a policy, filtered to applications the caller can access. Requires policy_list_assignments permission."
+        },
+        {
+          "info": {
+            "name": "Create Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/assignments",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Applies a policy to one or more applications. Requires policy_assignment_create permission on the policy and model_assign_policy permission on each target application."
+        },
+        {
+          "info": {
+            "name": "Check Policy Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/check_compliance",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enqueues a Metrics → Alerts → Compliance chain for every assignment in this policy. The window is taken from the request body's start_timestamp / end_timestamp. Requires policy_check_compliance permission."
+        },
+        {
+          "info": {
+            "name": "List Policy Compliance History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policies/:policy_id/compliance_history",
+            "params": [
+              {
+                "name": "policy_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "compliance_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule compliance status: 'COMPLIANT' or 'NON_COMPLIANT'."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific model."
+              },
+              {
+                "name": "rule_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by rule type: 'alert_rule' or 'attestation_rule'."
+              },
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to rows for a specific rule."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field: rule_name, rule_type, compliance_status, updated_at, created_at."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order: asc or desc."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns the full rule compliance evaluation history for a policy, filtered to applications the caller can access. Requires policy_list_compliance_history permission."
+        },
+        {
+          "info": {
+            "name": "Get Policy Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policy_alert_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single policy alert rule by ID. Requires policy_alert_rule_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Policy Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/policy_alert_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a policy alert rule. Propagates to materialized rules on all assigned applications. Requires policy_alert_rule_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Policy Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/policy_alert_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a policy alert rule. CASCADE deletes materialized rules. Rejected if this is the last rule on an applied policy. Requires policy_alert_rule_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Policy Attestation Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policy_attestation_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single policy attestation rule by ID. Requires policy_attestation_rule_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Policy Attestation Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/policy_attestation_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a policy attestation rule. Requires policy_attestation_rule_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Policy Attestation Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/policy_attestation_rules/:rule_id",
+            "params": [
+              {
+                "name": "rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a policy attestation rule. Rejected if this is the last rule on an applied policy. Requires policy_attestation_rule_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Policy Assignment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single policy assignment with full policy and model detail. Requires policy_assignment_read permission."
+        },
+        {
+          "info": {
+            "name": "Delete Policy Assignment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Unapplies a policy from an application. Cascades to materialized alert rules and attestation records. Requires policy_assignment_delete permission."
+        },
+        {
+          "info": {
+            "name": "Check Assignment Compliance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id/check_compliance",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enqueues a Metrics → Alerts → Compliance chain scoped to a specific assignment. The window is taken from the request body's start_timestamp / end_timestamp. Requires policy_assignment_check_compliance permission."
+        },
+        {
+          "info": {
+            "name": "List Assignment Attestations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id/attestations",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists attestation history for a policy assignment. Requires policy_assignment_list_attestations permission."
+        },
+        {
+          "info": {
+            "name": "Create Attestation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id/attestations",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits an attestation for a policy assignment. Requires policy_assignment_create_attestation permission."
+        },
+        {
+          "info": {
+            "name": "Set Compliance Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id/compliance_status",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the compliance status for a policy assignment. Called by the data-plane compliance check executor. Requires policy_assignment_set_compliance_status permission."
+        },
+        {
+          "info": {
+            "name": "Update Assignment Job Chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/policy_assignments/:assignment_id/job_chain",
+            "params": [
+              {
+                "name": "assignment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sparse update for the downstream job IDs in the compliance chain (alerts_check_job_id, compliance_job_id). Called by the data-plane executors as the chain advances. metrics_calc_job_id is set by the operator at chain submission and is not accepted here. Requires policy_assignment_set_compliance_status permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

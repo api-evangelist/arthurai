@@ -1,0 +1,175 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Sessions API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Session Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/sessions",
+            "params": [
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Task IDs to filter on. At least one is required."
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "User IDs to filter on. Optional."
+              },
+              {
+                "name": "trace_ids",
+                "value": "",
+                "type": "query",
+                "description": "Trace IDs to filter on. Returns sessions containing at least one matching trace. Optional."
+              },
+              {
+                "name": "session_ids",
+                "value": "",
+                "type": "query",
+                "description": "Session IDs to filter on. Optional."
+              },
+              {
+                "name": "include_experiment_sessions",
+                "value": "",
+                "type": "query",
+                "description": "Include sessions originating from Arthur experiments. Defaults to false for most uses."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get session metadata with pagination and filtering. Returns aggregated session information."
+        },
+        {
+          "info": {
+            "name": "Get Session Traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/sessions/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all traces in a session. Returns list of full trace trees with existing metrics (no computation)."
+        },
+        {
+          "info": {
+            "name": "Compute Missing Session Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/sessions/:session_id/metrics",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all traces in a session and compute missing metrics. Returns list of full trace trees with computed metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

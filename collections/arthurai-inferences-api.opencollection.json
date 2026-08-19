@@ -1,0 +1,125 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Inferences API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query Inferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/inferences/query",
+            "params": [
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Task ID to filter on."
+              },
+              {
+                "name": "task_name",
+                "value": "",
+                "type": "query",
+                "description": "Task name to filter on."
+              },
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "query",
+                "description": "Conversation ID to filter on."
+              },
+              {
+                "name": "inference_id",
+                "value": "",
+                "type": "query",
+                "description": "Inference ID to filter on."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query",
+                "description": "User ID to filter on."
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date in ISO8601 string format."
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date in ISO8601 string format."
+              },
+              {
+                "name": "rule_types",
+                "value": "",
+                "type": "query",
+                "description": "List of RuleType to query for. Any inference that ran any rule in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_statuses, will return inferences with rules in the intersection of rule_types and rule_statuses."
+              },
+              {
+                "name": "rule_statuses",
+                "value": "",
+                "type": "query",
+                "description": "List of RuleResultEnum to query for. Any inference with any rule status in the list will be returned. Defaults to all statuses. If used in conjunction with with rule_types, will return inferences with rules in the intersection of rule_statuses and rule_types."
+              },
+              {
+                "name": "prompt_statuses",
+                "value": "",
+                "type": "query",
+                "description": "List of RuleResultEnum to query for at inference prompt stage level. Must be 'Pass' / 'Fail'. Defaults to both."
+              },
+              {
+                "name": "response_statuses",
+                "value": "",
+                "type": "query",
+                "description": "List of RuleResultEnum to query for at inference response stage level. Must be 'Pass' / 'Fail'. Defaults to both. Inferences missing responses will not be affected by this filter."
+              },
+              {
+                "name": "include_count",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include the total count of matching inferences. Set to False to improve query performance for large datasets. Count will be returned as -1 if set to False."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Paginated inference querying. See parameters for available filters. Includes inferences from archived tasks and rules."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

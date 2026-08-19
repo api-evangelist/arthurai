@@ -1,0 +1,1806 @@
+{
+  "item": [
+    {
+      "id": "811a06d9-eb04-4d67-8d7c-ccc0a40b523d",
+      "name": "Custom Aggregation Tests V1",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fb4466c2-c202-4f00-9c8e-79ac26283598",
+          "name": "Post Custom Aggregation Test.",
+          "request": {
+            "name": "Post Custom Aggregation Test.",
+            "description": {
+              "content": "Requires workspace_create_custom_aggregation_test permission. Will queue an async job to test the configured custom aggregation for the dataset. Requires dataset_create_data_retrieval on the dataset the test is configured to run against.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workspaces",
+                ":workspace_id",
+                "custom_aggregation_tests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspace_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"value_column\": \"<string>\",\n      \"timestamp_column\": \"<string>\",\n      \"metric_kind\": \"<string>\",\n      \"dimension_columns\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"metric_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"value_column\": \"<string>\",\n      \"timestamp_column\": \"<string>\",\n      \"metric_kind\": \"<string>\",\n      \"dimension_columns\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"<string>\",\n      \"friendly_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"<string>\"\n    },\n    {\n      \"parameter_key\": \"<string>\",\n      \"friendly_name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"<string>\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"<string>\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"<string>\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a6f506a5-b9f2-40aa-bc0b-bf7f531f212c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"multiclass_classification\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"custom\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    }\n  ],\n  \"sql\": \"string\",\n  \"name\": \"string\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"2026-01-16T14:38:42.592Z\",\n  \"end_timestamp\": \"1979-02-01T05:10:39.681Z\",\n  \"dataset_id\": \"1857e801-561d-e1b4-87c8-69a1bd9d5671\",\n  \"id\": \"95b7e674-af9d-8a88-1553-552f4110d1f8\",\n  \"authored_by\": {\n    \"created_at\": \"1958-12-24T19:16:14.211Z\",\n    \"updated_at\": \"1983-09-15T16:01:50.224Z\",\n    \"organization_id\": \"string\",\n    \"id\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"user_type\": \"data_plane\",\n    \"organization_name\": \"string\",\n    \"email\": \"lsGEYtAEM@vQKvyVbCJjIHpronQMsWnTDe.pbk\",\n    \"picture\": \"string\",\n    \"data_plane_id\": \"6b0225ee-3976-4eae-3f1b-1603a8b068ab\",\n    \"client_id\": \"string\"\n  },\n  \"workspace_id\": \"bf79b020-bcee-b6e4-60b6-0daeebeb25d8\",\n  \"test_status\": \"completed\",\n  \"created_at\": \"1990-10-11T03:54:46.835Z\",\n  \"job_id\": \"c7c82fd6-4ab7-8d40-5d0f-4e9a071a8fff\",\n  \"description\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc414b63-0200-4d51-aa15-bf5038fa46e3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"multiclass_classification\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5e7857c-341e-4962-a190-6f4131e7767b",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"multiclass_classification\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df3d01dd-a1db-402d-9eb5-ca7fda79f929",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"multiclass_classification\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66dd6258-79df-452a-940b-46d78449f987",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"multiclass_classification\"\n    }\n  ],\n  \"sql\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"<dateTime>\",\n  \"end_timestamp\": \"<dateTime>\",\n  \"dataset_id\": \"<uuid>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8744b1b6-12b2-47f7-a950-1118e74d0e71",
+          "name": "Get Custom Aggregation Tests.",
+          "request": {
+            "name": "Get Custom Aggregation Tests.",
+            "description": {
+              "content": "Requires workspace_list_custom_aggregation_tests permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workspaces",
+                ":workspace_id",
+                "custom_aggregation_tests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number to fetch."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "The number of items per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Search for custom aggregation tests by aggregation name or description."
+                },
+                {
+                  "disabled": false,
+                  "key": "dataset_id",
+                  "value": "<uuid>",
+                  "description": "Filter for tests using a specific dataset."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspace_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "da0b6a5c-4f40-4e46-ab8b-8c15ac3c2742",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"reported_aggregations\": [\n        {\n          \"metric_name\": \"string\",\n          \"description\": \"string\",\n          \"value_column\": \"string\",\n          \"timestamp_column\": \"string\",\n          \"metric_kind\": \"numeric\",\n          \"dimension_columns\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"metric_name\": \"string\",\n          \"description\": \"string\",\n          \"value_column\": \"string\",\n          \"timestamp_column\": \"string\",\n          \"metric_kind\": \"sketch\",\n          \"dimension_columns\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ],\n      \"aggregate_args\": [\n        {\n          \"parameter_key\": \"string\",\n          \"friendly_name\": \"string\",\n          \"description\": \"string\",\n          \"parameter_type\": \"dataset\",\n          \"model_problem_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"parameter_key\": \"string\",\n          \"friendly_name\": \"string\",\n          \"description\": \"string\",\n          \"parameter_type\": \"dataset\",\n          \"model_problem_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"sql\": \"string\",\n      \"name\": \"string\",\n      \"aggregation_arg_configuration\": [\n        {\n          \"arg_key\": \"string\",\n          \"arg_value\": {}\n        },\n        {\n          \"arg_key\": \"string\",\n          \"arg_value\": {}\n        }\n      ],\n      \"start_timestamp\": \"1988-12-11T13:19:15.881Z\",\n      \"end_timestamp\": \"1996-05-03T03:00:41.517Z\",\n      \"dataset_id\": \"15179bfb-07bf-4983-6314-dd92cd48eebb\",\n      \"id\": \"04453d36-e980-e50e-b45b-2543fa5b901e\",\n      \"authored_by\": {\n        \"created_at\": \"1982-04-29T20:35:09.565Z\",\n        \"updated_at\": \"1976-12-03T13:01:52.459Z\",\n        \"organization_id\": \"string\",\n        \"id\": \"string\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\",\n        \"user_type\": \"service_account\",\n        \"organization_name\": \"string\",\n        \"email\": \"APknyX2H2WkkKtU@vxMibhafwevQtaPiETtTMJXjuKB.xv\",\n        \"picture\": \"string\",\n        \"data_plane_id\": \"adaf9258-3dcd-5b2f-6a5f-5ed586bdf2a8\",\n        \"client_id\": \"string\"\n      },\n      \"workspace_id\": \"239365de-2c16-5d16-f8e3-64da88ac0ce3\",\n      \"test_status\": \"queued\",\n      \"created_at\": \"1968-10-11T09:13:17.223Z\",\n      \"job_id\": \"bc5b7893-a27f-878e-083b-77bed87a1f2b\",\n      \"description\": \"string\"\n    },\n    {\n      \"reported_aggregations\": [\n        {\n          \"metric_name\": \"string\",\n          \"description\": \"string\",\n          \"value_column\": \"string\",\n          \"timestamp_column\": \"string\",\n          \"metric_kind\": \"numeric\",\n          \"dimension_columns\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"metric_name\": \"string\",\n          \"description\": \"string\",\n          \"value_column\": \"string\",\n          \"timestamp_column\": \"string\",\n          \"metric_kind\": \"numeric\",\n          \"dimension_columns\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ],\n      \"aggregate_args\": [\n        {\n          \"parameter_key\": \"string\",\n          \"friendly_name\": \"string\",\n          \"description\": \"string\",\n          \"parameter_type\": \"dataset\",\n          \"model_problem_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"parameter_key\": \"string\",\n          \"friendly_name\": \"string\",\n          \"description\": \"string\",\n          \"parameter_type\": \"dataset\",\n          \"model_problem_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"sql\": \"string\",\n      \"name\": \"string\",\n      \"aggregation_arg_configuration\": [\n        {\n          \"arg_key\": \"string\",\n          \"arg_value\": {}\n        },\n        {\n          \"arg_key\": \"string\",\n          \"arg_value\": {}\n        }\n      ],\n      \"start_timestamp\": \"2021-01-24T11:49:22.472Z\",\n      \"end_timestamp\": \"1968-09-21T01:58:28.857Z\",\n      \"dataset_id\": \"75bb5645-3c41-7a30-6abe-f7e9c1b8fcfc\",\n      \"id\": \"836cb602-834b-c33a-35ed-438e8c8d3e28\",\n      \"authored_by\": {\n        \"created_at\": \"2022-04-30T10:00:44.344Z\",\n        \"updated_at\": \"1991-05-29T05:05:22.161Z\",\n        \"organization_id\": \"string\",\n        \"id\": \"string\",\n        \"first_name\": \"string\",\n        \"last_name\": \"string\",\n        \"user_type\": \"user\",\n        \"organization_name\": \"string\",\n        \"email\": \"KZEaKoturtmyEsg@goIEYETtyuNzuKUqVSjPXaBOZEpMVut.vqi\",\n        \"picture\": \"string\",\n        \"data_plane_id\": \"67a15337-80a8-6756-fdf9-6a3da1858b42\",\n        \"client_id\": \"string\"\n      },\n      \"workspace_id\": \"202b9bd6-887a-cd05-7a6e-ac462906768f\",\n      \"test_status\": \"completed\",\n      \"created_at\": \"2014-11-22T15:34:54.801Z\",\n      \"job_id\": \"7c8ec3f1-6071-9884-f466-acbebb70aba7\",\n      \"description\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"total_pages\": 5360,\n    \"total_records\": 8081,\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0afe8e4-404b-437d-87d9-44067ad70105",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53c19fc5-9993-4637-b71b-157ae125f8fd",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa03ff46-605a-4e11-a796-70e718e9ec66",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "custom_aggregation_tests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d6534f8-1a06-4c18-82cb-1d25128b3ca5",
+          "name": "Delete Custom Aggregation Test.",
+          "request": {
+            "name": "Delete Custom Aggregation Test.",
+            "description": {
+              "content": "Requires custom_aggregation_test_delete permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "custom_aggregation_tests",
+                ":custom_aggregation_test_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "custom_aggregation_test_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "dcb7dc27-de86-4fcc-a3af-d096fdd45cf7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "62a89bfe-2781-4b49-b740-ad5e53b51b54",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1b9c0c5-ad9d-471f-9346-bf55212fdfb5",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09d3d8ae-8131-4f78-8325-07724c42d16d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "70afbad3-076b-4061-8399-adaae96114cb",
+          "name": "Get Custom Aggregation Test By Id.",
+          "request": {
+            "name": "Get Custom Aggregation Test By Id.",
+            "description": {
+              "content": "Requires custom_aggregation_test_read permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "custom_aggregation_tests",
+                ":custom_aggregation_test_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "custom_aggregation_test_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "f364df00-2c78-4bd6-80e4-01b939004481",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reported_aggregations\": [\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"sketch\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"metric_name\": \"string\",\n      \"description\": \"string\",\n      \"value_column\": \"string\",\n      \"timestamp_column\": \"string\",\n      \"metric_kind\": \"numeric\",\n      \"dimension_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"aggregate_args\": [\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"custom\"\n    },\n    {\n      \"parameter_key\": \"string\",\n      \"friendly_name\": \"string\",\n      \"description\": \"string\",\n      \"parameter_type\": \"dataset\",\n      \"model_problem_type\": \"regression\"\n    }\n  ],\n  \"sql\": \"string\",\n  \"name\": \"string\",\n  \"aggregation_arg_configuration\": [\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    },\n    {\n      \"arg_key\": \"string\",\n      \"arg_value\": {}\n    }\n  ],\n  \"start_timestamp\": \"2026-01-16T14:38:42.592Z\",\n  \"end_timestamp\": \"1979-02-01T05:10:39.681Z\",\n  \"dataset_id\": \"1857e801-561d-e1b4-87c8-69a1bd9d5671\",\n  \"id\": \"95b7e674-af9d-8a88-1553-552f4110d1f8\",\n  \"authored_by\": {\n    \"created_at\": \"1958-12-24T19:16:14.211Z\",\n    \"updated_at\": \"1983-09-15T16:01:50.224Z\",\n    \"organization_id\": \"string\",\n    \"id\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"user_type\": \"data_plane\",\n    \"organization_name\": \"string\",\n    \"email\": \"lsGEYtAEM@vQKvyVbCJjIHpronQMsWnTDe.pbk\",\n    \"picture\": \"string\",\n    \"data_plane_id\": \"6b0225ee-3976-4eae-3f1b-1603a8b068ab\",\n    \"client_id\": \"string\"\n  },\n  \"workspace_id\": \"bf79b020-bcee-b6e4-60b6-0daeebeb25d8\",\n  \"test_status\": \"completed\",\n  \"created_at\": \"1990-10-11T03:54:46.835Z\",\n  \"job_id\": \"c7c82fd6-4ab7-8d40-5d0f-4e9a071a8fff\",\n  \"description\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "014f0e61-f537-4d82-9695-cf8fffbd8790",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01d8e4b7-3b21-42aa-b4ba-49e498c25fca",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39b4d045-3068-4ce3-a62f-7632bc5c95ea",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "acc704d3-1ab3-43f8-82a3-57f6d82dad96",
+          "name": "Post Custom Aggregation Test Results.",
+          "request": {
+            "name": "Post Custom Aggregation Test Results.",
+            "description": {
+              "content": "Requires custom_aggregation_test_create_results permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "custom_aggregation_tests",
+                ":custom_aggregation_test_id",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "custom_aggregation_test_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"<string>\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aca35ed9-4f33-4dcc-80f7-469bc5771780",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total_metrics\": 5077,\n  \"num_counter_metrics\": 2660,\n  \"num_sketch_metrics\": 360,\n  \"num_series\": 9069\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d765618a-20c1-4fad-b76b-f4610efc6d4e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b258240-7de5-4f18-8875-01eb8918e6b0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2c3f8d9-9e37-42f8-b42c-5827cd2af2a7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3be9f600-8482-4471-8cce-55e2acb834d3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"numeric_series\": [\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"dimensions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d991a51-d9b1-4382-9429-8f10b109c7c0",
+          "name": "Get Custom Aggregation Test Results By Id.",
+          "request": {
+            "name": "Get Custom Aggregation Test Results By Id.",
+            "description": {
+              "content": "Requires custom_aggregation_test_read_results permission. Also requires dataset_get_data_retrieval on the dataset the custom aggregation test is configured against.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "custom_aggregation_tests",
+                ":custom_aggregation_test_id",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number to fetch."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "The number of items per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_range_after",
+                  "value": "<dateTime>",
+                  "description": "Filter results to only include metrics with timestamp after this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_range_before",
+                  "value": "<dateTime>",
+                  "description": "Filter results to only include metrics with timestamp before this time."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "custom_aggregation_test_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "9f0d4938-c834-4fbc-a522-b710490fc0b6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "time_range_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_range_before",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"test_run_id\": \"ca774a28-e433-26cd-f006-1abb1b6b30ee\",\n      \"metric_name\": \"string\",\n      \"timestamp\": \"2025-03-03T12:12:59.723Z\",\n      \"value\": {\n        \"value\": 6089.549178261994,\n        \"metric_kind\": \"numeric\"\n      },\n      \"dimensions\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ]\n    },\n    {\n      \"test_run_id\": \"ca30bcf6-77f2-70a0-7c17-26e77e8eff0e\",\n      \"metric_name\": \"string\",\n      \"timestamp\": \"1992-04-06T19:49:20.380Z\",\n      \"value\": {\n        \"value\": 3891.5704917535345,\n        \"metric_kind\": \"numeric\"\n      },\n      \"dimensions\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"total_pages\": 8018,\n    \"total_records\": 8944,\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c16e5d8-2397-4df1-a379-681ddbf62b9e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "time_range_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_range_before",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2ed6b48-ee3a-4926-b2ed-c5d49fa0143b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "time_range_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_range_before",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cdb0799-eabb-474f-b9d0-189c1467798c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "custom_aggregation_tests",
+                    ":custom_aggregation_test_id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "time_range_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_range_before",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "custom_aggregation_test_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "94484c1d-ea73-4ed5-9e8c-109833cfdc80",
+    "name": "Arthur GenAI Engine Agent Discovery Custom Aggregation Tests V1 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

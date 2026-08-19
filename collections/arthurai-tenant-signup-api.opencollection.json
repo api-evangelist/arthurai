@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Tenant Signup API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tenant Signup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Tenant Signup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/tenant/signup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Public tenant signup. Accepts try-it-out onboarding form data, persists an onboarding submission, and creates a new organization, a default demo task scoped to that org, and a TENANT-USER API key with `org_scope` set to the new org. Returns the four identifiers; the raw `api_key` value appears only in this response (the DB stores only its hash). Gated by GENAI_ENGINE_DEMO_MODE — returns 404 when disabled."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

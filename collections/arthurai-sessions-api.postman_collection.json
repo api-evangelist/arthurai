@@ -1,0 +1,778 @@
+{
+  "item": [
+    {
+      "id": "75af9c05-5f1d-49cb-8860-2e0a38145417",
+      "name": "Sessions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "efc8c904-5585-4995-aa97-3facb0cf1095",
+          "name": "List Session Metadata",
+          "request": {
+            "name": "List Session Metadata",
+            "description": {
+              "content": "Get session metadata with pagination and filtering. Returns aggregated session information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "traces",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "task_ids",
+                  "value": "<string>",
+                  "description": "(Required) Task IDs to filter on. At least one is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "Inclusive start date in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "Exclusive end date in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>",
+                  "description": "User IDs to filter on. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_ids",
+                  "value": "<string>",
+                  "description": "User IDs to filter on. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "trace_ids",
+                  "value": "<string>",
+                  "description": "Trace IDs to filter on. Returns sessions containing at least one matching trace. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "trace_ids",
+                  "value": "<string>",
+                  "description": "Trace IDs to filter on. Returns sessions containing at least one matching trace. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "session_ids",
+                  "value": "<string>",
+                  "description": "Session IDs to filter on. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "session_ids",
+                  "value": "<string>",
+                  "description": "Session IDs to filter on. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_experiment_sessions",
+                  "value": "false",
+                  "description": "Include sessions originating from Arthur experiments. Defaults to false for most uses."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "debbf9a8-8673-4e40-b922-58107d8293fe",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_experiment_sessions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 8493,\n  \"sessions\": [\n    {\n      \"session_id\": \"string\",\n      \"task_id\": \"string\",\n      \"trace_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"trace_count\": 4940,\n      \"span_count\": 4768,\n      \"earliest_start_time\": \"2010-08-30T14:41:21.870Z\",\n      \"latest_end_time\": \"1996-06-17T08:27:10.233Z\",\n      \"duration_ms\": 7742.15150151729,\n      \"prompt_token_count\": 3059,\n      \"completion_token_count\": 8782,\n      \"total_token_count\": 5137,\n      \"prompt_token_cost\": 1722.8942821079052,\n      \"completion_token_cost\": 4035.616163470488,\n      \"total_token_cost\": 1484.33277283344,\n      \"user_id\": \"string\"\n    },\n    {\n      \"session_id\": \"string\",\n      \"task_id\": \"string\",\n      \"trace_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"trace_count\": 258,\n      \"span_count\": 7748,\n      \"earliest_start_time\": \"2006-08-28T03:09:02.312Z\",\n      \"latest_end_time\": \"1988-05-21T06:41:52.743Z\",\n      \"duration_ms\": 7346.409960431601,\n      \"prompt_token_count\": 9809,\n      \"completion_token_count\": 9283,\n      \"total_token_count\": 2947,\n      \"prompt_token_cost\": 4373.5101419703315,\n      \"completion_token_cost\": 5225.711617094922,\n      \"total_token_cost\": 2239.5840338685766,\n      \"user_id\": \"string\"\n    }\n  ],\n  \"display_currency\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a837d8f-f679-45ee-9100-3e21c862732f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "session_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_experiment_sessions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "689195c3-8136-4035-8fdf-457cc4710464",
+          "name": "Get Session Traces",
+          "request": {
+            "name": "Get Session Traces",
+            "description": {
+              "content": "Get all traces in a session. Returns list of full trace trees with existing metrics (no computation).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "traces",
+                "sessions",
+                ":session_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "session_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c08d0f4a-974c-4ab8-87df-70be9acceb91",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"count\": 105,\n  \"traces\": [\n    {\n      \"trace_id\": \"string\",\n      \"start_time\": \"1988-09-10T09:51:28.722Z\",\n      \"end_time\": \"2013-02-11T05:58:16.122Z\",\n      \"prompt_token_count\": 1567,\n      \"completion_token_count\": 8084,\n      \"total_token_count\": 7190,\n      \"prompt_token_cost\": 1374.3030882687435,\n      \"completion_token_cost\": 7554.661142617737,\n      \"total_token_cost\": 937.1090685010697,\n      \"input_content\": \"string\",\n      \"output_content\": \"string\",\n      \"annotations\": [\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1993-06-23T05:01:24.147Z\",\n          \"updated_at\": \"1991-07-23T16:51:37.860Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 1918,\n          \"annotation_score\": 4288,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 8079.847172201128\n        },\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1990-10-09T09:55:44.379Z\",\n          \"updated_at\": \"2007-07-06T04:23:05.112Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 2852,\n          \"annotation_score\": 3824,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 1813.062052254948\n        }\n      ]\n    },\n    {\n      \"trace_id\": \"string\",\n      \"start_time\": \"1970-03-07T18:36:09.242Z\",\n      \"end_time\": \"2023-03-02T07:12:02.852Z\",\n      \"prompt_token_count\": 7968,\n      \"completion_token_count\": 5405,\n      \"total_token_count\": 9470,\n      \"prompt_token_cost\": 7180.015435661989,\n      \"completion_token_cost\": 7943.239820391586,\n      \"total_token_cost\": 285.74517385558164,\n      \"input_content\": \"string\",\n      \"output_content\": \"string\",\n      \"annotations\": [\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"continuous_eval\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1959-07-27T18:02:51.117Z\",\n          \"updated_at\": \"1951-05-02T10:05:26.925Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 8520,\n          \"annotation_score\": 7568,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 3263.0309714125283\n        },\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"2024-04-19T17:30:14.207Z\",\n          \"updated_at\": \"2023-03-05T22:07:23.683Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 3403,\n          \"annotation_score\": 3098,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 1226.0006186197381\n        }\n      ]\n    }\n  ],\n  \"display_currency\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da162452-246b-4b66-96ec-ed4e8420902a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d38fe2c0-b1e1-48b3-8416-4ac1a10a2b47",
+          "name": "Compute Missing Session Metrics",
+          "request": {
+            "name": "Compute Missing Session Metrics",
+            "description": {
+              "content": "Get all traces in a session and compute missing metrics. Returns list of full trace trees with computed metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "traces",
+                "sessions",
+                ":session_id",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "session_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5131a23c-2074-417f-ad3b-232c8fc1d402",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions",
+                    ":session_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"count\": 105,\n  \"traces\": [\n    {\n      \"trace_id\": \"string\",\n      \"start_time\": \"1988-09-10T09:51:28.722Z\",\n      \"end_time\": \"2013-02-11T05:58:16.122Z\",\n      \"prompt_token_count\": 1567,\n      \"completion_token_count\": 8084,\n      \"total_token_count\": 7190,\n      \"prompt_token_cost\": 1374.3030882687435,\n      \"completion_token_cost\": 7554.661142617737,\n      \"total_token_cost\": 937.1090685010697,\n      \"input_content\": \"string\",\n      \"output_content\": \"string\",\n      \"annotations\": [\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1993-06-23T05:01:24.147Z\",\n          \"updated_at\": \"1991-07-23T16:51:37.860Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 1918,\n          \"annotation_score\": 4288,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 8079.847172201128\n        },\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1990-10-09T09:55:44.379Z\",\n          \"updated_at\": \"2007-07-06T04:23:05.112Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 2852,\n          \"annotation_score\": 3824,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 1813.062052254948\n        }\n      ]\n    },\n    {\n      \"trace_id\": \"string\",\n      \"start_time\": \"1970-03-07T18:36:09.242Z\",\n      \"end_time\": \"2023-03-02T07:12:02.852Z\",\n      \"prompt_token_count\": 7968,\n      \"completion_token_count\": 5405,\n      \"total_token_count\": 9470,\n      \"prompt_token_cost\": 7180.015435661989,\n      \"completion_token_cost\": 7943.239820391586,\n      \"total_token_cost\": 285.74517385558164,\n      \"input_content\": \"string\",\n      \"output_content\": \"string\",\n      \"annotations\": [\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"continuous_eval\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"1959-07-27T18:02:51.117Z\",\n          \"updated_at\": \"1951-05-02T10:05:26.925Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 8520,\n          \"annotation_score\": 7568,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 3263.0309714125283\n        },\n        {\n          \"id\": \"string\",\n          \"annotation_type\": \"human\",\n          \"trace_id\": \"string\",\n          \"created_at\": \"2024-04-19T17:30:14.207Z\",\n          \"updated_at\": \"2023-03-05T22:07:23.683Z\",\n          \"continuous_eval_id\": \"string\",\n          \"continuous_eval_name\": \"string\",\n          \"eval_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"eval_name\": \"string\",\n          \"eval_version\": 3403,\n          \"annotation_score\": 3098,\n          \"annotation_description\": \"string\",\n          \"input_variables\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"run_status\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"cost\": 1226.0006186197381\n        }\n      ]\n    }\n  ],\n  \"display_currency\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d87eee1-b92c-4f0c-bd4e-2c68f3c2ed1d",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "traces",
+                    "sessions",
+                    ":session_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "session_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e25076e4-8b86-4668-8347-b3a7a39c7df9",
+    "name": "Arthur GenAI Engine Agent Discovery Sessions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Alerts V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Alerts V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Model Alerts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alerts",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort by."
+              },
+              {
+                "name": "alert_rule_ids",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the alert rule to filter by."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "The bound to filter by."
+              },
+              {
+                "name": "time_from",
+                "value": "",
+                "type": "query",
+                "description": "The start timestamp to filter by."
+              },
+              {
+                "name": "time_to",
+                "value": "",
+                "type": "query",
+                "description": "The end timestamp to filter by."
+              },
+              {
+                "name": "created_at_from",
+                "value": "",
+                "type": "query",
+                "description": "Filter alerts created at or after this timestamp."
+              },
+              {
+                "name": "created_at_to",
+                "value": "",
+                "type": "query",
+                "description": "Filter alerts created at or before this timestamp."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a list of alerts associated with a model. Requires model_list_alerts permission."
+        },
+        {
+          "info": {
+            "name": "Create Model Alerts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alerts",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a list of alerts associated with a model. Requires model_create_alert permission."
+        },
+        {
+          "info": {
+            "name": "Get Model Alert Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alert_logs",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "alert_rule_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by alert rule ID."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status."
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Filter logs with bucket timestamp at or after this time."
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "Filter logs with bucket timestamp at or before this time."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns alert rule evaluation logs for a model. Requires model_list_alerts permission."
+        },
+        {
+          "info": {
+            "name": "Create Model Alert Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alert_logs",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates alert rule evaluation logs for a model. Requires model_create_alert permission."
+        },
+        {
+          "info": {
+            "name": "Get Workspace Alerts.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/alerts",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "alert_rule_ids",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the alert rule to filter by."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "The bound to filter by."
+              },
+              {
+                "name": "time_from",
+                "value": "",
+                "type": "query",
+                "description": "The start timestamp to filter by."
+              },
+              {
+                "name": "time_to",
+                "value": "",
+                "type": "query",
+                "description": "The end timestamp to filter by."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns alerts from all models in the workspace matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires workspace_list_alerts permission."
+        },
+        {
+          "info": {
+            "name": "Get Workspace Alerts Grouped.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/alerts/grouped",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "alert_rule_ids",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the alert rule to filter by."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "The bound to filter by."
+              },
+              {
+                "name": "time_from",
+                "value": "",
+                "type": "query",
+                "description": "The start timestamp to filter by. Defaults to 7 days ago if not specified."
+              },
+              {
+                "name": "time_to",
+                "value": "",
+                "type": "query",
+                "description": "The end timestamp to filter by. Defaults to now if not specified."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns alerts from all models in the workspace grouped by alert rule. Supports pagination and time range filtering with a default of the last 7 days. Requires workspace_list_alerts permission."
+        },
+        {
+          "info": {
+            "name": "Get Alert By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/alerts/:alert_id",
+            "params": [
+              {
+                "name": "alert_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single alert by ID. Requires model_alert_read permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

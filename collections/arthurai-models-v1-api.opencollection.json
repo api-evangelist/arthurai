@@ -1,0 +1,393 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Models V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Models V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Model By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single model by ID. Requires model_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Model",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/models/:model_id",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a single model. Requires model_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Model By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/models/:model_id",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a single model. Requires model_delete permission."
+        },
+        {
+          "info": {
+            "name": "Update Model Metric Configuration By Model Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/metric_config",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a single model metric spec. Requires model_put_metric_config permission."
+        },
+        {
+          "info": {
+            "name": "Update Model Metrics Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/schedule",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or overwrites the model metrics job schedule. Requires model_metrics_schedule_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Model Metrics Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/schedule",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes metrics job schedule. Requires model_metrics_schedule_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Workspace Models.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/models",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models based on a specific dataset ID."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models with a name similar to this name."
+              },
+              {
+                "name": "onboarding_identifier",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models whose 'onboarding_identifier' matches the provided string."
+              },
+              {
+                "name": "infrastructure",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by infrastructure type."
+              },
+              {
+                "name": "model_problem_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by problem type."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns the applications the requesting user has access to across all projects in the workspace, matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires the workspace_list_models permission (granted by the Workspace Reader role); results are further limited to the projects in which the user has access to models."
+        },
+        {
+          "info": {
+            "name": "Get Organization Models.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/models",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models based on a specific dataset ID."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models with a name similar to this name."
+              },
+              {
+                "name": "onboarding_identifier",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models whose 'onboarding_identifier' matches the provided string."
+              },
+              {
+                "name": "infrastructure",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by infrastructure type."
+              },
+              {
+                "name": "model_problem_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by problem type."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns all models (applications) across every workspace in the organization, matching the filter and sorting criteria. If multiple filters are specified, only results matching all criteria are returned. Requires the organization_list_models permission; results are further limited to the projects in which the caller has access to models."
+        },
+        {
+          "info": {
+            "name": "List Models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/models",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the models that are based on this dataset id. Optional."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the models with a name similar to this name. Optional."
+              },
+              {
+                "name": "onboarding_identifier",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for models whose 'onboarding_identifier' matches the provided string."
+              },
+              {
+                "name": "infrastructure",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by infrastructure type."
+              },
+              {
+                "name": "model_problem_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter for models by problem type."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns models matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires project_list_models permission."
+        },
+        {
+          "info": {
+            "name": "Create Model",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/models",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a single model. Requires project_create_model permission."
+        },
+        {
+          "info": {
+            "name": "Generates A Metrics Spec.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/generate_metrics_spec",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a metric spec for a model based on one or several datasets. Requires project_generate_metrics_spec permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

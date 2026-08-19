@@ -1,0 +1,250 @@
+{
+  "item": [
+    {
+      "id": "320ab186-f824-489c-891a-92d149b51767",
+      "name": "ML Evals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "750eb361-b1e7-4565-a895-ee8dadaeba47",
+          "name": "Save an ML eval",
+          "request": {
+            "name": "Save an ML eval",
+            "description": {
+              "content": "Save an ML eval. If an eval with the same name exists, a new version is created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "ml_evals",
+                ":eval_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eval_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eval_type\": \"<string>\",\n  \"config\": {\n    \"disabled_pii_entities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"pii_confidence_threshold\": \"<number>\",\n    \"allow_list\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "62ea0938-0b81-46c8-a80b-cea7998023ef",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "ml_evals",
+                    ":eval_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eval_type\": \"llm_as_a_judge\",\n  \"config\": {\n    \"disabled_pii_entities\": [\n      \"string\",\n      \"string\"\n    ],\n    \"pii_confidence_threshold\": 0.23406716401918926,\n    \"allow_list\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"created_at\": \"1996-06-08T14:37:55.416Z\",\n  \"eval_kind\": \"llm_as_a_judge\",\n  \"model_name\": \"string\",\n  \"model_provider\": \"bedrock\",\n  \"instructions\": \"string\",\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 7229.320406875496,\n    \"temperature\": 4230.803094532439,\n    \"top_p\": 240.44240524888295,\n    \"max_tokens\": 862,\n    \"stop\": \"string\",\n    \"presence_penalty\": 1998.7971570410878,\n    \"frequency_penalty\": 7754.50576475745,\n    \"seed\": 6753,\n    \"logprobs\": false,\n    \"top_logprobs\": 2672,\n    \"logit_bias\": [\n      {\n        \"token_id\": 8214,\n        \"bias\": 51.2169877626433\n      },\n      {\n        \"token_id\": 8818,\n        \"bias\": -81.11944342614213\n      }\n    ],\n    \"max_completion_tokens\": 4823,\n    \"reasoning_effort\": \"low\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 9190\n    }\n  },\n  \"deleted_at\": \"1980-02-28T03:25:18.934Z\",\n  \"version\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29395822-c63e-468c-9b4e-a09724d477d1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "ml_evals",
+                    ":eval_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eval_type\": \"llm_as_a_judge\",\n  \"config\": {\n    \"disabled_pii_entities\": [\n      \"string\",\n      \"string\"\n    ],\n    \"pii_confidence_threshold\": 0.23406716401918926,\n    \"allow_list\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "23fa2d7f-3b1a-4dfc-9652-d875b7f90f1b",
+    "name": "Arthur GenAI Engine Agent Discovery ML Evals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery ML Evals API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ML Evals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Save an ML eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/tasks/:task_id/ml_evals/:eval_name",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Save an ML eval. If an eval with the same name exists, a new version is created."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2233 @@
+{
+  "item": [
+    {
+      "id": "3d75855d-b281-4479-a14e-c7486116897f",
+      "name": "RAG Settings",
+      "description": {
+        "content": "Endpoints for RAG setting management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "df8a1773-d0c9-4297-b18d-c3eed4d96b5d",
+          "name": "Create Rag Search Settings",
+          "request": {
+            "name": "Create Rag Search Settings",
+            "description": {
+              "content": "Create a new RAG search settings configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "rag_search_settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) ID of the task to create the search settings configuration under."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": {\n    \"collection_name\": \"<string>\",\n    \"limit\": \"<integer>\",\n    \"include_vector\": \"<boolean>\",\n    \"offset\": \"<integer>\",\n    \"auto_limit\": \"<integer>\",\n    \"return_metadata\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"return_properties\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"fusion_type\": \"<string>\",\n    \"max_vector_distance\": \"<number>\",\n    \"minimum_match_or_operator\": \"<integer>\",\n    \"and_operator\": \"<boolean>\",\n    \"target_vector\": \"<string>\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"rag_provider_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c868b912-1c91-4a47-86d6-c5269849e792",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_search_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) ID of the task to create the search settings configuration under."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 7594,\n    \"include_vector\": true,\n    \"offset\": 7853,\n    \"auto_limit\": 3706,\n    \"return_metadata\": [\n      \"is_consistent\",\n      \"is_consistent\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 9844.968665765937,\n    \"minimum_match_or_operator\": 68,\n    \"and_operator\": true,\n    \"target_vector\": \"string\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"rag_provider_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"5283a90d-3d54-68fa-cc03-37532aa2f160\",\n  \"task_id\": \"string\",\n  \"name\": \"string\",\n  \"latest_version_number\": 2012,\n  \"latest_version\": {\n    \"setting_configuration_id\": \"d8812426-3cc6-33e1-eb3e-22fbf6fa76ff\",\n    \"version_number\": 680,\n    \"created_at\": 1806,\n    \"updated_at\": 2419,\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"settings\": {\n      \"collection_name\": \"string\",\n      \"limit\": 9205,\n      \"include_vector\": false,\n      \"offset\": 8326,\n      \"auto_limit\": 1799,\n      \"return_metadata\": [\n        \"creation_time\",\n        \"is_consistent\"\n      ],\n      \"return_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"rag_provider\": \"weaviate\",\n      \"search_kind\": \"hybrid_search\",\n      \"alpha\": 0.7,\n      \"query_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"fusion_type\": \"FUSION_TYPE_RELATIVE_SCORE\",\n      \"max_vector_distance\": 9329.791499162096,\n      \"minimum_match_or_operator\": 1168,\n      \"and_operator\": false,\n      \"target_vector\": \"string\"\n    },\n    \"deleted_at\": 3100\n  },\n  \"created_at\": 4743,\n  \"updated_at\": 1694,\n  \"rag_provider_id\": \"b0ff2f89-7f65-6097-8d9f-daae7f864b15\",\n  \"description\": \"string\",\n  \"all_possible_tags\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "809ce16c-b679-4bf0-ad36-dcfe243e8809",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_search_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) ID of the task to create the search settings configuration under."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 7594,\n    \"include_vector\": true,\n    \"offset\": 7853,\n    \"auto_limit\": 3706,\n    \"return_metadata\": [\n      \"is_consistent\",\n      \"is_consistent\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 9844.968665765937,\n    \"minimum_match_or_operator\": 68,\n    \"and_operator\": true,\n    \"target_vector\": \"string\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"rag_provider_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b11a3f9e-dbf4-414b-9d74-b38e1c2f1562",
+          "name": "Get Task Rag Search Settings",
+          "request": {
+            "name": "Get Task Rag Search Settings",
+            "description": {
+              "content": "Get list of RAG search setting configurations for the task.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "rag_search_settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "config_name",
+                  "value": "<string>",
+                  "description": "Rag search setting configuration name substring to search for."
+                },
+                {
+                  "disabled": false,
+                  "key": "rag_provider_ids",
+                  "value": "<uuid>",
+                  "description": "List of rag provider configuration IDs to filter for."
+                },
+                {
+                  "disabled": false,
+                  "key": "rag_provider_ids",
+                  "value": "<uuid>",
+                  "description": "List of rag provider configuration IDs to filter for."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) ID of the task to fetch the provider connections for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "745da256-30e2-485f-a202-a11f2978226d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_search_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "config_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rag_provider_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "rag_provider_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) ID of the task to fetch the provider connections for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 3240,\n  \"rag_provider_setting_configurations\": [\n    {\n      \"id\": \"e1565739-4654-a77b-7e84-f5ebf398925d\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"latest_version_number\": 241,\n      \"latest_version\": {\n        \"setting_configuration_id\": \"8be549dc-2750-d664-6b6f-e9d588a7c6bd\",\n        \"version_number\": 3242,\n        \"created_at\": 9414,\n        \"updated_at\": 7712,\n        \"tags\": [\n          \"string\",\n          \"string\"\n        ],\n        \"settings\": {\n          \"collection_name\": \"string\",\n          \"limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"include_vector\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"offset\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"auto_limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"return_metadata\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"return_properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rag_provider\": \"weaviate\",\n          \"search_kind\": \"hybrid_search\",\n          \"alpha\": 0.7,\n          \"query_properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fusion_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"max_vector_distance\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"minimum_match_or_operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"and_operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"target_vector\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"deleted_at\": 3913\n      },\n      \"created_at\": 9661,\n      \"updated_at\": 563,\n      \"rag_provider_id\": \"fd5dd0e9-9489-ad56-53d8-5ebf907692d5\",\n      \"description\": \"string\",\n      \"all_possible_tags\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"15248362-21f0-5b94-0f4b-cc2ca30905fe\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"latest_version_number\": 8734,\n      \"latest_version\": {\n        \"setting_configuration_id\": \"eb2d5b1b-8131-89c5-4cbf-302033607a6c\",\n        \"version_number\": 7984,\n        \"created_at\": 5011,\n        \"updated_at\": 9798,\n        \"tags\": [\n          \"string\",\n          \"string\"\n        ],\n        \"settings\": {\n          \"collection_name\": \"string\",\n          \"limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"include_vector\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"offset\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"auto_limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"return_metadata\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"return_properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rag_provider\": \"weaviate\",\n          \"search_kind\": \"hybrid_search\",\n          \"alpha\": 0.7,\n          \"query_properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fusion_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"max_vector_distance\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"minimum_match_or_operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"and_operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"target_vector\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"deleted_at\": 1626\n      },\n      \"created_at\": 8764,\n      \"updated_at\": 4618,\n      \"rag_provider_id\": \"61e62a96-0d06-f260-5145-50bf908f9b0c\",\n      \"description\": \"string\",\n      \"all_possible_tags\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ceac5b3-80b8-4577-a716-e057169508e3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_search_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "config_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rag_provider_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "rag_provider_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) ID of the task to fetch the provider connections for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae22f3af-66bb-4055-a892-ba75fc98e5ce",
+          "name": "Get Rag Search Setting",
+          "request": {
+            "name": "Get Rag Search Setting",
+            "description": {
+              "content": "Get a single RAG setting configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of RAG search setting configuration."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fb078750-4516-4d7e-a049-7bc4e2bdbddf",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"5283a90d-3d54-68fa-cc03-37532aa2f160\",\n  \"task_id\": \"string\",\n  \"name\": \"string\",\n  \"latest_version_number\": 2012,\n  \"latest_version\": {\n    \"setting_configuration_id\": \"d8812426-3cc6-33e1-eb3e-22fbf6fa76ff\",\n    \"version_number\": 680,\n    \"created_at\": 1806,\n    \"updated_at\": 2419,\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"settings\": {\n      \"collection_name\": \"string\",\n      \"limit\": 9205,\n      \"include_vector\": false,\n      \"offset\": 8326,\n      \"auto_limit\": 1799,\n      \"return_metadata\": [\n        \"creation_time\",\n        \"is_consistent\"\n      ],\n      \"return_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"rag_provider\": \"weaviate\",\n      \"search_kind\": \"hybrid_search\",\n      \"alpha\": 0.7,\n      \"query_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"fusion_type\": \"FUSION_TYPE_RELATIVE_SCORE\",\n      \"max_vector_distance\": 9329.791499162096,\n      \"minimum_match_or_operator\": 1168,\n      \"and_operator\": false,\n      \"target_vector\": \"string\"\n    },\n    \"deleted_at\": 3100\n  },\n  \"created_at\": 4743,\n  \"updated_at\": 1694,\n  \"rag_provider_id\": \"b0ff2f89-7f65-6097-8d9f-daae7f864b15\",\n  \"description\": \"string\",\n  \"all_possible_tags\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57ef6f49-9b27-42e3-9321-d202a409fed3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9591b8f0-f47f-4c30-b61a-d51769f21d69",
+          "name": "Delete Rag Search Setting",
+          "request": {
+            "name": "Delete Rag Search Setting",
+            "description": {
+              "content": "Delete a RAG search setting configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of RAG setting configuration."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2dbd1c00-e12a-452d-880c-fcb95f67650d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG setting configuration."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d8e6615-4faa-4d07-b099-f62abd368596",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG setting configuration."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20079cdb-ddb0-45cb-9f61-2c9fbed00a43",
+          "name": "Update Rag Search Settings",
+          "request": {
+            "name": "Update Rag Search Settings",
+            "description": {
+              "content": "Update a single RAG search setting configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of the RAG setting configuration to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"rag_provider_id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "05ab0814-e1b7-4d3d-a22e-f244fbcc57fe",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG setting configuration to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"rag_provider_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"5283a90d-3d54-68fa-cc03-37532aa2f160\",\n  \"task_id\": \"string\",\n  \"name\": \"string\",\n  \"latest_version_number\": 2012,\n  \"latest_version\": {\n    \"setting_configuration_id\": \"d8812426-3cc6-33e1-eb3e-22fbf6fa76ff\",\n    \"version_number\": 680,\n    \"created_at\": 1806,\n    \"updated_at\": 2419,\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"settings\": {\n      \"collection_name\": \"string\",\n      \"limit\": 9205,\n      \"include_vector\": false,\n      \"offset\": 8326,\n      \"auto_limit\": 1799,\n      \"return_metadata\": [\n        \"creation_time\",\n        \"is_consistent\"\n      ],\n      \"return_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"rag_provider\": \"weaviate\",\n      \"search_kind\": \"hybrid_search\",\n      \"alpha\": 0.7,\n      \"query_properties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"fusion_type\": \"FUSION_TYPE_RELATIVE_SCORE\",\n      \"max_vector_distance\": 9329.791499162096,\n      \"minimum_match_or_operator\": 1168,\n      \"and_operator\": false,\n      \"target_vector\": \"string\"\n    },\n    \"deleted_at\": 3100\n  },\n  \"created_at\": 4743,\n  \"updated_at\": 1694,\n  \"rag_provider_id\": \"b0ff2f89-7f65-6097-8d9f-daae7f864b15\",\n  \"description\": \"string\",\n  \"all_possible_tags\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb27a45e-0df3-4497-8259-239c7c855584",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG setting configuration to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"rag_provider_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e4d8423-04e1-4512-a6d3-ca2365218294",
+          "name": "Create Rag Search Settings Version",
+          "request": {
+            "name": "Create Rag Search Settings Version",
+            "description": {
+              "content": "Create a new version for an existing RAG search settings configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of the RAG settings configuration to create the new version for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": {\n    \"collection_name\": \"<string>\",\n    \"limit\": \"<integer>\",\n    \"include_vector\": \"<boolean>\",\n    \"offset\": \"<integer>\",\n    \"auto_limit\": \"<integer>\",\n    \"return_metadata\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"return_properties\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"fusion_type\": \"<string>\",\n    \"max_vector_distance\": \"<number>\",\n    \"minimum_match_or_operator\": \"<integer>\",\n    \"and_operator\": \"<boolean>\",\n    \"target_vector\": \"<string>\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7e0005c3-696d-464b-a876-2f0c8e4a7864",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG settings configuration to create the new version for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3398,\n    \"include_vector\": false,\n    \"offset\": 8315,\n    \"auto_limit\": 281,\n    \"return_metadata\": [\n      \"last_update_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 315.231692377399,\n    \"minimum_match_or_operator\": 1960,\n    \"and_operator\": false,\n    \"target_vector\": \"string\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"setting_configuration_id\": \"2be0b38f-d147-0e11-65ab-5545c767eb37\",\n  \"version_number\": 3409,\n  \"created_at\": 7562,\n  \"updated_at\": 6230,\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3716,\n    \"include_vector\": true,\n    \"offset\": 6792,\n    \"auto_limit\": 4393,\n    \"return_metadata\": [\n      \"creation_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"search_kind\": \"hybrid_search\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 5009.75967138936,\n    \"minimum_match_or_operator\": 4512,\n    \"and_operator\": true,\n    \"target_vector\": \"string\"\n  },\n  \"deleted_at\": 7909\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bc97c2a-9283-4245-9216-35e32196fc75",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG settings configuration to create the new version for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3398,\n    \"include_vector\": false,\n    \"offset\": 8315,\n    \"auto_limit\": 281,\n    \"return_metadata\": [\n      \"last_update_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 315.231692377399,\n    \"minimum_match_or_operator\": 1960,\n    \"and_operator\": false,\n    \"target_vector\": \"string\",\n    \"search_kind\": \"hybrid_search\"\n  },\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fcd816a-74ca-4a8d-baf2-c59253e9ad10",
+          "name": "Get Rag Search Setting Configuration Versions",
+          "request": {
+            "name": "Get Rag Search Setting Configuration Versions",
+            "description": {
+              "content": "Get list of versions for the RAG search setting configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>",
+                  "description": "List of tags to filter for versions tagged with any matching tag."
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>",
+                  "description": "List of tags to filter for versions tagged with any matching tag."
+                },
+                {
+                  "disabled": false,
+                  "key": "version_numbers",
+                  "value": "<integer>",
+                  "description": "List of version numbers to filter for."
+                },
+                {
+                  "disabled": false,
+                  "key": "version_numbers",
+                  "value": "<integer>",
+                  "description": "List of version numbers to filter for."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of the RAG search setting configuration to get versions for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "81064233-7c14-4258-9ecd-2b41b8f75a52",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "version_numbers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "version_numbers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG search setting configuration to get versions for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 991,\n  \"rag_provider_setting_configurations\": [\n    {\n      \"setting_configuration_id\": \"ff324cf5-b740-3b73-abcf-f5583c419283\",\n      \"version_number\": 1134,\n      \"created_at\": 6969,\n      \"updated_at\": 5458,\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"settings\": {\n        \"collection_name\": \"string\",\n        \"limit\": 589,\n        \"include_vector\": false,\n        \"offset\": 168,\n        \"auto_limit\": 8391,\n        \"return_metadata\": [\n          \"distance\",\n          \"score\"\n        ],\n        \"return_properties\": [\n          \"string\",\n          \"string\"\n        ],\n        \"rag_provider\": \"weaviate\",\n        \"search_kind\": \"hybrid_search\",\n        \"alpha\": 0.7,\n        \"query_properties\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fusion_type\": \"FUSION_TYPE_RANKED\",\n        \"max_vector_distance\": 4068.913840334438,\n        \"minimum_match_or_operator\": 3576,\n        \"and_operator\": false,\n        \"target_vector\": \"string\"\n      },\n      \"deleted_at\": 1231\n    },\n    {\n      \"setting_configuration_id\": \"2734fdee-d6eb-c125-6c06-086603a2e20b\",\n      \"version_number\": 4404,\n      \"created_at\": 761,\n      \"updated_at\": 5750,\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"settings\": {\n        \"collection_name\": \"string\",\n        \"limit\": 8444,\n        \"include_vector\": true,\n        \"offset\": 4114,\n        \"auto_limit\": 1199,\n        \"return_metadata\": [\n          \"score\",\n          \"distance\"\n        ],\n        \"return_properties\": [\n          \"string\",\n          \"string\"\n        ],\n        \"rag_provider\": \"weaviate\",\n        \"search_kind\": \"hybrid_search\",\n        \"alpha\": 0.7,\n        \"query_properties\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fusion_type\": \"FUSION_TYPE_RELATIVE_SCORE\",\n        \"max_vector_distance\": 9509.78865690342,\n        \"minimum_match_or_operator\": 5135,\n        \"and_operator\": true,\n        \"target_vector\": \"string\"\n      },\n      \"deleted_at\": 7577\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d835304-69d9-45a5-b488-bde79d937e63",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "version_numbers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "version_numbers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG search setting configuration to get versions for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2666c853-88c8-49c4-8100-d8662fd6c5f5",
+          "name": "Get Rag Search Setting Version",
+          "request": {
+            "name": "Get Rag Search Setting Version",
+            "description": {
+              "content": "Get a single RAG setting configuration version.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions",
+                ":version_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of RAG search setting configuration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "version_number",
+                  "description": "(Required) Version number of the version to fetch."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eef74c50-e29e-4f55-9f25-020ab4863675",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to fetch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"setting_configuration_id\": \"2be0b38f-d147-0e11-65ab-5545c767eb37\",\n  \"version_number\": 3409,\n  \"created_at\": 7562,\n  \"updated_at\": 6230,\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3716,\n    \"include_vector\": true,\n    \"offset\": 6792,\n    \"auto_limit\": 4393,\n    \"return_metadata\": [\n      \"creation_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"search_kind\": \"hybrid_search\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 5009.75967138936,\n    \"minimum_match_or_operator\": 4512,\n    \"and_operator\": true,\n    \"target_vector\": \"string\"\n  },\n  \"deleted_at\": 7909\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83440888-7c62-44b7-b74e-9468b585540f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to fetch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e93997ca-2fea-4a4d-85fa-339dc129a092",
+          "name": "Delete Rag Search Setting Version",
+          "request": {
+            "name": "Delete Rag Search Setting Version",
+            "description": {
+              "content": "Soft delete a RAG search setting configuration version.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions",
+                ":version_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of RAG search setting configuration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "version_number",
+                  "description": "(Required) Version number of the version to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "adcb8936-f11e-4137-9fbc-30fd2bb63599",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "67cf32b9-f653-4a13-8087-c74c745de6eb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "510fc943-400c-4a6e-bde6-e4a19f7ef2bd",
+          "name": "Update Rag Search Settings Version",
+          "request": {
+            "name": "Update Rag Search Settings Version",
+            "description": {
+              "content": "Update a single RAG search setting configuration version metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions",
+                ":version_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of the RAG search setting configuration to update."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "version_number",
+                  "description": "(Required) Version number of the version to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "23888f5e-eef5-4e95-8c39-f2066fe82b63",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG search setting configuration to update."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"setting_configuration_id\": \"2be0b38f-d147-0e11-65ab-5545c767eb37\",\n  \"version_number\": 3409,\n  \"created_at\": 7562,\n  \"updated_at\": 6230,\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3716,\n    \"include_vector\": true,\n    \"offset\": 6792,\n    \"auto_limit\": 4393,\n    \"return_metadata\": [\n      \"creation_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"search_kind\": \"hybrid_search\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 5009.75967138936,\n    \"minimum_match_or_operator\": 4512,\n    \"and_operator\": true,\n    \"target_vector\": \"string\"\n  },\n  \"deleted_at\": 7909\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eac666f9-99b7-441d-a5af-6922506a3aea",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    ":version_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of the RAG search setting configuration to update."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "version_number",
+                      "description": "(Required) Version number of the version to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ecec65c5-4c10-4654-87c9-b2024d019242",
+          "name": "Get Rag Search Setting Version By Tag",
+          "request": {
+            "name": "Get Rag Search Setting Version By Tag",
+            "description": {
+              "content": "Get a single RAG setting configuration version by tag.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_search_settings",
+                ":setting_configuration_id",
+                "versions",
+                "tags",
+                ":tag"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "setting_configuration_id",
+                  "description": "(Required) ID of RAG search setting configuration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tag",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7e2fe16d-065c-441c-a1c7-5477c366c2dd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"setting_configuration_id\": \"2be0b38f-d147-0e11-65ab-5545c767eb37\",\n  \"version_number\": 3409,\n  \"created_at\": 7562,\n  \"updated_at\": 6230,\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"settings\": {\n    \"collection_name\": \"string\",\n    \"limit\": 3716,\n    \"include_vector\": true,\n    \"offset\": 6792,\n    \"auto_limit\": 4393,\n    \"return_metadata\": [\n      \"creation_time\",\n      \"creation_time\"\n    ],\n    \"return_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rag_provider\": \"weaviate\",\n    \"search_kind\": \"hybrid_search\",\n    \"alpha\": 0.7,\n    \"query_properties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"fusion_type\": \"FUSION_TYPE_RANKED\",\n    \"max_vector_distance\": 5009.75967138936,\n    \"minimum_match_or_operator\": 4512,\n    \"and_operator\": true,\n    \"target_vector\": \"string\"\n  },\n  \"deleted_at\": 7909\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbb5e68a-f278-4018-b986-654ca8097033",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_search_settings",
+                    ":setting_configuration_id",
+                    "versions",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "setting_configuration_id",
+                      "description": "(Required) ID of RAG search setting configuration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a801f785-5eac-4e06-a68f-e60c5e3de834",
+    "name": "Arthur GenAI Engine Agent Discovery RAG Settings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for RAG setting management",
+      "type": "text/plain"
+    }
+  }
+}

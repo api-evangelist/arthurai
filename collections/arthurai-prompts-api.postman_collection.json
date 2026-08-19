@@ -1,0 +1,3228 @@
+{
+  "item": [
+    {
+      "id": "5ca67997-8bf9-4677-9f99-ca7178da4a8c",
+      "name": "Prompts",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6674a032-37e3-4e54-8c9a-65af94895800",
+          "name": "Get an agentic prompt",
+          "request": {
+            "name": "Get an agentic prompt",
+            "description": {
+              "content": "Get an agentic prompt by name and version",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ea48e86d-ee3b-4e71-8084-efd68ca3e2ae",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"string\",\n  \"model_provider\": \"anthropic\",\n  \"created_at\": \"1979-09-26T13:30:25.448Z\",\n  \"version\": 1,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 6287.974474599263,\n    \"temperature\": 661.386604595845,\n    \"top_p\": 9351.259873146093,\n    \"max_tokens\": 4202,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6004.282016044401,\n    \"frequency_penalty\": 5240.91115080391,\n    \"seed\": 2511,\n    \"logprobs\": false,\n    \"top_logprobs\": 141,\n    \"logit_bias\": [\n      {\n        \"token_id\": 2467,\n        \"bias\": -82.35243114756479\n      },\n      {\n        \"token_id\": 8701,\n        \"bias\": -92.86154123429642\n      }\n    ],\n    \"max_completion_tokens\": 654,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 8796\n    },\n    \"tool_choice\": \"none\",\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"stream_options\": {\n      \"include_usage\": false\n    }\n  },\n  \"deleted_at\": \"2023-01-19T08:41:38.298Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c182d823-4145-49e6-8530-10228f1db105",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d47c6a29-647c-428b-9f8d-37e385d91d6c",
+          "name": "Delete an agentic prompt version",
+          "request": {
+            "name": "Delete an agentic prompt version",
+            "description": {
+              "content": "Deletes a specific version of an agentic prompt",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to delete. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a73214fe-e9bd-47e8-a67a-aa0e7af7cfca",
+              "name": "Prompt version deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to delete. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "896c45d7-5597-4383-99d4-88cd30cd365d",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to delete. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7b36621d-7e98-4eea-b8d1-5c04bbb85800",
+          "name": "Get all agentic prompts",
+          "request": {
+            "name": "Get all agentic prompts",
+            "description": {
+              "content": "Get all agentic prompts for a given task with optional filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "name",
+                  "description": "Field to sort the metadata list by. 'name' (default) preserves the historical alphabetical ordering. 'latest_version_created_at' orders by the most recent version's creation timestamp so that pagination matches the 'last updated' display."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "llm_asset_names",
+                  "value": "<string>",
+                  "description": "LLM asset names to filter on using partial matching. If provided, llm assets matching any of these name patterns will be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "llm_asset_names",
+                  "value": "<string>",
+                  "description": "LLM asset names to filter on using partial matching. If provided, llm assets matching any of these name patterns will be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "model_provider",
+                  "value": "<string>",
+                  "description": "Filter by model provider (e.g., 'openai', 'anthropic', 'azure')."
+                },
+                {
+                  "disabled": false,
+                  "key": "model_name",
+                  "value": "<string>",
+                  "description": "Filter by model name (e.g., 'gpt-4', 'claude-3-5-sonnet')."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<string>",
+                  "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<string>",
+                  "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>",
+                  "description": "List of tags to filter for items that have any matching tag across any version."
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>",
+                  "description": "List of tags to filter for items that have any matching tag across any version."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5f57b226-06ed-4185-960c-cf4a3f105a6c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "llm_asset_names",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_asset_names",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_provider",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"llm_metadata\": [\n    {\n      \"name\": \"string\",\n      \"versions\": 8250,\n      \"created_at\": \"1959-05-01T03:09:43.543Z\",\n      \"latest_version_created_at\": \"2010-12-17T05:16:58.859Z\",\n      \"deleted_versions\": [\n        3595,\n        1150\n      ],\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"versions\": 6212,\n      \"created_at\": \"1969-10-19T14:57:56.272Z\",\n      \"latest_version_created_at\": \"2006-05-30T16:27:13.673Z\",\n      \"deleted_versions\": [\n        9155,\n        7097\n      ],\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"count\": 8138\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba572f59-4103-4b0d-aa52-ff5d1ef05c14",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "llm_asset_names",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_asset_names",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_provider",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "448fcea9-11fd-47f5-9327-6ce5ea97e8c7",
+          "name": "List all versions of an agentic prompt",
+          "request": {
+            "name": "List all versions of an agentic prompt",
+            "description": {
+              "content": "List all versions of an agentic prompt with optional filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "model_provider",
+                  "value": "<string>",
+                  "description": "Filter by model provider (e.g., 'openai', 'anthropic', 'azure')."
+                },
+                {
+                  "disabled": false,
+                  "key": "model_name",
+                  "value": "<string>",
+                  "description": "Filter by model name (e.g., 'gpt-4', 'claude-3-5-sonnet')."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<string>",
+                  "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<string>",
+                  "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_deleted",
+                  "value": "false",
+                  "description": "Whether to exclude deleted prompt versions from the results. Default is False."
+                },
+                {
+                  "disabled": false,
+                  "key": "min_version",
+                  "value": "<integer>",
+                  "description": "Minimum version number to filter on (inclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_version",
+                  "value": "<integer>",
+                  "description": "Maximum version number to filter on (inclusive)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4c836d5d-e5e8-4665-9454-e87b05a10d30",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "model_provider",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "min_version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"versions\": [\n    {\n      \"version\": 2819,\n      \"created_at\": \"1974-12-11T13:34:10.076Z\",\n      \"deleted_at\": \"2008-04-28T20:05:55.865Z\",\n      \"num_messages\": 5522,\n      \"num_tools\": 4061,\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_provider\": \"vertex_ai\",\n      \"model_name\": \"string\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"version\": 441,\n      \"created_at\": \"1953-08-20T00:48:17.331Z\",\n      \"deleted_at\": \"1960-03-02T13:48:53.141Z\",\n      \"num_messages\": 6107,\n      \"num_tools\": 8015,\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_provider\": \"anthropic\",\n      \"model_name\": \"string\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"count\": 9726\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "357ba75c-6a76-438e-a2b0-9c561997cb83",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "model_provider",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "model_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "min_version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79c0cf96-fba0-4814-b105-f0e933a3ed2e",
+          "name": "Run/Stream an unsaved agentic prompt",
+          "request": {
+            "name": "Run/Stream an unsaved agentic prompt",
+            "description": {
+              "content": "Runs or streams an unsaved agentic prompt",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"<string>\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": \"<boolean>\"\n    },\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": \"<boolean>\"\n    }\n  ],\n  \"config\": {\n    \"timeout\": \"<number>\",\n    \"temperature\": \"<number>\",\n    \"top_p\": \"<number>\",\n    \"max_tokens\": \"<integer>\",\n    \"stop\": \"<string>\",\n    \"presence_penalty\": \"<number>\",\n    \"frequency_penalty\": \"<number>\",\n    \"seed\": \"<integer>\",\n    \"logprobs\": \"<boolean>\",\n    \"top_logprobs\": \"<integer>\",\n    \"logit_bias\": [\n      {\n        \"token_id\": \"<integer>\",\n        \"bias\": \"<number>\"\n      },\n      {\n        \"token_id\": \"<integer>\",\n        \"bias\": \"<number>\"\n      }\n    ],\n    \"max_completion_tokens\": \"<integer>\",\n    \"reasoning_effort\": \"<string>\",\n    \"thinking\": {\n      \"type\": \"<string>\",\n      \"budget_tokens\": \"<integer>\"\n    },\n    \"response_format\": {\n      \"type\": \"<string>\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"<string>\",\n    \"stream_options\": {\n      \"include_usage\": \"<boolean>\"\n    }\n  },\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ],\n    \"strict\": \"<boolean>\",\n    \"stream\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a5979e72-cdcb-41a0-8807-37d84ea70374",
+              "name": "An AgenticPromptRunResponse object for non-streaming requests or a StreamingResponse which has two events, a chunk event or a final_response event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"tool\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"vertex_ai\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": false\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"config\": {\n    \"timeout\": 8484.393925122276,\n    \"temperature\": 8945.722885113626,\n    \"top_p\": 4518.662531233669,\n    \"max_tokens\": 9232,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6665.489604823166,\n    \"frequency_penalty\": 2736.8549227102203,\n    \"seed\": 4096,\n    \"logprobs\": true,\n    \"top_logprobs\": 2940,\n    \"logit_bias\": [\n      {\n        \"token_id\": 8789,\n        \"bias\": 24.03946308939682\n      },\n      {\n        \"token_id\": 727,\n        \"bias\": 76.93483051858755\n      }\n    ],\n    \"max_completion_tokens\": 7745,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 3583\n    },\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"none\",\n    \"stream_options\": {\n      \"include_usage\": true\n    }\n  },\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"strict\": true,\n    \"stream\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cost\": \"string\",\n  \"content\": \"string\",\n  \"tool_calls\": [\n    {\n      \"key_0\": 6234,\n      \"key_1\": 9756,\n      \"key_2\": 3109,\n      \"key_3\": 2257\n    },\n    {\n      \"key_0\": 289,\n      \"key_1\": \"string\",\n      \"key_2\": false\n    }\n  ],\n  \"input_tokens\": 7246,\n  \"output_tokens\": 7209,\n  \"total_tokens\": 8755\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b484650-ca02-49ba-8a43-22278e63c2aa",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"tool\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"vertex_ai\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": false\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"config\": {\n    \"timeout\": 8484.393925122276,\n    \"temperature\": 8945.722885113626,\n    \"top_p\": 4518.662531233669,\n    \"max_tokens\": 9232,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6665.489604823166,\n    \"frequency_penalty\": 2736.8549227102203,\n    \"seed\": 4096,\n    \"logprobs\": true,\n    \"top_logprobs\": 2940,\n    \"logit_bias\": [\n      {\n        \"token_id\": 8789,\n        \"bias\": 24.03946308939682\n      },\n      {\n        \"token_id\": 727,\n        \"bias\": 76.93483051858755\n      }\n    ],\n    \"max_completion_tokens\": 7745,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 3583\n    },\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"none\",\n    \"stream_options\": {\n      \"include_usage\": true\n    }\n  },\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"strict\": true,\n    \"stream\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "90afa73b-c038-4270-a331-315acbb4d8d6",
+          "name": "Render an unsaved prompt with variables",
+          "request": {
+            "name": "Render an unsaved prompt with variables",
+            "description": {
+              "content": "Render an unsaved prompt by replacing template variables with provided values. Accepts messages directly in the request body instead of loading from database.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "prompt_renders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ],\n    \"strict\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d376362e-d3c6-4586-bc1a-bcccf92bca49",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "prompt_renders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"system\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"strict\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3fd3a2d-f954-412b-bc88-3e51cd9067fc",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "prompt_renders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"system\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"completion_request\": {\n    \"variables\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"strict\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38d34671-fde3-414c-a632-0f161c5fb9b9",
+          "name": "Gets the list of variables needed from an unsaved prompt's messages",
+          "request": {
+            "name": "Gets the list of variables needed from an unsaved prompt's messages",
+            "description": {
+              "content": "Gets the list of variables needed from an unsaved prompt's messages",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "prompt_variables"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "835670ae-15c2-4a91-9737-f87de809618d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "prompt_variables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"tool\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b170dbd4-054e-405d-9cee-cf89fe23749c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "prompt_variables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"tool\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b8c5902-4eb9-4fee-a947-49366304043e",
+          "name": "Run/Stream a specific version of an agentic prompt",
+          "request": {
+            "name": "Run/Stream a specific version of an agentic prompt",
+            "description": {
+              "content": "Run or stream a specific version of an existing agentic prompt",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to run. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variables\": [],\n  \"strict\": false,\n  \"stream\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "78ea8b44-5565-48fa-a29b-1eaccd66ff82",
+              "name": "An AgenticPromptRunResponse object for non-streaming requests or a StreamingResponse which has two events, a chunk event or a final_response event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to run. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"variables\": [],\n  \"strict\": false,\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cost\": \"string\",\n  \"content\": \"string\",\n  \"tool_calls\": [\n    {\n      \"key_0\": 6234,\n      \"key_1\": 9756,\n      \"key_2\": 3109,\n      \"key_3\": 2257\n    },\n    {\n      \"key_0\": 289,\n      \"key_1\": \"string\",\n      \"key_2\": false\n    }\n  ],\n  \"input_tokens\": 7246,\n  \"output_tokens\": 7209,\n  \"total_tokens\": 8755\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbb7c9da-9a24-46a7-9858-836cd8aea27e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to run. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"variables\": [],\n  \"strict\": false,\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8e0f5488-83b5-4e23-903c-eec87aea497b",
+          "name": "Render a specific version of an agentic prompt with variables",
+          "request": {
+            "name": "Render a specific version of an agentic prompt with variables",
+            "description": {
+              "content": "Render a specific version of an existing agentic prompt by replacing template variables with provided values. Returns the complete prompt object with rendered messages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version",
+                "renders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to render. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"completion_request\": {\n    \"variables\": [],\n    \"strict\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1431be5c-2a7d-4b0a-8ab7-72ec8bec0856",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "renders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to render. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completion_request\": {\n    \"variables\": [],\n    \"strict\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"string\",\n  \"model_provider\": \"anthropic\",\n  \"created_at\": \"1979-09-26T13:30:25.448Z\",\n  \"version\": 1,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 6287.974474599263,\n    \"temperature\": 661.386604595845,\n    \"top_p\": 9351.259873146093,\n    \"max_tokens\": 4202,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6004.282016044401,\n    \"frequency_penalty\": 5240.91115080391,\n    \"seed\": 2511,\n    \"logprobs\": false,\n    \"top_logprobs\": 141,\n    \"logit_bias\": [\n      {\n        \"token_id\": 2467,\n        \"bias\": -82.35243114756479\n      },\n      {\n        \"token_id\": 8701,\n        \"bias\": -92.86154123429642\n      }\n    ],\n    \"max_completion_tokens\": 654,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 8796\n    },\n    \"tool_choice\": \"none\",\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"stream_options\": {\n      \"include_usage\": false\n    }\n  },\n  \"deleted_at\": \"2023-01-19T08:41:38.298Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf2cef93-233f-4036-be58-6cf9689d4823",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "renders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to render. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completion_request\": {\n    \"variables\": [],\n    \"strict\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd917b3a-610d-4284-b48d-fe54f0f5b454",
+          "name": "Save an agentic prompt",
+          "request": {
+            "name": "Save an agentic prompt",
+            "description": {
+              "content": "Save an agentic prompt to the database",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"<string>\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": \"<boolean>\"\n    },\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": \"<boolean>\"\n    }\n  ],\n  \"config\": {\n    \"timeout\": \"<number>\",\n    \"temperature\": \"<number>\",\n    \"top_p\": \"<number>\",\n    \"max_tokens\": \"<integer>\",\n    \"stop\": \"<string>\",\n    \"presence_penalty\": \"<number>\",\n    \"frequency_penalty\": \"<number>\",\n    \"seed\": \"<integer>\",\n    \"logprobs\": \"<boolean>\",\n    \"top_logprobs\": \"<integer>\",\n    \"logit_bias\": [\n      {\n        \"token_id\": \"<integer>\",\n        \"bias\": \"<number>\"\n      },\n      {\n        \"token_id\": \"<integer>\",\n        \"bias\": \"<number>\"\n      }\n    ],\n    \"max_completion_tokens\": \"<integer>\",\n    \"reasoning_effort\": \"<string>\",\n    \"thinking\": {\n      \"type\": \"<string>\",\n      \"budget_tokens\": \"<integer>\"\n    },\n    \"response_format\": {\n      \"type\": \"<string>\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"<string>\",\n    \"stream_options\": {\n      \"include_usage\": \"<boolean>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9dd67f19-bc6f-49e4-ad50-db60b1c73134",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"openai\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": false\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"config\": {\n    \"timeout\": 8801.579400088549,\n    \"temperature\": 8525.330774441227,\n    \"top_p\": 7840.179507820237,\n    \"max_tokens\": 1841,\n    \"stop\": \"string\",\n    \"presence_penalty\": 1725.3190119383278,\n    \"frequency_penalty\": 9594.351471282493,\n    \"seed\": 771,\n    \"logprobs\": true,\n    \"top_logprobs\": 5232,\n    \"logit_bias\": [\n      {\n        \"token_id\": 7953,\n        \"bias\": -91.19931559512887\n      },\n      {\n        \"token_id\": 3627,\n        \"bias\": -34.76637416056279\n      }\n    ],\n    \"max_completion_tokens\": 9969,\n    \"reasoning_effort\": \"none\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 6847\n    },\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"required\",\n    \"stream_options\": {\n      \"include_usage\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"string\",\n  \"model_provider\": \"anthropic\",\n  \"created_at\": \"1979-09-26T13:30:25.448Z\",\n  \"version\": 1,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 6287.974474599263,\n    \"temperature\": 661.386604595845,\n    \"top_p\": 9351.259873146093,\n    \"max_tokens\": 4202,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6004.282016044401,\n    \"frequency_penalty\": 5240.91115080391,\n    \"seed\": 2511,\n    \"logprobs\": false,\n    \"top_logprobs\": 141,\n    \"logit_bias\": [\n      {\n        \"token_id\": 2467,\n        \"bias\": -82.35243114756479\n      },\n      {\n        \"token_id\": 8701,\n        \"bias\": -92.86154123429642\n      }\n    ],\n    \"max_completion_tokens\": 654,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 8796\n    },\n    \"tool_choice\": \"none\",\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"stream_options\": {\n      \"include_usage\": false\n    }\n  },\n  \"deleted_at\": \"2023-01-19T08:41:38.298Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21daeb51-44e0-4210-bd92-0933783adfb9",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"<string>\",\n  \"model_provider\": \"openai\",\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": false\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"config\": {\n    \"timeout\": 8801.579400088549,\n    \"temperature\": 8525.330774441227,\n    \"top_p\": 7840.179507820237,\n    \"max_tokens\": 1841,\n    \"stop\": \"string\",\n    \"presence_penalty\": 1725.3190119383278,\n    \"frequency_penalty\": 9594.351471282493,\n    \"seed\": 771,\n    \"logprobs\": true,\n    \"top_logprobs\": 5232,\n    \"logit_bias\": [\n      {\n        \"token_id\": 7953,\n        \"bias\": -91.19931559512887\n      },\n      {\n        \"token_id\": 3627,\n        \"bias\": -34.76637416056279\n      }\n    ],\n    \"max_completion_tokens\": 9969,\n    \"reasoning_effort\": \"none\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 6847\n    },\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"tool_choice\": \"required\",\n    \"stream_options\": {\n      \"include_usage\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8cc9b2c1-c354-4b8f-b4b8-34b86138c914",
+          "name": "Delete an agentic prompt",
+          "request": {
+            "name": "Delete an agentic prompt",
+            "description": {
+              "content": "Deletes an entire agentic prompt",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cc9c82bb-ece2-470e-99b2-ed75e37b5a2a",
+              "name": "Prompt deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c9003a3-faff-4fa8-8b65-39f3b586d12b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0dc19ca2-656b-4349-8621-f1dfc7d2395d",
+          "name": "Get an agentic prompt by name and tag",
+          "request": {
+            "name": "Get an agentic prompt by name and tag",
+            "description": {
+              "content": "Get an agentic prompt by name and tag",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                "tags",
+                ":tag"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tag",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f4395d59-c903-4975-9bef-a497d67733a1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"string\",\n  \"model_provider\": \"anthropic\",\n  \"created_at\": \"1979-09-26T13:30:25.448Z\",\n  \"version\": 1,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 6287.974474599263,\n    \"temperature\": 661.386604595845,\n    \"top_p\": 9351.259873146093,\n    \"max_tokens\": 4202,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6004.282016044401,\n    \"frequency_penalty\": 5240.91115080391,\n    \"seed\": 2511,\n    \"logprobs\": false,\n    \"top_logprobs\": 141,\n    \"logit_bias\": [\n      {\n        \"token_id\": 2467,\n        \"bias\": -82.35243114756479\n      },\n      {\n        \"token_id\": 8701,\n        \"bias\": -92.86154123429642\n      }\n    ],\n    \"max_completion_tokens\": 654,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 8796\n    },\n    \"tool_choice\": \"none\",\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"stream_options\": {\n      \"include_usage\": false\n    }\n  },\n  \"deleted_at\": \"2023-01-19T08:41:38.298Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84c7632e-ff5d-46b2-b5e7-abddca08cd7b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a778f590-6991-48bb-a90b-2dbad6e68e21",
+          "name": "Add a tag to an agentic prompt version",
+          "request": {
+            "name": "Add a tag to an agentic prompt version",
+            "description": {
+              "content": "Add a tag to an agentic prompt version",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version",
+                "tags"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tag\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e4cdf639-a22f-479f-8cdb-a861966be3eb",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "tags"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tag\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"model_name\": \"string\",\n  \"model_provider\": \"anthropic\",\n  \"created_at\": \"1979-09-26T13:30:25.448Z\",\n  \"version\": 1,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    },\n    {\n      \"function\": {\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"parameters\": {\n          \"properties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"required\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"additionalProperties\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"type\": \"function\",\n      \"strict\": true\n    }\n  ],\n  \"variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"config\": {\n    \"timeout\": 6287.974474599263,\n    \"temperature\": 661.386604595845,\n    \"top_p\": 9351.259873146093,\n    \"max_tokens\": 4202,\n    \"stop\": \"string\",\n    \"presence_penalty\": 6004.282016044401,\n    \"frequency_penalty\": 5240.91115080391,\n    \"seed\": 2511,\n    \"logprobs\": false,\n    \"top_logprobs\": 141,\n    \"logit_bias\": [\n      {\n        \"token_id\": 2467,\n        \"bias\": -82.35243114756479\n      },\n      {\n        \"token_id\": 8701,\n        \"bias\": -92.86154123429642\n      }\n    ],\n    \"max_completion_tokens\": 654,\n    \"reasoning_effort\": \"default\",\n    \"thinking\": {\n      \"type\": \"adaptive\",\n      \"budget_tokens\": 8796\n    },\n    \"tool_choice\": \"none\",\n    \"response_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"schema\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"strict\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"stream_options\": {\n      \"include_usage\": false\n    }\n  },\n  \"deleted_at\": \"2023-01-19T08:41:38.298Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "267cda12-29a0-44d7-953f-832ea6b8dd3e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "tags"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tag\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "761f5283-a5e8-4791-949c-8864b45152ff",
+          "name": "Remove a tag from an agentic prompt version",
+          "request": {
+            "name": "Remove a tag from an agentic prompt version",
+            "description": {
+              "content": "Remove a tag from an agentic prompt version",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "prompts",
+                ":prompt_name",
+                "versions",
+                ":prompt_version",
+                "tags",
+                ":tag"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prompt_version",
+                  "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tag",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eb5bb480-84b8-42bf-9342-2ad5f72329a9",
+              "name": "Prompt version deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a006c48e-c853-41f8-98bb-879a15f28252",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "prompts",
+                    ":prompt_name",
+                    "versions",
+                    ":prompt_version",
+                    "tags",
+                    ":tag"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prompt_version",
+                      "description": "(Required) The version of the prompt to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tag",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0646ac37-de3d-4b9b-9c68-c1e39f415f96",
+    "name": "Arthur GenAI Engine Agent Discovery Prompts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

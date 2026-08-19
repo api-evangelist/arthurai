@@ -1,0 +1,2073 @@
+{
+  "item": [
+    {
+      "id": "28528959-74d9-4bc0-8aa8-258be916a2b0",
+      "name": "Continuous Evals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5bd66b63-0095-41d6-b039-b1bde4f5f8bd",
+          "name": "Get a continuous eval by id",
+          "request": {
+            "name": "Get a continuous eval by id",
+            "description": {
+              "content": "Get a continuous eval by id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "continuous_evals",
+                ":eval_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "eval_id",
+                  "description": "(Required) The id of the continuous eval to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "84e2d329-3330-4828-9d96-5d07ef41aff3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0a4e8649-94dc-7113-7d8e-b1b5a3969d37\",\n  \"name\": \"string\",\n  \"task_id\": \"string\",\n  \"transform_id\": \"8cb2b278-b668-a6a4-2ae9-eee19a56bd61\",\n  \"created_at\": \"2000-12-03T07:14:01.945Z\",\n  \"updated_at\": \"2001-06-05T12:15:18.055Z\",\n  \"description\": \"string\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_name\": \"string\",\n  \"llm_eval_version\": 3852,\n  \"transform_version_id\": \"de569275-232e-b708-4916-677e48693444\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"enabled\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "619e5ae1-bbd1-4887-a386-6777738ffd7c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bbf52af3-bf1d-4df9-ad16-b6dd0617ae73",
+          "name": "Update a continuous eval",
+          "request": {
+            "name": "Update a continuous eval",
+            "description": {
+              "content": "Update a continuous eval",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "continuous_evals",
+                ":eval_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "eval_id",
+                  "description": "(Required) The id of the continuous eval to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"<string>\",\n      \"eval_variable\": \"<string>\"\n    },\n    {\n      \"transform_variable\": \"<string>\",\n      \"eval_variable\": \"<string>\"\n    }\n  ],\n  \"enabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9f64c3f-2e02-47b2-8e3b-ccee9fc64284",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0a4e8649-94dc-7113-7d8e-b1b5a3969d37\",\n  \"name\": \"string\",\n  \"task_id\": \"string\",\n  \"transform_id\": \"8cb2b278-b668-a6a4-2ae9-eee19a56bd61\",\n  \"created_at\": \"2000-12-03T07:14:01.945Z\",\n  \"updated_at\": \"2001-06-05T12:15:18.055Z\",\n  \"description\": \"string\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_name\": \"string\",\n  \"llm_eval_version\": 3852,\n  \"transform_version_id\": \"de569275-232e-b708-4916-677e48693444\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"enabled\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7bfa7c49-eef2-4a4b-9281-b021ffb96bdc",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29b03e95-ae4d-4e4b-8c71-39263b09ed1c",
+          "name": "Delete a continuous eval",
+          "request": {
+            "name": "Delete a continuous eval",
+            "description": {
+              "content": "Delete a continuous eval",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "continuous_evals",
+                ":eval_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "eval_id",
+                  "description": "(Required) The id of the continuous eval to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5e4f223b-651d-4648-9f48-28d3e28bd8bb",
+              "name": "Continuous eval deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c781d96-1c95-4b8b-a156-cc8f804c8938",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    ":eval_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "eval_id",
+                      "description": "(Required) The id of the continuous eval to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4e29f2e1-cae6-48ca-82f6-37b130661b56",
+          "name": "Get all continuous evals for a specific task",
+          "request": {
+            "name": "Get all continuous evals for a specific task",
+            "description": {
+              "content": "Get all continuous evals for a specific task",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "continuous_evals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Name of the continuous eval to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "llm_eval_name",
+                  "value": "<string>",
+                  "description": "Name of the llm eval to filter on"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<string>",
+                  "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<string>",
+                  "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "enabled",
+                  "value": "<string>",
+                  "description": "Whether the continuous eval is enabled."
+                },
+                {
+                  "disabled": false,
+                  "key": "continuous_eval_ids",
+                  "value": "<string>",
+                  "description": "List of continuous eval IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "continuous_eval_ids",
+                  "value": "<string>",
+                  "description": "List of continuous eval IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "llm_eval_name_exact",
+                  "value": "<string>",
+                  "description": "Exact LLM eval name to filter on (case-sensitive exact match)."
+                },
+                {
+                  "disabled": false,
+                  "key": "llm_eval_version",
+                  "value": "<integer>",
+                  "description": "LLM eval version to filter on."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4fa4f70a-6e48-41d7-a367-aa69ae924179",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enabled",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_name_exact",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"evals\": [\n    {\n      \"id\": \"4378b63d-454e-97a0-c57a-1ffff7aea27c\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"36b58109-aec6-87ce-9f17-0d7a440907e2\",\n      \"created_at\": \"2025-06-23T03:12:22.333Z\",\n      \"updated_at\": \"1991-09-30T05:50:33.005Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 4506,\n      \"transform_version_id\": \"b9e7102e-bb2c-e022-1996-587f112d87f5\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"df3136a8-77c2-97cb-216a-c9eea0c88bdd\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"47db1c48-b645-17aa-83c2-f4557fce5a53\",\n      \"created_at\": \"1956-05-20T07:22:56.726Z\",\n      \"updated_at\": \"1952-02-09T05:19:36.620Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 8795,\n      \"transform_version_id\": \"ea693e04-c932-8976-422a-1ad75a364d7e\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"count\": 807\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d0571d4-df57-404e-a37b-d56bfab69342",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enabled",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_name_exact",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "llm_eval_version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a72f3325-2b71-48ed-a12a-606410674202",
+          "name": "Create a continuous eval",
+          "request": {
+            "name": "Create a continuous eval",
+            "description": {
+              "content": "Create a continuous eval",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "continuous_evals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"<string>\",\n      \"eval_variable\": \"<string>\"\n    },\n    {\n      \"transform_variable\": \"<string>\",\n      \"eval_variable\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"enabled\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d65314c4-d583-4f3c-9d78-003fd263fc2a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"enabled\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0a4e8649-94dc-7113-7d8e-b1b5a3969d37\",\n  \"name\": \"string\",\n  \"task_id\": \"string\",\n  \"transform_id\": \"8cb2b278-b668-a6a4-2ae9-eee19a56bd61\",\n  \"created_at\": \"2000-12-03T07:14:01.945Z\",\n  \"updated_at\": \"2001-06-05T12:15:18.055Z\",\n  \"description\": \"string\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_name\": \"string\",\n  \"llm_eval_version\": 3852,\n  \"transform_version_id\": \"de569275-232e-b708-4916-677e48693444\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"enabled\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "470e1cf4-a235-4c38-97ab-b87901219276",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"llm_eval_name\": \"<string>\",\n  \"transform_id\": \"<uuid>\",\n  \"transform_variable_mapping\": [\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    },\n    {\n      \"transform_variable\": \"string\",\n      \"eval_variable\": \"string\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"eval_type\": \"llm_eval\",\n  \"llm_eval_version\": \"<string>\",\n  \"transform_version_id\": \"<uuid>\",\n  \"enabled\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a8916608-a9f8-4195-98e1-14644871b097",
+          "name": "Get all continuous eval run results for a specific task",
+          "request": {
+            "name": "Get all continuous eval run results for a specific task",
+            "description": {
+              "content": "Get all continuous eval run results for a specific task",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "continuous_evals",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "List of agentic annotation IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "List of agentic annotation IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "continuous_eval_ids",
+                  "value": "<string>",
+                  "description": "List of continuous eval IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "continuous_eval_ids",
+                  "value": "<string>",
+                  "description": "List of continuous eval IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "eval_name",
+                  "value": "<string>",
+                  "description": "Name of the continuous eval to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "trace_ids",
+                  "value": "<string>",
+                  "description": "List of trace IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "trace_ids",
+                  "value": "<string>",
+                  "description": "List of trace IDs to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "annotation_score",
+                  "value": "<integer>",
+                  "description": "Annotation score to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "run_status",
+                  "value": "<string>",
+                  "description": "Run status to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<string>",
+                  "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<string>",
+                  "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "continuous_eval_enabled",
+                  "value": "<string>",
+                  "description": "Whether the continuous eval is enabled."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "108230cc-5acc-4a98-98a5-c2916ff3e3de",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "eval_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "annotation_score",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "run_status",
+                      "value": "pending"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_enabled",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"annotations\": [\n    {\n      \"id\": \"string\",\n      \"annotation_type\": \"human\",\n      \"trace_id\": \"string\",\n      \"created_at\": \"1958-12-14T09:55:35.686Z\",\n      \"updated_at\": \"1964-07-26T03:54:01.169Z\",\n      \"continuous_eval_id\": \"string\",\n      \"continuous_eval_name\": \"string\",\n      \"eval_type\": \"ml_eval\",\n      \"eval_name\": \"string\",\n      \"eval_version\": 5617,\n      \"annotation_score\": 4596,\n      \"annotation_description\": \"string\",\n      \"input_variables\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"run_status\": \"failed\",\n      \"cost\": 4795.807502207125\n    },\n    {\n      \"id\": \"string\",\n      \"annotation_type\": \"continuous_eval\",\n      \"trace_id\": \"string\",\n      \"created_at\": \"1961-06-30T12:38:15.365Z\",\n      \"updated_at\": \"2018-02-10T18:12:28.340Z\",\n      \"continuous_eval_id\": \"string\",\n      \"continuous_eval_name\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"eval_name\": \"string\",\n      \"eval_version\": 8062,\n      \"annotation_score\": 7732,\n      \"annotation_description\": \"string\",\n      \"input_variables\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"run_status\": \"error\",\n      \"cost\": 9101.837293113449\n    }\n  ],\n  \"count\": 3417\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf4daa10-396b-4689-8d08-5bd50c0b27b3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "eval_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trace_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "annotation_score",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "run_status",
+                      "value": "pending"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "continuous_eval_enabled",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bf520ad-92a3-4da1-b36a-3cd551f8f6ac",
+          "name": "Get all variables and mappings for a continuous eval",
+          "request": {
+            "name": "Get all variables and mappings for a continuous eval",
+            "description": {
+              "content": "Get all variables and mappings for a continuous eval",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "continuous_evals",
+                "transforms",
+                ":transform_id",
+                "llm_evals",
+                ":eval_name",
+                "versions",
+                ":eval_version",
+                "variables"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "transform_id",
+                  "description": "(Required) The id of the transform to get the continuous eval variables and mappings for."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eval_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eval_version",
+                  "description": "(Required) The version of the eval to get the continuous eval variables and mappings for."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5f9eb11d-c8c3-45c3-ab9a-9d9fb88cc7fd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "transforms",
+                    ":transform_id",
+                    "llm_evals",
+                    ":eval_name",
+                    "versions",
+                    ":eval_version",
+                    "variables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "transform_id",
+                      "description": "(Required) The id of the transform to get the continuous eval variables and mappings for."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_version",
+                      "description": "(Required) The version of the eval to get the continuous eval variables and mappings for."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"matching_variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"transform_variables\": [\n    \"string\",\n    \"string\"\n  ],\n  \"eval_variables\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b1caf3c-8b92-47f3-87fd-f49ae440a633",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "transforms",
+                    ":transform_id",
+                    "llm_evals",
+                    ":eval_name",
+                    "versions",
+                    ":eval_version",
+                    "variables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "transform_id",
+                      "description": "(Required) The id of the transform to get the continuous eval variables and mappings for."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eval_version",
+                      "description": "(Required) The version of the eval to get the continuous eval variables and mappings for."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cf3946b-d389-4033-9b96-5abf117da24c",
+          "name": "Rerun a failed continuous eval",
+          "request": {
+            "name": "Rerun a failed continuous eval",
+            "description": {
+              "content": "Rerun a failed continuous eval",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "continuous_evals",
+                "results",
+                ":run_id",
+                "rerun"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "run_id",
+                  "description": "(Required) The id of the continuous eval run to rerun."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ec7b0fc4-e176-43b2-88fc-d76f970f29ff",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    "results",
+                    ":run_id",
+                    "rerun"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "run_id",
+                      "description": "(Required) The id of the continuous eval run to rerun."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"run_id\": \"eb333784-94e3-3ae7-277c-3f56f20d089a\",\n  \"trace_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2cf96c49-2e67-4d4b-8d18-7d7a5960ce3b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "continuous_evals",
+                    "results",
+                    ":run_id",
+                    "rerun"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "run_id",
+                      "description": "(Required) The id of the continuous eval run to rerun."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1f1b792a-4556-42a6-bb8d-6c0c9cb21e94",
+          "name": "Get daily aggregated analytics for agentic annotations",
+          "request": {
+            "name": "Get daily aggregated analytics for agentic annotations",
+            "description": {
+              "content": "Returns daily counts of passed/failed/error/skipped annotations and total cost per day",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "continuous_evals",
+                "analytics",
+                "daily"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "Start time (inclusive). Defaults to 30 days ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "End time (exclusive). Defaults to now."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c40ec07a-6df0-4c7d-89f8-36d650f8bff9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "analytics",
+                    "daily"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"stats\": [\n    {\n      \"date\": \"string\",\n      \"passed_count\": 9472,\n      \"failed_count\": 4705,\n      \"error_count\": 891,\n      \"skipped_count\": 7883,\n      \"total_cost\": 8794.934352913917,\n      \"total_count\": 1398\n    },\n    {\n      \"date\": \"string\",\n      \"passed_count\": 7529,\n      \"failed_count\": 8977,\n      \"error_count\": 1567,\n      \"skipped_count\": 8139,\n      \"total_cost\": 9665.201572349033,\n      \"total_count\": 7376\n    }\n  ],\n  \"count\": 6999\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42122e01-fb5c-454d-a13d-d75543df5196",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "continuous_evals",
+                    "analytics",
+                    "daily"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "740cf587-5ff0-42a0-80a8-8ff637a152f7",
+    "name": "Arthur GenAI Engine Agent Discovery Continuous Evals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

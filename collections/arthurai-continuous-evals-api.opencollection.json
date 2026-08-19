@@ -1,0 +1,395 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Continuous Evals API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Continuous Evals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a continuous eval by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/continuous_evals/:eval_id",
+            "params": [
+              {
+                "name": "eval_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the continuous eval to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a continuous eval by id"
+        },
+        {
+          "info": {
+            "name": "Update a continuous eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/continuous_evals/:eval_id",
+            "params": [
+              {
+                "name": "eval_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the continuous eval to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a continuous eval"
+        },
+        {
+          "info": {
+            "name": "Delete a continuous eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/continuous_evals/:eval_id",
+            "params": [
+              {
+                "name": "eval_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the continuous eval to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a continuous eval"
+        },
+        {
+          "info": {
+            "name": "Get all continuous evals for a specific task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/continuous_evals",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the continuous eval to filter on."
+              },
+              {
+                "name": "llm_eval_name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the llm eval to filter on"
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Whether the continuous eval is enabled."
+              },
+              {
+                "name": "continuous_eval_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of continuous eval IDs to filter on."
+              },
+              {
+                "name": "llm_eval_name_exact",
+                "value": "",
+                "type": "query",
+                "description": "Exact LLM eval name to filter on (case-sensitive exact match)."
+              },
+              {
+                "name": "llm_eval_version",
+                "value": "",
+                "type": "query",
+                "description": "LLM eval version to filter on."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all continuous evals for a specific task"
+        },
+        {
+          "info": {
+            "name": "Create a continuous eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/continuous_evals",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a continuous eval"
+        },
+        {
+          "info": {
+            "name": "Get all continuous eval run results for a specific task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/continuous_evals/results",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of agentic annotation IDs to filter on."
+              },
+              {
+                "name": "continuous_eval_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of continuous eval IDs to filter on."
+              },
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the continuous eval to filter on."
+              },
+              {
+                "name": "trace_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of trace IDs to filter on."
+              },
+              {
+                "name": "annotation_score",
+                "value": "",
+                "type": "query",
+                "description": "Annotation score to filter on."
+              },
+              {
+                "name": "run_status",
+                "value": "",
+                "type": "query",
+                "description": "Run status to filter on."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "continuous_eval_enabled",
+                "value": "",
+                "type": "query",
+                "description": "Whether the continuous eval is enabled."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all continuous eval run results for a specific task"
+        },
+        {
+          "info": {
+            "name": "Get all variables and mappings for a continuous eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/continuous_evals/transforms/:transform_id/llm_evals/:eval_name/versions/:eval_version/variables",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the transform to get the continuous eval variables and mappings for."
+              },
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the eval to get the continuous eval variables and mappings for."
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all variables and mappings for a continuous eval"
+        },
+        {
+          "info": {
+            "name": "Rerun a failed continuous eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/continuous_evals/results/:run_id/rerun",
+            "params": [
+              {
+                "name": "run_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the continuous eval run to rerun."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Rerun a failed continuous eval"
+        },
+        {
+          "info": {
+            "name": "Get daily aggregated analytics for agentic annotations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/continuous_evals/analytics/daily",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Start time (inclusive). Defaults to 30 days ago."
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "End time (exclusive). Defaults to now."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns daily counts of passed/failed/error/skipped annotations and total cost per day"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

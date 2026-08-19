@@ -1,0 +1,425 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Authorization V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authorization V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Workspace Role Bindings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/role_bindings",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for role bindings by user name, group name, role name, user ID or group ID."
+              },
+              {
+                "name": "bound_member_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of role bindings by the kind of the bound member. Optional."
+              },
+              {
+                "name": "user_types",
+                "value": "",
+                "type": "query",
+                "description": "Limits the results to a specific set of user types. Only applies to user role bindings."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches all workspace role bindings. Requires workspace_list_role_bindings permission."
+        },
+        {
+          "info": {
+            "name": "Post Workspace Role Binding.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/role_bindings",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new workspace role binding. Requires workspace_create_role_binding permission."
+        },
+        {
+          "info": {
+            "name": "List Roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/roles",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order of the returned list. Optional."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of roles by name. Optional."
+              },
+              {
+                "name": "organization_bindable",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of roles by organization bindable. Optional."
+              },
+              {
+                "name": "workspace_bindable",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of roles by workspace bindable. Optional."
+              },
+              {
+                "name": "project_bindable",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of roles by project bindable. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches all roles. Requires organization_list_roles permission."
+        },
+        {
+          "info": {
+            "name": "List Organization Role Bindings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/role_bindings",
+            "params": [
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for role bindings by user name, group name, role name, user ID or group ID."
+              },
+              {
+                "name": "bound_member_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of role bindings by the kind of the bound member. Optional."
+              },
+              {
+                "name": "user_types",
+                "value": "",
+                "type": "query",
+                "description": "Limits the results to a specific set of user types. Only applies to user role bindings."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches all organization role bindings. Requires organization_list_role_bindings permission."
+        },
+        {
+          "info": {
+            "name": "Post Organization Role Binding.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/role_bindings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new organization role binding. Requires organization_create_role_binding permission."
+        },
+        {
+          "info": {
+            "name": "List Project Role Bindings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/role_bindings",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for role bindings by user name, group name, role name, parent workspace name or ID, user ID or group ID."
+              },
+              {
+                "name": "bound_member_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of role bindings by the kind of the bound member. Optional."
+              },
+              {
+                "name": "user_types",
+                "value": "",
+                "type": "query",
+                "description": "Limits the results to a specific set of user types. Only applies to user role bindings."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches all project role bindings. Requires project_list_role_bindings permission."
+        },
+        {
+          "info": {
+            "name": "Post Project Role Binding",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/role_bindings",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new project role binding. Requires project_create_role_binding permission."
+        },
+        {
+          "info": {
+            "name": "Get User Role Bindings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/users/:user_id/role_bindings",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for role bindings by workspace name, project name, role name, workspace ID, or project ID."
+              },
+              {
+                "name": "bound_resource_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of role bindings by the kind of the bound resource. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all role bindings for the user. Requires user_list_role_bindings permission."
+        },
+        {
+          "info": {
+            "name": "Get Group Role Bindings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id/role_bindings",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for role bindings by workspace name, project name, role name, workspace ID, or project ID."
+              },
+              {
+                "name": "bound_resource_kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of role bindings by the kind of the bound resource. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all role bindings for the group. Requires group_list_role_bindings permission."
+        },
+        {
+          "info": {
+            "name": "Delete Role Binding.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/role_bindings/:role_binding_id",
+            "params": [
+              {
+                "name": "role_binding_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes role binding by id. Permission required depends on the role binding type. Deleting an organization role binding requires organization_role_binding_delete permission. Deleting a workspace role binding requires workspace_role_binding_delete permission. Deleting a project role binding requires project_role_binding_delete permission."
+        },
+        {
+          "info": {
+            "name": "List Permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/permissions",
+            "params": [
+              {
+                "name": "search_string",
+                "value": "",
+                "type": "query",
+                "description": "String to search on. Will perform a substring match of name and description."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns list of available permissions."
+        },
+        {
+          "info": {
+            "name": "Check Permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/permissions/check",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Check given permissions and returns a list of allowed and not allowed permissions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

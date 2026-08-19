@@ -1,0 +1,370 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery RAG Settings API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RAG Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Task Rag Search Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_search_settings",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task to fetch the provider connections for."
+              },
+              {
+                "name": "config_name",
+                "value": "",
+                "type": "query",
+                "description": "Rag search setting configuration name substring to search for."
+              },
+              {
+                "name": "rag_provider_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of rag provider configuration IDs to filter for."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get list of RAG search setting configurations for the task."
+        },
+        {
+          "info": {
+            "name": "Create Rag Search Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_search_settings",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task to create the search settings configuration under."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new RAG search settings configuration."
+        },
+        {
+          "info": {
+            "name": "Get Rag Search Setting",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG search setting configuration."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a single RAG setting configuration."
+        },
+        {
+          "info": {
+            "name": "Update Rag Search Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG setting configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a single RAG search setting configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Rag Search Setting",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG setting configuration."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a RAG search setting configuration."
+        },
+        {
+          "info": {
+            "name": "Get Rag Search Setting Configuration Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG search setting configuration to get versions for."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "List of tags to filter for versions tagged with any matching tag."
+              },
+              {
+                "name": "version_numbers",
+                "value": "",
+                "type": "query",
+                "description": "List of version numbers to filter for."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get list of versions for the RAG search setting configuration."
+        },
+        {
+          "info": {
+            "name": "Create Rag Search Settings Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG settings configuration to create the new version for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new version for an existing RAG search settings configuration."
+        },
+        {
+          "info": {
+            "name": "Get Rag Search Setting Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions/:version_number",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG search setting configuration."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the version to fetch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a single RAG setting configuration version."
+        },
+        {
+          "info": {
+            "name": "Update Rag Search Settings Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions/:version_number",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG search setting configuration to update."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the version to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a single RAG search setting configuration version metadata."
+        },
+        {
+          "info": {
+            "name": "Delete Rag Search Setting Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions/:version_number",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG search setting configuration."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the version to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Soft delete a RAG search setting configuration version."
+        },
+        {
+          "info": {
+            "name": "Get Rag Search Setting Version By Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_search_settings/:setting_configuration_id/versions/tags/:tag",
+            "params": [
+              {
+                "name": "setting_configuration_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG search setting configuration."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a single RAG setting configuration version by tag."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

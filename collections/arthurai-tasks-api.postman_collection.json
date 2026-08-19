@@ -1,0 +1,2553 @@
+{
+  "item": [
+    {
+      "id": "a676b31f-c4ac-4f87-8517-2dc377a6cd04",
+      "name": "Tasks",
+      "description": {
+        "content": "Endpoints to manage tasks and their rules",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f3b73394-1209-432f-a16b-7213192d8496",
+          "name": "Get All Tasks",
+          "request": {
+            "name": "Get All Tasks",
+            "description": {
+              "content": "[Deprecated] Use /tasks/search endpoint. This endpoint will be removed in a future release.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "78e94ddb-7de8-4b38-a4c7-4c6107a0380a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 6495,\n    \"updated_at\": 5696,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ModelSensitiveDataRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": false,\n        \"scope\": \"default\",\n        \"created_at\": 5857,\n        \"updated_at\": 6200,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 2017,\n        \"updated_at\": 9629,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": true,\n    \"is_system_task\": true,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"QueryRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1966-10-04T23:15:07.835Z\",\n        \"updated_at\": \"2025-07-28T22:50:49.494Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"QueryRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"2007-05-03T18:29:27.834Z\",\n        \"updated_at\": \"2000-10-22T01:35:41.139Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 9217,\n    \"updated_at\": 3819,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ToxicityRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 5959,\n        \"updated_at\": 1678,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"RegexRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": false,\n        \"scope\": \"default\",\n        \"created_at\": 2695,\n        \"updated_at\": 9064,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": true,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"external\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1984-02-25T19:06:06.418Z\",\n        \"updated_at\": \"2012-01-16T14:28:24.462Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"QueryRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1986-06-20T05:31:46.392Z\",\n        \"updated_at\": \"1993-11-02T14:49:07.913Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bc56388-8ec2-418a-a365-f3c0d7eca5ca",
+          "name": "Create Task",
+          "request": {
+            "name": "Create Task",
+            "description": {
+              "content": "Register a new task. When a new task is created, all existing default rules will be auto-applied for this new task. Optionally specify if the task is agentic.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"<string>\",\n    \"gcp_metadata\": {\n      \"project_id\": \"<string>\",\n      \"region\": \"<string>\",\n      \"resource_id\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b7334df8-35ce-4248-8425-afda6c7dc0d4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"external\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": 9763,\n  \"updated_at\": 750,\n  \"rules\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ToxicityRule\",\n      \"apply_to_prompt\": false,\n      \"apply_to_response\": true,\n      \"scope\": \"task\",\n      \"created_at\": 9234,\n      \"updated_at\": 3729,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"PIIDataRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": true,\n      \"scope\": \"default\",\n      \"created_at\": 228,\n      \"updated_at\": 6521,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": true,\n  \"is_system_task\": false,\n  \"is_autocreated\": false,\n  \"is_archived\": true,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    },\n    \"service_names\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"metrics\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ResponseRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2019-11-21T04:56:37.952Z\",\n      \"updated_at\": \"1967-04-15T09:22:12.651Z\",\n      \"config\": \"string\",\n      \"enabled\": true\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"QueryRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2024-07-26T22:14:21.884Z\",\n      \"updated_at\": \"1955-11-23T00:46:49.705Z\",\n      \"config\": \"string\",\n      \"enabled\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0fb8f10-cf8c-411c-87dd-c6e7fdf14b2b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"external\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50739bd3-2d2f-4cd2-9f81-92108e10d154",
+          "name": "Archive Task",
+          "request": {
+            "name": "Archive Task",
+            "description": {
+              "content": "Archive task. Also archives all task-scoped rules. Associated default rules are unaffected.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "beab834c-e5e6-49a7-9e65-e946f86a1df8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e133328a-6c9c-42bb-9b2b-20105ba849b1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d1249e7-f535-4e0b-ac57-cbb5ecfee14d",
+          "name": "Get Task",
+          "request": {
+            "name": "Get Task",
+            "description": {
+              "content": "Get tasks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6f6599c3-e2c5-4673-bafd-c3719605cf14",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": 9763,\n  \"updated_at\": 750,\n  \"rules\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ToxicityRule\",\n      \"apply_to_prompt\": false,\n      \"apply_to_response\": true,\n      \"scope\": \"task\",\n      \"created_at\": 9234,\n      \"updated_at\": 3729,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"PIIDataRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": true,\n      \"scope\": \"default\",\n      \"created_at\": 228,\n      \"updated_at\": 6521,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": true,\n  \"is_system_task\": false,\n  \"is_autocreated\": false,\n  \"is_archived\": true,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    },\n    \"service_names\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"metrics\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ResponseRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2019-11-21T04:56:37.952Z\",\n      \"updated_at\": \"1967-04-15T09:22:12.651Z\",\n      \"config\": \"string\",\n      \"enabled\": true\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"QueryRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2024-07-26T22:14:21.884Z\",\n      \"updated_at\": \"1955-11-23T00:46:49.705Z\",\n      \"config\": \"string\",\n      \"enabled\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7b3d739-f46d-4f75-ae6e-6f2c6d1ba001",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aab3a06b-a85b-45a3-91e5-ad6eb70d0b75",
+          "name": "Unarchive Task",
+          "request": {
+            "name": "Unarchive Task",
+            "description": {
+              "content": "Unarchive a previously archived task. Also unarchives all task-scoped rules and metrics that were archived with it.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "unarchive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "11d6c45d-ed6c-4787-8991-8469a2b02624",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b8535e4-e8d0-48f9-b0db-31203a7704c1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48e4fa13-172a-4633-858c-423884c6d930",
+          "name": "Get Agent Tasks",
+          "request": {
+            "name": "Get Agent Tasks",
+            "description": {
+              "content": "Get agentic tasks with enriched agent metadata (tools, sub-agents, models). Returns only agentic tasks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "agent-tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1466dadf-cf1b-405d-bcc2-770f36973d7d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "agent-tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": \"1973-09-18T01:43:58.694Z\",\n    \"updated_at\": \"2002-03-27T15:44:18.709Z\",\n    \"is_autocreated\": false,\n    \"creation_source\": {\n      \"gcp_project_id\": \"string\",\n      \"gcp_region\": \"string\",\n      \"gcp_reasoning_engine_id\": \"string\",\n      \"type\": \"GCP\",\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"last_fetched\": \"2001-11-12T15:55:21.412Z\",\n    \"tools\": [\n      {\n        \"name\": \"string\",\n        \"arguments\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"name\": \"string\",\n        \"arguments\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"sub_agents\": [\n      {\n        \"name\": \"string\"\n      },\n      {\n        \"name\": \"string\"\n      }\n    ],\n    \"models\": [\n      {\n        \"name\": \"string\"\n      },\n      {\n        \"name\": \"string\"\n      }\n    ],\n    \"data_sources\": [\n      {\n        \"url\": \"string\"\n      },\n      {\n        \"url\": \"string\"\n      }\n    ],\n    \"num_spans\": 9904,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ModelSensitiveDataRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": false,\n        \"scope\": \"task\",\n        \"created_at\": 3081,\n        \"updated_at\": 5132,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": false,\n        \"scope\": \"task\",\n        \"created_at\": 2065,\n        \"updated_at\": 668,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": \"1988-10-05T07:29:08.147Z\",\n    \"updated_at\": \"2008-10-27T22:32:23.573Z\",\n    \"is_autocreated\": false,\n    \"creation_source\": {\n      \"gcp_project_id\": \"string\",\n      \"gcp_region\": \"string\",\n      \"gcp_reasoning_engine_id\": \"string\",\n      \"type\": \"GCP\",\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"last_fetched\": \"1977-06-01T11:38:53.188Z\",\n    \"tools\": [\n      {\n        \"name\": \"string\",\n        \"arguments\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"name\": \"string\",\n        \"arguments\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"sub_agents\": [\n      {\n        \"name\": \"string\"\n      },\n      {\n        \"name\": \"string\"\n      }\n    ],\n    \"models\": [\n      {\n        \"name\": \"string\"\n      },\n      {\n        \"name\": \"string\"\n      }\n    ],\n    \"data_sources\": [\n      {\n        \"url\": \"string\"\n      },\n      {\n        \"url\": \"string\"\n      }\n    ],\n    \"num_spans\": 544,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ToxicityRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 8565,\n        \"updated_at\": 2705,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ModelHallucinationRuleV2\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": false,\n        \"scope\": \"default\",\n        \"created_at\": 2758,\n        \"updated_at\": 5328,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cc22d48-c4f9-4ca6-9ece-54fe174701ba",
+          "name": "Redirect To Tasks",
+          "request": {
+            "name": "Redirect To Tasks",
+            "description": {
+              "content": "Redirect to /tasks endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "task"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "decd339e-34d7-414b-96fd-11b7dc9fe850",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "359b025d-5408-4b87-afcf-3090150fd2b2",
+          "name": "Search Tasks",
+          "request": {
+            "name": "Search Tasks",
+            "description": {
+              "content": "Search tasks. Can filter by task IDs, task name substring, and agentic status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"task_name\": \"<string>\",\n  \"is_agentic\": \"<boolean>\",\n  \"include_archived\": \"<boolean>\",\n  \"only_archived\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "02977f05-80a2-49ee-bf79-71bf225a4c28",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"task_name\": \"<string>\",\n  \"is_agentic\": \"<boolean>\",\n  \"include_archived\": \"<boolean>\",\n  \"only_archived\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 5222,\n  \"tasks\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": 836,\n      \"updated_at\": 5529,\n      \"rules\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ModelSensitiveDataRule\",\n          \"apply_to_prompt\": false,\n          \"apply_to_response\": false,\n          \"scope\": \"task\",\n          \"created_at\": 3832,\n          \"updated_at\": 4885,\n          \"enabled\": false,\n          \"config\": {\n            \"keywords\": [\n              \"Blocked_Keyword_1\",\n              \"Blocked_Keyword_2\"\n            ]\n          }\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"RegexRule\",\n          \"apply_to_prompt\": false,\n          \"apply_to_response\": true,\n          \"scope\": \"default\",\n          \"created_at\": 8855,\n          \"updated_at\": 3512,\n          \"enabled\": false,\n          \"config\": {\n            \"keywords\": [\n              \"Blocked_Keyword_1\",\n              \"Blocked_Keyword_2\"\n            ]\n          }\n        }\n      ],\n      \"is_agentic\": true,\n      \"is_system_task\": true,\n      \"is_autocreated\": true,\n      \"is_archived\": true,\n      \"agent_metadata\": {\n        \"provider\": \"external\",\n        \"gcp_metadata\": {\n          \"project_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"region\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"resource_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"service_names\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"metrics\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ResponseRelevance\",\n          \"metric_metadata\": \"string\",\n          \"created_at\": \"1951-02-18T09:22:02.325Z\",\n          \"updated_at\": \"1984-04-19T09:01:56.963Z\",\n          \"config\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ResponseRelevance\",\n          \"metric_metadata\": \"string\",\n          \"created_at\": \"2003-12-23T00:56:11.930Z\",\n          \"updated_at\": \"1954-09-19T23:13:26.112Z\",\n          \"config\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": 4242,\n      \"updated_at\": 432,\n      \"rules\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ToxicityRule\",\n          \"apply_to_prompt\": true,\n          \"apply_to_response\": true,\n          \"scope\": \"task\",\n          \"created_at\": 5916,\n          \"updated_at\": 4157,\n          \"enabled\": false,\n          \"config\": {\n            \"keywords\": [\n              \"Blocked_Keyword_1\",\n              \"Blocked_Keyword_2\"\n            ]\n          }\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ModelSensitiveDataRule\",\n          \"apply_to_prompt\": false,\n          \"apply_to_response\": false,\n          \"scope\": \"default\",\n          \"created_at\": 7113,\n          \"updated_at\": 7607,\n          \"enabled\": false,\n          \"config\": {\n            \"keywords\": [\n              \"Blocked_Keyword_1\",\n              \"Blocked_Keyword_2\"\n            ]\n          }\n        }\n      ],\n      \"is_agentic\": false,\n      \"is_system_task\": false,\n      \"is_autocreated\": false,\n      \"is_archived\": true,\n      \"agent_metadata\": {\n        \"provider\": \"gcp\",\n        \"gcp_metadata\": {\n          \"project_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"region\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"resource_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"service_names\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"metrics\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ResponseRelevance\",\n          \"metric_metadata\": \"string\",\n          \"created_at\": \"1996-08-08T06:39:19.136Z\",\n          \"updated_at\": \"2008-03-22T22:50:58.924Z\",\n          \"config\": \"string\",\n          \"enabled\": false\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"type\": \"ToolSelection\",\n          \"metric_metadata\": \"string\",\n          \"created_at\": \"1982-12-23T13:43:37.667Z\",\n          \"updated_at\": \"2017-03-17T17:40:19.288Z\",\n          \"config\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "808c5f25-1496-4115-831f-a6a12c97e00a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"task_name\": \"<string>\",\n  \"is_agentic\": \"<boolean>\",\n  \"include_archived\": \"<boolean>\",\n  \"only_archived\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6449ced-a3c3-473f-bf30-ad113c8263e4",
+          "name": "Create Task Rule",
+          "request": {
+            "name": "Create Task Rule",
+            "description": {
+              "content": "Create a rule to be applied only to this task. Available rule types are KeywordRule, ModelHallucinationRuleV2, ModelSensitiveDataRule, PIIDataRule, PromptInjectionRule, RegexRule, ToxicityRule.Note: The rules are cached by the validation endpoints for 60 seconds.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"apply_to_prompt\": \"<boolean>\",\n  \"apply_to_response\": \"<boolean>\",\n  \"config\": {\n    \"keywords\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4a6b75e6-6afa-40d6-b906-4659ee278a06",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Sensitive Data Rule\",\n  \"type\": \"ModelSensitiveDataRule\",\n  \"apply_to_prompt\": true,\n  \"apply_to_response\": false,\n  \"config\": {\n    \"examples\": [\n      {\n        \"example\": \"John has O negative blood group\",\n        \"result\": true\n      },\n      {\n        \"example\": \"Most of the people have A positive blood group\",\n        \"result\": false\n      }\n    ],\n    \"hint\": \"specific individual's blood types\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"type\": \"KeywordRule\",\n  \"apply_to_prompt\": false,\n  \"apply_to_response\": true,\n  \"scope\": \"task\",\n  \"created_at\": 3508,\n  \"updated_at\": 4895,\n  \"enabled\": false,\n  \"config\": {\n    \"keywords\": [\n      \"Blocked_Keyword_1\",\n      \"Blocked_Keyword_2\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48069f64-46d6-403e-9f0f-d01fa1bd4ef0",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Sensitive Data Rule\",\n  \"type\": \"ModelSensitiveDataRule\",\n  \"apply_to_prompt\": true,\n  \"apply_to_response\": false,\n  \"config\": {\n    \"examples\": [\n      {\n        \"example\": \"John has O negative blood group\",\n        \"result\": true\n      },\n      {\n        \"example\": \"Most of the people have A positive blood group\",\n        \"result\": false\n      }\n    ],\n    \"hint\": \"specific individual's blood types\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d0f3604f-1bcc-4ebb-acf8-123dbbb1928e",
+          "name": "Update Task Rules",
+          "request": {
+            "name": "Update Task Rules",
+            "description": {
+              "content": "Enable or disable an existing rule for this task including the default rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "rules",
+                ":rule_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "rule_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c3257893-3d14-4b23-a1b8-c83c9d5e453c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules",
+                    ":rule_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "rule_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": 9763,\n  \"updated_at\": 750,\n  \"rules\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ToxicityRule\",\n      \"apply_to_prompt\": false,\n      \"apply_to_response\": true,\n      \"scope\": \"task\",\n      \"created_at\": 9234,\n      \"updated_at\": 3729,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"PIIDataRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": true,\n      \"scope\": \"default\",\n      \"created_at\": 228,\n      \"updated_at\": 6521,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": true,\n  \"is_system_task\": false,\n  \"is_autocreated\": false,\n  \"is_archived\": true,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    },\n    \"service_names\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"metrics\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ResponseRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2019-11-21T04:56:37.952Z\",\n      \"updated_at\": \"1967-04-15T09:22:12.651Z\",\n      \"config\": \"string\",\n      \"enabled\": true\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"QueryRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2024-07-26T22:14:21.884Z\",\n      \"updated_at\": \"1955-11-23T00:46:49.705Z\",\n      \"config\": \"string\",\n      \"enabled\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1027fe2a-0c6e-4b44-87e5-ff35cebfcc02",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules",
+                    ":rule_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "rule_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb724015-947e-42bf-a152-044a9dc501a1",
+          "name": "Archive Task Rule",
+          "request": {
+            "name": "Archive Task Rule",
+            "description": {
+              "content": "Archive an existing rule for this task.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "rules",
+                ":rule_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "rule_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3ce25e52-d97b-49f6-a7d7-9711d16a61ba",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules",
+                    ":rule_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "rule_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05079095-f2a1-43c3-bda9-88035c067762",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "rules",
+                    ":rule_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "rule_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0198e7a2-09cc-4239-9135-bcbfdfce61e4",
+          "name": "Create Task Metric",
+          "request": {
+            "name": "Create Task Metric",
+            "description": {
+              "content": "Create metrics for a task. Only agentic tasks can have metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"metric_metadata\": \"<string>\",\n  \"config\": {\n    \"relevance_threshold\": \"<number>\",\n    \"use_llm_judge\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1ebad676-d748-4e0c-a3d1-683661984404",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"QueryRelevance\",\n  \"name\": \"My User Query Relevance\",\n  \"metric_metadata\": \"This is a test metric metadata\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"type\": \"ToolSelection\",\n  \"metric_metadata\": \"string\",\n  \"created_at\": \"1965-02-03T20:35:55.391Z\",\n  \"updated_at\": \"2003-06-18T17:14:26.329Z\",\n  \"config\": \"string\",\n  \"enabled\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4cd73dd-1ffb-473b-bc53-e46b71f6d352",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"QueryRelevance\",\n  \"name\": \"My User Query Relevance\",\n  \"metric_metadata\": \"This is a test metric metadata\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4cef9ffc-a8d5-4506-b67a-910d8a74873d",
+          "name": "Update Task Metric",
+          "request": {
+            "name": "Update Task Metric",
+            "description": {
+              "content": "Update a task metric.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "metrics",
+                ":metric_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "metric_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "981089b4-c42d-487c-bf54-6831f059af38",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics",
+                    ":metric_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "metric_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": 9763,\n  \"updated_at\": 750,\n  \"rules\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ToxicityRule\",\n      \"apply_to_prompt\": false,\n      \"apply_to_response\": true,\n      \"scope\": \"task\",\n      \"created_at\": 9234,\n      \"updated_at\": 3729,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"PIIDataRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": true,\n      \"scope\": \"default\",\n      \"created_at\": 228,\n      \"updated_at\": 6521,\n      \"enabled\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": true,\n  \"is_system_task\": false,\n  \"is_autocreated\": false,\n  \"is_archived\": true,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    },\n    \"service_names\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"metrics\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"ResponseRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2019-11-21T04:56:37.952Z\",\n      \"updated_at\": \"1967-04-15T09:22:12.651Z\",\n      \"config\": \"string\",\n      \"enabled\": true\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"QueryRelevance\",\n      \"metric_metadata\": \"string\",\n      \"created_at\": \"2024-07-26T22:14:21.884Z\",\n      \"updated_at\": \"1955-11-23T00:46:49.705Z\",\n      \"config\": \"string\",\n      \"enabled\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "421d6a1b-17ed-4b73-b99c-66ad1f941431",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics",
+                    ":metric_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "metric_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a80d1d6-9540-4c36-9439-2625379608b8",
+          "name": "Archive Task Metric",
+          "request": {
+            "name": "Archive Task Metric",
+            "description": {
+              "content": "Archive a task metric.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tasks",
+                ":task_id",
+                "metrics",
+                ":metric_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "metric_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "46627274-5304-45f5-8d47-5bb2cf535337",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics",
+                    ":metric_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "metric_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1471a161-9cb5-474d-8d3a-e5e2310bf023",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tasks",
+                    ":task_id",
+                    "metrics",
+                    ":metric_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "metric_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2a34e0c-455b-4eb4-9de9-053944987930",
+          "name": "Stream Demo Chatbot",
+          "request": {
+            "name": "Stream Demo Chatbot",
+            "description": {
+              "content": "Stream a demo chatbot response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "demos",
+                "chatbot",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"history\": [\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"name\": \"<string>\",\n      \"content\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"session_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2630332d-ac3b-440f-9f59-e15a9e6113f6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "demos",
+                    "chatbot",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"history\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"system\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66d48bab-e499-4f3f-b48d-76ba756bcbf1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "demos",
+                    "chatbot",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"history\": [\n    {\n      \"role\": \"developer\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    },\n    {\n      \"role\": \"system\",\n      \"name\": \"string\",\n      \"content\": \"string\",\n      \"tool_calls\": [\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        },\n        {\n          \"id\": \"string\",\n          \"function\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"arguments\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"function\"\n        }\n      ],\n      \"tool_call_id\": \"string\"\n    }\n  ],\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "72ed1cbc-292d-4715-bb1a-c4ac3775f77d",
+    "name": "Arthur GenAI Engine Agent Discovery Tasks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints to manage tasks and their rules",
+      "type": "text/plain"
+    }
+  }
+}

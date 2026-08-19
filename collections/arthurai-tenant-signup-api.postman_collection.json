@@ -1,0 +1,175 @@
+{
+  "item": [
+    {
+      "id": "f3536789-ea5b-42f7-b964-eccfa660a025",
+      "name": "Tenant Signup",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3967ee69-1aaa-46c3-94d3-dcfbea73101c",
+          "name": "Create Tenant Signup",
+          "request": {
+            "name": "Create Tenant Signup",
+            "description": {
+              "content": "Public tenant signup. Accepts try-it-out onboarding form data, persists an onboarding submission, and creates a new organization, a default demo task scoped to that org, and a TENANT-USER API key with `org_scope` set to the new org. Returns the four identifiers; the raw `api_key` value appears only in this response (the DB stores only its hash). Gated by GENAI_ENGINE_DEMO_MODE — returns 404 when disabled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "tenant",
+                "signup"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"form_data\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"job_title\": \"<string>\",\n    \"company\": \"<string>\",\n    \"maturity\": \"<string>\",\n    \"brings\": \"<string>\",\n    \"competitors\": [\n      \"<string>\"\n    ],\n    \"attribution\": \"<string>\",\n    \"brings_other\": \"\",\n    \"competitor_other\": \"<string>\",\n    \"attribution_other\": \"<string>\"\n  },\n  \"form_variant\": \"<string>\",\n  \"recaptcha_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "895de9c5-c3b3-4592-bed1-65fad8723b04",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tenant",
+                    "signup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"form_data\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"string\",\n    \"job_title\": \"string\",\n    \"company\": \"string\",\n    \"maturity\": \"string\",\n    \"brings\": \"string\",\n    \"competitors\": [\n      \"string\"\n    ],\n    \"attribution\": \"string\",\n    \"brings_other\": \"\",\n    \"competitor_other\": \"string\",\n    \"attribution_other\": \"string\"\n  },\n  \"form_variant\": \"<string>\",\n  \"recaptcha_token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"org_id\": \"763c3340-bb59-d8ad-62ae-1067ff38cdd8\",\n  \"task_id\": \"string\",\n  \"task_name\": \"string\",\n  \"api_key\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "633771b4-da78-4795-b942-a2c9a83b599e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "tenant",
+                    "signup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"form_data\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"string\",\n    \"job_title\": \"string\",\n    \"company\": \"string\",\n    \"maturity\": \"string\",\n    \"brings\": \"string\",\n    \"competitors\": [\n      \"string\"\n    ],\n    \"attribution\": \"string\",\n    \"brings_other\": \"\",\n    \"competitor_other\": \"string\",\n    \"attribution_other\": \"string\"\n  },\n  \"form_variant\": \"<string>\",\n  \"recaptcha_token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4648fbb1-bc7f-497b-8dd3-b41437186da0",
+    "name": "Arthur GenAI Engine Agent Discovery Tenant Signup API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

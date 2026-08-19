@@ -1,0 +1,546 @@
+{
+  "item": [
+    {
+      "id": "843db32d-8f26-4cf1-b9f7-551a3c771989",
+      "name": "Feedback",
+      "description": {
+        "content": "Endpoints to manage user feedback on inferences",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e56138d4-3b17-48a3-82a2-6770351629a6",
+          "name": "Post Feedback",
+          "request": {
+            "name": "Post Feedback",
+            "description": {
+              "content": "Post feedback for LLM Application.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "feedback",
+                ":inference_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "inference_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"target\": \"<string>\",\n  \"score\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"user_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9c4b4371-0322-4c6a-9bba-2b3bec4d6879",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "feedback",
+                    ":inference_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "inference_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"target\": \"prompt_results\",\n  \"score\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"user_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"inference_id\": \"string\",\n  \"target\": \"context\",\n  \"score\": 5358,\n  \"created_at\": \"2019-10-06T07:26:33.977Z\",\n  \"updated_at\": \"1997-06-16T04:20:02.743Z\",\n  \"reason\": \"string\",\n  \"user_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b040a2cd-4847-4258-805a-00689ed1f156",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "feedback",
+                    ":inference_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "inference_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"target\": \"prompt_results\",\n  \"score\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"user_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4f9b24f-ef7f-44d2-8dae-d0cf24c7586a",
+          "name": "Query Feedback",
+          "request": {
+            "name": "Query Feedback",
+            "description": {
+              "content": "Paginated feedback querying. See parameters for available filters. Includes feedback from archived tasks and rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "feedback",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "Inclusive start date in ISO8601 string format"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "Exclusive end date in ISO8601 string format"
+                },
+                {
+                  "disabled": false,
+                  "key": "feedback_id",
+                  "value": "<string>",
+                  "description": "Feedback ID to filter on"
+                },
+                {
+                  "disabled": false,
+                  "key": "inference_id",
+                  "value": "<string>",
+                  "description": "Inference ID to filter on"
+                },
+                {
+                  "disabled": false,
+                  "key": "target",
+                  "value": "<string>",
+                  "description": "Target of the feedback. Must be one of ['context', 'response_results', 'prompt_results']"
+                },
+                {
+                  "disabled": false,
+                  "key": "score",
+                  "value": "<integer>",
+                  "description": "Score of the feedback. Must be an integer."
+                },
+                {
+                  "disabled": false,
+                  "key": "feedback_user_id",
+                  "value": "<string>",
+                  "description": "User ID of the user giving feedback to filter on (query will perform fuzzy search)"
+                },
+                {
+                  "disabled": false,
+                  "key": "conversation_id",
+                  "value": "<string>",
+                  "description": "Conversation ID to filter on"
+                },
+                {
+                  "disabled": false,
+                  "key": "task_id",
+                  "value": "<string>",
+                  "description": "Task ID to filter on"
+                },
+                {
+                  "disabled": false,
+                  "key": "inference_user_id",
+                  "value": "<string>",
+                  "description": "User ID of the user who created the inferences to filter on (query will perform fuzzy search)"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "128b2b73-7307-433f-b6bc-10571f2958bb",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "feedback",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "feedback_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target",
+                      "value": "prompt_results"
+                    },
+                    {
+                      "key": "score",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "feedback_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "conversation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "task_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"feedback\": [\n    {\n      \"id\": \"string\",\n      \"inference_id\": \"string\",\n      \"target\": \"context\",\n      \"score\": 1783,\n      \"created_at\": \"1992-06-10T15:10:34.767Z\",\n      \"updated_at\": \"1963-08-11T04:54:17.417Z\",\n      \"reason\": \"string\",\n      \"user_id\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"inference_id\": \"string\",\n      \"target\": \"prompt_results\",\n      \"score\": 7680,\n      \"created_at\": \"1976-06-28T04:46:24.974Z\",\n      \"updated_at\": \"1992-05-05T17:30:16.293Z\",\n      \"reason\": \"string\",\n      \"user_id\": \"string\"\n    }\n  ],\n  \"page\": 8842,\n  \"page_size\": 7602,\n  \"total_pages\": 8590,\n  \"total_count\": 9612\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "974b43ed-85c6-42b1-bec1-a9bb9c277473",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "feedback",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "feedback_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target",
+                      "value": "prompt_results"
+                    },
+                    {
+                      "key": "score",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "feedback_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "conversation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "task_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "32762e0b-2819-4342-a710-36ff4765abb9",
+    "name": "Arthur GenAI Engine Agent Discovery Feedback API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints to manage user feedback on inferences",
+      "type": "text/plain"
+    }
+  }
+}

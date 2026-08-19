@@ -1,0 +1,482 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Datasets V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Datasets By Connector Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/datasets",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a list of configured datasets for the connector. Requires connector_list_datasets permission."
+        },
+        {
+          "info": {
+            "name": "Create Connector Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/datasets",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create connector dataset. Requires connector_create_dataset permission."
+        },
+        {
+          "info": {
+            "name": "Get Available Datasets By Connector Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/available_datasets",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort by."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search term to filter by."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a list of available datasets for the connector. Requires connector_list_available_datasets permission."
+        },
+        {
+          "info": {
+            "name": "Create Single Available Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/available_datasets",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a single available dataset for this connector. Requires connector_create_available_datasetpermission."
+        },
+        {
+          "info": {
+            "name": "Overwrite Connector Available Datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/available_datasets",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Overwrite all available datasets for this connector. Requires connector_put_available_datasets permission."
+        },
+        {
+          "info": {
+            "name": "Get Dataset By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single dataset by ID. Requires dataset_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a dataset. Requires dataset_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a dataset. Requires dataset_delete permission."
+        },
+        {
+          "info": {
+            "name": "Update Dataset Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id/schema",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a dataset schema. Requires dataset_put_schema permission."
+        },
+        {
+          "info": {
+            "name": "Get Workspace Datasets.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/datasets",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for datasets that are used by these models. Optional."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for datasets by connector name or dataset name."
+              },
+              {
+                "name": "connector_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by connector type."
+              },
+              {
+                "name": "connector_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by connector name."
+              },
+              {
+                "name": "dataset_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by dataset name."
+              },
+              {
+                "name": "joined_datasets",
+                "value": "",
+                "type": "query",
+                "description": "Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None."
+              },
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by the data plane (engine) that backs them."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Endpoint requires workspace_list_datasets permission. It will only include datasets the user has additional dataset_read permissions on in the response."
+        },
+        {
+          "info": {
+            "name": "Get Datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/datasets",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for datasets that are used by these models. Optional."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for datasets by connector name or dataset name."
+              },
+              {
+                "name": "connector_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by connector type."
+              },
+              {
+                "name": "connector_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by connector name."
+              },
+              {
+                "name": "dataset_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by dataset name."
+              },
+              {
+                "name": "joined_datasets",
+                "value": "",
+                "type": "query",
+                "description": "Filter for joined datasets. Only returns joined datasets if True. Only returns non-joined datasets if False. Not applied if None."
+              },
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter datasets by the data plane (engine) that backs them."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a list of configured datasets. Requires project_list_datasets permission."
+        },
+        {
+          "info": {
+            "name": "Create Project Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/datasets",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create project dataset. Requires project_create_dataset permission."
+        },
+        {
+          "info": {
+            "name": "Create Project Available Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/available_datasets",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create project dataset. Requires project_create_available_dataset permission."
+        },
+        {
+          "info": {
+            "name": "Get Available Dataset By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/available_datasets/:available_dataset_id",
+            "params": [
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single available dataset by ID. Requires available_dataset_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Available Dataset Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/available_datasets/:available_dataset_id/schema",
+            "params": [
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a single available dataset schema. Requires available_dataset_put_schema permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

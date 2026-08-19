@@ -1,0 +1,253 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Notebooks API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notebooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List notebooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all notebooks for a task with pagination and optional name search"
+        },
+        {
+          "info": {
+            "name": "Create a notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new notebook for organizing experiments within a task"
+        },
+        {
+          "info": {
+            "name": "Get notebook details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a notebook including state and experiment history"
+        },
+        {
+          "info": {
+            "name": "Update notebook metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update notebook name or description (not the state)"
+        },
+        {
+          "info": {
+            "name": "Delete notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a notebook (experiments are kept)"
+        },
+        {
+          "info": {
+            "name": "Get notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the current state (draft configuration) of a notebook"
+        },
+        {
+          "info": {
+            "name": "Set notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set the state (draft configuration) of a notebook"
+        },
+        {
+          "info": {
+            "name": "Get notebook history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/notebooks/:notebook_id/history",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Notebook ID"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of experiments run from this notebook"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

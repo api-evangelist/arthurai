@@ -1,0 +1,259 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Prompt Experiments API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prompt Experiments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List prompt experiments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/prompt_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search text to filter experiments by name, description, prompt name, or dataset name"
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter experiments by dataset ID"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all prompt experiments for a task with optional filtering and pagination"
+        },
+        {
+          "info": {
+            "name": "Create and run a prompt experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/prompt_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new prompt experiment and initiate execution"
+        },
+        {
+          "info": {
+            "name": "Get prompt experiment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/prompt_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to retrieve"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a specific prompt experiment including summary results"
+        },
+        {
+          "info": {
+            "name": "Delete prompt experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/prompt_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a prompt experiment and all its associated data"
+        },
+        {
+          "info": {
+            "name": "Get experiment test cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/prompt_experiments/:experiment_id/test_cases",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of test case results for a prompt experiment"
+        },
+        {
+          "info": {
+            "name": "Get prompt results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/prompt_experiments/:experiment_id/prompts/:prompt_key/results",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment"
+              },
+              {
+                "name": "prompt_key",
+                "value": "",
+                "type": "path",
+                "description": "The prompt key (format: 'saved:name:version' or 'unsaved:auto_name'). URL-encode colons as %3A"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of results for a specific prompt within an experiment (supports both saved and unsaved prompts)"
+        },
+        {
+          "info": {
+            "name": "Attach notebook to experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/prompt_experiments/:experiment_id/notebook",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the experiment"
+              },
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the notebook to attach"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Attach a notebook to an existing experiment"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

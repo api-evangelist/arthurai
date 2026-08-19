@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Metrics V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Metric Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/metrics/versions",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Get metric versions for a model. Requires model_list_metric_versions permission."
+        },
+        {
+          "info": {
+            "name": "Create A Metric Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/metrics/versions",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new version for metrics to be uploaded for this model. Requires model_create_metric_version permission."
+        },
+        {
+          "info": {
+            "name": "Upload Metrics For Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/metrics/versions/:metric_version_num",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "metric_version_num",
+                "value": "",
+                "type": "path",
+                "description": "The version number for the metrics being uploaded. Should be an integer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds metrics for a model by version. This will create the version if it does not exist. Requires model_add_metrics_for_version permission."
+        },
+        {
+          "info": {
+            "name": "Query Model Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/metrics/query",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Queries metrics for a model. Requires model_query_metrics permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Custom Aggregation Tests V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom Aggregation Tests V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Custom Aggregation Tests.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/custom_aggregation_tests",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number to fetch."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of items per page."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for custom aggregation tests by aggregation name or description."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter for tests using a specific dataset."
+              }
+            ]
+          },
+          "docs": "Requires workspace_list_custom_aggregation_tests permission."
+        },
+        {
+          "info": {
+            "name": "Post Custom Aggregation Test.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/custom_aggregation_tests",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires workspace_create_custom_aggregation_test permission. Will queue an async job to test the configured custom aggregation for the dataset. Requires dataset_create_data_retrieval on the dataset the test is configured to run against."
+        },
+        {
+          "info": {
+            "name": "Get Custom Aggregation Test By Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/custom_aggregation_tests/:custom_aggregation_test_id",
+            "params": [
+              {
+                "name": "custom_aggregation_test_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requires custom_aggregation_test_read permission."
+        },
+        {
+          "info": {
+            "name": "Delete Custom Aggregation Test.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/custom_aggregation_tests/:custom_aggregation_test_id",
+            "params": [
+              {
+                "name": "custom_aggregation_test_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requires custom_aggregation_test_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Custom Aggregation Test Results By Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/custom_aggregation_tests/:custom_aggregation_test_id/results",
+            "params": [
+              {
+                "name": "custom_aggregation_test_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number to fetch."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of items per page."
+              },
+              {
+                "name": "time_range_after",
+                "value": "",
+                "type": "query",
+                "description": "Filter results to only include metrics with timestamp after this time."
+              },
+              {
+                "name": "time_range_before",
+                "value": "",
+                "type": "query",
+                "description": "Filter results to only include metrics with timestamp before this time."
+              }
+            ]
+          },
+          "docs": "Requires custom_aggregation_test_read_results permission. Also requires dataset_get_data_retrieval on the dataset the custom aggregation test is configured against."
+        },
+        {
+          "info": {
+            "name": "Post Custom Aggregation Test Results.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/custom_aggregation_tests/:custom_aggregation_test_id/results",
+            "params": [
+              {
+                "name": "custom_aggregation_test_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires custom_aggregation_test_create_results permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

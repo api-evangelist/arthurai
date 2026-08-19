@@ -1,0 +1,269 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Groups V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Groups V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Group Memberships",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/group_memberships",
+            "params": [
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter memberships to select user IDs."
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter memberships to select group IDs."
+              },
+              {
+                "name": "group_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter memberships by group name. A name matches if it contains the input string case-insensitive."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Searches memberships for the intersection of user and group IDs. Requires organization_list_group_memberships permission."
+        },
+        {
+          "info": {
+            "name": "List Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/groups",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order of the returned list. Optional."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter the list of groups by name. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches all groups. Requires organization_list_groups permission."
+        },
+        {
+          "info": {
+            "name": "Create Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires organization_create_group permission."
+        },
+        {
+          "info": {
+            "name": "Get Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Fetches group by ID. Requires group_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates group by ID. Requires group_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes group by ID. Requires group_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Group Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id/users",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for users by name or email."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Fetches group users by group ID. Requires group_list_users permission."
+        },
+        {
+          "info": {
+            "name": "Assign User To Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id/users",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign user to group by group ID. Requires group_create_group_membership permission."
+        },
+        {
+          "info": {
+            "name": "Remove Users From Group In Bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/groups/:group_id/users",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Remove all users from group by group ID. Requires group_delete_group_membership permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

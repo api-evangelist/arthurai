@@ -1,0 +1,309 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Alert Rules V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Alert Rules V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Model Alert Rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alert_rules",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort by."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the alert rule to search by."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "The bound to filter by."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "The query to filter by."
+              },
+              {
+                "name": "threshold_less_than",
+                "value": "",
+                "type": "query",
+                "description": "The threshold to filter by, less than."
+              },
+              {
+                "name": "threshold_greater_than",
+                "value": "",
+                "type": "query",
+                "description": "The threshold to filter by, greater than."
+              },
+              {
+                "name": "metric_name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the alert rule query metric to search by."
+              },
+              {
+                "name": "policy_model_assignment_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional policy model assignment ID to filter alert rules by."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns a list of alert rules associated with a model. Requires model_list_alert_rules permission."
+        },
+        {
+          "info": {
+            "name": "Create Model Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alert_rules",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an alert rule. Requires model_create_alert_rule permission."
+        },
+        {
+          "info": {
+            "name": "Validate A Model Alert Rule Query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/models/:model_id/alert_rule_query_validation",
+            "params": [
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates an alert rule query. Requires model_create_alert_rule permission."
+        },
+        {
+          "info": {
+            "name": "Get Workspace Alert Rules.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/alert_rules",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort by."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional filter to alert rules of a single model."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the alert rule to search by."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "The bound to filter by."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "The query to filter by."
+              },
+              {
+                "name": "threshold_less_than",
+                "value": "",
+                "type": "query",
+                "description": "The threshold to filter by, less than."
+              },
+              {
+                "name": "threshold_greater_than",
+                "value": "",
+                "type": "query",
+                "description": "The threshold to filter by, greater than."
+              },
+              {
+                "name": "metric_name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the alert rule query metric to search by."
+              },
+              {
+                "name": "policy_model_assignment_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional policy model assignment ID to filter alert rules by."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns alert rules across all models in the workspace, including rules attached indirectly via policy assignments. Applies the caller's per-model RBAC. Requires workspace_list_alert_rules permission."
+        },
+        {
+          "info": {
+            "name": "Validate An Alert Rule Query (Static)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/alert_rules/validate_query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Performs static validation of an alert rule SQL query without requiring a model. Checks syntax, allowed tables, allowed functions, clause restrictions, and template presence. Does not execute the query."
+        },
+        {
+          "info": {
+            "name": "Get Alert Rule By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/alert_rules/:alert_rule_id",
+            "params": [
+              {
+                "name": "alert_rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single alert rule by ID. Requires alert_rule_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Model Alert Rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/alert_rules/:alert_rule_id",
+            "params": [
+              {
+                "name": "alert_rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an alert rule. Requires alert_rule_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Alert Rule By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/alert_rules/:alert_rule_id",
+            "params": [
+              {
+                "name": "alert_rule_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a single alert rule by ID. Requires alert_rule_delete permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

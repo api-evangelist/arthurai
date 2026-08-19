@@ -1,0 +1,839 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Agents V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agents V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Organization Unregistered Agents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/unregistered_agents",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort the agents by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by name."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by agent IDs."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by task IDs."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these sub-agent names."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these tool names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these data source URLs."
+              },
+              {
+                "name": "show_muted",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that are muted."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all unregistered agents across every workspace in the organization. Gate-only: unregistered agents have no model to evaluate, so the org permission gate is the entire access boundary. Requires organization_list_unregistered_agents permission."
+        },
+        {
+          "info": {
+            "name": "List Organization Agent Llm Models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/agent_llm_models",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the llm models by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by name."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by any model IDs their associated agents are attached to."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on their associated task IDs."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on their associated tool names."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on agents containing any of these sub-agent names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on agents containing any of these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all registered agent LLM models across every workspace in the organization, filtered to agents whose models the caller can read. Requires organization_list_agent_llm_models permission."
+        },
+        {
+          "info": {
+            "name": "List Organization Agent Tools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/agent_tools",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the tools by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by name."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by any model IDs their associated agents use."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on their associated task IDs."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing these sub-agent names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Lists all registered agent tools across every workspace in the organization, filtered to agents whose models the caller can read. Requires organization_list_agent_tools permission."
+        },
+        {
+          "info": {
+            "name": "Get A Registered Agent By Its Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agents/registered/:agent_id",
+            "params": [
+              {
+                "name": "agent_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single registered agent by ID. Requires agent_read permission."
+        },
+        {
+          "info": {
+            "name": "Update An Unregistered Agent.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/agents/unregistered/:agent_id",
+            "params": [
+              {
+                "name": "agent_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an unregistered agent. Requires unregistered_agent_patch permission."
+        },
+        {
+          "info": {
+            "name": "List All Agents For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/registered",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort the agents by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by name."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by model IDs."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by task IDs."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these sub-agent names."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these tool names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all agents for a workspace. Requires workspace_list_agents permission."
+        },
+        {
+          "info": {
+            "name": "List All Unregistered Agents For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/unregistered",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort the agents by."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by name."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by agent IDs."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents by task IDs."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these sub-agent names."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these tool names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that use any of these data source URLs."
+              },
+              {
+                "name": "show_muted",
+                "value": "",
+                "type": "query",
+                "description": "Filter agents that are muted."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all unregistered agents for a workspace. Requires workspace_list_unregistered_agents permission."
+        },
+        {
+          "info": {
+            "name": "List All Registered Agent Tools For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/registered/tools",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by name."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools by any model IDs their associated agents are attached to."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on their associated task IDs."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing any of these sub-agent names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing any of these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing any of these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all tools for a workspace. Requires workspace_list_agent_tools permission."
+        },
+        {
+          "info": {
+            "name": "List All Registered Agent Sub-Agents For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/registered/subagents",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents by name."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents by any model IDs their associated agents are attached to."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents on their associated task IDs."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents on their associated tool names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter tools on agents containing any of these llm model names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter sub-agents on agents containing any of these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all sub-agents for a workspace. Requires workspace_list_agent_sub_agents permission."
+        },
+        {
+          "info": {
+            "name": "List All Registered Agent Llm Models For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/registered/llm_models",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by name."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models by any model IDs their associated agents are attached to."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on their associated task IDs."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on their associated tool names."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on agents containing any of these sub-agent names."
+              },
+              {
+                "name": "data_source_urls",
+                "value": "",
+                "type": "query",
+                "description": "Filter llm models on agents containing any of these data source URLs."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all llm models for a workspace. Requires workspace_list_agent_llm_models permission."
+        },
+        {
+          "info": {
+            "name": "List All Registered Agent Data Sources For A Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents/registered/data_sources",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order to sort the agents by."
+              },
+              {
+                "name": "name_filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources by URL."
+              },
+              {
+                "name": "agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources by their associated agent names."
+              },
+              {
+                "name": "agent_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources by their associated agent IDs."
+              },
+              {
+                "name": "model_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources by any model IDs their associated agents are attached to."
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources on their associated task IDs."
+              },
+              {
+                "name": "tool_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources on their associated tool names."
+              },
+              {
+                "name": "sub_agent_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources on agents containing any of these sub-agent names."
+              },
+              {
+                "name": "llm_model_names",
+                "value": "",
+                "type": "query",
+                "description": "Filter data sources on agents containing any of these llm model names."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "List all data sources for a workspace. Requires workspace_list_agent_data_sources permission."
+        },
+        {
+          "info": {
+            "name": "Upsert Agents.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/agents",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update agents in the workspace. Deduplicates by (workspace_id, data_plane_id, task_id). Performs full replacement on match. Requires workspace_upsert_agents permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

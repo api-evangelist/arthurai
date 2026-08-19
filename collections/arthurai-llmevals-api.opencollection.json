@@ -1,0 +1,455 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery LLMEvals API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "LLMEvals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an llm eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/:eval_version",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the llm eval to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get an llm eval by name and version"
+        },
+        {
+          "info": {
+            "name": "Delete an llm eval version",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/:eval_version",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the llm eval to delete. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a specific version of an llm eval"
+        },
+        {
+          "info": {
+            "name": "List all versions of an llm eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "model_provider",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model provider (e.g., 'openai', 'anthropic', 'azure')."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model name (e.g., 'gpt-4', 'claude-3-5-sonnet')."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "exclude_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Whether to exclude deleted prompt versions from the results. Default is False."
+              },
+              {
+                "name": "min_version",
+                "value": "",
+                "type": "query",
+                "description": "Minimum version number to filter on (inclusive)."
+              },
+              {
+                "name": "max_version",
+                "value": "",
+                "type": "query",
+                "description": "Maximum version number to filter on (inclusive)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all versions of an llm eval with optional filtering."
+        },
+        {
+          "info": {
+            "name": "Get all llm evals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort the metadata list by. 'name' (default) preserves the historical alphabetical ordering. 'latest_version_created_at' orders by the most recent version's creation timestamp so that pagination matches the 'last updated' display."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "llm_asset_names",
+                "value": "",
+                "type": "query",
+                "description": "LLM asset names to filter on using partial matching. If provided, llm assets matching any of these name patterns will be returned"
+              },
+              {
+                "name": "model_provider",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model provider (e.g., 'openai', 'anthropic', 'azure')."
+              },
+              {
+                "name": "model_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model name (e.g., 'gpt-4', 'claude-3-5-sonnet')."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "List of tags to filter for items that have any matching tag across any version."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get all llm evals for a given task with optional filtering."
+        },
+        {
+          "info": {
+            "name": "Run a saved llm eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/:eval_version/completions",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the llm eval to run. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Run a saved llm eval"
+        },
+        {
+          "info": {
+            "name": "Save an llm eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Save an llm eval to the database"
+        },
+        {
+          "info": {
+            "name": "Delete an llm eval",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an entire llm eval"
+        },
+        {
+          "info": {
+            "name": "Get an llm eval by name and tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/tags/:tag",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get an llm eval by name and tag"
+        },
+        {
+          "info": {
+            "name": "Add a tag to an llm eval version",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/:eval_version/tags",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the llm eval to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a tag to an llm eval version"
+        },
+        {
+          "info": {
+            "name": "Remove a tag from an llm eval version",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/llm_evals/:eval_name/versions/:eval_version/tags/:tag",
+            "params": [
+              {
+                "name": "eval_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "eval_version",
+                "value": "",
+                "type": "path",
+                "description": "The version of the llm eval to retrieve. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove a tag from an llm eval version"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,438 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Jobs V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Job By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single job by ID. Requires project_job_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Job By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a single job by ID. Requires project_job_update permission."
+        },
+        {
+          "info": {
+            "name": "Update Job State",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/state",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_run_id",
+                "value": "",
+                "type": "query",
+                "description": "Job run ID associated with the state update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update job state. Requires project_job_put_state permission."
+        },
+        {
+          "info": {
+            "name": "Get Job Runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/runs",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get Job runs. Required project_job_read_runs permission."
+        },
+        {
+          "info": {
+            "name": "Get Job Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/runs/:job_run_id/logs",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The job run associated with the logs. Should be formatted as a UUID."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              }
+            ]
+          },
+          "docs": "Get job logs for a run. Requires project_job_read_logs permission."
+        },
+        {
+          "info": {
+            "name": "Append To Job Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/runs/:job_run_id/logs",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The job run associated with the logs. Should be formatted as a UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Append job logs. Requires project_job_append_logs permission."
+        },
+        {
+          "info": {
+            "name": "Get Job Errors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/runs/:job_run_id/errors",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The job run associated with the errors. Should be formatted as a UUID."
+              }
+            ]
+          },
+          "docs": "Get job errors. Requires project_job_read_errors permission."
+        },
+        {
+          "info": {
+            "name": "Append To Job Errors",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/jobs/:job_id/runs/:job_run_id/errors",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The job run associated with the errors. Should be formatted as a UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Append job errors. Requires project_job_append_errors permission."
+        },
+        {
+          "info": {
+            "name": "List Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/jobs",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "duration_sec_greater_than",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for jobs that ran for greater than or equal to this number of seconds. Optional."
+              },
+              {
+                "name": "duration_sec_less_than",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that ran for less than or equal to this number of seconds. Optional."
+              },
+              {
+                "name": "started_before",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that started before this timestamp. Optional."
+              },
+              {
+                "name": "started_after",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that started after this timestamp. Optional."
+              },
+              {
+                "name": "queued_before",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that were queued before this timestamp. Optional."
+              },
+              {
+                "name": "queued_after",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that were queued after this timestamp. Optional."
+              },
+              {
+                "name": "ready_before",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that are ready before this timestamp. Optional."
+              },
+              {
+                "name": "ready_before_current_time",
+                "value": "",
+                "type": "query",
+                "description": "When true, filters jobs ready before the current server time. Takes precedence over ready_before. Optional."
+              },
+              {
+                "name": "ready_after",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that are ready after this timestamp. Optional."
+              },
+              {
+                "name": "ready_after_current_time",
+                "value": "",
+                "type": "query",
+                "description": "When true, filters jobs ready after the current server time. Takes precedence over ready_after. Optional."
+              },
+              {
+                "name": "finished_before",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that finished before this timestamp. Optional."
+              },
+              {
+                "name": "finished_after",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that finished after this timestamp. Optional."
+              },
+              {
+                "name": "kinds",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs of this kind. Optional."
+              },
+              {
+                "name": "exclude_kinds",
+                "value": "",
+                "type": "query",
+                "description": "Exclude jobs of these kinds. Takes precedence over kinds."
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for jobs in these states. Optional."
+              },
+              {
+                "name": "error_count_above",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that had greater than or equal to this many errors. Optional."
+              },
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that were ran on this dataplane. Optional."
+              },
+              {
+                "name": "schedule_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for jobs associated with this schedule ID. Optional."
+              },
+              {
+                "name": "trigger_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that were started by this trigger type. Optional."
+              },
+              {
+                "name": "triggered_by_user_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that started by this user id. Only valid when trigger_type = 'user'. Optional."
+              },
+              {
+                "name": "triggered_by_user_email",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for the jobs that started by this user email. Only valid when trigger_type = 'user'. Optional."
+              },
+              {
+                "name": "model_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for jobs associated with this model ID. Includes jobs associated with datasets used by the model. Optional."
+              },
+              {
+                "name": "nonce",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for jobs that match a job nonce used to ensure exactly once execution."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns jobs in the project matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires project_list_jobs permission. Note: exclude_kinds takes precedence over kinds and will exclude jobs even if they are in kinds."
+        },
+        {
+          "info": {
+            "name": "Submit Jobs Batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/jobs",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit new jobs to run. Requires project_create_job permission."
+        },
+        {
+          "info": {
+            "name": "Dequeue Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/data_planes/:data_plane_id/jobs/next",
+            "params": [
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the next available job for processing from the data plane's job queue. Requires data_plane_jobs_dequeue_next permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

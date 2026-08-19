@@ -1,0 +1,87 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Task Based Validation API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Task Based Validation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate Prompt Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/tasks/:task_id/validate_prompt",
+            "headers": [
+              {
+                "name": "traceparent",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Validate a prompt based on the configured rules for this task. Note: Rules related to specific tasks are cached for 60 seconds."
+        },
+        {
+          "info": {
+            "name": "Validate Response Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/tasks/:task_id/validate_response/:inference_id",
+            "headers": [
+              {
+                "name": "traceparent",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inference_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Validate a response based on the configured rules for this task. Inference ID corresponds to the previously validated associated prompt’s inference id. Must provide context if a Hallucination Rule is an enabled task rule. Note: Rules related to specific tasks are cached for 60 seconds."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

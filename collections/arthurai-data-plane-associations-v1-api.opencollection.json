@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Data Plane Associations V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Plane Associations V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Data Plane Associations For Workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/data_plane_associations",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "include_projects",
+                "value": "",
+                "type": "query",
+                "description": "Include project details in the response. Defaults to false."
+              },
+              {
+                "name": "include_data_planes",
+                "value": "",
+                "type": "query",
+                "description": "Include data plane details in the response. Defaults to false."
+              },
+              {
+                "name": "gen_ai_enabled",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only return engines enabled with the GenAI capability"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Requires workspace_list_data_plane_associations permission."
+        },
+        {
+          "info": {
+            "name": "Post Data Plane Association.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/data_plane_associations",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires workspace_create_data_plane_association permission."
+        },
+        {
+          "info": {
+            "name": "List Data Plane Associations For Project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/data_plane_associations",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "gen_ai_enabled",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only return engines enabled with the GenAI capability"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Requires project_list_data_plane_associations."
+        },
+        {
+          "info": {
+            "name": "List Projects Associated With The Data Plane",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/data_planes/:data_plane_id/associations",
+            "params": [
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Requires data_plane_list_associations permission."
+        },
+        {
+          "info": {
+            "name": "Delete Data Plane Association By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/data_plane_associations/:data_plane_association_id",
+            "params": [
+              {
+                "name": "data_plane_association_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a single data plane association. Requires data_plane_association_delete permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

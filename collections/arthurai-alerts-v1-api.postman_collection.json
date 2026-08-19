@@ -1,0 +1,2605 @@
+{
+  "item": [
+    {
+      "id": "cb6a85a2-d3f0-4702-a88a-25556df5a360",
+      "name": "Alerts V1",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4dd91e9e-035c-4e6c-bf82-c2d55bc72b75",
+          "name": "Get Model Alerts",
+          "request": {
+            "name": "Get Model Alerts",
+            "description": {
+              "content": "Returns a list of alerts associated with a model. Requires model_list_alerts permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "timestamp",
+                  "description": "The field to sort by."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "The order to sort by."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "bound",
+                  "value": "<string>",
+                  "description": "The bound to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_from",
+                  "value": "<dateTime>",
+                  "description": "The start timestamp to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_to",
+                  "value": "<dateTime>",
+                  "description": "The end timestamp to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at_from",
+                  "value": "<dateTime>",
+                  "description": "Filter alerts created at or after this timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at_to",
+                  "value": "<dateTime>",
+                  "description": "Filter alerts created at or before this timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page to return starting from 1 up to total_pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "20",
+                  "description": "The number of records per page. The max is 1000."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "b8345854-941a-4e9b-b34a-8b00b939c0c3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"2018-10-03T00:21:43.366Z\",\n      \"value\": 3664.904768606001,\n      \"threshold\": 4779.696115140627,\n      \"bound\": \"upper_bound\",\n      \"interval\": {\n        \"unit\": \"days\",\n        \"count\": 2140\n      },\n      \"dimensions\": {\n        \"key_0\": 4933\n      },\n      \"alert_rule_id\": \"c36e0405-b6ec-9906-d3a3-37185540d1eb\",\n      \"created_at\": \"2005-10-08T21:08:53.263Z\",\n      \"updated_at\": \"2009-02-14T16:22:09.850Z\",\n      \"id\": \"459c7e7c-7fdf-b7f8-10df-b93c23f8069f\",\n      \"model_id\": \"ec1a02f9-0331-a13f-1328-40c71e112c4d\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"118d5375-9b4b-8ca3-8071-a60168610686\",\n      \"is_duplicate_of\": \"c1a879e1-a213-3ce6-acf9-b093daf5c9af\"\n    },\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1997-08-26T17:19:33.469Z\",\n      \"value\": 8006.814319931285,\n      \"threshold\": 2094.8021710675725,\n      \"bound\": \"upper_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 6783\n      },\n      \"dimensions\": {\n        \"key_0\": 9762,\n        \"key_1\": 9117.324167299088,\n        \"key_2\": false\n      },\n      \"alert_rule_id\": \"dba72777-4bab-728b-e73e-e603b2443533\",\n      \"created_at\": \"2025-11-02T19:05:07.782Z\",\n      \"updated_at\": \"1973-03-09T19:01:21.062Z\",\n      \"id\": \"a83466ce-bdf1-9c3d-b347-65176447d133\",\n      \"model_id\": \"8918614d-0c0a-e17e-7822-17cdc15c0ff6\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"4dff9867-98c2-b923-29ac-03e849da9e20\",\n      \"is_duplicate_of\": \"29570f78-4c60-5b20-0567-a2d06b516b34\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b51543e-afb9-4345-bd28-3a5e88edd934",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e4e2d20-6127-4ff8-8e7f-d8c605e10479",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "700eb355-17a9-4578-b843-c7856e532880",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a7d69e7-ab1c-4cbe-88a4-23ff7877e5e9",
+          "name": "Create Model Alerts",
+          "request": {
+            "name": "Create Model Alerts",
+            "description": {
+              "content": "Creates a list of alerts associated with a model. Requires model_create_alert permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"value\": \"<number>\",\n      \"threshold\": \"<number>\",\n      \"bound\": \"<string>\",\n      \"interval\": {\n        \"unit\": \"<string>\",\n        \"count\": \"<integer>\"\n      },\n      \"dimensions\": {\n        \"key_0\": false\n      },\n      \"alert_rule_id\": \"<uuid>\",\n      \"job_id\": \"<uuid>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f186aacd-3632-41e3-890a-58b64baa6ad0",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1981-06-20T01:22:37.197Z\",\n      \"value\": 2412.8516476048735,\n      \"threshold\": 358.7824085337865,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 4743\n      },\n      \"dimensions\": {\n        \"key_0\": 5248,\n        \"key_1\": 3040.667873166283,\n        \"key_2\": true,\n        \"key_3\": true\n      },\n      \"alert_rule_id\": \"a3fba02d-b942-329c-0986-2311d8966124\",\n      \"job_id\": \"231691ba-bcd3-2365-ffa5-dfc8d7eb5d6d\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1958-11-07T04:41:14.635Z\",\n      \"value\": 2199.2260539123545,\n      \"threshold\": 7222.848730619359,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"days\",\n        \"count\": 6913\n      },\n      \"dimensions\": {\n        \"key_0\": 2608,\n        \"key_1\": \"string\",\n        \"key_2\": true\n      },\n      \"alert_rule_id\": \"ebf886e5-ebc2-38fe-533c-9775ca05da31\",\n      \"created_at\": \"1981-01-08T02:29:10.462Z\",\n      \"updated_at\": \"2006-08-15T08:38:01.257Z\",\n      \"id\": \"eee5a6f1-dd49-6c27-139e-5c4ed93e79b3\",\n      \"model_id\": \"37763868-194b-510b-28fa-262f8aadb22d\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"24c5c0eb-2f3e-03da-660f-d05bee66053e\",\n      \"is_duplicate_of\": \"f17fdb02-1a6b-2f31-1e82-88b9629a7ad7\"\n    },\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1998-12-25T14:52:15.418Z\",\n      \"value\": 4337.381424583568,\n      \"threshold\": 677.1073580334686,\n      \"bound\": \"upper_bound\",\n      \"interval\": {\n        \"unit\": \"days\",\n        \"count\": 6673\n      },\n      \"dimensions\": {\n        \"key_0\": 1028\n      },\n      \"alert_rule_id\": \"58ed9ed1-2122-5786-25f4-fe21f6215aef\",\n      \"created_at\": \"1967-12-18T23:17:21.875Z\",\n      \"updated_at\": \"1995-07-11T22:35:12.769Z\",\n      \"id\": \"83b4935a-214f-f1f0-da18-e7a415d5f177\",\n      \"model_id\": \"071c8db4-7cf5-e88b-0c47-626a318aade1\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"c112324d-497a-6ad4-b7b7-5450607d5664\",\n      \"is_duplicate_of\": \"c72a1e36-7c97-9364-5ecd-fc44a72915d0\"\n    }\n  ],\n  \"webhooks_called\": [\n    {\n      \"webhook_id\": \"2a28415d-cfc8-cde5-7e8e-dc7f37187014\",\n      \"webhook_name\": \"string\",\n      \"webhook_result\": {\n        \"error\": \"string\",\n        \"response\": {\n          \"status_code\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"response\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"webhook_id\": \"c27b0ff2-164f-82db-6b9f-765e510678db\",\n      \"webhook_name\": \"string\",\n      \"webhook_result\": {\n        \"error\": \"string\",\n        \"response\": {\n          \"status_code\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"response\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b06ef39f-c870-4fc0-8bb3-80c92de106e6",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1981-06-20T01:22:37.197Z\",\n      \"value\": 2412.8516476048735,\n      \"threshold\": 358.7824085337865,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 4743\n      },\n      \"dimensions\": {\n        \"key_0\": 5248,\n        \"key_1\": 3040.667873166283,\n        \"key_2\": true,\n        \"key_3\": true\n      },\n      \"alert_rule_id\": \"a3fba02d-b942-329c-0986-2311d8966124\",\n      \"job_id\": \"231691ba-bcd3-2365-ffa5-dfc8d7eb5d6d\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9dda4c80-a9fb-4b7e-bcab-c3c3a1534a2e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1981-06-20T01:22:37.197Z\",\n      \"value\": 2412.8516476048735,\n      \"threshold\": 358.7824085337865,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 4743\n      },\n      \"dimensions\": {\n        \"key_0\": 5248,\n        \"key_1\": 3040.667873166283,\n        \"key_2\": true,\n        \"key_3\": true\n      },\n      \"alert_rule_id\": \"a3fba02d-b942-329c-0986-2311d8966124\",\n      \"job_id\": \"231691ba-bcd3-2365-ffa5-dfc8d7eb5d6d\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b40a3211-671c-4632-b270-e0040ed0ba1b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1981-06-20T01:22:37.197Z\",\n      \"value\": 2412.8516476048735,\n      \"threshold\": 358.7824085337865,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 4743\n      },\n      \"dimensions\": {\n        \"key_0\": 5248,\n        \"key_1\": 3040.667873166283,\n        \"key_2\": true,\n        \"key_3\": true\n      },\n      \"alert_rule_id\": \"a3fba02d-b942-329c-0986-2311d8966124\",\n      \"job_id\": \"231691ba-bcd3-2365-ffa5-dfc8d7eb5d6d\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ada3a5a6-6542-4541-93a6-ba287d8934bd",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"alerts\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1981-06-20T01:22:37.197Z\",\n      \"value\": 2412.8516476048735,\n      \"threshold\": 358.7824085337865,\n      \"bound\": \"lower_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 4743\n      },\n      \"dimensions\": {\n        \"key_0\": 5248,\n        \"key_1\": 3040.667873166283,\n        \"key_2\": true,\n        \"key_3\": true\n      },\n      \"alert_rule_id\": \"a3fba02d-b942-329c-0986-2311d8966124\",\n      \"job_id\": \"231691ba-bcd3-2365-ffa5-dfc8d7eb5d6d\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "727b544d-34fc-48fe-8c2e-9c356be79960",
+          "name": "Create Model Alert Logs",
+          "request": {
+            "name": "Create Model Alert Logs",
+            "description": {
+              "content": "Creates alert rule evaluation logs for a model. Requires model_create_alert permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "alert_logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"logs\": [\n    {\n      \"alert_rule_id\": \"<uuid>\",\n      \"status\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"job_id\": \"<uuid>\",\n      \"policy_model_assignment_id\": \"<uuid>\"\n    },\n    {\n      \"alert_rule_id\": \"<uuid>\",\n      \"status\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"job_id\": \"<uuid>\",\n      \"policy_model_assignment_id\": \"<uuid>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ab60d5c6-fb9a-4cc2-b395-99818ba42055",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"logs\": [\n    {\n      \"alert_rule_id\": \"4677509a-4243-211b-37a4-acbee302da52\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2005-08-29T07:14:44.711Z\",\n      \"job_id\": \"4dcde037-3150-d36a-d93f-1793f369ce92\",\n      \"policy_model_assignment_id\": \"a0f4347a-68e6-9178-a750-1d1639cddd62\"\n    },\n    {\n      \"alert_rule_id\": \"0143f40b-92e8-a7cd-3f33-16ac5358d988\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2020-06-05T14:00:57.392Z\",\n      \"job_id\": \"33000f66-1e64-d42a-8a99-37129b8dc78b\",\n      \"policy_model_assignment_id\": \"be7550f2-4a11-70ca-70c5-9e4f46014de1\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"created_at\": \"1991-08-21T00:34:58.042Z\",\n      \"updated_at\": \"1994-09-21T07:32:59.157Z\",\n      \"id\": \"455a5462-a1c0-1496-d454-5fad0b435d03\",\n      \"alert_rule_id\": \"da872a20-02bf-9368-8c95-763f7400ac1c\",\n      \"model_id\": \"5869a6a2-05e8-6132-fe09-02fea14c931e\",\n      \"status\": \"okay\",\n      \"timestamp\": \"1996-06-19T16:36:35.359Z\",\n      \"job_id\": \"d467494c-e2e2-cb35-f774-8291bc92826a\",\n      \"policy_model_assignment_id\": \"06414f98-dfc1-111c-741f-4664359eebdb\"\n    },\n    {\n      \"created_at\": \"2000-03-23T08:58:07.848Z\",\n      \"updated_at\": \"1966-02-13T16:58:33.446Z\",\n      \"id\": \"2109728b-8c3f-b624-a1ec-c5d0510ab9e6\",\n      \"alert_rule_id\": \"d2737c63-52e0-e4e6-3a89-f137db641c3d\",\n      \"model_id\": \"18238cb0-3545-9e5b-456d-648504f2b52a\",\n      \"status\": \"okay\",\n      \"timestamp\": \"1968-04-20T07:05:07.746Z\",\n      \"job_id\": \"7041a3be-e140-397b-173b-add869f8b40d\",\n      \"policy_model_assignment_id\": \"bf70ef68-9837-9dad-36a7-e3ce0f458bc7\"\n    }\n  ],\n  \"pagination\": {\n    \"total_pages\": 7758,\n    \"total_records\": 5217,\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1425566-a010-425f-bfbd-248e921e210e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"logs\": [\n    {\n      \"alert_rule_id\": \"4677509a-4243-211b-37a4-acbee302da52\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2005-08-29T07:14:44.711Z\",\n      \"job_id\": \"4dcde037-3150-d36a-d93f-1793f369ce92\",\n      \"policy_model_assignment_id\": \"a0f4347a-68e6-9178-a750-1d1639cddd62\"\n    },\n    {\n      \"alert_rule_id\": \"0143f40b-92e8-a7cd-3f33-16ac5358d988\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2020-06-05T14:00:57.392Z\",\n      \"job_id\": \"33000f66-1e64-d42a-8a99-37129b8dc78b\",\n      \"policy_model_assignment_id\": \"be7550f2-4a11-70ca-70c5-9e4f46014de1\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba6a9320-946f-44af-ba8b-24b98f066600",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"logs\": [\n    {\n      \"alert_rule_id\": \"4677509a-4243-211b-37a4-acbee302da52\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2005-08-29T07:14:44.711Z\",\n      \"job_id\": \"4dcde037-3150-d36a-d93f-1793f369ce92\",\n      \"policy_model_assignment_id\": \"a0f4347a-68e6-9178-a750-1d1639cddd62\"\n    },\n    {\n      \"alert_rule_id\": \"0143f40b-92e8-a7cd-3f33-16ac5358d988\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2020-06-05T14:00:57.392Z\",\n      \"job_id\": \"33000f66-1e64-d42a-8a99-37129b8dc78b\",\n      \"policy_model_assignment_id\": \"be7550f2-4a11-70ca-70c5-9e4f46014de1\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d80dd4b2-8450-4e1b-aff8-94d60e8d409b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"logs\": [\n    {\n      \"alert_rule_id\": \"4677509a-4243-211b-37a4-acbee302da52\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2005-08-29T07:14:44.711Z\",\n      \"job_id\": \"4dcde037-3150-d36a-d93f-1793f369ce92\",\n      \"policy_model_assignment_id\": \"a0f4347a-68e6-9178-a750-1d1639cddd62\"\n    },\n    {\n      \"alert_rule_id\": \"0143f40b-92e8-a7cd-3f33-16ac5358d988\",\n      \"status\": \"okay\",\n      \"timestamp\": \"2020-06-05T14:00:57.392Z\",\n      \"job_id\": \"33000f66-1e64-d42a-8a99-37129b8dc78b\",\n      \"policy_model_assignment_id\": \"be7550f2-4a11-70ca-70c5-9e4f46014de1\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1586090b-21eb-4bd8-94d8-9f792cffdd31",
+          "name": "Get Model Alert Logs",
+          "request": {
+            "name": "Get Model Alert Logs",
+            "description": {
+              "content": "Returns alert rule evaluation logs for a model. Requires model_list_alerts permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "alert_logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alert_rule_id",
+                  "value": "<uuid>",
+                  "description": "Filter by alert rule ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by status."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "Filter logs with bucket timestamp at or after this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "Filter logs with bucket timestamp at or before this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page to return starting from 1 up to total_pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "20",
+                  "description": "The number of records per page. The max is 1000."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "36a9eb01-c550-465d-b3e3-d70accd66106",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alert_rule_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "no_data"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"created_at\": \"1991-08-21T00:34:58.042Z\",\n      \"updated_at\": \"1994-09-21T07:32:59.157Z\",\n      \"id\": \"455a5462-a1c0-1496-d454-5fad0b435d03\",\n      \"alert_rule_id\": \"da872a20-02bf-9368-8c95-763f7400ac1c\",\n      \"model_id\": \"5869a6a2-05e8-6132-fe09-02fea14c931e\",\n      \"status\": \"okay\",\n      \"timestamp\": \"1996-06-19T16:36:35.359Z\",\n      \"job_id\": \"d467494c-e2e2-cb35-f774-8291bc92826a\",\n      \"policy_model_assignment_id\": \"06414f98-dfc1-111c-741f-4664359eebdb\"\n    },\n    {\n      \"created_at\": \"2000-03-23T08:58:07.848Z\",\n      \"updated_at\": \"1966-02-13T16:58:33.446Z\",\n      \"id\": \"2109728b-8c3f-b624-a1ec-c5d0510ab9e6\",\n      \"alert_rule_id\": \"d2737c63-52e0-e4e6-3a89-f137db641c3d\",\n      \"model_id\": \"18238cb0-3545-9e5b-456d-648504f2b52a\",\n      \"status\": \"okay\",\n      \"timestamp\": \"1968-04-20T07:05:07.746Z\",\n      \"job_id\": \"7041a3be-e140-397b-173b-add869f8b40d\",\n      \"policy_model_assignment_id\": \"bf70ef68-9837-9dad-36a7-e3ce0f458bc7\"\n    }\n  ],\n  \"pagination\": {\n    \"total_pages\": 7758,\n    \"total_records\": 5217,\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e392ce37-ac52-4d59-a36f-b996f09458f3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alert_rule_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "no_data"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69530f34-10e7-426d-b2b3-8eca7fb724d4",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alert_rule_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "no_data"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "632c3951-6e90-437a-95e5-6a73105abf3d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "alert_logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alert_rule_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "no_data"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ccc1ef63-93f0-4c41-a897-84a3b1f3c561",
+          "name": "Get Workspace Alerts.",
+          "request": {
+            "name": "Get Workspace Alerts.",
+            "description": {
+              "content": "Returns alerts from all models in the workspace matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires workspace_list_alerts permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workspaces",
+                ":workspace_id",
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "timestamp",
+                  "description": "Override the field used for sorting the returned list. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Override the sort order used. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "bound",
+                  "value": "<string>",
+                  "description": "The bound to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_from",
+                  "value": "<dateTime>",
+                  "description": "The start timestamp to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_to",
+                  "value": "<dateTime>",
+                  "description": "The end timestamp to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page to return starting from 1 up to total_pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "20",
+                  "description": "The number of records per page. The max is 1000."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspace_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "3e5b8327-1997-413a-88db-27edd6aa5234",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"2018-10-03T00:21:43.366Z\",\n      \"value\": 3664.904768606001,\n      \"threshold\": 4779.696115140627,\n      \"bound\": \"upper_bound\",\n      \"interval\": {\n        \"unit\": \"days\",\n        \"count\": 2140\n      },\n      \"dimensions\": {\n        \"key_0\": 4933\n      },\n      \"alert_rule_id\": \"c36e0405-b6ec-9906-d3a3-37185540d1eb\",\n      \"created_at\": \"2005-10-08T21:08:53.263Z\",\n      \"updated_at\": \"2009-02-14T16:22:09.850Z\",\n      \"id\": \"459c7e7c-7fdf-b7f8-10df-b93c23f8069f\",\n      \"model_id\": \"ec1a02f9-0331-a13f-1328-40c71e112c4d\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"118d5375-9b4b-8ca3-8071-a60168610686\",\n      \"is_duplicate_of\": \"c1a879e1-a213-3ce6-acf9-b093daf5c9af\"\n    },\n    {\n      \"description\": \"string\",\n      \"timestamp\": \"1997-08-26T17:19:33.469Z\",\n      \"value\": 8006.814319931285,\n      \"threshold\": 2094.8021710675725,\n      \"bound\": \"upper_bound\",\n      \"interval\": {\n        \"unit\": \"minutes\",\n        \"count\": 6783\n      },\n      \"dimensions\": {\n        \"key_0\": 9762,\n        \"key_1\": 9117.324167299088,\n        \"key_2\": false\n      },\n      \"alert_rule_id\": \"dba72777-4bab-728b-e73e-e603b2443533\",\n      \"created_at\": \"2025-11-02T19:05:07.782Z\",\n      \"updated_at\": \"1973-03-09T19:01:21.062Z\",\n      \"id\": \"a83466ce-bdf1-9c3d-b347-65176447d133\",\n      \"model_id\": \"8918614d-0c0a-e17e-7822-17cdc15c0ff6\",\n      \"alert_rule_name\": \"string\",\n      \"alert_rule_metric_name\": \"string\",\n      \"job_id\": \"4dff9867-98c2-b923-29ac-03e849da9e20\",\n      \"is_duplicate_of\": \"29570f78-4c60-5b20-0567-a2d06b516b34\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5d26eb7-9119-4fd7-9efb-774c933e303d",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "591d99d8-f8d2-45de-b925-fd7c9dce7600",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74ca28a8-d870-408b-92b5-6ae614688249",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ffa56ea-c6f7-469c-8e1b-d2891bf0ddb7",
+          "name": "Get Workspace Alerts Grouped.",
+          "request": {
+            "name": "Get Workspace Alerts Grouped.",
+            "description": {
+              "content": "Returns alerts from all models in the workspace grouped by alert rule. Supports pagination and time range filtering with a default of the last 7 days. Requires workspace_list_alerts permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workspaces",
+                ":workspace_id",
+                "alerts",
+                "grouped"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "timestamp",
+                  "description": "Override the field used for sorting the returned list. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Override the sort order used. Optional."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_rule_ids",
+                  "value": "<uuid>",
+                  "description": "The ID of the alert rule to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "bound",
+                  "value": "<string>",
+                  "description": "The bound to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_from",
+                  "value": "<dateTime>",
+                  "description": "The start timestamp to filter by. Defaults to 7 days ago if not specified."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_to",
+                  "value": "<dateTime>",
+                  "description": "The end timestamp to filter by. Defaults to now if not specified."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page to return starting from 1 up to total_pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "20",
+                  "description": "The number of records per page. The max is 1000."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspace_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "267a370c-47fb-43ad-82e5-b0c113b22e17",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts",
+                    "grouped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"alert_rule_id\": \"e2ef0e7a-894f-2213-9403-e8eec63056a1\",\n      \"alert_rule_name\": \"string\",\n      \"count\": 7859,\n      \"latest_timestamp\": \"2002-02-02T18:42:07.365Z\",\n      \"model_id\": \"505fdc96-54fd-0023-b977-1c972216f1de\",\n      \"model_name\": \"string\",\n      \"bound\": \"lower_bound\",\n      \"alerts\": [\n        {\n          \"description\": \"string\",\n          \"timestamp\": \"1950-03-01T19:46:46.032Z\",\n          \"value\": 7863.305408855813,\n          \"threshold\": 8240.894579527307,\n          \"bound\": \"lower_bound\",\n          \"interval\": {\n            \"unit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"count\": 4394\n          },\n          \"dimensions\": {\n            \"key_0\": false,\n            \"key_1\": true,\n            \"key_2\": 5532,\n            \"key_3\": \"string\"\n          },\n          \"alert_rule_id\": \"cf246939-21c2-a5a6-86f7-00e67497614d\",\n          \"created_at\": \"1997-09-25T19:24:53.559Z\",\n          \"updated_at\": \"2003-06-22T12:29:57.957Z\",\n          \"id\": \"ab7eec17-42e5-a90e-4de8-7c3aa837acfb\",\n          \"model_id\": \"242e9832-76f5-ed28-cc26-d9d3f23c0504\",\n          \"alert_rule_name\": \"string\",\n          \"alert_rule_metric_name\": \"string\",\n          \"job_id\": \"366e13ca-2803-fffe-b666-c80301ececce\",\n          \"is_duplicate_of\": \"2fd2d64d-3d1b-6263-9ae8-295d56258968\"\n        },\n        {\n          \"description\": \"string\",\n          \"timestamp\": \"1993-11-21T04:57:00.643Z\",\n          \"value\": 533.5821469036339,\n          \"threshold\": 4791.4619479994135,\n          \"bound\": \"lower_bound\",\n          \"interval\": {\n            \"unit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"count\": 8930\n          },\n          \"dimensions\": {\n            \"key_0\": 3966,\n            \"key_1\": true\n          },\n          \"alert_rule_id\": \"f4e813c9-fc13-759a-1092-252a369d8cd6\",\n          \"created_at\": \"2013-10-20T23:12:40.775Z\",\n          \"updated_at\": \"2013-08-19T03:58:42.346Z\",\n          \"id\": \"4ea64ad9-9c51-2cb0-69c9-39c7b4fab7c6\",\n          \"model_id\": \"6741e5f8-d7d9-4e05-4e49-3a04187262ec\",\n          \"alert_rule_name\": \"string\",\n          \"alert_rule_metric_name\": \"string\",\n          \"job_id\": \"982e120d-a13a-f335-8872-ffc219977267\",\n          \"is_duplicate_of\": \"8ec76197-41c1-5cef-d9c9-4b77b52e3b0b\"\n        }\n      ]\n    },\n    {\n      \"alert_rule_id\": \"74c1bc70-f0e6-de0b-71bd-bdcfc9f80426\",\n      \"alert_rule_name\": \"string\",\n      \"count\": 9098,\n      \"latest_timestamp\": \"1995-11-18T12:04:01.614Z\",\n      \"model_id\": \"ce8ecfec-2dff-3aa6-b409-d4410c416432\",\n      \"model_name\": \"string\",\n      \"bound\": \"lower_bound\",\n      \"alerts\": [\n        {\n          \"description\": \"string\",\n          \"timestamp\": \"1960-02-26T10:47:31.979Z\",\n          \"value\": 7879.718620587507,\n          \"threshold\": 5036.8137434939035,\n          \"bound\": \"lower_bound\",\n          \"interval\": {\n            \"unit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"count\": 9707\n          },\n          \"dimensions\": {\n            \"key_0\": false\n          },\n          \"alert_rule_id\": \"02d12f08-6d4a-78fa-4e5a-d8fe248a5c21\",\n          \"created_at\": \"2025-04-11T13:10:42.945Z\",\n          \"updated_at\": \"2002-08-22T09:56:48.618Z\",\n          \"id\": \"303c384d-9e86-c618-9bd6-a1ec6df6429f\",\n          \"model_id\": \"ac76fc58-aaf7-6200-4b85-f7901d6ad61b\",\n          \"alert_rule_name\": \"string\",\n          \"alert_rule_metric_name\": \"string\",\n          \"job_id\": \"87f7e1c6-4c70-a9b9-359c-266857b5ae8e\",\n          \"is_duplicate_of\": \"7e6b43ce-b837-fe81-01e4-1887d9298226\"\n        },\n        {\n          \"description\": \"string\",\n          \"timestamp\": \"1987-04-19T20:16:16.292Z\",\n          \"value\": 8789.852044888796,\n          \"threshold\": 2295.1057708482113,\n          \"bound\": \"upper_bound\",\n          \"interval\": {\n            \"unit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"count\": 4654\n          },\n          \"dimensions\": {\n            \"key_0\": \"string\",\n            \"key_1\": 4115\n          },\n          \"alert_rule_id\": \"906f1d27-5dce-3f88-9e39-3b667f5ae75c\",\n          \"created_at\": \"1972-05-20T18:20:44.256Z\",\n          \"updated_at\": \"1999-07-03T00:21:36.799Z\",\n          \"id\": \"f1de46f4-8e18-a746-d828-b363048b25e1\",\n          \"model_id\": \"6091ae30-d70c-fece-4aea-110c01cefd0d\",\n          \"alert_rule_name\": \"string\",\n          \"alert_rule_metric_name\": \"string\",\n          \"job_id\": \"2f630d24-5313-40fa-d172-b48ae000d948\",\n          \"is_duplicate_of\": \"ed066417-d7d1-be6f-93e6-b16b3d016383\"\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 20\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df39264d-2d4c-4d12-9c44-453bf55c5050",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts",
+                    "grouped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37e57afd-9a1b-409b-a577-b203b7bb451e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts",
+                    "grouped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b618367-f5bf-4b3e-b754-f099e997abc3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workspaces",
+                    ":workspace_id",
+                    "alerts",
+                    "grouped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "timestamp"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "alert_rule_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "upper_bound"
+                    },
+                    {
+                      "key": "time_from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "time_to",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspace_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c372194-0233-4c14-8630-b00ca9239666",
+          "name": "Get Alert By Id",
+          "request": {
+            "name": "Get Alert By Id",
+            "description": {
+              "content": "Returns a single alert by ID. Requires model_alert_read permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "alerts",
+                ":alert_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "alert_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "00020eb6-5888-4f13-adcc-7f05edadb62d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "alerts",
+                    ":alert_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alert_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"string\",\n  \"timestamp\": \"1987-02-24T11:43:03.450Z\",\n  \"value\": 8737.499300829413,\n  \"threshold\": 5704.499735668831,\n  \"bound\": \"lower_bound\",\n  \"interval\": {\n    \"unit\": \"hours\",\n    \"count\": 3349\n  },\n  \"dimensions\": {\n    \"key_0\": true,\n    \"key_1\": 8252.438592296161\n  },\n  \"alert_rule_id\": \"92e31fae-a9a0-5ce0-5001-5522c05441a7\",\n  \"created_at\": \"2006-06-06T05:38:38.487Z\",\n  \"updated_at\": \"1994-08-17T09:08:24.871Z\",\n  \"id\": \"08a67dd4-dba0-5ef2-50b3-4b3f9c707fe3\",\n  \"model_id\": \"5a1e38aa-5bf7-aeb8-ccb1-1ea9146f73f7\",\n  \"alert_rule_name\": \"string\",\n  \"alert_rule_metric_name\": \"string\",\n  \"job_id\": \"71b7c78b-050f-22cd-00b5-ebae5b994b20\",\n  \"is_duplicate_of\": \"fdc72448-997c-3d79-b126-d4741717e4dc\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2b74fe1-73f5-4e64-a6f3-87f0ae9eafdd",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "alerts",
+                    ":alert_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alert_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e6a223d-b2ac-41a5-b9f3-881c7d0b7afa",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "alerts",
+                    ":alert_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alert_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "546f3fe1-684e-49df-a364-b6f14e8bb708",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "alerts",
+                    ":alert_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alert_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6c50627a-59d8-43ed-bb40-0acb93d31d1d",
+    "name": "Arthur GenAI Engine Agent Discovery Alerts V1 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

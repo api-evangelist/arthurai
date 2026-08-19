@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery User Management API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Me",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/me",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the current caller's identity, roles, org_scope, and (when scoped) the organization record. Used by the UI on login to decide between admin and tenant render branches. Admin callers and JWT callers receive org_scope=null and org=null."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,253 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Agentic Notebooks API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agentic Notebooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agentic notebooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/agentic_notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all agentic notebooks for a task with pagination and optional name search"
+        },
+        {
+          "info": {
+            "name": "Create an agentic notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/agentic_notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new agentic notebook for organizing experiments within a task"
+        },
+        {
+          "info": {
+            "name": "Get agentic notebook details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about an agentic notebook including state and experiment history"
+        },
+        {
+          "info": {
+            "name": "Update agentic notebook metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update agentic notebook name or description (not the state)"
+        },
+        {
+          "info": {
+            "name": "Delete agentic notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete an agentic notebook (experiments are kept)"
+        },
+        {
+          "info": {
+            "name": "Get agentic notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the current state (draft configuration) of an agentic notebook"
+        },
+        {
+          "info": {
+            "name": "Set agentic notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set the state (draft configuration) of an agentic notebook"
+        },
+        {
+          "info": {
+            "name": "Get agentic notebook history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agentic_notebooks/:notebook_id/history",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "Agentic Notebook ID"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of experiments run from this agentic notebook"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

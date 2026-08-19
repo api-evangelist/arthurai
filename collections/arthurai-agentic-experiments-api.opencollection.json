@@ -1,0 +1,210 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Agentic Experiments API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agentic Experiments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agentic experiments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/agentic_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all agentic experiments for a task with optional filtering and pagination"
+        },
+        {
+          "info": {
+            "name": "Create and run an agentic experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/agentic_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new agentic experiment and initiate execution"
+        },
+        {
+          "info": {
+            "name": "Get agentic experiment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agentic_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to retrieve"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a specific agentic experiment including summary results"
+        },
+        {
+          "info": {
+            "name": "Delete agentic experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/agentic_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete an agentic experiment and all its associated data"
+        },
+        {
+          "info": {
+            "name": "Get experiment test cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/agentic_experiments/:experiment_id/test_cases",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of test case results for an agentic experiment"
+        },
+        {
+          "info": {
+            "name": "Attach notebook to agentic experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/agentic_experiments/:experiment_id/notebook",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the experiment"
+              },
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the notebook to attach"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Attach an agentic notebook to an existing experiment"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

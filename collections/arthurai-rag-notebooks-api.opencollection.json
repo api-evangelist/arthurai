@@ -1,0 +1,253 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery RAG Notebooks API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RAG Notebooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List RAG notebooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all RAG notebooks for a task with pagination and optional name search"
+        },
+        {
+          "info": {
+            "name": "Create a RAG notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_notebooks",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new RAG notebook for organizing experiments within a task"
+        },
+        {
+          "info": {
+            "name": "Get RAG notebook details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a RAG notebook including state and experiment history"
+        },
+        {
+          "info": {
+            "name": "Update RAG notebook metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update RAG notebook name or description (not the state)"
+        },
+        {
+          "info": {
+            "name": "Delete RAG notebook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a RAG notebook (experiments are kept)"
+        },
+        {
+          "info": {
+            "name": "Get RAG notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the current state (draft configuration) of a RAG notebook"
+        },
+        {
+          "info": {
+            "name": "Set RAG notebook state",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id/state",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set the state (draft configuration) of a RAG notebook"
+        },
+        {
+          "info": {
+            "name": "Get RAG notebook history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_notebooks/:notebook_id/history",
+            "params": [
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "path",
+                "description": "RAG Notebook ID"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of experiments run from this RAG notebook"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

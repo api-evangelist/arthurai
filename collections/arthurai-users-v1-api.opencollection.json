@@ -1,0 +1,220 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Users V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Users In An Organization.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/organization/users",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "user_types",
+                "value": "",
+                "type": "query",
+                "description": "Limits the results to a specific set of user types."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for users by name or email."
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optional list of user IDs to filter down."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Requires organization_list_users permission."
+        },
+        {
+          "info": {
+            "name": "Create User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires organization_create_user permission."
+        },
+        {
+          "info": {
+            "name": "Create User Via Email Invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/users/invite-user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires organization_invite_user permission. Also requires underlying permissions for managing user permissions: group_create_group_membership, organization_create_role_binding, workspace_create_role_binding, or project_create_role_binding depending on whether the user is being added to a group or granted a role bound to an organization, workspace, or project."
+        },
+        {
+          "info": {
+            "name": "Create Service Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/organization/service_accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires organization_create_service_account permission."
+        },
+        {
+          "info": {
+            "name": "Get User Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/users/me"
+          },
+          "docs": "Returns Arthur user metadata."
+        },
+        {
+          "info": {
+            "name": "Accept User Invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/users/me/accept-invite"
+          },
+          "docs": "Accepts pending invitations for the user."
+        },
+        {
+          "info": {
+            "name": "Patch User.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/users/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires user_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/users/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requires delete_user permission."
+        },
+        {
+          "info": {
+            "name": "Regenerate User Credentials.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/users/:user_id/credentials",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requires user_regenerate_creds permission."
+        },
+        {
+          "info": {
+            "name": "Patch Service Account User.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/users/:user_id/service_account",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires user_update permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Feedback API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Feedback",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Post Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/feedback/:inference_id",
+            "params": [
+              {
+                "name": "inference_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Post feedback for LLM Application."
+        },
+        {
+          "info": {
+            "name": "Query Feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/feedback/query",
+            "params": [
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date in ISO8601 string format"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date in ISO8601 string format"
+              },
+              {
+                "name": "feedback_id",
+                "value": "",
+                "type": "query",
+                "description": "Feedback ID to filter on"
+              },
+              {
+                "name": "inference_id",
+                "value": "",
+                "type": "query",
+                "description": "Inference ID to filter on"
+              },
+              {
+                "name": "target",
+                "value": "",
+                "type": "query",
+                "description": "Target of the feedback. Must be one of ['context', 'response_results', 'prompt_results']"
+              },
+              {
+                "name": "score",
+                "value": "",
+                "type": "query",
+                "description": "Score of the feedback. Must be an integer."
+              },
+              {
+                "name": "feedback_user_id",
+                "value": "",
+                "type": "query",
+                "description": "User ID of the user giving feedback to filter on (query will perform fuzzy search)"
+              },
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "query",
+                "description": "Conversation ID to filter on"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "query",
+                "description": "Task ID to filter on"
+              },
+              {
+                "name": "inference_user_id",
+                "value": "",
+                "type": "query",
+                "description": "User ID of the user who created the inferences to filter on (query will perform fuzzy search)"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Paginated feedback querying. See parameters for available filters. Includes feedback from archived tasks and rules."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

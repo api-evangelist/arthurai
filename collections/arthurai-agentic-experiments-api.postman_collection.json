@@ -1,0 +1,1174 @@
+{
+  "item": [
+    {
+      "id": "96051d8f-9dc5-4fbc-8b2c-64ae3c60831f",
+      "name": "Agentic Experiments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cc74471f-2958-42ac-92b6-7f3cb314edcc",
+          "name": "List agentic experiments",
+          "request": {
+            "name": "List agentic experiments",
+            "description": {
+              "content": "List all agentic experiments for a task with optional filtering and pagination",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "agentic_experiments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "dataset_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f933d989-968a-4354-8ac9-07ce537ceefd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "agentic_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 8449,\n  \"page_size\": 9412,\n  \"total_pages\": 9794,\n  \"total_count\": 6006,\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"string\",\n      \"status\": \"queued\",\n      \"dataset_id\": \"b15bf44a-e3a2-a1c1-45d0-bbce6f446fe9\",\n      \"dataset_name\": \"string\",\n      \"dataset_version\": 4176,\n      \"total_rows\": 2323,\n      \"completed_rows\": 5469,\n      \"failed_rows\": 4936,\n      \"http_template\": {\n        \"endpoint_name\": \"string\",\n        \"endpoint_url\": \"string\",\n        \"request_body\": \"string\",\n        \"headers\": [\n          {\n            \"name\": \"string\",\n            \"value\": \"string\"\n          },\n          {\n            \"name\": \"string\",\n            \"value\": \"string\"\n          }\n        ]\n      },\n      \"description\": \"string\",\n      \"finished_at\": \"string\",\n      \"total_cost\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"string\",\n      \"status\": \"completed\",\n      \"dataset_id\": \"57a995ee-9475-a628-720e-a61547f77b62\",\n      \"dataset_name\": \"string\",\n      \"dataset_version\": 6003,\n      \"total_rows\": 8154,\n      \"completed_rows\": 6268,\n      \"failed_rows\": 3507,\n      \"http_template\": {\n        \"endpoint_name\": \"string\",\n        \"endpoint_url\": \"string\",\n        \"request_body\": \"string\",\n        \"headers\": [\n          {\n            \"name\": \"string\",\n            \"value\": \"string\"\n          },\n          {\n            \"name\": \"string\",\n            \"value\": \"string\"\n          }\n        ]\n      },\n      \"description\": \"string\",\n      \"finished_at\": \"string\",\n      \"total_cost\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13575871-4084-41a6-8a84-e1530f3ef0e7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "agentic_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0a1f98e3-656b-4cf0-8c0b-17da5fa0e5c1",
+          "name": "Create and run an agentic experiment",
+          "request": {
+            "name": "Create and run an agentic experiment",
+            "description": {
+              "content": "Create a new agentic experiment and initiate execution",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "agentic_experiments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"<uuid>\",\n    \"version\": \"<integer>\"\n  },\n  \"http_template\": {\n    \"endpoint_name\": \"<string>\",\n    \"endpoint_url\": \"<string>\",\n    \"request_body\": \"<string>\",\n    \"headers\": [\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ]\n  },\n  \"template_variable_mapping\": [\n    {\n      \"variable_name\": \"<string>\",\n      \"source\": {\n        \"type\": \"<string>\",\n        \"dataset_column\": {\n          \"name\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"variable_name\": \"<string>\",\n      \"source\": {\n        \"type\": \"<string>\",\n        \"dataset_column\": {\n          \"name\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"eval_list\": [\n    {\n      \"name\": \"<string>\",\n      \"version\": \"<integer>\",\n      \"transform_id\": \"<uuid>\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"version\": \"<integer>\",\n      \"transform_id\": \"<uuid>\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"<string>\",\n      \"column_value\": \"<string>\"\n    },\n    {\n      \"column_name\": \"<string>\",\n      \"column_value\": \"<string>\"\n    }\n  ],\n  \"request_time_parameters\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0d39258b-984d-41b6-b180-699f67dd2fd8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "agentic_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"f961148f-8f4f-e3b7-97cc-a16ec64b2ca0\",\n    \"version\": 7913\n  },\n  \"http_template\": {\n    \"endpoint_name\": \"string\",\n    \"endpoint_url\": \"string\",\n    \"request_body\": \"string\",\n    \"headers\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"template_variable_mapping\": [\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    },\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    }\n  ],\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 5534,\n      \"transform_id\": \"ef87be5e-4ddc-9266-79f2-e4749ff5d2b1\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 1735,\n      \"transform_id\": \"2a9b63ab-4445-148c-51c1-ecdefa88455c\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ],\n  \"request_time_parameters\": [\n    {\n      \"name\": \"string\",\n      \"value\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"running\",\n  \"dataset_id\": \"10325bc6-59e7-2888-f455-0c0ef021e122\",\n  \"dataset_name\": \"string\",\n  \"dataset_version\": 8783,\n  \"total_rows\": 1938,\n  \"completed_rows\": 9418,\n  \"failed_rows\": 225,\n  \"http_template\": {\n    \"endpoint_name\": \"string\",\n    \"endpoint_url\": \"string\",\n    \"request_body\": \"string\",\n    \"headers\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6155d7d7-e7d4-4580-b8f7-0ad004e6636c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "agentic_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"f961148f-8f4f-e3b7-97cc-a16ec64b2ca0\",\n    \"version\": 7913\n  },\n  \"http_template\": {\n    \"endpoint_name\": \"string\",\n    \"endpoint_url\": \"string\",\n    \"request_body\": \"string\",\n    \"headers\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"template_variable_mapping\": [\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    },\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    }\n  ],\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 5534,\n      \"transform_id\": \"ef87be5e-4ddc-9266-79f2-e4749ff5d2b1\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 1735,\n      \"transform_id\": \"2a9b63ab-4445-148c-51c1-ecdefa88455c\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ],\n  \"request_time_parameters\": [\n    {\n      \"name\": \"string\",\n      \"value\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cf7870b-e19e-43ad-bdd9-43cb705537f6",
+          "name": "Get agentic experiment details",
+          "request": {
+            "name": "Get agentic experiment details",
+            "description": {
+              "content": "Get detailed information about a specific agentic experiment including summary results",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "agentic_experiments",
+                ":experiment_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment to retrieve"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "383a0cd1-ceb5-46f0-8864-82c42b7597e6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"completed\",\n  \"total_rows\": 3931,\n  \"completed_rows\": 7154,\n  \"failed_rows\": 454,\n  \"dataset_ref\": {\n    \"id\": \"4a3768cb-88ec-b799-3a12-4c6629ae7ca0\",\n    \"version\": 7935,\n    \"name\": \"string\"\n  },\n  \"http_template\": {\n    \"endpoint_name\": \"string\",\n    \"endpoint_url\": \"string\",\n    \"request_body\": \"string\",\n    \"headers\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"template_variable_mapping\": [\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    },\n    {\n      \"variable_name\": \"string\",\n      \"source\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      }\n    }\n  ],\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 472,\n      \"transform_id\": \"b6084ad5-d081-b222-24ca-7b7ef110dcfb\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 4982,\n      \"transform_id\": \"cb000fa2-6949-c848-6f2c-d28ef6e1a4e3\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"summary_results\": {\n    \"eval_summaries\": [\n      {\n        \"eval_name\": \"string\",\n        \"eval_version\": \"string\",\n        \"transform_id\": \"cebcba30-4a09-dcdb-e57e-0ddc13cf907a\",\n        \"eval_results\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 2409,\n            \"total_count\": 9614\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 7231,\n            \"total_count\": 4529\n          }\n        ]\n      },\n      {\n        \"eval_name\": \"string\",\n        \"eval_version\": \"string\",\n        \"transform_id\": \"b7f93afd-8f5d-23d6-033e-7d9e72c86477\",\n        \"eval_results\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 8274,\n            \"total_count\": 9411\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 4031,\n            \"total_count\": 5440\n          }\n        ]\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ],\n  \"notebook_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d01902d9-e946-430a-9db2-317964467e5e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c8d117d-03ac-4996-8425-ad6d3c8ca6d7",
+          "name": "Delete agentic experiment",
+          "request": {
+            "name": "Delete agentic experiment",
+            "description": {
+              "content": "Delete an agentic experiment and all its associated data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "agentic_experiments",
+                ":experiment_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment to delete"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1af26267-fc2e-424a-8ffc-c31d0eb476fc",
+              "name": "Experiment deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e1443f2f-af77-4957-a5b9-1538be1e811a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7200a0c4-9a46-4671-9195-3696865e401e",
+          "name": "Get experiment test cases",
+          "request": {
+            "name": "Get experiment test cases",
+            "description": {
+              "content": "Get paginated list of test case results for an agentic experiment",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "agentic_experiments",
+                ":experiment_id",
+                "test_cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6ed8ffee-19e8-470f-8936-3ccc9a1a9f10",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id",
+                    "test_cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 2215,\n  \"page_size\": 9942,\n  \"total_pages\": 9557,\n  \"total_count\": 7807,\n  \"data\": [\n    {\n      \"status\": \"completed\",\n      \"dataset_row_id\": \"string\",\n      \"template_input_variables\": [\n        {\n          \"variable_name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"variable_name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"agentic_result\": {\n        \"evals\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"eval_input_variables\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"eval_results\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"eval_input_variables\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"eval_results\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"request_url\": \"string\",\n        \"request_headers\": {\n          \"key_0\": \"string\"\n        },\n        \"request_body\": \"string\",\n        \"output\": {\n          \"response_body\": {\n            \"key_0\": false,\n            \"key_1\": false,\n            \"key_2\": \"string\"\n          },\n          \"status_code\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"trace_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"total_cost\": \"string\"\n    },\n    {\n      \"status\": \"evaluating\",\n      \"dataset_row_id\": \"string\",\n      \"template_input_variables\": [\n        {\n          \"variable_name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"variable_name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"agentic_result\": {\n        \"evals\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"eval_input_variables\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"eval_results\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"eval_input_variables\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"eval_results\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"request_url\": \"string\",\n        \"request_headers\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"request_body\": \"string\",\n        \"output\": {\n          \"response_body\": {\n            \"key_0\": false\n          },\n          \"status_code\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"trace_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"total_cost\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa0da8cb-68ac-4cda-b724-2129d92e11bf",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id",
+                    "test_cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7c77c04-bdff-4c9e-88d7-9b4afc40dc97",
+          "name": "Attach notebook to agentic experiment",
+          "request": {
+            "name": "Attach notebook to agentic experiment",
+            "description": {
+              "content": "Attach an agentic notebook to an existing experiment",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "agentic_experiments",
+                ":experiment_id",
+                "notebook"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "notebook_id",
+                  "value": "<string>",
+                  "description": "(Required) ID of the notebook to attach"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) ID of the experiment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5f7c26b3-bcae-4d82-b97c-0b0fde1e204f",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id",
+                    "notebook"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "notebook_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"running\",\n  \"dataset_id\": \"10325bc6-59e7-2888-f455-0c0ef021e122\",\n  \"dataset_name\": \"string\",\n  \"dataset_version\": 8783,\n  \"total_rows\": 1938,\n  \"completed_rows\": 9418,\n  \"failed_rows\": 225,\n  \"http_template\": {\n    \"endpoint_name\": \"string\",\n    \"endpoint_url\": \"string\",\n    \"request_body\": \"string\",\n    \"headers\": [\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "588adbd2-a629-4fd5-ab87-6693cc9d0e91",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "agentic_experiments",
+                    ":experiment_id",
+                    "notebook"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "notebook_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fa2deddb-6583-4a95-a8c2-900338d24d76",
+    "name": "Arthur GenAI Engine Agent Discovery Agentic Experiments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

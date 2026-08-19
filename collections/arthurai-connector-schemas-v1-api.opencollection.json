@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Connector Schemas V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connector Schemas V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Available Connector Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connector_schemas/connector_types"
+          },
+          "docs": "Returns all Arthur-supported connector types."
+        },
+        {
+          "info": {
+            "name": "Get Connector Schema By Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connector_schemas/:connector_type",
+            "params": [
+              {
+                "name": "connector_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the connector schema to fetch."
+              }
+            ]
+          },
+          "docs": "Returns a connector schema by type."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

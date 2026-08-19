@@ -1,0 +1,286 @@
+{
+  "item": [
+    {
+      "id": "2cef0f75-31a7-46a6-88cc-32cd6a1e4003",
+      "name": "Configuration",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5aa59cd7-bed0-4215-b8c4-f53546f5f23f",
+          "name": "Get Configuration",
+          "request": {
+            "name": "Get Configuration",
+            "description": {
+              "content": "Get application configuration settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3041597c-b54e-460d-9dc5-70afdb7a277a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"max_llm_rules_per_task_count\": 5831,\n  \"trace_retention_days\": 5906,\n  \"chat_task_id\": \"string\",\n  \"default_currency\": \"string\",\n  \"document_storage_configuration\": {\n    \"storage_environment\": \"string\",\n    \"bucket_name\": \"string\",\n    \"container_name\": \"string\",\n    \"assumable_role_arn\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f51553a2-84f5-484e-b392-d4b32a7b6b98",
+          "name": "Update Configuration",
+          "request": {
+            "name": "Update Configuration",
+            "description": {
+              "content": "Update application configuration settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chat_task_id\": \"<string>\",\n  \"default_currency\": \"<string>\",\n  \"document_storage_configuration\": {\n    \"environment\": \"<string>\",\n    \"connection_string\": \"<string>\",\n    \"container_name\": \"<string>\",\n    \"bucket_name\": \"<string>\",\n    \"assumable_role_arn\": \"<string>\"\n  },\n  \"max_llm_rules_per_task_count\": \"<integer>\",\n  \"trace_retention_days\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "01fbfc39-c205-49e4-97b4-3a2bc400c366",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chat_task_id\": \"<string>\",\n  \"default_currency\": \"<string>\",\n  \"document_storage_configuration\": {\n    \"environment\": \"aws\",\n    \"connection_string\": \"string\",\n    \"container_name\": \"string\",\n    \"bucket_name\": \"string\",\n    \"assumable_role_arn\": \"string\"\n  },\n  \"max_llm_rules_per_task_count\": \"<integer>\",\n  \"trace_retention_days\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"max_llm_rules_per_task_count\": 5831,\n  \"trace_retention_days\": 5906,\n  \"chat_task_id\": \"string\",\n  \"default_currency\": \"string\",\n  \"document_storage_configuration\": {\n    \"storage_environment\": \"string\",\n    \"bucket_name\": \"string\",\n    \"container_name\": \"string\",\n    \"assumable_role_arn\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8467b980-bda0-4a5d-91ef-0fb7f6b646cb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chat_task_id\": \"<string>\",\n  \"default_currency\": \"<string>\",\n  \"document_storage_configuration\": {\n    \"environment\": \"aws\",\n    \"connection_string\": \"string\",\n    \"container_name\": \"string\",\n    \"bucket_name\": \"string\",\n    \"assumable_role_arn\": \"string\"\n  },\n  \"max_llm_rules_per_task_count\": \"<integer>\",\n  \"trace_retention_days\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d068c3f5-ca69-4099-b7fe-a8efaad633af",
+    "name": "Arthur GenAI Engine Agent Discovery Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

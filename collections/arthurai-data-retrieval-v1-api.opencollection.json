@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Data Retrieval V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Retrieval V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Raw Data Operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id/data_retrieval",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new raw data operation. Requires the dataset_create_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Gets Raw Data Operation Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets the data retrieved by raw data operation. Requires the dataset_get_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Put Retrieved Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Place raw data for returning. Requires the dataset_put_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Delete Retrieved Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/datasets/:dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes retrieved data living in memory. A new operation will need to be created to retrieve the data again. Requires the dataset_delete_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Create Raw Data Operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/available_dataset/:available_dataset_id/data_retrieval",
+            "params": [
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new raw data operation. Requires the available_dataset_create_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Gets Raw Data Operation Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/available_dataset/:available_dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              },
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets the data retrieved by raw data operation. Requires the available_dataset_get_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Put Retrieved Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/available_dataset/:available_dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Place raw data for returning. Requires the available_dataset_put_data_retrieval permission."
+        },
+        {
+          "info": {
+            "name": "Delete Retrieved Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/available_dataset/:available_dataset_id/data_retrieval/:operation_id",
+            "params": [
+              {
+                "name": "operation_id",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID of the raw data operation."
+              },
+              {
+                "name": "available_dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes retrieved data living in memory. A new operation will need to be created to retrieve the data again. Requires the available_dataset_delete_data_retrieval permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

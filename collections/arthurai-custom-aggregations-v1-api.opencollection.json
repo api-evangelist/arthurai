@@ -1,0 +1,190 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Custom Aggregations V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom Aggregations V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Custom Aggregation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/custom_aggregations",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number to fetch."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of items per page."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search for custom aggregations by aggregation name or description."
+              }
+            ]
+          },
+          "docs": "Requires workspace_list_custom_aggregations permission."
+        },
+        {
+          "info": {
+            "name": "Post Custom Aggregation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/custom_aggregations",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires workspace_create_custom_aggregation permission."
+        },
+        {
+          "info": {
+            "name": "Validate A Custom Aggregation Before Creation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/workspaces/:workspace_id/validate_custom_aggregation",
+            "params": [
+              {
+                "name": "workspace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates the custom aggregation and returns any expected errors for aggregation creation. Requires workspace_validate_custom_aggregation permission."
+        },
+        {
+          "info": {
+            "name": "Get Custom Aggregation By Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/custom_aggregations/:custom_aggregation_id",
+            "params": [
+              {
+                "name": "custom_aggregation_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version of the custom aggregation to fetch."
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Whether to fetch the latest version of the custom aggregation."
+              }
+            ]
+          },
+          "docs": "Requires custom_aggregation_read permission. Includes version filters to specify the versions included on the returned aggregation."
+        },
+        {
+          "info": {
+            "name": "Update Custom Aggregation By Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/custom_aggregations/:custom_aggregation_id",
+            "params": [
+              {
+                "name": "custom_aggregation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new version of the custom aggregation. Requires custom_aggregation_put permission."
+        },
+        {
+          "info": {
+            "name": "Patch Custom Aggregation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/custom_aggregations/:custom_aggregation_id",
+            "params": [
+              {
+                "name": "custom_aggregation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires custom_aggregation_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Custom Aggregation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/custom_aggregations/:custom_aggregation_id",
+            "params": [
+              {
+                "name": "custom_aggregation_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requires custom_aggregation_delete permission. Aggregation will no longer be available to execute but will still be available to read."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

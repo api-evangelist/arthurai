@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agent Discovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute Agent Polling",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/agent-polling/execute",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manually trigger a polling job for a task. Does not require any particular state — admins can use this to force an immediate poll outside the normal loop cadence."
+        },
+        {
+          "info": {
+            "name": "Execute All Agent Polling",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/agent-polling/execute-all",
+            "params": [
+              {
+                "name": "wait_for_completion",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manually trigger a full agent discovery and polling cycle. Discovers new GCP agents and enqueues trace-fetch jobs for all eligible tasks. Use wait_for_completion=true to block until all polling jobs finish."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

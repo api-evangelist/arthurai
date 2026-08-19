@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Chatbot API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chatbot",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stream a chatbot response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/chatbot/stream",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Send a message to the Arthur AI chatbot and receive a streaming response. The chatbot can call Arthur Engine API endpoints on your behalf."
+        },
+        {
+          "info": {
+            "name": "Get chatbot model configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/chatbot/config",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the model provider, model name, blacklisted endpoints, and available endpoints."
+        },
+        {
+          "info": {
+            "name": "Update chatbot model configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/chatbot/config",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Saves a new version of the chatbot prompt with the specified model provider and model name, and tags it as production."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

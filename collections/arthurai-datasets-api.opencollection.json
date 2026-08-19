@@ -1,0 +1,412 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Datasets API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/tasks/:task_id/datasets",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Register a new dataset."
+        },
+        {
+          "info": {
+            "name": "Get Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to fetch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a dataset."
+        },
+        {
+          "info": {
+            "name": "Update Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a dataset."
+        },
+        {
+          "info": {
+            "name": "Delete Dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a dataset."
+        },
+        {
+          "info": {
+            "name": "Get Datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/tasks/:task_id/datasets/search",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "dataset_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of dataset ids to query for."
+              },
+              {
+                "name": "dataset_name",
+                "value": "",
+                "type": "query",
+                "description": "Dataset name substring to search for."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search datasets. Optionally can filter by dataset IDs and dataset name."
+        },
+        {
+          "info": {
+            "name": "Get Dataset Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to fetch versions for."
+              },
+              {
+                "name": "latest_version_only",
+                "value": "",
+                "type": "query",
+                "description": "Whether to only include the latest version for the dataset in the response. Defaults to False."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List dataset versions."
+        },
+        {
+          "info": {
+            "name": "Create Dataset Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to create a new version for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new dataset version."
+        },
+        {
+          "info": {
+            "name": "Get Dataset Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions/:version_number",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset to fetch the version for."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number to fetch."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search query to filter rows. Performs case-insensitive search across all column values."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch a dataset version."
+        },
+        {
+          "info": {
+            "name": "Get Dataset Version Row",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions/:version_number/rows/:row_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the dataset."
+              },
+              {
+                "name": "row_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the row to fetch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch a specific row from a dataset version by row ID."
+        },
+        {
+          "info": {
+            "name": "Get the model configuration stored in the SDG system prompt.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/datasets/synthetic-data/prompt-status",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the model configuration stored in the SDG system prompt."
+        },
+        {
+          "info": {
+            "name": "Generate Synthetic Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions/:version_number/generate-synthetic",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the dataset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate synthetic data rows based on existing dataset patterns."
+        },
+        {
+          "info": {
+            "name": "Send Synthetic Data Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/datasets/:dataset_id/versions/:version_number/generate-synthetic/message",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the dataset."
+              },
+              {
+                "name": "version_number",
+                "value": "",
+                "type": "path",
+                "description": "Version number of the dataset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Send a message to refine synthetic data generation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

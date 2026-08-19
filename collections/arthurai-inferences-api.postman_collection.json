@@ -1,0 +1,313 @@
+{
+  "item": [
+    {
+      "id": "8ca2839f-9745-486a-bda4-d13788ef7337",
+      "name": "Inferences",
+      "description": {
+        "content": "Endpoints for querying past inferences",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0e5e0d82-021f-4ddf-8ecc-4a721b3a1ac5",
+          "name": "Query Inferences",
+          "request": {
+            "name": "Query Inferences",
+            "description": {
+              "content": "Paginated inference querying. See parameters for available filters. Includes inferences from archived tasks and rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "inferences",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "task_name",
+                  "value": "<string>",
+                  "description": "Task name to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "conversation_id",
+                  "value": "<string>",
+                  "description": "Conversation ID to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "inference_id",
+                  "value": "<string>",
+                  "description": "Inference ID to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "<string>",
+                  "description": "User ID to filter on."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "Inclusive start date in ISO8601 string format."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "Exclusive end date in ISO8601 string format."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_count",
+                  "value": "true",
+                  "description": "Whether to include the total count of matching inferences. Set to False to improve query performance for large datasets. Count will be returned as -1 if set to False."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "369051c7-f364-4c8e-a236-387dfebbd2ca",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "inferences",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "conversation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "include_count",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1836,\n  \"inferences\": [\n    {\n      \"id\": \"string\",\n      \"result\": \"Model Not Available\",\n      \"created_at\": 4628,\n      \"updated_at\": 9012,\n      \"inference_prompt\": {\n        \"id\": \"string\",\n        \"inference_id\": \"string\",\n        \"result\": \"Model Not Available\",\n        \"created_at\": 4727,\n        \"updated_at\": 9301,\n        \"message\": \"string\",\n        \"prompt_rule_results\": [\n          {\n            \"id\": \"string\",\n            \"name\": \"string\",\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": 4975,\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"name\": \"string\",\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": 9081,\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"tokens\": 3762\n      },\n      \"inference_feedback\": [\n        {\n          \"id\": \"string\",\n          \"inference_id\": \"string\",\n          \"target\": \"prompt_results\",\n          \"score\": 360,\n          \"created_at\": \"1998-01-22T12:16:31.281Z\",\n          \"updated_at\": \"2002-08-17T22:21:17.949Z\",\n          \"reason\": \"string\",\n          \"user_id\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"inference_id\": \"string\",\n          \"target\": \"prompt_results\",\n          \"score\": 3058,\n          \"created_at\": \"1950-07-10T12:12:57.876Z\",\n          \"updated_at\": \"1970-01-06T21:45:34.875Z\",\n          \"reason\": \"string\",\n          \"user_id\": \"string\"\n        }\n      ],\n      \"task_id\": \"string\",\n      \"task_name\": \"string\",\n      \"conversation_id\": \"string\",\n      \"inference_response\": {\n        \"id\": \"string\",\n        \"inference_id\": \"string\",\n        \"result\": \"Skipped\",\n        \"created_at\": 2929,\n        \"updated_at\": 8130,\n        \"message\": \"string\",\n        \"response_rule_results\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"context\": \"string\",\n        \"tokens\": 845,\n        \"model_name\": \"string\"\n      },\n      \"user_id\": \"string\",\n      \"model_name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"result\": \"Partially Unavailable\",\n      \"created_at\": 4952,\n      \"updated_at\": 3237,\n      \"inference_prompt\": {\n        \"id\": \"string\",\n        \"inference_id\": \"string\",\n        \"result\": \"Fail\",\n        \"created_at\": 685,\n        \"updated_at\": 2297,\n        \"message\": \"string\",\n        \"prompt_rule_results\": [\n          {\n            \"id\": \"string\",\n            \"name\": \"string\",\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": 7684,\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"name\": \"string\",\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": 3457,\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"tokens\": 2465\n      },\n      \"inference_feedback\": [\n        {\n          \"id\": \"string\",\n          \"inference_id\": \"string\",\n          \"target\": \"context\",\n          \"score\": 285,\n          \"created_at\": \"2013-03-10T19:38:59.497Z\",\n          \"updated_at\": \"1976-06-27T01:49:04.945Z\",\n          \"reason\": \"string\",\n          \"user_id\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"inference_id\": \"string\",\n          \"target\": \"prompt_results\",\n          \"score\": 2391,\n          \"created_at\": \"2010-04-06T13:16:53.609Z\",\n          \"updated_at\": \"2006-08-20T17:48:34.878Z\",\n          \"reason\": \"string\",\n          \"user_id\": \"string\"\n        }\n      ],\n      \"task_id\": \"string\",\n      \"task_name\": \"string\",\n      \"conversation_id\": \"string\",\n      \"inference_response\": {\n        \"id\": \"string\",\n        \"inference_id\": \"string\",\n        \"result\": \"Pass\",\n        \"created_at\": 8378,\n        \"updated_at\": 8675,\n        \"message\": \"string\",\n        \"response_rule_results\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rule_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scope\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"result\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"latency_ms\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"details\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"context\": \"string\",\n        \"tokens\": 8568,\n        \"model_name\": \"string\"\n      },\n      \"user_id\": \"string\",\n      \"model_name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "951e3877-2d93-4371-9e11-37aeb4b4d2ca",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "inferences",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "conversation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "inference_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "include_count",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "778b37aa-4534-4db9-a44b-3c5b6bb72e95",
+    "name": "Arthur GenAI Engine Agent Discovery Inferences API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for querying past inferences",
+      "type": "text/plain"
+    }
+  }
+}

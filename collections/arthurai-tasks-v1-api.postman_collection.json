@@ -1,0 +1,3174 @@
+{
+  "item": [
+    {
+      "id": "da495ec2-a52a-4560-8adb-cd2430da4330",
+      "name": "Tasks V1",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5b7f6b22-42af-4e6e-afdd-b2ec13ff6f81",
+          "name": "Update A Task",
+          "request": {
+            "name": "Update A Task",
+            "description": {
+              "content": "Submits a job to update the task definition for this model and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_update permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"apply_to_prompt\": \"<boolean>\",\n      \"apply_to_response\": \"<boolean>\",\n      \"config\": {\n        \"keywords\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"apply_to_prompt\": \"<boolean>\",\n      \"apply_to_response\": \"<boolean>\",\n      \"config\": {\n        \"keywords\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b8e3915f-81a8-4dd1-805b-a73fdc90f36f",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"2ba2e3c9-1c0c-b5ed-0cc2-a74c01f90708\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfdae0e0-700d-4b22-918d-16f584e8ea6e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ce64e58-decd-474c-af8a-8a3fc1019253",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac338bb6-f4b4-4dc3-918a-bbf79a9260d1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "724b815a-841b-438f-91c5-276ac0c1063c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rules_to_enable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_disable\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_archive\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f109e13-d9c3-4459-8f81-924d31a90212",
+          "name": "Delete A Task",
+          "request": {
+            "name": "Delete A Task",
+            "description": {
+              "content": "Submits a job to delete the task and the corresponding platform model, and returns the job ID. Requires model_task_delete permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "e5811ab2-1be7-4440-af3d-4fb4f12df264",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"2ba2e3c9-1c0c-b5ed-0cc2-a74c01f90708\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a1ea0ef-5399-4ce4-ad7a-41577c5474e4",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2434db10-8d79-444f-a368-f9ff50a580eb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c46c781c-9d25-4f92-9281-650635248be6",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4a8e0ab-de58-437f-a8d8-ddf35dc1ec75",
+          "name": "Get Cached Task State",
+          "request": {
+            "name": "Get Cached Task State",
+            "description": {
+              "content": "Retrieve the task state cached in the control plane. Requires model_task_read permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "e3f06e43-08ce-4f1e-91a5-dd065f2ff4a6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"scope_model_id\": \"8b71e7c8-5a4b-b348-e49f-0bb1a5b4068b\",\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 5132,\n    \"updated_at\": 7633,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"RegexRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 7398,\n        \"updated_at\": 296,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ModelHallucinationRuleV2\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": false,\n        \"scope\": \"default\",\n        \"created_at\": 8205,\n        \"updated_at\": 5170,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": true,\n    \"is_autocreated\": false,\n    \"is_archived\": false,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"region\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"resource_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"QueryRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"2016-07-01T09:16:28.301Z\",\n        \"updated_at\": \"1981-11-24T20:25:09.475Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"QueryRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"2016-05-09T10:42:59.742Z\",\n        \"updated_at\": \"2014-08-01T00:43:38.307Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      }\n    ]\n  },\n  \"last_synced_at\": \"2021-09-29T16:23:55.217Z\",\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1993-06-06T07:04:17.930Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"bedrock\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 4735.93410201972,\n        \"temperature\": 3475.0557427877447,\n        \"top_p\": 7216.593860138547,\n        \"max_tokens\": 962,\n        \"stop\": \"string\",\n        \"presence_penalty\": 8341.363975389348,\n        \"frequency_penalty\": 9225.16929675942,\n        \"seed\": 7519,\n        \"logprobs\": false,\n        \"top_logprobs\": 4018,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2667,\n        \"reasoning_effort\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"thinking\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"deleted_at\": \"1957-07-26T06:34:17.805Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1950-08-06T04:26:04.644Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 7205.28289186728,\n        \"temperature\": 7393.7487099297105,\n        \"top_p\": 8397.498409884976,\n        \"max_tokens\": 6672,\n        \"stop\": \"string\",\n        \"presence_penalty\": 2594.478594463433,\n        \"frequency_penalty\": 5104.429422012003,\n        \"seed\": 8907,\n        \"logprobs\": true,\n        \"top_logprobs\": 2348,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 4079,\n        \"reasoning_effort\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"thinking\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"deleted_at\": \"2010-03-15T22:51:15.799Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"0c1afd1d-4006-cff4-8693-d746069f604e\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"e69812f5-e5ef-7df5-cac1-4fde641b09c4\",\n      \"created_at\": \"1983-05-19T17:03:24.793Z\",\n      \"updated_at\": \"1969-01-05T14:20:47.455Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 1325,\n      \"transform_version_id\": \"a1dc00cf-9ed4-f4fd-b5f1-908d666153d0\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"1b2a48d6-08dd-ea2a-7f58-32954eb9a29a\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"595b9031-b130-dd62-08a0-6d1373ac82ff\",\n      \"created_at\": \"1951-04-04T04:07:08.901Z\",\n      \"updated_at\": \"1973-12-23T16:19:16.830Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7795,\n      \"transform_version_id\": \"88aaf3b1-2eab-32ea-d04f-873a9802f9f9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"9684b8ca-bea4-a9d1-6593-75888786a223\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"span_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"attribute_path\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"span_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"attribute_path\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"2024-03-24T12:20:40.416Z\",\n      \"updated_at\": \"2010-12-04T09:06:20.060Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"0d018002-10b6-d7ae-5bdf-2d6ccf08e2f7\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"span_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"attribute_path\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"span_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"attribute_path\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1952-11-09T22:04:08.529Z\",\n      \"updated_at\": \"1987-08-18T22:30:13.876Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53c9c116-2d9e-4ab8-a5b2-89cfbd38e12e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4eb49a42-b210-4598-972f-8c4b51f6bf7f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c8bd0b1-982c-4144-839f-5a50e1ad8692",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c99c580c-86df-4850-aefc-6117260895ae",
+          "name": "Sync A Task",
+          "request": {
+            "name": "Sync A Task",
+            "description": {
+              "content": "Submits a job to fetch the latest task state and returns the job ID. When the job finishes, it will upload the latest copy of the task state. Requires model_task_sync permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "27442a64-227d-41b5-a7c8-085a6df4cc7c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"2ba2e3c9-1c0c-b5ed-0cc2-a74c01f90708\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e33534f-14b3-4b58-a056-3f023d05a74d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3a41b63-d296-47c3-9554-c985830d4534",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "303cb2ae-20e2-4f78-8b83-7c5576ef779a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e0c5efa-4751-46ff-b9f2-3791aaf0d042",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8e10d777-3e14-40a1-aa70-740c6de70af2",
+          "name": "Upload Task State",
+          "request": {
+            "name": "Upload Task State",
+            "description": {
+              "content": "Upload a copy of the task state to cache in the control plane. Requires model_task_put_state_cache permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "cache"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"task\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"created_at\": \"<integer>\",\n    \"updated_at\": \"<integer>\",\n    \"rules\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"type\": \"<string>\",\n        \"apply_to_prompt\": \"<boolean>\",\n        \"apply_to_response\": \"<boolean>\",\n        \"scope\": \"<string>\",\n        \"created_at\": \"<integer>\",\n        \"updated_at\": \"<integer>\",\n        \"enabled\": \"<boolean>\",\n        \"config\": {\n          \"keywords\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"type\": \"<string>\",\n        \"apply_to_prompt\": \"<boolean>\",\n        \"apply_to_response\": \"<boolean>\",\n        \"scope\": \"<string>\",\n        \"created_at\": \"<integer>\",\n        \"updated_at\": \"<integer>\",\n        \"enabled\": \"<boolean>\",\n        \"config\": {\n          \"keywords\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": \"<boolean>\",\n    \"is_system_task\": \"<boolean>\",\n    \"is_autocreated\": \"<boolean>\",\n    \"is_archived\": \"<boolean>\",\n    \"agent_metadata\": {\n      \"provider\": \"<string>\",\n      \"gcp_metadata\": {\n        \"project_id\": \"<string>\",\n        \"region\": \"<string>\",\n        \"resource_id\": \"<string>\"\n      },\n      \"service_names\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"type\": \"<string>\",\n        \"metric_metadata\": \"<string>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"config\": \"<string>\",\n        \"enabled\": \"<boolean>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"type\": \"<string>\",\n        \"metric_metadata\": \"<string>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"config\": \"<string>\",\n        \"enabled\": \"<boolean>\"\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"<string>\",\n      \"model_provider\": \"<string>\",\n      \"instructions\": \"<string>\",\n      \"variables\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"config\": {\n        \"timeout\": \"<number>\",\n        \"temperature\": \"<number>\",\n        \"top_p\": \"<number>\",\n        \"max_tokens\": \"<integer>\",\n        \"stop\": \"<string>\",\n        \"presence_penalty\": \"<number>\",\n        \"frequency_penalty\": \"<number>\",\n        \"seed\": \"<integer>\",\n        \"logprobs\": \"<boolean>\",\n        \"top_logprobs\": \"<integer>\",\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": \"<integer>\",\n        \"reasoning_effort\": \"<string>\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"<dateTime>\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"<string>\",\n      \"model_provider\": \"<string>\",\n      \"instructions\": \"<string>\",\n      \"variables\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"config\": {\n        \"timeout\": \"<number>\",\n        \"temperature\": \"<number>\",\n        \"top_p\": \"<number>\",\n        \"max_tokens\": \"<integer>\",\n        \"stop\": \"<string>\",\n        \"presence_penalty\": \"<number>\",\n        \"frequency_penalty\": \"<number>\",\n        \"seed\": \"<integer>\",\n        \"logprobs\": \"<boolean>\",\n        \"top_logprobs\": \"<integer>\",\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": \"<integer>\",\n        \"reasoning_effort\": \"<string>\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"<dateTime>\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"task_id\": \"<string>\",\n      \"transform_id\": \"<uuid>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"<string>\",\n      \"llm_eval_version\": \"<integer>\",\n      \"transform_version_id\": \"<uuid>\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"<string>\",\n          \"eval_variable\": \"<string>\"\n        },\n        {\n          \"transform_variable\": \"<string>\",\n          \"eval_variable\": \"<string>\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"task_id\": \"<string>\",\n      \"transform_id\": \"<uuid>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"<string>\",\n      \"llm_eval_version\": \"<integer>\",\n      \"transform_version_id\": \"<uuid>\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"<string>\",\n          \"eval_variable\": \"<string>\"\n        },\n        {\n          \"transform_variable\": \"<string>\",\n          \"eval_variable\": \"<string>\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"<uuid>\",\n      \"task_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"<string>\",\n            \"span_name\": \"<string>\",\n            \"attribute_path\": \"<string>\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"<string>\",\n            \"span_name\": \"<string>\",\n            \"attribute_path\": \"<string>\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"task_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"<string>\",\n            \"span_name\": \"<string>\",\n            \"attribute_path\": \"<string>\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"<string>\",\n            \"span_name\": \"<string>\",\n            \"attribute_path\": \"<string>\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"description\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a8dd79fe-ecb0-4a68-bf41-971b5b1c2e46",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 4240,\n    \"updated_at\": 7609,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 9175,\n        \"updated_at\": 1102,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PIIDataRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 124,\n        \"updated_at\": 3010,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": false,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1990-05-04T04:59:23.813Z\",\n        \"updated_at\": \"1959-02-08T21:57:17.885Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1976-04-29T10:12:34.191Z\",\n        \"updated_at\": \"1960-10-02T04:53:56.319Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-06-19T13:50:37.846Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 3675.9637044740266,\n        \"temperature\": 6138.329556021625,\n        \"top_p\": 9974.856274324036,\n        \"max_tokens\": 9208,\n        \"stop\": \"string\",\n        \"presence_penalty\": 1304.1545565223335,\n        \"frequency_penalty\": 5726.366442451247,\n        \"seed\": 6559,\n        \"logprobs\": false,\n        \"top_logprobs\": 1500,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 9986,\n        \"reasoning_effort\": \"high\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1998-11-12T17:01:24.747Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-12-04T17:38:26.407Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"openai\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 8802.919713290883,\n        \"temperature\": 9488.662492311796,\n        \"top_p\": 5109.461721759394,\n        \"max_tokens\": 2244,\n        \"stop\": \"string\",\n        \"presence_penalty\": 9317.89248235172,\n        \"frequency_penalty\": 2459.9469666812,\n        \"seed\": 9293,\n        \"logprobs\": false,\n        \"top_logprobs\": 8410,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2002,\n        \"reasoning_effort\": \"minimal\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1985-10-21T15:24:44.295Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"bcfe723a-1b24-e3e7-ad73-a24a18e2f2f7\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"9949184f-416c-1bde-2341-b7c1bf5bf41f\",\n      \"created_at\": \"1999-09-28T10:57:26.045Z\",\n      \"updated_at\": \"2010-12-16T06:04:05.156Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 3479,\n      \"transform_version_id\": \"c12dd95f-a270-82a1-f0b5-dbcda64b6493\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"a3e40f98-fd06-723f-6346-7b99f0d11f9b\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"6d8a8722-430f-f21d-56d2-9e4e091d87fb\",\n      \"created_at\": \"2015-04-20T14:45:51.156Z\",\n      \"updated_at\": \"2012-10-02T23:14:30.304Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7181,\n      \"transform_version_id\": \"9503dea4-bf33-2365-0e5a-28e4d56124e9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"231b8ca9-0539-4d93-7e16-313ba84a78d3\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1972-02-22T20:20:33.387Z\",\n      \"updated_at\": \"1977-12-29T15:06:33.218Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"34516d68-4ba2-ef2a-d299-0e8377881a53\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1991-07-09T01:59:05.631Z\",\n      \"updated_at\": \"2022-06-24T05:01:14.130Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "75005f42-0614-4982-9ba5-0361e5c87b25",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 4240,\n    \"updated_at\": 7609,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 9175,\n        \"updated_at\": 1102,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PIIDataRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 124,\n        \"updated_at\": 3010,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": false,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1990-05-04T04:59:23.813Z\",\n        \"updated_at\": \"1959-02-08T21:57:17.885Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1976-04-29T10:12:34.191Z\",\n        \"updated_at\": \"1960-10-02T04:53:56.319Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-06-19T13:50:37.846Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 3675.9637044740266,\n        \"temperature\": 6138.329556021625,\n        \"top_p\": 9974.856274324036,\n        \"max_tokens\": 9208,\n        \"stop\": \"string\",\n        \"presence_penalty\": 1304.1545565223335,\n        \"frequency_penalty\": 5726.366442451247,\n        \"seed\": 6559,\n        \"logprobs\": false,\n        \"top_logprobs\": 1500,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 9986,\n        \"reasoning_effort\": \"high\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1998-11-12T17:01:24.747Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-12-04T17:38:26.407Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"openai\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 8802.919713290883,\n        \"temperature\": 9488.662492311796,\n        \"top_p\": 5109.461721759394,\n        \"max_tokens\": 2244,\n        \"stop\": \"string\",\n        \"presence_penalty\": 9317.89248235172,\n        \"frequency_penalty\": 2459.9469666812,\n        \"seed\": 9293,\n        \"logprobs\": false,\n        \"top_logprobs\": 8410,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2002,\n        \"reasoning_effort\": \"minimal\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1985-10-21T15:24:44.295Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"bcfe723a-1b24-e3e7-ad73-a24a18e2f2f7\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"9949184f-416c-1bde-2341-b7c1bf5bf41f\",\n      \"created_at\": \"1999-09-28T10:57:26.045Z\",\n      \"updated_at\": \"2010-12-16T06:04:05.156Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 3479,\n      \"transform_version_id\": \"c12dd95f-a270-82a1-f0b5-dbcda64b6493\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"a3e40f98-fd06-723f-6346-7b99f0d11f9b\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"6d8a8722-430f-f21d-56d2-9e4e091d87fb\",\n      \"created_at\": \"2015-04-20T14:45:51.156Z\",\n      \"updated_at\": \"2012-10-02T23:14:30.304Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7181,\n      \"transform_version_id\": \"9503dea4-bf33-2365-0e5a-28e4d56124e9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"231b8ca9-0539-4d93-7e16-313ba84a78d3\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1972-02-22T20:20:33.387Z\",\n      \"updated_at\": \"1977-12-29T15:06:33.218Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"34516d68-4ba2-ef2a-d299-0e8377881a53\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1991-07-09T01:59:05.631Z\",\n      \"updated_at\": \"2022-06-24T05:01:14.130Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "380bd243-83f1-4318-beb3-00b40a8b4b7c",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 4240,\n    \"updated_at\": 7609,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 9175,\n        \"updated_at\": 1102,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PIIDataRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 124,\n        \"updated_at\": 3010,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": false,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1990-05-04T04:59:23.813Z\",\n        \"updated_at\": \"1959-02-08T21:57:17.885Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1976-04-29T10:12:34.191Z\",\n        \"updated_at\": \"1960-10-02T04:53:56.319Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-06-19T13:50:37.846Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 3675.9637044740266,\n        \"temperature\": 6138.329556021625,\n        \"top_p\": 9974.856274324036,\n        \"max_tokens\": 9208,\n        \"stop\": \"string\",\n        \"presence_penalty\": 1304.1545565223335,\n        \"frequency_penalty\": 5726.366442451247,\n        \"seed\": 6559,\n        \"logprobs\": false,\n        \"top_logprobs\": 1500,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 9986,\n        \"reasoning_effort\": \"high\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1998-11-12T17:01:24.747Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-12-04T17:38:26.407Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"openai\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 8802.919713290883,\n        \"temperature\": 9488.662492311796,\n        \"top_p\": 5109.461721759394,\n        \"max_tokens\": 2244,\n        \"stop\": \"string\",\n        \"presence_penalty\": 9317.89248235172,\n        \"frequency_penalty\": 2459.9469666812,\n        \"seed\": 9293,\n        \"logprobs\": false,\n        \"top_logprobs\": 8410,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2002,\n        \"reasoning_effort\": \"minimal\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1985-10-21T15:24:44.295Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"bcfe723a-1b24-e3e7-ad73-a24a18e2f2f7\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"9949184f-416c-1bde-2341-b7c1bf5bf41f\",\n      \"created_at\": \"1999-09-28T10:57:26.045Z\",\n      \"updated_at\": \"2010-12-16T06:04:05.156Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 3479,\n      \"transform_version_id\": \"c12dd95f-a270-82a1-f0b5-dbcda64b6493\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"a3e40f98-fd06-723f-6346-7b99f0d11f9b\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"6d8a8722-430f-f21d-56d2-9e4e091d87fb\",\n      \"created_at\": \"2015-04-20T14:45:51.156Z\",\n      \"updated_at\": \"2012-10-02T23:14:30.304Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7181,\n      \"transform_version_id\": \"9503dea4-bf33-2365-0e5a-28e4d56124e9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"231b8ca9-0539-4d93-7e16-313ba84a78d3\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1972-02-22T20:20:33.387Z\",\n      \"updated_at\": \"1977-12-29T15:06:33.218Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"34516d68-4ba2-ef2a-d299-0e8377881a53\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1991-07-09T01:59:05.631Z\",\n      \"updated_at\": \"2022-06-24T05:01:14.130Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84b5c3f0-8cee-4517-aa4f-cdc65b54ffad",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 4240,\n    \"updated_at\": 7609,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 9175,\n        \"updated_at\": 1102,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PIIDataRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 124,\n        \"updated_at\": 3010,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": false,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1990-05-04T04:59:23.813Z\",\n        \"updated_at\": \"1959-02-08T21:57:17.885Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1976-04-29T10:12:34.191Z\",\n        \"updated_at\": \"1960-10-02T04:53:56.319Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-06-19T13:50:37.846Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 3675.9637044740266,\n        \"temperature\": 6138.329556021625,\n        \"top_p\": 9974.856274324036,\n        \"max_tokens\": 9208,\n        \"stop\": \"string\",\n        \"presence_penalty\": 1304.1545565223335,\n        \"frequency_penalty\": 5726.366442451247,\n        \"seed\": 6559,\n        \"logprobs\": false,\n        \"top_logprobs\": 1500,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 9986,\n        \"reasoning_effort\": \"high\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1998-11-12T17:01:24.747Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-12-04T17:38:26.407Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"openai\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 8802.919713290883,\n        \"temperature\": 9488.662492311796,\n        \"top_p\": 5109.461721759394,\n        \"max_tokens\": 2244,\n        \"stop\": \"string\",\n        \"presence_penalty\": 9317.89248235172,\n        \"frequency_penalty\": 2459.9469666812,\n        \"seed\": 9293,\n        \"logprobs\": false,\n        \"top_logprobs\": 8410,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2002,\n        \"reasoning_effort\": \"minimal\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1985-10-21T15:24:44.295Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"bcfe723a-1b24-e3e7-ad73-a24a18e2f2f7\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"9949184f-416c-1bde-2341-b7c1bf5bf41f\",\n      \"created_at\": \"1999-09-28T10:57:26.045Z\",\n      \"updated_at\": \"2010-12-16T06:04:05.156Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 3479,\n      \"transform_version_id\": \"c12dd95f-a270-82a1-f0b5-dbcda64b6493\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"a3e40f98-fd06-723f-6346-7b99f0d11f9b\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"6d8a8722-430f-f21d-56d2-9e4e091d87fb\",\n      \"created_at\": \"2015-04-20T14:45:51.156Z\",\n      \"updated_at\": \"2012-10-02T23:14:30.304Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7181,\n      \"transform_version_id\": \"9503dea4-bf33-2365-0e5a-28e4d56124e9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"231b8ca9-0539-4d93-7e16-313ba84a78d3\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1972-02-22T20:20:33.387Z\",\n      \"updated_at\": \"1977-12-29T15:06:33.218Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"34516d68-4ba2-ef2a-d299-0e8377881a53\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1991-07-09T01:59:05.631Z\",\n      \"updated_at\": \"2022-06-24T05:01:14.130Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cece996-f4ae-4fe1-8aeb-f6dc03ed9500",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"created_at\": 4240,\n    \"updated_at\": 7609,\n    \"rules\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PromptInjectionRule\",\n        \"apply_to_prompt\": false,\n        \"apply_to_response\": true,\n        \"scope\": \"task\",\n        \"created_at\": 9175,\n        \"updated_at\": 1102,\n        \"enabled\": false,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"PIIDataRule\",\n        \"apply_to_prompt\": true,\n        \"apply_to_response\": true,\n        \"scope\": \"default\",\n        \"created_at\": 124,\n        \"updated_at\": 3010,\n        \"enabled\": true,\n        \"config\": {\n          \"keywords\": [\n            \"Blocked_Keyword_1\",\n            \"Blocked_Keyword_2\"\n          ]\n        }\n      }\n    ],\n    \"is_agentic\": false,\n    \"is_system_task\": false,\n    \"is_autocreated\": true,\n    \"is_archived\": true,\n    \"agent_metadata\": {\n      \"provider\": \"gcp\",\n      \"gcp_metadata\": {\n        \"project_id\": \"string\",\n        \"region\": \"string\",\n        \"resource_id\": \"string\"\n      },\n      \"service_names\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"metrics\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1990-05-04T04:59:23.813Z\",\n        \"updated_at\": \"1959-02-08T21:57:17.885Z\",\n        \"config\": \"string\",\n        \"enabled\": false\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"type\": \"ResponseRelevance\",\n        \"metric_metadata\": \"string\",\n        \"created_at\": \"1976-04-29T10:12:34.191Z\",\n        \"updated_at\": \"1960-10-02T04:53:56.319Z\",\n        \"config\": \"string\",\n        \"enabled\": true\n      }\n    ]\n  },\n  \"evals\": [\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-06-19T13:50:37.846Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"azure\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 3675.9637044740266,\n        \"temperature\": 6138.329556021625,\n        \"top_p\": 9974.856274324036,\n        \"max_tokens\": 9208,\n        \"stop\": \"string\",\n        \"presence_penalty\": 1304.1545565223335,\n        \"frequency_penalty\": 5726.366442451247,\n        \"seed\": 6559,\n        \"logprobs\": false,\n        \"top_logprobs\": 1500,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 9986,\n        \"reasoning_effort\": \"high\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1998-11-12T17:01:24.747Z\",\n      \"version\": 1\n    },\n    {\n      \"name\": \"string\",\n      \"created_at\": \"1953-12-04T17:38:26.407Z\",\n      \"eval_kind\": \"llm_as_a_judge\",\n      \"model_name\": \"string\",\n      \"model_provider\": \"openai\",\n      \"instructions\": \"string\",\n      \"variables\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"config\": {\n        \"timeout\": 8802.919713290883,\n        \"temperature\": 9488.662492311796,\n        \"top_p\": 5109.461721759394,\n        \"max_tokens\": 2244,\n        \"stop\": \"string\",\n        \"presence_penalty\": 9317.89248235172,\n        \"frequency_penalty\": 2459.9469666812,\n        \"seed\": 9293,\n        \"logprobs\": false,\n        \"top_logprobs\": 8410,\n        \"logit_bias\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"max_completion_tokens\": 2002,\n        \"reasoning_effort\": \"minimal\",\n        \"thinking\": {\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"budget_tokens\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"deleted_at\": \"1985-10-21T15:24:44.295Z\",\n      \"version\": 1\n    }\n  ],\n  \"continuous_evals\": [\n    {\n      \"id\": \"bcfe723a-1b24-e3e7-ad73-a24a18e2f2f7\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"9949184f-416c-1bde-2341-b7c1bf5bf41f\",\n      \"created_at\": \"1999-09-28T10:57:26.045Z\",\n      \"updated_at\": \"2010-12-16T06:04:05.156Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 3479,\n      \"transform_version_id\": \"c12dd95f-a270-82a1-f0b5-dbcda64b6493\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    },\n    {\n      \"id\": \"a3e40f98-fd06-723f-6346-7b99f0d11f9b\",\n      \"name\": \"string\",\n      \"task_id\": \"string\",\n      \"transform_id\": \"6d8a8722-430f-f21d-56d2-9e4e091d87fb\",\n      \"created_at\": \"2015-04-20T14:45:51.156Z\",\n      \"updated_at\": \"2012-10-02T23:14:30.304Z\",\n      \"description\": \"string\",\n      \"eval_type\": \"llm_eval\",\n      \"llm_eval_name\": \"string\",\n      \"llm_eval_version\": 7181,\n      \"transform_version_id\": \"9503dea4-bf33-2365-0e5a-28e4d56124e9\",\n      \"transform_variable_mapping\": [\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        },\n        {\n          \"transform_variable\": \"string\",\n          \"eval_variable\": \"string\"\n        }\n      ],\n      \"enabled\": true\n    }\n  ],\n  \"transforms\": [\n    {\n      \"id\": \"231b8ca9-0539-4d93-7e16-313ba84a78d3\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1972-02-22T20:20:33.387Z\",\n      \"updated_at\": \"1977-12-29T15:06:33.218Z\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"34516d68-4ba2-ef2a-d299-0e8377881a53\",\n      \"task_id\": \"string\",\n      \"name\": \"string\",\n      \"definition\": {\n        \"variables\": [\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"variable_name\": \"string\",\n            \"span_name\": \"string\",\n            \"attribute_path\": \"string\",\n            \"fallback\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"created_at\": \"1991-07-09T01:59:05.631Z\",\n      \"updated_at\": \"2022-06-24T05:01:14.130Z\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "adcf41a7-97c5-4abe-994b-c27a687b1299",
+          "name": "Upload Task State",
+          "request": {
+            "name": "Upload Task State",
+            "description": {
+              "content": "Upload the task connection information. Requires model_task_put_connection_info permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "connection_info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"validation_key\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"key\": \"<string>\"\n  },\n  \"api_host\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c74a28c4-fe61-4fee-912a-6f34477602b5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"key\": \"string\"\n  },\n  \"api_host\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"1959-01-15T11:51:44.550Z\",\n  \"updated_at\": \"1991-07-11T12:59:31.896Z\",\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\"\n  },\n  \"api_host\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4df3f2af-999d-499d-9c8d-8d18ba239b08",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"key\": \"string\"\n  },\n  \"api_host\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62b30558-3c98-4564-af07-b9d5cbc1742f",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"key\": \"string\"\n  },\n  \"api_host\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e85c25ba-141f-48b0-8d8a-15e37434743b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"key\": \"string\"\n  },\n  \"api_host\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96168341-2d05-44dc-99cd-e071bd2ff626",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"key\": \"string\"\n  },\n  \"api_host\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0162c3b4-fe09-4296-ac8c-ea07f7387541",
+          "name": "Get Task Connection Info",
+          "request": {
+            "name": "Get Task Connection Info",
+            "description": {
+              "content": "Retrieve the task connection information. Requires model_task_get_connection_info permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "connection_info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "8eab523e-3b1c-4cda-978f-e06ae123ecfc",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"1959-01-15T11:51:44.550Z\",\n  \"updated_at\": \"1991-07-11T12:59:31.896Z\",\n  \"validation_key\": {\n    \"id\": \"string\",\n    \"name\": \"string\"\n  },\n  \"api_host\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be9b4243-8dba-4038-99c3-6f8570a18e74",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c020c059-6b51-4717-aeda-b1bed19b0e1b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cc0514a-0274-442a-bbd5-10d63155b1df",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "035039ab-5bba-42cb-ad7c-d5e3c063dd08",
+          "name": "Delete Connection Info.",
+          "request": {
+            "name": "Delete Connection Info.",
+            "description": {
+              "content": "Deletes connection information for a model. Requires model_task_delete_connection_info permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "connection_info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "274a64ab-f17f-48e7-8b7b-3ea6fce30627",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "65c217e6-fbe8-4760-98ca-2fb7053bab1e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d18af1b-d4a3-47c5-8a41-a8581ac95607",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0ad3124-dc63-46ce-b1be-8b2864a0151b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "connection_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a79fc9b-499e-4b32-ad5e-529f2137982a",
+          "name": "Regenerate Task Validation Key",
+          "request": {
+            "name": "Regenerate Task Validation Key",
+            "description": {
+              "content": "Regenerate the task validation key. Requires model_task_regenerate_validation_key permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "models",
+                ":model_id",
+                "task",
+                "regenerate_validation_key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "model_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "bcab67c7-69ff-4dcb-a2d2-784cb51377ca",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "regenerate_validation_key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"37014150-e918-f7f2-c714-61bd940a01a7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f75826c-4667-4e04-97b8-93b77e7161c0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "regenerate_validation_key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa6c9cff-ebc3-4061-81a5-8869270d8e84",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "regenerate_validation_key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e0a14cb-34d8-4444-b7a0-ed6144ba6673",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "models",
+                    ":model_id",
+                    "task",
+                    "regenerate_validation_key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "model_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91290a4c-433d-4ee7-9ba6-54ff1476e1d6",
+          "name": "Create A Task.",
+          "request": {
+            "name": "Create A Task.",
+            "description": {
+              "content": "Submits a job to create a task in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_task permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                ":project_id",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"apply_to_prompt\": \"<boolean>\",\n      \"apply_to_response\": \"<boolean>\",\n      \"config\": {\n        \"keywords\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"apply_to_prompt\": \"<boolean>\",\n      \"apply_to_response\": \"<boolean>\",\n      \"config\": {\n        \"keywords\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"<string>\",\n    \"gcp_metadata\": {\n      \"project_id\": \"<string>\",\n      \"region\": \"<string>\",\n      \"resource_id\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "86cea860-d220-443a-92f9-5b9f2c4186d8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"2ba2e3c9-1c0c-b5ed-0cc2-a74c01f90708\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53b04c83-cdc4-4d94-922a-190d8510d174",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7814cf2a-37c5-413d-92ba-7145192c07d0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95e72a7d-3c85-4530-a747-162fc771ed9f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f294c06a-a1e5-44dc-ace4-b1e681bccd54",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\",\n  \"rules_to_add\": [\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    },\n    {\n      \"name\": \"SSN Regex Rule\",\n      \"type\": \"RegexRule\",\n      \"apply_to_prompt\": true,\n      \"apply_to_response\": false,\n      \"config\": {\n        \"keywords\": [\n          \"Blocked_Keyword_1\",\n          \"Blocked_Keyword_2\"\n        ]\n      }\n    }\n  ],\n  \"is_agentic\": false,\n  \"agent_metadata\": {\n    \"provider\": \"gcp\",\n    \"gcp_metadata\": {\n      \"project_id\": \"string\",\n      \"region\": \"string\",\n      \"resource_id\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fba51c9a-fe5c-4711-a731-259fd47c7be1",
+          "name": "Link An Existing Task To A New Model.",
+          "request": {
+            "name": "Link An Existing Task To A New Model.",
+            "description": {
+              "content": "Submits a job to link an existing task to a new model in the project and returns a job ID. When the job finishes, it will upload a copy of the task state. Requires the project_create_model_link_task permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                ":project_id",
+                "link_task"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9b0ff971-14ea-4590-952f-8d7f15978aa9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "link_task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"2ba2e3c9-1c0c-b5ed-0cc2-a74c01f90708\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7b3a266-e9f7-4345-83e0-d8b120d2fded",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "link_task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1671f807-f944-4803-ad8d-978442482188",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "link_task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2075d351-0642-441d-8ed4-5a099d94def8",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "link_task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbaeb8e9-3110-4eef-a8fe-7b150a82e058",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "projects",
+                    ":project_id",
+                    "link_task"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<uuid>\",\n  \"connector_id\": \"<uuid>\",\n  \"onboarding_identifier\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e12e94ad-a25b-46cc-89a9-a3a75484230b",
+    "name": "Arthur GenAI Engine Agent Discovery Tasks V1 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

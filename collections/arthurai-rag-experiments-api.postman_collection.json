@@ -1,0 +1,1413 @@
+{
+  "item": [
+    {
+      "id": "eb5502a4-c6bc-4718-b400-7555f167eee2",
+      "name": "RAG Experiments",
+      "description": {
+        "content": "Endpoints for managing RAG experiments",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7e1f2f9b-5107-4174-95f1-715590a2562b",
+          "name": "List RAG experiments",
+          "request": {
+            "name": "List RAG experiments",
+            "description": {
+              "content": "List all RAG experiments for a task with optional filtering and pagination",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "rag_experiments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Search text to filter experiments by name or description"
+                },
+                {
+                  "disabled": false,
+                  "key": "dataset_id",
+                  "value": "<uuid>",
+                  "description": "Filter experiments by dataset ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6ca6066c-a31f-4ea6-b484-71910a3d05f4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 3615,\n  \"page_size\": 3221,\n  \"total_pages\": 2129,\n  \"total_count\": 3921,\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"string\",\n      \"status\": \"queued\",\n      \"dataset_id\": \"315f8b86-de4d-7269-e8d1-0344f89387fe\",\n      \"dataset_name\": \"string\",\n      \"dataset_version\": 1696,\n      \"total_rows\": 4274,\n      \"completed_rows\": 3429,\n      \"failed_rows\": 113,\n      \"rag_configs\": [\n        {\n          \"setting_configuration_id\": \"52bd8ff6-dd6d-bd91-0f99-f32d9ff28777\",\n          \"version\": 9849,\n          \"query_column\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"saved\"\n        },\n        {\n          \"setting_configuration_id\": \"35311812-c377-87a7-9fa7-91cae405e275\",\n          \"version\": 8500,\n          \"query_column\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"saved\"\n        }\n      ],\n      \"description\": \"string\",\n      \"finished_at\": \"string\",\n      \"total_cost\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"string\",\n      \"status\": \"failed\",\n      \"dataset_id\": \"5f33291a-5a97-6e9a-8a81-1a8711642b5d\",\n      \"dataset_name\": \"string\",\n      \"dataset_version\": 3603,\n      \"total_rows\": 2874,\n      \"completed_rows\": 7703,\n      \"failed_rows\": 4359,\n      \"rag_configs\": [\n        {\n          \"setting_configuration_id\": \"7918a747-85d3-482c-542c-387e38c7382f\",\n          \"version\": 5055,\n          \"query_column\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"saved\"\n        },\n        {\n          \"setting_configuration_id\": \"8893a913-a7ca-af42-dc20-de4d9d06403f\",\n          \"version\": 3643,\n          \"query_column\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"saved\"\n        }\n      ],\n      \"description\": \"string\",\n      \"finished_at\": \"string\",\n      \"total_cost\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f4f6bf4-be3e-449d-818e-9a727b35d878",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dataset_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "928d7f47-34bb-4f77-a0e3-b1f5895ee7d0",
+          "name": "Create and run a RAG experiment",
+          "request": {
+            "name": "Create and run a RAG experiment",
+            "description": {
+              "content": "Create a new RAG experiment and initiate execution",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id",
+                "rag_experiments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"<uuid>\",\n    \"version\": \"<integer>\"\n  },\n  \"eval_list\": [\n    {\n      \"name\": \"<string>\",\n      \"version\": \"<integer>\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"version\": \"<integer>\",\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"<string>\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"<uuid>\",\n      \"version\": \"<integer>\",\n      \"query_column\": {\n        \"type\": \"<string>\",\n        \"dataset_column\": {\n          \"name\": \"<string>\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"<uuid>\",\n      \"version\": \"<integer>\",\n      \"query_column\": {\n        \"type\": \"<string>\",\n        \"dataset_column\": {\n          \"name\": \"<string>\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"<string>\",\n      \"column_value\": \"<string>\"\n    },\n    {\n      \"column_name\": \"<string>\",\n      \"column_value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c84b1470-f0d2-4e73-800a-f7d7e0c430fe",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"03379626-18dd-e4e6-7799-5b629c8e77d0\",\n    \"version\": 753\n  },\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 7804,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 8975,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"3ca197be-b881-0c33-ad7f-e40084904bdb\",\n      \"version\": 3116,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"4efc2adc-20b5-bd0d-6bcf-4a7da561030d\",\n      \"version\": 701,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"queued\",\n  \"dataset_id\": \"21c4d44d-c762-cc7e-45dd-ca26c4345723\",\n  \"dataset_name\": \"string\",\n  \"dataset_version\": 2084,\n  \"total_rows\": 5007,\n  \"completed_rows\": 5706,\n  \"failed_rows\": 3892,\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"5d73af93-9ae5-7bf7-e0c7-1b9674f23354\",\n      \"version\": 3983,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"5f871113-9838-c88e-9231-c6dc66a26f09\",\n      \"version\": 458,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "071355ff-f1d3-445e-ba70-73ff974ff444",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id",
+                    "rag_experiments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"dataset_ref\": {\n    \"id\": \"03379626-18dd-e4e6-7799-5b629c8e77d0\",\n    \"version\": 753\n  },\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 7804,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 8975,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"3ca197be-b881-0c33-ad7f-e40084904bdb\",\n      \"version\": 3116,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"4efc2adc-20b5-bd0d-6bcf-4a7da561030d\",\n      \"version\": 701,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "911d88d7-f7ff-4099-b734-07cf1eee4eef",
+          "name": "Get RAG experiment details",
+          "request": {
+            "name": "Get RAG experiment details",
+            "description": {
+              "content": "Get detailed information about a specific RAG experiment including summary results",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_experiments",
+                ":experiment_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment to retrieve"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1fc5a353-3554-4db9-8f45-f0a8358e318e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"completed\",\n  \"total_rows\": 5342,\n  \"completed_rows\": 1938,\n  \"failed_rows\": 970,\n  \"dataset_ref\": {\n    \"id\": \"98a29888-e9e2-4541-4663-b536f057c8a1\",\n    \"version\": 3155,\n    \"name\": \"string\"\n  },\n  \"eval_list\": [\n    {\n      \"name\": \"string\",\n      \"version\": 937,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"version\": 924,\n      \"variable_mapping\": [\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"variable_name\": \"string\",\n          \"source\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset_column\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"75845df2-79e8-402e-d0f1-c4edc6f49721\",\n      \"version\": 9034,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"11f678ed-4587-97f5-e516-a654ac2a521d\",\n      \"version\": 6530,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"summary_results\": {\n    \"rag_eval_summaries\": [\n      {\n        \"eval_results\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 3407,\n            \"total_count\": 238\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 3909,\n            \"total_count\": 6147\n          }\n        ],\n        \"rag_config_key\": \"string\",\n        \"rag_config_type\": \"string\",\n        \"setting_configuration_id\": \"b505d549-ba6c-5b01-cf26-1ff8346e7e8b\",\n        \"setting_configuration_version\": 2886\n      },\n      {\n        \"eval_results\": [\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 2009,\n            \"total_count\": 1622\n          },\n          {\n            \"eval_name\": \"string\",\n            \"eval_version\": \"string\",\n            \"pass_count\": 4039,\n            \"total_count\": 4301\n          }\n        ],\n        \"rag_config_key\": \"string\",\n        \"rag_config_type\": \"string\",\n        \"setting_configuration_id\": \"8871ac00-4fa9-6c41-ff93-9c377fd0e0fd\",\n        \"setting_configuration_version\": 4142\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\",\n  \"dataset_row_filter\": [\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    },\n    {\n      \"column_name\": \"string\",\n      \"column_value\": \"string\"\n    }\n  ],\n  \"notebook_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a9c764d-8370-49db-9da6-45395a02b9b5",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a8acd3a-e817-469a-806e-0db735ff6603",
+          "name": "Delete RAG experiment",
+          "request": {
+            "name": "Delete RAG experiment",
+            "description": {
+              "content": "Delete a RAG experiment and all its associated data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_experiments",
+                ":experiment_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment to delete"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5efddb25-f548-47a8-8a76-8dcf3a48c842",
+              "name": "Experiment deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c91bfa11-ad04-4d73-a306-ee9f2c20deea",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2aea8a76-40d7-4cb5-a81c-c138e7be4f12",
+          "name": "Get experiment test cases",
+          "request": {
+            "name": "Get experiment test cases",
+            "description": {
+              "content": "Get paginated list of test case results for a RAG experiment",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_experiments",
+                ":experiment_id",
+                "test_cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a6f9d99a-3f35-40e1-ad1f-968031e15187",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "test_cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 7357,\n  \"page_size\": 4425,\n  \"total_pages\": 4420,\n  \"total_count\": 4392,\n  \"data\": [\n    {\n      \"status\": \"queued\",\n      \"dataset_row_id\": \"string\",\n      \"rag_results\": [\n        {\n          \"evals\": [\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"rag_config_key\": \"string\",\n          \"rag_config_type\": \"string\",\n          \"query_text\": \"string\",\n          \"setting_configuration_id\": \"9414dc4d-786e-3c5f-10ea-48e4e13898aa\",\n          \"setting_configuration_version\": 1406,\n          \"output\": {\n            \"response\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"evals\": [\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"rag_config_key\": \"string\",\n          \"rag_config_type\": \"string\",\n          \"query_text\": \"string\",\n          \"setting_configuration_id\": \"5cf6c3bd-45d1-eab0-bce5-85ce7f67e385\",\n          \"setting_configuration_version\": 5199,\n          \"output\": {\n            \"response\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"total_cost\": \"string\"\n    },\n    {\n      \"status\": \"running\",\n      \"dataset_row_id\": \"string\",\n      \"rag_results\": [\n        {\n          \"evals\": [\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"rag_config_key\": \"string\",\n          \"rag_config_type\": \"string\",\n          \"query_text\": \"string\",\n          \"setting_configuration_id\": \"8beaf611-6986-251d-79b4-676619f24283\",\n          \"setting_configuration_version\": 4913,\n          \"output\": {\n            \"response\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"evals\": [\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"eval_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_version\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_input_variables\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eval_results\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"rag_config_key\": \"string\",\n          \"rag_config_type\": \"string\",\n          \"query_text\": \"string\",\n          \"setting_configuration_id\": \"5b7dadda-9060-850b-f409-b752f2f89dc4\",\n          \"setting_configuration_version\": 2245,\n          \"output\": {\n            \"response\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"total_cost\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9bb6451f-4312-49eb-9499-758f533536c2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "test_cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a7cf69f-fd9f-4453-a67a-7d43895e3df9",
+          "name": "Get RAG config results",
+          "request": {
+            "name": "Get RAG config results",
+            "description": {
+              "content": "Get paginated list of results for a specific RAG configuration within an experiment (supports both saved and unsaved configs)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_experiments",
+                ":experiment_id",
+                "rag_configs",
+                ":rag_config_key",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Sort the results (asc/desc)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) The ID of the experiment"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rag_config_key",
+                  "description": "(Required) The RAG config key (format: 'saved:setting_config_id:version' or 'unsaved:uuid'). URL-encode colons as %3A"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4bf627a6-21c8-4cfc-b32e-3f53b2e1b855",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "rag_configs",
+                    ":rag_config_key",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rag_config_key",
+                      "description": "(Required) The RAG config key (format: 'saved:setting_config_id:version' or 'unsaved:uuid'). URL-encode colons as %3A"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 6103,\n  \"page_size\": 501,\n  \"total_pages\": 5641,\n  \"total_count\": 2560,\n  \"data\": [\n    {\n      \"status\": \"running\",\n      \"dataset_row_id\": \"string\",\n      \"evals\": [\n        {\n          \"eval_name\": \"string\",\n          \"eval_version\": \"string\",\n          \"eval_input_variables\": [\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"eval_results\": {\n            \"score\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"explanation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cost\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"eval_name\": \"string\",\n          \"eval_version\": \"string\",\n          \"eval_input_variables\": [\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"eval_results\": {\n            \"score\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"explanation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cost\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"query_text\": \"string\",\n      \"total_cost\": \"string\",\n      \"output\": {\n        \"response\": {\n          \"response\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"status\": \"completed\",\n      \"dataset_row_id\": \"string\",\n      \"evals\": [\n        {\n          \"eval_name\": \"string\",\n          \"eval_version\": \"string\",\n          \"eval_input_variables\": [\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"eval_results\": {\n            \"score\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"explanation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cost\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"eval_name\": \"string\",\n          \"eval_version\": \"string\",\n          \"eval_input_variables\": [\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"variable_name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"eval_results\": {\n            \"score\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"explanation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cost\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"query_text\": \"string\",\n      \"total_cost\": \"string\",\n      \"output\": {\n        \"response\": {\n          \"response\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "735fa22e-c3fb-41f3-abed-9826746429eb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "rag_configs",
+                    ":rag_config_key",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) The ID of the experiment"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rag_config_key",
+                      "description": "(Required) The RAG config key (format: 'saved:setting_config_id:version' or 'unsaved:uuid'). URL-encode colons as %3A"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "456d269b-76a2-42e1-b01d-714771802973",
+          "name": "Attach notebook to RAG experiment",
+          "request": {
+            "name": "Attach notebook to RAG experiment",
+            "description": {
+              "content": "Attach a RAG notebook to an existing experiment",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "rag_experiments",
+                ":experiment_id",
+                "notebook"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "notebook_id",
+                  "value": "<string>",
+                  "description": "(Required) ID of the notebook to attach"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "experiment_id",
+                  "description": "(Required) ID of the experiment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b87c7e67-91f1-4d61-8827-2e03e20f6e93",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "notebook"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "notebook_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"created_at\": \"string\",\n  \"status\": \"queued\",\n  \"dataset_id\": \"21c4d44d-c762-cc7e-45dd-ca26c4345723\",\n  \"dataset_name\": \"string\",\n  \"dataset_version\": 2084,\n  \"total_rows\": 5007,\n  \"completed_rows\": 5706,\n  \"failed_rows\": 3892,\n  \"rag_configs\": [\n    {\n      \"setting_configuration_id\": \"5d73af93-9ae5-7bf7-e0c7-1b9674f23354\",\n      \"version\": 3983,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    },\n    {\n      \"setting_configuration_id\": \"5f871113-9838-c88e-9231-c6dc66a26f09\",\n      \"version\": 458,\n      \"query_column\": {\n        \"type\": \"string\",\n        \"dataset_column\": {\n          \"name\": \"string\"\n        }\n      },\n      \"type\": \"saved\"\n    }\n  ],\n  \"description\": \"string\",\n  \"finished_at\": \"string\",\n  \"total_cost\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ddb90a9-39e6-477b-a17d-5ead7d538f41",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "rag_experiments",
+                    ":experiment_id",
+                    "notebook"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "notebook_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "experiment_id",
+                      "description": "(Required) ID of the experiment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "cd54efce-c3bf-4e50-892f-cad4a0e4a294",
+    "name": "Arthur GenAI Engine Agent Discovery RAG Experiments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for managing RAG experiments",
+      "type": "text/plain"
+    }
+  }
+}

@@ -2,14 +2,11 @@ generated: '2026-07-18'
 method: derived
 status: candidate
 source: openapi/arthur-engine-openapi.json
-notes: >-
-  No official hosted/remote Arthur MCP server was found published (no
-  @arthur-ai MCP package on npm, no documented mcp.arthur.ai endpoint). Arthur
-  itself GOVERNS MCP traffic (agent discovery across MCP) rather than shipping a
-  provider MCP server. Arthur does publish an official Claude Code Skill
-  (/arthur-onboard) and a Claude Code integration for tracing — see skills/.
-  The tool list below is a DERIVED candidate mapping of high-value Arthur GenAI
-  Engine operations to MCP tools, not a published server.
+notes: No official hosted/remote Arthur MCP server was found published (no @arthur-ai MCP package on npm,
+  no documented mcp.arthur.ai endpoint). Arthur itself GOVERNS MCP traffic (agent discovery across MCP)
+  rather than shipping a provider MCP server. Arthur does publish an official Claude Code Skill (/arthur-onboard)
+  and a Claude Code integration for tracing — see skills/. The tool list below is a DERIVED candidate
+  mapping of high-value Arthur GenAI Engine operations to MCP tools, not a published server.
 server:
   name: arthur-engine
   transport: http
@@ -36,3 +33,9 @@ tools:
 - name: post_feedback
   description: Record feedback on a scored inference
   source_operation: openapi/arthur-engine-openapi.json#post_feedback_api_v2_feedback__inference_id__post
+deployment:
+  mode: none
+  verified: derived
+  tools: 7
+  checked: '2026-08-12'
+  source: catalog MCP census

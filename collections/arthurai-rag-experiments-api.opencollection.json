@@ -1,0 +1,259 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery RAG Experiments API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RAG Experiments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List RAG experiments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search text to filter experiments by name or description"
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter experiments by dataset ID"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all RAG experiments for a task with optional filtering and pagination"
+        },
+        {
+          "info": {
+            "name": "Create and run a RAG experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_experiments",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new RAG experiment and initiate execution"
+        },
+        {
+          "info": {
+            "name": "Get RAG experiment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to retrieve"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a specific RAG experiment including summary results"
+        },
+        {
+          "info": {
+            "name": "Delete RAG experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/rag_experiments/:experiment_id",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a RAG experiment and all its associated data"
+        },
+        {
+          "info": {
+            "name": "Get experiment test cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_experiments/:experiment_id/test_cases",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of test case results for a RAG experiment"
+        },
+        {
+          "info": {
+            "name": "Get RAG config results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_experiments/:experiment_id/rag_configs/:rag_config_key/results",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the experiment"
+              },
+              {
+                "name": "rag_config_key",
+                "value": "",
+                "type": "path",
+                "description": "The RAG config key (format: 'saved:setting_config_id:version' or 'unsaved:uuid'). URL-encode colons as %3A"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get paginated list of results for a specific RAG configuration within an experiment (supports both saved and unsaved configs)"
+        },
+        {
+          "info": {
+            "name": "Attach notebook to RAG experiment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/rag_experiments/:experiment_id/notebook",
+            "params": [
+              {
+                "name": "experiment_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the experiment"
+              },
+              {
+                "name": "notebook_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the notebook to attach"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Attach a RAG notebook to an existing experiment"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

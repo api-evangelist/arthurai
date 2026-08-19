@@ -1,0 +1,655 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Traces API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Traces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Receive Traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/traces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Receiver for OpenInference trace standard."
+        },
+        {
+          "info": {
+            "name": "List Trace Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces",
+            "params": [
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Column to sort results by."
+              },
+              {
+                "name": "include_spans",
+                "value": "",
+                "type": "query",
+                "description": "Include flat list of spans for each trace. Defaults to false for performance."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "task_ids",
+                "value": "",
+                "type": "query",
+                "description": "Task IDs to filter on. At least one is required."
+              },
+              {
+                "name": "trace_ids",
+                "value": "",
+                "type": "query",
+                "description": "Trace IDs to filter on. Optional."
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "tool_name",
+                "value": "",
+                "type": "query",
+                "description": "Return only results with this tool name."
+              },
+              {
+                "name": "span_types",
+                "value": "",
+                "type": "query",
+                "description": "Span types to filter on. Optional. Valid values: AGENT, CHAIN, EMBEDDING, EVALUATOR, GUARDRAIL, LLM, PROMPT, RERANKER, RETRIEVER, TOOL, UNKNOWN"
+              },
+              {
+                "name": "annotation_score",
+                "value": "",
+                "type": "query",
+                "description": "Filter by trace annotation score (0 or 1)."
+              },
+              {
+                "name": "annotation_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by trace annotation type (i.e. 'human' or 'continuous_eval')."
+              },
+              {
+                "name": "continuous_eval_run_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by trace annotation run status (e.g. 'passed', 'failed', etc.)."
+              },
+              {
+                "name": "continuous_eval_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by continuous eval name."
+              },
+              {
+                "name": "span_ids",
+                "value": "",
+                "type": "query",
+                "description": "Span IDs to filter on. Optional."
+              },
+              {
+                "name": "session_ids",
+                "value": "",
+                "type": "query",
+                "description": "Session IDs to filter on. Optional."
+              },
+              {
+                "name": "user_ids",
+                "value": "",
+                "type": "query",
+                "description": "User ID substrings to filter on (case-insensitive). Returns results where user_id contains any of the provided values. Optional."
+              },
+              {
+                "name": "span_name",
+                "value": "",
+                "type": "query",
+                "description": "Return only results with this span name."
+              },
+              {
+                "name": "span_name_contains",
+                "value": "",
+                "type": "query",
+                "description": "Return only results where span name contains this substring."
+              },
+              {
+                "name": "status_code",
+                "value": "",
+                "type": "query",
+                "description": "Status codes to filter on. Optional. Valid values: Ok, Error, Unset."
+              },
+              {
+                "name": "query_relevance_eq",
+                "value": "",
+                "type": "query",
+                "description": "Equal to this value."
+              },
+              {
+                "name": "query_relevance_gt",
+                "value": "",
+                "type": "query",
+                "description": "Greater than this value."
+              },
+              {
+                "name": "query_relevance_gte",
+                "value": "",
+                "type": "query",
+                "description": "Greater than or equal to this value."
+              },
+              {
+                "name": "query_relevance_lt",
+                "value": "",
+                "type": "query",
+                "description": "Less than this value."
+              },
+              {
+                "name": "query_relevance_lte",
+                "value": "",
+                "type": "query",
+                "description": "Less than or equal to this value."
+              },
+              {
+                "name": "response_relevance_eq",
+                "value": "",
+                "type": "query",
+                "description": "Equal to this value."
+              },
+              {
+                "name": "response_relevance_gt",
+                "value": "",
+                "type": "query",
+                "description": "Greater than this value."
+              },
+              {
+                "name": "response_relevance_gte",
+                "value": "",
+                "type": "query",
+                "description": "Greater than or equal to this value."
+              },
+              {
+                "name": "response_relevance_lt",
+                "value": "",
+                "type": "query",
+                "description": "Less than this value."
+              },
+              {
+                "name": "response_relevance_lte",
+                "value": "",
+                "type": "query",
+                "description": "Less than or equal to this value."
+              },
+              {
+                "name": "tool_selection",
+                "value": "",
+                "type": "query",
+                "description": "Tool selection evaluation result."
+              },
+              {
+                "name": "tool_usage",
+                "value": "",
+                "type": "query",
+                "description": "Tool usage evaluation result."
+              },
+              {
+                "name": "trace_duration_eq",
+                "value": "",
+                "type": "query",
+                "description": "Duration exactly equal to this value (seconds)."
+              },
+              {
+                "name": "trace_duration_gt",
+                "value": "",
+                "type": "query",
+                "description": "Duration greater than this value (seconds)."
+              },
+              {
+                "name": "trace_duration_gte",
+                "value": "",
+                "type": "query",
+                "description": "Duration greater than or equal to this value (seconds)."
+              },
+              {
+                "name": "trace_duration_lt",
+                "value": "",
+                "type": "query",
+                "description": "Duration less than this value (seconds)."
+              },
+              {
+                "name": "trace_duration_lte",
+                "value": "",
+                "type": "query",
+                "description": "Duration less than or equal to this value (seconds)."
+              },
+              {
+                "name": "total_token_count_eq",
+                "value": "",
+                "type": "query",
+                "description": "Total token count exactly equal to this value."
+              },
+              {
+                "name": "total_token_count_gt",
+                "value": "",
+                "type": "query",
+                "description": "Total token count greater than this value."
+              },
+              {
+                "name": "total_token_count_gte",
+                "value": "",
+                "type": "query",
+                "description": "Total token count greater than or equal to this value."
+              },
+              {
+                "name": "total_token_count_lt",
+                "value": "",
+                "type": "query",
+                "description": "Total token count less than this value."
+              },
+              {
+                "name": "total_token_count_lte",
+                "value": "",
+                "type": "query",
+                "description": "Total token count less than or equal to this value."
+              },
+              {
+                "name": "prompt_token_count_eq",
+                "value": "",
+                "type": "query",
+                "description": "Prompt token count exactly equal to this value."
+              },
+              {
+                "name": "prompt_token_count_gt",
+                "value": "",
+                "type": "query",
+                "description": "Prompt token count greater than this value."
+              },
+              {
+                "name": "prompt_token_count_gte",
+                "value": "",
+                "type": "query",
+                "description": "Prompt token count greater than or equal to this value."
+              },
+              {
+                "name": "prompt_token_count_lt",
+                "value": "",
+                "type": "query",
+                "description": "Prompt token count less than this value."
+              },
+              {
+                "name": "prompt_token_count_lte",
+                "value": "",
+                "type": "query",
+                "description": "Prompt token count less than or equal to this value."
+              },
+              {
+                "name": "completion_token_count_eq",
+                "value": "",
+                "type": "query",
+                "description": "Completion token count exactly equal to this value."
+              },
+              {
+                "name": "completion_token_count_gt",
+                "value": "",
+                "type": "query",
+                "description": "Completion token count greater than this value."
+              },
+              {
+                "name": "completion_token_count_gte",
+                "value": "",
+                "type": "query",
+                "description": "Completion token count greater than or equal to this value."
+              },
+              {
+                "name": "completion_token_count_lt",
+                "value": "",
+                "type": "query",
+                "description": "Completion token count less than this value."
+              },
+              {
+                "name": "completion_token_count_lte",
+                "value": "",
+                "type": "query",
+                "description": "Completion token count less than or equal to this value."
+              },
+              {
+                "name": "span_count_eq",
+                "value": "",
+                "type": "query",
+                "description": "Span count exactly equal to this value."
+              },
+              {
+                "name": "span_count_gt",
+                "value": "",
+                "type": "query",
+                "description": "Span count greater than this value."
+              },
+              {
+                "name": "span_count_gte",
+                "value": "",
+                "type": "query",
+                "description": "Span count greater than or equal to this value."
+              },
+              {
+                "name": "span_count_lt",
+                "value": "",
+                "type": "query",
+                "description": "Span count less than this value."
+              },
+              {
+                "name": "span_count_lte",
+                "value": "",
+                "type": "query",
+                "description": "Span count less than or equal to this value."
+              },
+              {
+                "name": "include_experiment_traces",
+                "value": "",
+                "type": "query",
+                "description": "Include traces originating from Arthur experiments. Defaults to true."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get lightweight trace metadata for browsing/filtering operations. Returns metadata only without spans or metrics for fast performance. Set include_spans=true to include flat list of spans for each trace."
+        },
+        {
+          "info": {
+            "name": "Receive Traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/traces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Receiver for OpenInference trace standard."
+        },
+        {
+          "info": {
+            "name": "Get Overview of Traces for each Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/traces/overview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get overview of traces for each task including trace count, total tokens, and success rate."
+        },
+        {
+          "info": {
+            "name": "Get Time-Series Overview Data for a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/traces/overview/timeseries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get time-bucketed trace metrics (count, tokens, cost, success rate) for a single task."
+        },
+        {
+          "info": {
+            "name": "Get Single Trace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get complete trace tree with existing metrics (no computation). Returns full trace structure with spans."
+        },
+        {
+          "info": {
+            "name": "Compute Missing Trace Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id/metrics",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Compute all missing metrics for trace spans on-demand. Returns full trace tree with computed metrics."
+        },
+        {
+          "info": {
+            "name": "Get an annotation by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/annotations/:annotation_id",
+            "params": [
+              {
+                "name": "annotation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get an annotation by id"
+        },
+        {
+          "info": {
+            "name": "List Annotations for a Trace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id/annotations",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "continuous_eval_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the continuous eval to filter on."
+              },
+              {
+                "name": "annotation_type",
+                "value": "",
+                "type": "query",
+                "description": "Annotation type to filter on."
+              },
+              {
+                "name": "annotation_score",
+                "value": "",
+                "type": "query",
+                "description": "Annotation score to filter on."
+              },
+              {
+                "name": "run_status",
+                "value": "",
+                "type": "query",
+                "description": "Run status to filter on."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List annotations for a trace"
+        },
+        {
+          "info": {
+            "name": "Annotate a Trace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id/annotations",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Annotate a trace with a score and description (1 = liked, 0 = disliked)"
+        },
+        {
+          "info": {
+            "name": "Delete an annotation from a trace",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id/annotations",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete an annotation from a trace"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

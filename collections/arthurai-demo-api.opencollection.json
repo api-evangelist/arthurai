@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Demo API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Demo",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload Certificate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v2/demo/certificate",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a demo completion certificate PNG to persistent storage."
+        },
+        {
+          "info": {
+            "name": "Get Certificate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v2/demo/certificate/:cert_id",
+            "params": [
+              {
+                "name": "cert_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a previously stored demo completion certificate PNG."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

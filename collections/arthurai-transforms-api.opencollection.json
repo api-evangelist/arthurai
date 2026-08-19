@@ -1,0 +1,308 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Transforms API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transforms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Transforms For Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/traces/transforms",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the transform to filter on using partial matching."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end date for prompt creation in ISO8601 string format. Use local time (not UTC)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all transforms for a task."
+        },
+        {
+          "info": {
+            "name": "Create Transform For Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/traces/transforms",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new transform for a task."
+        },
+        {
+          "info": {
+            "name": "Get Transform",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform to fetch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a specific transform."
+        },
+        {
+          "info": {
+            "name": "Update Transform",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a transform."
+        },
+        {
+          "info": {
+            "name": "Delete Transform",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a transform. Returns 409 if the transform is referenced by continuous evals, agentic experiments, or agentic notebooks."
+        },
+        {
+          "info": {
+            "name": "Get Transform Dependents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id/dependents",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get resources that depend on this transform."
+        },
+        {
+          "info": {
+            "name": "List Transform Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id/versions",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all version snapshots for a transform, ordered by version number descending."
+        },
+        {
+          "info": {
+            "name": "Get Transform Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id/versions/:version_id",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform."
+              },
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the version to fetch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a specific version snapshot of a transform."
+        },
+        {
+          "info": {
+            "name": "Delete Transform Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/traces/transforms/:transform_id/versions/:version_id",
+            "params": [
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform."
+              },
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the version to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a specific version of a transform. Returns 409 if it is the only version or is pinned by a continuous eval."
+        },
+        {
+          "info": {
+            "name": "Execute Trace Transform Extraction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/traces/:trace_id/transforms/:transform_id/extractions",
+            "params": [
+              {
+                "name": "trace_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the trace to execute the transform against."
+              },
+              {
+                "name": "transform_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the transform to execute."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Execute a transform against a trace to extract variables."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,308 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery RAG Providers API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RAG Providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Rag Providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_providers",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task to fetch the provider connections for."
+              },
+              {
+                "name": "config_name",
+                "value": "",
+                "type": "query",
+                "description": "RAG Provider configuration name substring to search for."
+              },
+              {
+                "name": "authentication_method",
+                "value": "",
+                "type": "query",
+                "description": "RAG Provider authentication method to filter by."
+              },
+              {
+                "name": "rag_provider_name",
+                "value": "",
+                "type": "query",
+                "description": "RAG provider name to filter by."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort the results (asc/desc)"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size. Default is 10. Must be greater than 0 and less than 5000."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get list of RAG provider connection configurations for the task."
+        },
+        {
+          "info": {
+            "name": "Create Rag Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_providers",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task to register a new provider connection for. Should be formatted as a UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Register a new RAG provider connection configuration."
+        },
+        {
+          "info": {
+            "name": "Get Rag Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG provider configuration."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a single RAG provider connection configuration."
+        },
+        {
+          "info": {
+            "name": "Update Rag Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG provider to update the connection configuration for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a single RAG provider connection configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Rag Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG provider configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a RAG provider connection configuration."
+        },
+        {
+          "info": {
+            "name": "List Rag Provider Collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id/collections",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of RAG provider configuration to use for authentication with the vector store."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists all available vector database collections."
+        },
+        {
+          "info": {
+            "name": "Test Rag Provider Connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/tasks/:task_id/rag_providers/test_connection",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task to test the new provider connection for. Should be formatted as a UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Test a new RAG provider connection configuration."
+        },
+        {
+          "info": {
+            "name": "Execute Similarity Text Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id/similarity_text_search",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG provider configuration to use for the vector database connection."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Execute a RAG Provider Similarity Text Search."
+        },
+        {
+          "info": {
+            "name": "Execute Keyword Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id/keyword_search",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG provider configuration to use for the vector database connection."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Execute a RAG Provider Keyword (BM25/Sparse Vector) Search."
+        },
+        {
+          "info": {
+            "name": "Execute Hybrid Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/rag_providers/:provider_id/hybrid_search",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the RAG provider configuration to use for the vector database connection."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Execute a RAG provider hybrid (keyword and vector similarity) search."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

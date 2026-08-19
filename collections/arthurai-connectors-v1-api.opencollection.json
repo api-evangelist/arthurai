@@ -1,0 +1,204 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arthur GenAI Engine Agent Discovery Connectors V1 API",
+    "version": "2.1.688"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connectors V1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single connector by ID. Requires connector_read permission."
+        },
+        {
+          "info": {
+            "name": "Update Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a single connector. Requires connector_update permission."
+        },
+        {
+          "info": {
+            "name": "Delete Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a single connector by id. Requires connector_delete permission."
+        },
+        {
+          "info": {
+            "name": "Get Sensitive Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/sensitive",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single connector by ID with unmasked sensitive fields. Requires connector_get_sensitive_fields permission."
+        },
+        {
+          "info": {
+            "name": "Persist Connector Check Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/connectors/:connector_id/check_results",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the check result of the connector. Requires connector_put_check_result permission."
+        },
+        {
+          "info": {
+            "name": "List Connectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/connectors",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Override the field used for sorting the returned list. Optional."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Override the sort order used. Optional."
+              },
+              {
+                "name": "connector_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for connectors with this connector type. Optional."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for connectors with a name similar to this name. Optional."
+              },
+              {
+                "name": "data_plane_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results for connectors with this data plane ID. Optional."
+              },
+              {
+                "name": "include_temporary_connectors",
+                "value": "",
+                "type": "query",
+                "description": "Include connectors marked as temporary (for testing only) in the results. Optional."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page to return starting from 1 up to total_pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page. The max is 1000."
+              }
+            ]
+          },
+          "docs": "Returns connectors matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires project_list_connectors permission."
+        },
+        {
+          "info": {
+            "name": "Create Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/projects/:project_id/connectors",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a single connector. Requires project_create_connector permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
