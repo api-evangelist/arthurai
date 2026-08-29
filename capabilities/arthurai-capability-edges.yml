@@ -1,0 +1,208 @@
+slug: arthurai
+provider: ArthurAI
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 19
+edges:
+- tag: Authorization V1
+  spec_file: arthurai-authorization-v1-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: POST /api/v1/organization/role_bindings  Post Organization Role Binding; GET /api/v1/permissions  List
+    Permissions; POST /api/v1/permissions/check  Check Permissions
+  reason: Role bindings, roles, permission checks across org/workspace/project — RBAC authorization, i.e.
+    identity and access management.
+- tag: Models V1
+  spec_file: arthurai-models-v1-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.85
+  evidence: '"Create Model", "Update Model Metric Configuration By Model Id", "Update Model Metrics Schedule",
+    schema ModelProblemType'
+  reason: CRUD and monitoring configuration over AI/ML model registrations — squarely AI/ML model lifecycle
+    management.
+- tag: LLMEvals
+  spec_file: arthurai-llmevals-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.82
+  evidence: '"Save an llm eval", "Run a saved llm eval", "List all versions of an llm eval" — LLM-as-a-judge
+    evaluation lifecycle for AI models'
+  reason: Operations create, version and execute LLM evaluations, which is model evaluation/validation
+    within the AI/ML model lifecycle (MLOps, responsible AI).
+- tag: Users V1
+  spec_file: arthurai-users-v1-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /api/v1/organization/users/invite-user  Create User Via Email Invite; Create Service
+    Account; Regenerate User Credentials; PostGlobalRoleBinding
+  reason: Operations create, invite, patch and delete organization users and service accounts, manage
+    credentials and role bindings — classic identity and access management.
+- tag: Agents V1
+  spec_file: arthurai-agents-v1-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.78
+  evidence: GET /api/v1/organization/unregistered_agents "List Organization Unregistered Agents"; GET
+    /api/v1/workspaces/{workspace_id}/agents/registered/llm_models; schemas AgentResponse, DataSourceResponse,
+    OTELAgentCreationSource
+  reason: Registry of AI agents with their LLM models, tools and data sources, plus registration state
+    — AI inventory and governance over the model/agent lifecycle.
+- tag: Default Validation
+  spec_file: arthurai-default-validation-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.78
+  evidence: '''Endpoints to validate prompt and response on default rules''; schemas PIIDetailsResponse,
+    ToxicityDetailsResponse, HallucinationDetailsResponse, RuleResultEnum'
+  reason: Runtime guardrail validation of LLM prompts and responses for PII, toxicity and hallucination
+    is responsible-AI control within AI/ML model lifecycle management.
+- tag: ML Evals
+  spec_file: arthurai-ml-evals-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.78
+  evidence: '"Save an ML eval" with schemas PIIEvalConfig, ToxicityEvalConfig, PromptInjectionEvalConfig'
+  reason: Single operation registers ML evaluation configurations (toxicity, PII, prompt injection) —
+    responsible-AI model evaluation, part of AI/ML lifecycle management.
+- tag: Metrics V1
+  spec_file: arthurai-metrics-v1-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.78
+  evidence: '"Query Model Metrics", "Upload Metrics For Version", "Create A Metric Version" under /api/v1/models/{model_id}/metrics'
+  reason: Model-scoped metric versioning, ingestion and querying is ML model performance monitoring —
+    AI/ML model lifecycle (MLOps) rather than generic IT monitoring.
+- tag: Groups V1
+  spec_file: arthurai-groups-v1-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.76
+  evidence: GET /api/v1/organization/groups 'List Groups'; POST /api/v1/groups/{group_id}/users 'Assign
+    User To Group'; DELETE 'Remove Users From Group In Bulk'; schemas GroupMembership, UserType
+  reason: Group and group-membership administration for organization users is access-control/identity
+    administration. Could alternatively be read as tenant user administration, hence not higher.
+- tag: Continuous Evals
+  spec_file: arthurai-continuous-evals-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.75
+  evidence: POST /api/v1/tasks/{task_id}/continuous_evals  Create a continuous eval; GET .../continuous_evals/results  Get
+    all continuous eval run results
+  reason: Definition and running of continuous LLM/agent evaluations with results and analytics — AI model
+    lifecycle evaluation/monitoring (responsible AI).
+- tag: Spans
+  spec_file: arthurai-spans-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.75
+  evidence: '"Query Traces", "Compute Metrics for Span", "List Span Metadata with Filtering"; schemas
+    SpanWithMetricsResponse, QueryTracesWithMetricsResponse'
+  reason: Spans and traces with computed metrics are the core of distributed-tracing observability; the
+    operations query and enrich telemetry from the running service, matching Observability Management.
+- tag: Task Based Validation
+  spec_file: arthurai-task-based-validation-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.75
+  evidence: '"Endpoints to validate prompt and response for a task"; Validate Prompt Endpoint / Validate
+    Response Endpoint'
+  reason: Runtime guardrail validation of GenAI prompts and responses against configured rules is responsible-AI
+    governance, mapped to Artificial Intelligence Management.
+- tag: Prompts
+  spec_file: arthurai-prompts-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.72
+  evidence: '"Save an agentic prompt", "List all versions of an agentic prompt", "Run/Stream a specific
+    version of an agentic prompt"; schemas LLMConfigSettings, ModelProvider'
+  reason: Operations manage the lifecycle (save, version, tag, run, render) of LLM prompts with model
+    provider configuration — this is AI/LLM asset lifecycle management, best matched by Artificial Intelligence
+    Management. Not a generic content or product-spec capability.
+- tag: Rules
+  spec_file: arthurai-rules-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.72
+  evidence: '"Endpoints to manage rules", "Create Default Rule"; schemas ToxicityConfig, PIIConfig, RuleScope,
+    RuleType'
+  reason: These are guardrail rules (PII, toxicity, regex, keywords) that validate LLM prompts and responses
+    — responsible-AI controls within AI model lifecycle governance, not enterprise policy or compliance
+    management.
+- tag: Stateless Validation
+  spec_file: arthurai-stateless-validation-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.72
+  evidence: POST /api/v2/validate  Stateless Validate; schemas PIIConfig, ToxicityConfig, HallucinationDetailsResponse,
+    RuleResultEnum
+  reason: Endpoint applies guardrail rules (PII, toxicity, hallucination) to LLM prompts/responses — responsible-AI
+    control enforcement, which falls under AI/ML lifecycle and responsible AI management rather than any
+    generic capability.
+- tag: Agent Discovery
+  spec_file: arthurai-agent-discovery-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: 'POST /api/v1/agent-polling/execute-all "Execute All Agent Polling"; schema DiscoverAndPollResponse;
+    vendor: "agent discovery across OTEL/MCP/network/cloud APIs"'
+  reason: Discovery/polling of AI agents deployed in the estate is part of AI/ML inventory and governance
+    (responsible AI oversight), the closest supported capability.
+- tag: Alerts V1
+  spec_file: arthurai-alerts-v1-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: 'GET /api/v1/models/{model_id}/alerts  Get Model Alerts; schemas: Alert, AlertRuleInterval,
+    AlertWebhookCalled, AlertLogStatus'
+  reason: Alerting on monitored AI models on an observability platform — monitoring/observability of running
+    services, not financial-crime alerting. Could arguably be AI model monitoring (BC-610.60) but the
+    operations are generic alert rules/logs, so observability is the closest defensible fit.
+- tag: Continuous Eval Test Runs
+  spec_file: arthurai-continuous-eval-test-runs-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: 'POST /api/v1/continuous_evals/{eval_id}/test_runs  Create and start a test run for a continuous
+    eval; schemas: TestRunStatus, AgenticAnnotationResponse, EvalType'
+  reason: Executing evaluation test runs against LLM/agent outputs is part of AI/ML model lifecycle evaluation
+    and governance; not general software test management since the subject is AI models.
+- tag: Prompt Experiments
+  spec_file: arthurai-prompt-experiments-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: '"Create and run a prompt experiment", "Get experiment test cases", "Get prompt results";
+    schema PromptEvalResultSummaries'
+  reason: Designing and running prompt experiments with test cases and eval results is AI model/prompt
+    experimentation within the AI-ML lifecycle, not product feature A/B testing.
