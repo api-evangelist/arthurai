@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Feature Flags V1 API
-  version: 2.1.688
+  title: Arthur Scope Feature Flags V1 API
+  version: 0.1.0
 tags:
 - name: Feature Flags V1
 paths:
@@ -9,7 +9,7 @@ paths:
     get:
       tags:
       - Feature Flags V1
-      summary: Get Feature Flags.
+      summary: Get Feature Flags
       description: Retrieves all feature flags in the environment.
       operationId: get_feature_flags
       responses:
@@ -38,7 +38,11 @@ components:
       type: object
       title: InternalServerError
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

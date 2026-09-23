@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Model Providers API
+  title: Arthur GenAI Engine Model Providers API
   version: 2.1.688
   description: Endpoints for model provider management
 tags:
@@ -11,7 +11,7 @@ paths:
     put:
       tags:
       - Model Providers
-      summary: Set the configuration for a model provider.
+      summary: Set the configuration for a model provider
       description: Set the configuration for a model provider. Optionally upload GCP service account JSON credentials or bedrock credentials
       operationId: set_model_provider_api_v1_model_providers__provider__put
       security:
@@ -43,8 +43,7 @@ paths:
     delete:
       tags:
       - Model Providers
-      summary: Disables the configuration for a model provider.
-      description: Disables the configuration for a model provider
+      summary: Disables the configuration for a model provider
       operationId: delete_model_provider_api_v1_model_providers__provider__delete
       security:
       - API Key: []
@@ -67,7 +66,7 @@ paths:
     get:
       tags:
       - Model Providers
-      summary: List the model providers.
+      summary: List the model providers
       description: Shows all model providers and if they're enabled.
       operationId: get_model_providers_api_v1_model_providers_get
       responses:
@@ -83,7 +82,7 @@ paths:
     get:
       tags:
       - Model Providers
-      summary: List the models available from a provider.
+      summary: List the models available from a provider
       description: Returns a list of the names of all available models for a provider.
       operationId: get_model_providers_available_models_api_v1_model_providers__provider__available_models_get
       security:
@@ -125,6 +124,66 @@ components:
       - provider
       - available_models
       title: ModelProviderModelList
+    ModelProviderResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: The model provider
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the provider is enabled with credentials
+      type: object
+      required:
+      - provider
+      - enabled
+      title: ModelProviderResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
     GCPServiceAccountCredentialsRequest:
       properties:
         type:
@@ -196,57 +255,6 @@ components:
       - client_x509_cert_url
       - universe_domain
       title: GCPServiceAccountCredentialsRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    ModelProviderResponse:
-      properties:
-        provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: The model provider
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether the provider is enabled with credentials
-      type: object
-      required:
-      - provider
-      - enabled
-      title: ModelProviderResponse
     PutModelProviderCredentials:
       properties:
         api_key:
@@ -330,15 +338,6 @@ components:
           description: Optional GCP service account credentials JSON
       type: object
       title: PutModelProviderCredentials
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ModelProviderList:
       properties:
         providers:
@@ -352,7 +351,7 @@ components:
       - providers
       title: ModelProviderList
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

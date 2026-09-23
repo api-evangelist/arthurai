@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Arthur GenAI Engine Agent Discovery API
   version: 2.1.688
@@ -75,22 +75,27 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ExecutePollingResponse:
+    DiscoverAndPollResponse:
       properties:
         status:
           type: string
           title: Status
           description: Status of the operation
-        task_id:
-          type: string
-          title: Task Id
-          description: Task ID that was enqueued
+        discovered:
+          type: integer
+          title: Discovered
+          description: Number of new agent tasks created
+        traces_fetched:
+          type: integer
+          title: Traces Fetched
+          description: Total number of traces fetched across all tasks (0 in async mode)
       type: object
       required:
       - status
-      - task_id
-      title: ExecutePollingResponse
-      description: Response model for the single-task agent polling endpoint.
+      - discovered
+      - traces_fetched
+      title: DiscoverAndPollResponse
+      description: Response model for the execute-all agent polling endpoint.
     ValidationError:
       properties:
         loc:
@@ -126,29 +131,24 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    DiscoverAndPollResponse:
+    ExecutePollingResponse:
       properties:
         status:
           type: string
           title: Status
           description: Status of the operation
-        discovered:
-          type: integer
-          title: Discovered
-          description: Number of new agent tasks created
-        traces_fetched:
-          type: integer
-          title: Traces Fetched
-          description: Total number of traces fetched across all tasks (0 in async mode)
+        task_id:
+          type: string
+          title: Task Id
+          description: Task ID that was enqueued
       type: object
       required:
       - status
-      - discovered
-      - traces_fetched
-      title: DiscoverAndPollResponse
-      description: Response model for the execute-all agent polling endpoint.
+      - task_id
+      title: ExecutePollingResponse
+      description: Response model for the single-task agent polling endpoint.
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

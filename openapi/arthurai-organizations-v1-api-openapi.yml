@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Organizations V1 API
-  version: 2.1.688
+  title: Arthur Scope Organizations V1 API
+  version: 0.1.0
 tags:
 - name: Organizations V1
 paths:
@@ -9,7 +9,7 @@ paths:
     get:
       tags:
       - Organizations V1
-      summary: Get Users Organization.
+      summary: Get Users Organization
       description: Requires organization_read permission.
       operationId: get_users_organization
       responses:
@@ -37,7 +37,7 @@ paths:
     delete:
       tags:
       - Organizations V1
-      summary: Delete Organization.
+      summary: Delete Organization
       description: Deletes user's organization. Requires organization_delete permission.
       operationId: delete_organization
       responses:
@@ -67,7 +67,7 @@ paths:
     patch:
       tags:
       - Organizations V1
-      summary: Patch Organization.
+      summary: Patch Organization
       description: Requires organization_update permission.
       operationId: patch_organization
       requestBody:
@@ -106,22 +106,6 @@ paths:
         - organization_update
 components:
   schemas:
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     ValidationError:
       properties:
         loc:
@@ -148,6 +132,23 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     NotFoundError:
       properties:
         detail:
@@ -156,16 +157,14 @@ components:
           default: Resource not found
       type: object
       title: NotFoundError
-    PatchOrganization:
+    BadRequestError:
       properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the organization. Must be globally unique across all Arthur organizations.
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
       type: object
-      title: PatchOrganization
+      title: BadRequestError
     Organization:
       properties:
         created_at:
@@ -194,17 +193,22 @@ components:
       - id
       - name
       title: Organization
-    HTTPValidationError:
+    PatchOrganization:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the organization. Must be globally unique across all Arthur organizations.
       type: object
-      title: HTTPValidationError
+      title: PatchOrganization
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

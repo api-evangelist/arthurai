@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Registration V1 API
-  version: 2.1.688
+  title: Arthur Scope Registration V1 API
+  version: 0.1.0
 tags:
 - name: Registration V1
 paths:
@@ -9,7 +9,7 @@ paths:
     post:
       tags:
       - Registration V1
-      summary: Sign Up New User.
+      summary: Sign Up New User
       description: Signs up a new user and creates default resources. Triggers invitation to user email. Account creation feature flag must be enabled to use this endpoint.
       operationId: post_sign_up_user
       requestBody:
@@ -61,22 +61,6 @@ components:
       required:
       - email
       title: RegisterUser
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     ValidationError:
       properties:
         loc:
@@ -112,8 +96,28 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

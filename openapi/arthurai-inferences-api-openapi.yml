@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Inferences API
+  title: Arthur GenAI Engine Inferences API
   version: 2.1.688
   description: Endpoints for querying past inferences
 tags:
@@ -172,78 +172,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HallucinationClaimResponse:
-      properties:
-        claim:
-          type: string
-          title: Claim
-        valid:
-          type: boolean
-          title: Valid
-        reason:
-          type: string
-          title: Reason
-        order_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Order Number
-          description: This field is a helper for ordering the claims
-          default: -1
-      type: object
-      required:
-      - claim
-      - valid
-      - reason
-      title: HallucinationClaimResponse
-    KeywordDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        keyword_matches:
-          items:
-            $ref: '#/components/schemas/KeywordSpanResponse'
-          type: array
-          title: Keyword Matches
-          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
-          default: []
-      additionalProperties: false
-      type: object
-      title: KeywordDetailsResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     QueryInferencesResponse:
       properties:
         count:
@@ -328,6 +256,447 @@ components:
           task_name: My task name
           updated_at: 1723204787050
           user_id: 957df309-2137-4b77-abe5-15dd00c081f8
+    InferenceFeedbackTarget:
+      type: string
+      enum:
+      - context
+      - response_results
+      - prompt_results
+      title: InferenceFeedbackTarget
+    ExternalInferenceResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+        message:
+          type: string
+          title: Message
+        context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Context
+        response_rule_results:
+          items:
+            $ref: '#/components/schemas/ExternalRuleResult'
+          type: array
+          title: Response Rule Results
+        tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tokens
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      required:
+      - id
+      - inference_id
+      - result
+      - created_at
+      - updated_at
+      - message
+      - response_rule_results
+      title: ExternalInferenceResponse
+    PIIDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        pii_entities:
+          items:
+            $ref: '#/components/schemas/PIIEntitySpanResponse'
+          type: array
+          title: Pii Entities
+      type: object
+      required:
+      - pii_entities
+      title: PIIDetailsResponse
+    RuleResultEnum:
+      type: string
+      enum:
+      - Pass
+      - Fail
+      - Skipped
+      - Unavailable
+      - Partially Unavailable
+      - Model Not Available
+      title: RuleResultEnum
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ToxicityDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        toxicity_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Toxicity Score
+        toxicity_violation_type:
+          $ref: '#/components/schemas/ToxicityViolationType'
+      additionalProperties: false
+      type: object
+      required:
+      - toxicity_violation_type
+      title: ToxicityDetailsResponse
+    RegexSpanResponse:
+      properties:
+        matching_text:
+          type: string
+          title: Matching Text
+          description: The subtext within the input string that matched the regex rule.
+        pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern
+          description: Pattern that yielded the match.
+      type: object
+      required:
+      - matching_text
+      title: RegexSpanResponse
+    ExternalRuleResult:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the rule'
+        name:
+          type: string
+          title: Name
+          description: Name of the rule
+        rule_type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of the rule
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+          description: Result if the rule
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Duration in millisesconds of rule execution
+        details:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordDetailsResponse'
+          - $ref: '#/components/schemas/RegexDetailsResponse'
+          - $ref: '#/components/schemas/HallucinationDetailsResponse'
+          - $ref: '#/components/schemas/PIIDetailsResponse'
+          - $ref: '#/components/schemas/ToxicityDetailsResponse'
+          - $ref: '#/components/schemas/BaseDetailsResponse'
+          - type: 'null'
+          title: Details
+          description: Details of the rule output
+      type: object
+      required:
+      - id
+      - name
+      - rule_type
+      - scope
+      - result
+      - latency_ms
+      title: ExternalRuleResult
+      example:
+        id: 90f18c69-d793-4913-9bde-a0c7f3643de0
+        name: PII Rule
+        result: Pass
+    PIIEntityTypes:
+      type: string
+      enum:
+      - CREDIT_CARD
+      - CRYPTO
+      - DATE_TIME
+      - EMAIL_ADDRESS
+      - IBAN_CODE
+      - IP_ADDRESS
+      - NRP
+      - LOCATION
+      - PERSON
+      - PHONE_NUMBER
+      - MEDICAL_LICENSE
+      - URL
+      - US_BANK_NUMBER
+      - US_DRIVER_LICENSE
+      - US_ITIN
+      - US_PASSPORT
+      - US_SSN
+      title: PIIEntityTypes
+    PIIEntitySpanResponse:
+      properties:
+        entity:
+          $ref: '#/components/schemas/PIIEntityTypes'
+        span:
+          type: string
+          title: Span
+          description: The subtext within the input string that was identified as PII.
+        confidence:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence
+          description: Float value representing the confidence score of a given PII identification.
+      type: object
+      required:
+      - entity
+      - span
+      title: PIIEntitySpanResponse
+    RegexDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        regex_matches:
+          items:
+            $ref: '#/components/schemas/RegexSpanResponse'
+          type: array
+          title: Regex Matches
+          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
+          default: []
+      additionalProperties: false
+      type: object
+      title: RegexDetailsResponse
+    ToxicityViolationType:
+      type: string
+      enum:
+      - benign
+      - harmful_request
+      - toxic_content
+      - profanity
+      - unknown
+      title: ToxicityViolationType
+    InferenceFeedbackResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - inference_id
+      - target
+      - score
+      - created_at
+      - updated_at
+      title: InferenceFeedbackResponse
+    KeywordSpanResponse:
+      properties:
+        keyword:
+          type: string
+          title: Keyword
+          description: The keyword from the rule that matched within the input string.
+      type: object
+      required:
+      - keyword
+      title: KeywordSpanResponse
+    HallucinationDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        claims:
+          items:
+            $ref: '#/components/schemas/HallucinationClaimResponse'
+          type: array
+          title: Claims
+      type: object
+      required:
+      - claims
+      title: HallucinationDetailsResponse
+    HallucinationClaimResponse:
+      properties:
+        claim:
+          type: string
+          title: Claim
+        valid:
+          type: boolean
+          title: Valid
+        reason:
+          type: string
+          title: Reason
+        order_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order Number
+          description: This field is a helper for ordering the claims
+          default: -1
+      type: object
+      required:
+      - claim
+      - valid
+      - reason
+      title: HallucinationClaimResponse
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    BaseDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      title: BaseDetailsResponse
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    ExternalInferencePrompt:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        result:
+          $ref: '#/components/schemas/RuleResultEnum'
+        created_at:
+          type: integer
+          title: Created At
+        updated_at:
+          type: integer
+          title: Updated At
+        message:
+          type: string
+          title: Message
+        prompt_rule_results:
+          items:
+            $ref: '#/components/schemas/ExternalRuleResult'
+          type: array
+          title: Prompt Rule Results
+        tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tokens
+      type: object
+      required:
+      - id
+      - inference_id
+      - result
+      - created_at
+      - updated_at
+      - message
+      - prompt_rule_results
+      title: ExternalInferencePrompt
     ExternalInference:
       properties:
         id:
@@ -387,15 +756,6 @@ components:
       - inference_prompt
       - inference_feedback
       title: ExternalInference
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     RuleType:
       type: string
       enum:
@@ -407,52 +767,7 @@ components:
       - RegexRule
       - ToxicityRule
       title: RuleType
-    ExternalInferencePrompt:
-      properties:
-        id:
-          type: string
-          title: Id
-        inference_id:
-          type: string
-          title: Inference Id
-        result:
-          $ref: '#/components/schemas/RuleResultEnum'
-        created_at:
-          type: integer
-          title: Created At
-        updated_at:
-          type: integer
-          title: Updated At
-        message:
-          type: string
-          title: Message
-        prompt_rule_results:
-          items:
-            $ref: '#/components/schemas/ExternalRuleResult'
-          type: array
-          title: Prompt Rule Results
-        tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tokens
-      type: object
-      required:
-      - id
-      - inference_id
-      - result
-      - created_at
-      - updated_at
-      - message
-      - prompt_rule_results
-      title: ExternalInferencePrompt
-    RuleScope:
-      type: string
-      enum:
-      - default
-      - task
-      title: RuleScope
-    HallucinationDetailsResponse:
+    KeywordDetailsResponse:
       properties:
         score:
           anyOf:
@@ -464,333 +779,18 @@ components:
           - type: string
           - type: 'null'
           title: Message
-        claims:
+        keyword_matches:
           items:
-            $ref: '#/components/schemas/HallucinationClaimResponse'
+            $ref: '#/components/schemas/KeywordSpanResponse'
           type: array
-          title: Claims
-      type: object
-      required:
-      - claims
-      title: HallucinationDetailsResponse
-    InferenceFeedbackTarget:
-      type: string
-      enum:
-      - context
-      - response_results
-      - prompt_results
-      title: InferenceFeedbackTarget
-    RuleResultEnum:
-      type: string
-      enum:
-      - Pass
-      - Fail
-      - Skipped
-      - Unavailable
-      - Partially Unavailable
-      - Model Not Available
-      title: RuleResultEnum
-    BaseDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      title: BaseDetailsResponse
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    PIIEntityTypes:
-      type: string
-      enum:
-      - CREDIT_CARD
-      - CRYPTO
-      - DATE_TIME
-      - EMAIL_ADDRESS
-      - IBAN_CODE
-      - IP_ADDRESS
-      - NRP
-      - LOCATION
-      - PERSON
-      - PHONE_NUMBER
-      - MEDICAL_LICENSE
-      - URL
-      - US_BANK_NUMBER
-      - US_DRIVER_LICENSE
-      - US_ITIN
-      - US_PASSPORT
-      - US_SSN
-      title: PIIEntityTypes
-    ToxicityViolationType:
-      type: string
-      enum:
-      - benign
-      - harmful_request
-      - toxic_content
-      - profanity
-      - unknown
-      title: ToxicityViolationType
-    RegexDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        regex_matches:
-          items:
-            $ref: '#/components/schemas/RegexSpanResponse'
-          type: array
-          title: Regex Matches
-          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
+          title: Keyword Matches
+          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
           default: []
       additionalProperties: false
       type: object
-      title: RegexDetailsResponse
-    KeywordSpanResponse:
-      properties:
-        keyword:
-          type: string
-          title: Keyword
-          description: The keyword from the rule that matched within the input string.
-      type: object
-      required:
-      - keyword
-      title: KeywordSpanResponse
-    ExternalRuleResult:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ' ID of the rule'
-        name:
-          type: string
-          title: Name
-          description: Name of the rule
-        rule_type:
-          $ref: '#/components/schemas/RuleType'
-          description: Type of the rule
-        scope:
-          $ref: '#/components/schemas/RuleScope'
-          description: Scope of the rule. The rule can be set at default level or task level.
-        result:
-          $ref: '#/components/schemas/RuleResultEnum'
-          description: Result if the rule
-        latency_ms:
-          type: integer
-          title: Latency Ms
-          description: Duration in millisesconds of rule execution
-        details:
-          anyOf:
-          - $ref: '#/components/schemas/KeywordDetailsResponse'
-          - $ref: '#/components/schemas/RegexDetailsResponse'
-          - $ref: '#/components/schemas/HallucinationDetailsResponse'
-          - $ref: '#/components/schemas/PIIDetailsResponse'
-          - $ref: '#/components/schemas/ToxicityDetailsResponse'
-          - $ref: '#/components/schemas/BaseDetailsResponse'
-          - type: 'null'
-          title: Details
-          description: Details of the rule output
-      type: object
-      required:
-      - id
-      - name
-      - rule_type
-      - scope
-      - result
-      - latency_ms
-      title: ExternalRuleResult
-      example:
-        id: 90f18c69-d793-4913-9bde-a0c7f3643de0
-        name: PII Rule
-        result: Pass
-    RegexSpanResponse:
-      properties:
-        matching_text:
-          type: string
-          title: Matching Text
-          description: The subtext within the input string that matched the regex rule.
-        pattern:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pattern
-          description: Pattern that yielded the match.
-      type: object
-      required:
-      - matching_text
-      title: RegexSpanResponse
-    PIIDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        pii_entities:
-          items:
-            $ref: '#/components/schemas/PIIEntitySpanResponse'
-          type: array
-          title: Pii Entities
-      type: object
-      required:
-      - pii_entities
-      title: PIIDetailsResponse
-    ToxicityDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        toxicity_score:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Toxicity Score
-        toxicity_violation_type:
-          $ref: '#/components/schemas/ToxicityViolationType'
-      additionalProperties: false
-      type: object
-      required:
-      - toxicity_violation_type
-      title: ToxicityDetailsResponse
-    InferenceFeedbackResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        inference_id:
-          type: string
-          title: Inference Id
-        target:
-          $ref: '#/components/schemas/InferenceFeedbackTarget'
-        score:
-          type: integer
-          title: Score
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - id
-      - inference_id
-      - target
-      - score
-      - created_at
-      - updated_at
-      title: InferenceFeedbackResponse
-    ExternalInferenceResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        inference_id:
-          type: string
-          title: Inference Id
-        result:
-          $ref: '#/components/schemas/RuleResultEnum'
-        created_at:
-          type: integer
-          title: Created At
-        updated_at:
-          type: integer
-          title: Updated At
-        message:
-          type: string
-          title: Message
-        context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Context
-        response_rule_results:
-          items:
-            $ref: '#/components/schemas/ExternalRuleResult'
-          type: array
-          title: Response Rule Results
-        tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tokens
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-          description: The model name and version used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
-      type: object
-      required:
-      - id
-      - inference_id
-      - result
-      - created_at
-      - updated_at
-      - message
-      - response_rule_results
-      title: ExternalInferenceResponse
-    PIIEntitySpanResponse:
-      properties:
-        entity:
-          $ref: '#/components/schemas/PIIEntityTypes'
-        span:
-          type: string
-          title: Span
-          description: The subtext within the input string that was identified as PII.
-        confidence:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Confidence
-          description: Float value representing the confidence score of a given PII identification.
-      type: object
-      required:
-      - entity
-      - span
-      title: PIIEntitySpanResponse
+      title: KeywordDetailsResponse
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

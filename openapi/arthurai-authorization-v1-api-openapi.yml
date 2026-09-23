@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Authorization V1 API
-  version: 2.1.688
+  title: Arthur Scope Authorization V1 API
+  version: 0.1.0
 tags:
 - name: Authorization V1
 paths:
@@ -9,7 +9,7 @@ paths:
     post:
       tags:
       - Authorization V1
-      summary: Post Workspace Role Binding.
+      summary: Post Workspace Role Binding
       description: Creates new workspace role binding. Requires workspace_create_role_binding permission.
       operationId: post_workspace_role_binding
       security:
@@ -63,7 +63,7 @@ paths:
     get:
       tags:
       - Authorization V1
-      summary: List Workspace Role Bindings.
+      summary: List Workspace Role Bindings
       description: Fetches all workspace role bindings. Requires workspace_list_role_bindings permission.
       operationId: list_workspace_role_bindings
       security:
@@ -266,7 +266,7 @@ paths:
     post:
       tags:
       - Authorization V1
-      summary: Post Organization Role Binding.
+      summary: Post Organization Role Binding
       description: Creates new organization role binding. Requires organization_create_role_binding permission.
       operationId: post_org_role_binding
       security:
@@ -312,7 +312,7 @@ paths:
     get:
       tags:
       - Authorization V1
-      summary: List Organization Role Bindings.
+      summary: List Organization Role Bindings
       description: Fetches all organization role bindings. Requires organization_list_role_bindings permission.
       operationId: list_org_role_bindings
       security:
@@ -457,7 +457,7 @@ paths:
     get:
       tags:
       - Authorization V1
-      summary: List Project Role Bindings.
+      summary: List Project Role Bindings
       description: Fetches all project role bindings. Requires project_list_role_bindings permission.
       operationId: list_project_role_bindings
       security:
@@ -555,7 +555,7 @@ paths:
     get:
       tags:
       - Authorization V1
-      summary: Get User Role Bindings.
+      summary: Get User Role Bindings
       description: Lists all role bindings for the user. Requires user_list_role_bindings permission.
       operationId: list_user_role_bindings
       security:
@@ -640,7 +640,7 @@ paths:
     get:
       tags:
       - Authorization V1
-      summary: Get Group Role Bindings.
+      summary: Get Group Role Bindings
       description: Lists all role bindings for the group. Requires group_list_role_bindings permission.
       operationId: list_group_role_bindings
       security:
@@ -725,7 +725,7 @@ paths:
     delete:
       tags:
       - Authorization V1
-      summary: Delete Role Binding.
+      summary: Delete Role Binding
       description: Deletes role binding by id. Permission required depends on the role binding type. Deleting an organization role binding requires organization_role_binding_delete permission. Deleting a workspace role binding requires workspace_role_binding_delete permission. Deleting a project role binding requires project_role_binding_delete permission.
       operationId: delete_role_binding
       security:
@@ -855,14 +855,111 @@ paths:
       - OAuth2AuthorizationCode: []
 components:
   schemas:
-    InternalServerError:
+    BoundResourceKind:
+      type: string
+      enum:
+      - organization
+      - workspace
+      - project
+      - data_plane
+      title: BoundResourceKind
+    BoundRole:
       properties:
-        detail:
+        id:
           type: string
-          title: Detail
-          default: Internal server error
+          format: uuid
+          title: Id
+          description: ID of the bound role.
+        name:
+          type: string
+          title: Name
+          description: Name of the role.
       type: object
-      title: InternalServerError
+      required:
+      - id
+      - name
+      title: BoundRole
+    Permission:
+      properties:
+        name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Name of permission. Must be unique.
+        description:
+          type: string
+          title: Description
+          description: Description of the permission.
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the permission references.
+      type: object
+      required:
+      - name
+      - description
+      - resource_kind
+      title: Permission
+    ProjectBoundResourceMetadata:
+      properties:
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        workspace_name:
+          type: string
+          title: Workspace Name
+          description: Name of the parent workspace.
+      type: object
+      required:
+      - workspace_id
+      - workspace_name
+      title: ProjectBoundResourceMetadata
+    BoundMemberKind:
+      type: string
+      enum:
+      - user
+      - group
+      title: BoundMemberKind
+    PermissionsResponse:
+      properties:
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionResponseItem'
+          type: array
+          title: Permissions
+      type: object
+      required:
+      - permissions
+      title: PermissionsResponse
+    PermissionsRequest:
+      properties:
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionRequestItem'
+          type: array
+          maxItems: 100
+          minItems: 1
+          title: Permissions
+          description: List of checked permissions with their respective values. At least 1 permissions needs to be provided and 100 at most.
+      type: object
+      required:
+      - permissions
+      title: PermissionsRequest
+    ResourceList_RoleBinding_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/RoleBinding'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[RoleBinding]
     ValidationError:
       properties:
         loc:
@@ -889,40 +986,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Permission:
-      properties:
-        name:
-          $ref: '#/components/schemas/PermissionName'
-          description: Name of permission. Must be unique.
-        description:
-          type: string
-          title: Description
-          description: Description of the permission.
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the permission references.
-      type: object
-      required:
-      - name
-      - description
-      - resource_kind
-      title: Permission
-    BoundMember:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Id of the bound member.
-        name:
-          type: string
-          title: Name
-          description: Name of the bound member.
-      type: object
-      required:
-      - id
-      - name
-      title: BoundMember
     HTTPValidationError:
       properties:
         detail:
@@ -932,111 +995,31 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    BoundMemberKind:
-      type: string
-      enum:
-      - user
-      - group
-      title: BoundMemberKind
-    BoundResource:
+    PostRoleBinding:
       properties:
-        id:
+        role_id:
           type: string
           format: uuid
-          title: Id
-          description: ID of the bound resource.
-        name:
-          type: string
-          title: Name
-          description: Name of the bound resource.
-        metadata:
+          title: Role Id
+          description: ID of the bound role.
+        user_id:
           anyOf:
-          - $ref: '#/components/schemas/ProjectBoundResourceMetadata'
+          - type: string
+            format: uuid
           - type: 'null'
-          description: Metadata specific to the type of the bound resource.
+          title: User Id
+          description: ID of the bound user. Exactly one of user or group will be set.
+        group_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Group Id
+          description: ID of the bound group. Exactly one of user or group will be set.
       type: object
       required:
-      - id
-      - name
-      title: BoundResource
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    PermissionsRequest:
-      properties:
-        permissions:
-          items:
-            $ref: '#/components/schemas/PermissionRequestItem'
-          type: array
-          maxItems: 100
-          minItems: 1
-          title: Permissions
-          description: List of checked permissions with their respective values. At least 1 permissions needs to be provided and 100 at most.
-      type: object
-      required:
-      - permissions
-      title: PermissionsRequest
-    ProjectBoundResourceMetadata:
-      properties:
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        workspace_name:
-          type: string
-          title: Workspace Name
-          description: Name of the parent workspace.
-      type: object
-      required:
-      - workspace_id
-      - workspace_name
-      title: ProjectBoundResourceMetadata
-    ResourceList_Role_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Role'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Role]
-    BoundResourceKind:
-      type: string
-      enum:
-      - organization
-      - workspace
-      - project
-      - data_plane
-      title: BoundResourceKind
-    ResourceList_Permission_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Permission'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Permission]
+      - role_id
+      title: PostRoleBinding
     ResourceKind:
       type: string
       enum:
@@ -1064,26 +1047,11 @@ components:
       - policy_attestation_rule
       - policy_assignment
       title: ResourceKind
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    RoleSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: RoleSort
-    ResourceList_RoleBinding_:
+    ResourceList_Role_:
       properties:
         records:
           items:
-            $ref: '#/components/schemas/RoleBinding'
+            $ref: '#/components/schemas/Role'
           type: array
           title: Records
           description: List of records.
@@ -1094,7 +1062,22 @@ components:
       required:
       - records
       - pagination
-      title: ResourceList[RoleBinding]
+      title: ResourceList[Role]
+    RoleSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: RoleSort
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     RoleBinding:
       properties:
         created_at:
@@ -1138,107 +1121,49 @@ components:
       - bound_member_kind
       - bound_member
       title: RoleBinding
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    PostRoleBinding:
+    BadRequestError:
       properties:
-        role_id:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    PermissionRequestItem:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Resource kind to check.
+        resource_id:
           type: string
           format: uuid
-          title: Role Id
-          description: ID of the bound role.
-        user_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: User Id
-          description: ID of the bound user. Exactly one of user or group will be set.
-        group_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Group Id
-          description: ID of the bound group. Exactly one of user or group will be set.
+          title: Resource Id
+          description: Resource id to check permission for.
+        permission_name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Permission name to check on the given resource.
       type: object
       required:
-      - role_id
-      title: PostRoleBinding
-    Role:
+      - resource_kind
+      - resource_id
+      - permission_name
+      title: PermissionRequestItem
+    BoundMember:
       properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
         id:
           type: string
           format: uuid
           title: Id
-          description: ID of the role.
+          description: Id of the bound member.
         name:
           type: string
           title: Name
-          description: Name of the role.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the role.
-        organization_bindable:
-          type: boolean
-          title: Organization Bindable
-          description: Whether the role can be bound to an organization.
-        workspace_bindable:
-          type: boolean
-          title: Workspace Bindable
-          description: Whether the role can be bound to a workspace.
-        project_bindable:
-          type: boolean
-          title: Project Bindable
-          description: Whether the role can be bound to a project.
-        data_plane_bindable:
-          type: boolean
-          title: Data Plane Bindable
-          description: Whether the role can be bound to a data plane.
-        permissions:
-          items:
-            $ref: '#/components/schemas/PermissionName'
-          type: array
-          title: Permissions
-          description: Permissions granted by the role.
-        base_role_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Base Role Ids
-          description: List of IDs of the roles this role inherits permissions from, if any.
+          description: Name of the bound member.
       type: object
       required:
-      - created_at
-      - updated_at
       - id
       - name
-      - description
-      - organization_bindable
-      - workspace_bindable
-      - project_bindable
-      - data_plane_bindable
-      - permissions
-      - base_role_ids
-      title: Role
+      title: BoundMember
     PermissionResponseItem:
       properties:
         resource_kind:
@@ -1263,52 +1188,19 @@ components:
       - permission_name
       - allowed
       title: PermissionResponseItem
-    PermissionRequestItem:
-      properties:
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Resource kind to check.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: Resource id to check permission for.
-        permission_name:
-          $ref: '#/components/schemas/PermissionName'
-          description: Permission name to check on the given resource.
-      type: object
-      required:
-      - resource_kind
-      - resource_id
-      - permission_name
-      title: PermissionRequestItem
-    PermissionsResponse:
-      properties:
-        permissions:
-          items:
-            $ref: '#/components/schemas/PermissionResponseItem'
-          type: array
-          title: Permissions
-      type: object
-      required:
-      - permissions
-      title: PermissionsResponse
-    BoundRole:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the bound role.
-        name:
-          type: string
-          title: Name
-          description: Name of the role.
-      type: object
-      required:
-      - id
-      - name
-      title: BoundRole
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
     PermissionName:
       type: string
       enum:
@@ -1513,13 +1405,6 @@ components:
       - organization_list_agent_llm_models
       - organization_list_models
       title: PermissionName
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
     Pagination:
       properties:
         page:
@@ -1545,8 +1430,127 @@ components:
       - total_pages
       - total_records
       title: Pagination
+    BoundResource:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the bound resource.
+        name:
+          type: string
+          title: Name
+          description: Name of the bound resource.
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/ProjectBoundResourceMetadata'
+          - type: 'null'
+          description: Metadata specific to the type of the bound resource.
+      type: object
+      required:
+      - id
+      - name
+      title: BoundResource
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    Role:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role.
+        name:
+          type: string
+          title: Name
+          description: Name of the role.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role.
+        organization_bindable:
+          type: boolean
+          title: Organization Bindable
+          description: Whether the role can be bound to an organization.
+        workspace_bindable:
+          type: boolean
+          title: Workspace Bindable
+          description: Whether the role can be bound to a workspace.
+        project_bindable:
+          type: boolean
+          title: Project Bindable
+          description: Whether the role can be bound to a project.
+        data_plane_bindable:
+          type: boolean
+          title: Data Plane Bindable
+          description: Whether the role can be bound to a data plane.
+        permissions:
+          items:
+            $ref: '#/components/schemas/PermissionName'
+          type: array
+          title: Permissions
+          description: Permissions granted by the role.
+        base_role_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Base Role Ids
+          description: List of IDs of the roles this role inherits permissions from, if any.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - description
+      - organization_bindable
+      - workspace_bindable
+      - project_bindable
+      - data_plane_bindable
+      - permissions
+      - base_role_ids
+      title: Role
+    ResourceList_Permission_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Permission'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Permission]
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

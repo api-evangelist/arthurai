@@ -1,0 +1,68 @@
+# x-archived-from: arthur-ai-health-api-openapi.yml
+# x-archived-on: 2026-09-16
+openapi: 3.2.0
+info:
+  title: Arthur Scope Agents V1 Health API
+  version: 0.1.0
+servers:
+- url: https://platform.arthur.ai/api
+  description: Base URL declared by the provider in apis.yml (roadmap#122).
+tags:
+- name: Health
+paths:
+  /api/health:
+    get:
+      summary: Health Check
+      description: Confirms the API is healthy and responsive.
+      operationId: Health_check_api_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      tags:
+      - Health
+components:
+  schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    HealthStatus:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Successful health check message.
+          default: ok
+        build_version:
+          type: string
+          title: Build Version
+          description: Application build version.
+        release_version:
+          type: string
+          title: Release Version
+          description: Platform release version.
+      type: object
+      title: HealthStatus
+  securitySchemes:
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

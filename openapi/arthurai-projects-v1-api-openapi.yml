@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Projects V1 API
-  version: 2.1.688
+  title: Arthur Scope Projects V1 API
+  version: 0.1.0
 tags:
 - name: Projects V1
 paths:
@@ -9,7 +9,7 @@ paths:
     post:
       tags:
       - Projects V1
-      summary: Post Project.
+      summary: Post Project
       description: Requires workspace_create_project permission.
       operationId: post_project
       security:
@@ -63,7 +63,7 @@ paths:
     get:
       tags:
       - Projects V1
-      summary: Get Projects.
+      summary: Get Projects
       description: Requires workspace_list_projects permission.
       operationId: get_projects
       security:
@@ -193,7 +193,7 @@ paths:
     delete:
       tags:
       - Projects V1
-      summary: Delete Project.
+      summary: Delete Project
       description: Requires project_delete permission.
       operationId: delete_project
       security:
@@ -237,7 +237,7 @@ paths:
     patch:
       tags:
       - Projects V1
-      summary: Patch Project.
+      summary: Patch Project
       description: Requires project_update permission.
       operationId: patch_project
       security:
@@ -290,45 +290,6 @@ components:
       - asc
       - desc
       title: SortOrder
-    ProjectSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: ProjectSort
-    PatchProject:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-      type: object
-      title: PatchProject
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     ValidationError:
       properties:
         loc:
@@ -355,6 +316,88 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostProject:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+      type: object
+      required:
+      - name
+      title: PostProject
+    ResourceList_Project_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Project'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Project]
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     Project:
       properties:
         created_at:
@@ -400,18 +443,20 @@ components:
       - workspace_id
       - total_artifacts
       title: Project
-    NotFoundError:
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Resource not found
+          default: Bad Request
       type: object
-      title: NotFoundError
-    PostProject:
+      title: BadRequestError
+    PatchProject:
       properties:
         name:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Name
           description: Name of the project.
         description:
@@ -421,61 +466,20 @@ components:
           title: Description
           description: Description of the project.
       type: object
-      required:
+      title: PatchProject
+    ProjectSort:
+      type: string
+      enum:
       - name
-      title: PostProject
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ResourceList_Project_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Project'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Project]
+      - created_at
+      - updated_at
+      title: ProjectSort
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

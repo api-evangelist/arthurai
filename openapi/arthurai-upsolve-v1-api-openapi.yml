@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Upsolve V1 API
-  version: 2.1.688
+  title: Arthur Scope Upsolve V1 API
+  version: 0.1.0
 tags:
 - name: Upsolve V1
 paths:
@@ -74,39 +74,6 @@ components:
       - policy_attestation_rule
       - policy_assignment
       title: ResourceKind
-    PostUpsolveTenant:
-      properties:
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: ID of the resource.
-      type: object
-      required:
-      - resource_kind
-      - resource_id
-      title: PostUpsolveTenant
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    UpsolveToken:
-      properties:
-        token:
-          type: string
-          title: Token
-          description: JWT for use with Upsolve API.
-      type: object
-      required:
-      - token
-      title: UpsolveToken
     ValidationError:
       properties:
         loc:
@@ -133,14 +100,6 @@ components:
       - msg
       - type
       title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     HTTPValidationError:
       properties:
         detail:
@@ -150,8 +109,53 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PostUpsolveTenant:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: ID of the resource.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      title: PostUpsolveTenant
+    UpsolveToken:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: JWT for use with Upsolve API.
+      type: object
+      required:
+      - token
+      title: UpsolveToken
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

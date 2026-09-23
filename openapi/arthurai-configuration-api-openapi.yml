@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Configuration API
+  title: Arthur GenAI Engine Configuration API
   version: 2.1.688
 tags:
 - name: Configuration
@@ -50,34 +50,6 @@ paths:
       - Configuration
 components:
   schemas:
-    DocumentStorageConfigurationUpdateRequest:
-      properties:
-        environment:
-          $ref: '#/components/schemas/DocumentStorageEnvironment'
-        connection_string:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Connection String
-        container_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Container Name
-        bucket_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bucket Name
-        assumable_role_arn:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assumable Role Arn
-      type: object
-      required:
-      - environment
-      title: DocumentStorageConfigurationUpdateRequest
     ApplicationConfigurationUpdateRequest:
       properties:
         chat_task_id:
@@ -106,71 +78,6 @@ components:
           title: Trace Retention Days
       type: object
       title: ApplicationConfigurationUpdateRequest
-    DocumentStorageEnvironment:
-      type: string
-      enum:
-      - aws
-      - azure
-      title: DocumentStorageEnvironment
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DocumentStorageConfigurationResponse:
-      properties:
-        storage_environment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Storage Environment
-        bucket_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bucket Name
-        container_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Container Name
-        assumable_role_arn:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assumable Role Arn
-      type: object
-      title: DocumentStorageConfigurationResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ApplicationConfigurationResponse:
       properties:
         chat_task_id:
@@ -204,8 +111,101 @@ components:
       - max_llm_rules_per_task_count
       - trace_retention_days
       title: ApplicationConfigurationResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DocumentStorageConfigurationUpdateRequest:
+      properties:
+        environment:
+          $ref: '#/components/schemas/DocumentStorageEnvironment'
+        connection_string:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection String
+        container_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Name
+        bucket_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bucket Name
+        assumable_role_arn:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assumable Role Arn
+      type: object
+      required:
+      - environment
+      title: DocumentStorageConfigurationUpdateRequest
+    DocumentStorageConfigurationResponse:
+      properties:
+        storage_environment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Storage Environment
+        bucket_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bucket Name
+        container_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Name
+        assumable_role_arn:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assumable Role Arn
+      type: object
+      title: DocumentStorageConfigurationResponse
+    DocumentStorageEnvironment:
+      type: string
+      enum:
+      - aws
+      - azure
+      title: DocumentStorageEnvironment
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

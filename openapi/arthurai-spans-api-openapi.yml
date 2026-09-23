@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Spans API
+  title: Arthur GenAI Engine Spans API
   version: 2.1.688
 tags:
 - name: Spans
@@ -1913,37 +1913,119 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AgenticAnnotationType:
-      type: string
-      enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
-    MetricType:
-      type: string
-      enum:
-      - QueryRelevance
-      - ResponseRelevance
-      - ToolSelection
-      title: MetricType
-    QueryTracesWithMetricsResponse:
+    AgenticAnnotationResponse:
       properties:
-        count:
-          type: integer
-          title: Count
-          description: The total number of spans matching the query parameters
-        traces:
-          items:
-            $ref: '#/components/schemas/TraceResponse'
-          type: array
-          title: Traces
-          description: List of traces containing nested spans matching the search filters
+        id:
+          type: string
+          title: Id
+          description: ID of the annotation
+        annotation_type:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Type of annotation
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace this annotation belongs to
+        continuous_eval_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Id
+          description: ID of the continuous eval this annotation belongs to
+        continuous_eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Name
+          description: Name of the continuous eval this annotation belongs to
+        eval_type:
+          anyOf:
+          - $ref: '#/components/schemas/EvalType'
+          - type: 'null'
+          description: 'Type of eval: ''llm_eval'' or ''ml_eval'''
+        eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eval Name
+          description: Name of the eval the continuous eval used when scoring
+        eval_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Eval Version
+          description: Version of the eval the continuous eval used when scoring
+        annotation_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Annotation Score
+          description: Binary score for a positive or negative annotation.
+        annotation_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Annotation Description
+          description: Description of the annotation.
+        input_variables:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/VariableTemplateValue'
+            type: array
+          - type: 'null'
+          title: Input Variables
+          description: Input variables for the continuous eval
+        run_status:
+          anyOf:
+          - $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          - type: 'null'
+          description: Status of the continuous eval run
+        cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cost
+          description: Cost of the continuous eval run
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the annotation was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the annotation was last updated
       type: object
       required:
-      - count
-      - traces
-      title: QueryTracesWithMetricsResponse
-      description: New response format that groups spans into traces with nested structure
+      - id
+      - annotation_type
+      - trace_id
+      - created_at
+      - updated_at
+      title: AgenticAnnotationResponse
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    StatusCodeEnum:
+      type: string
+      enum:
+      - Ok
+      - Error
+      - Unset
+      title: StatusCodeEnum
     ValidationError:
       properties:
         loc:
@@ -1970,31 +2052,6 @@ components:
       - msg
       - type
       title: ValidationError
-    UnregisteredRootSpansResponse:
-      properties:
-        groups:
-          items:
-            $ref: '#/components/schemas/UnregisteredRootSpanGroup'
-          type: array
-          title: Groups
-          description: List of grouped root spans, ordered by count descending
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of root spans (and traces) across all groups
-      type: object
-      required:
-      - groups
-      - total_count
-      title: UnregisteredRootSpansResponse
-      description: Response for unregistered root spans endpoint
-    ToolClassEnum:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      title: ToolClassEnum
     HTTPValidationError:
       properties:
         detail:
@@ -2004,6 +2061,12 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
     UnregisteredRootSpanGroup:
       properties:
         span_name:
@@ -2020,6 +2083,162 @@ components:
       - count
       title: UnregisteredRootSpanGroup
       description: Group of root spans with the same span_name for unregistered traces
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    TraceSortBy:
+      type: string
+      enum:
+      - start_time
+      - total_token_count
+      - total_token_cost
+      - span_count
+      title: TraceSortBy
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
+    SpanWithMetricsResponse:
+      properties:
+        prompt_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Token Count
+          description: Number of prompt tokens
+        completion_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Token Count
+          description: Number of completion tokens
+        total_token_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Token Count
+          description: Total number of tokens
+        prompt_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Prompt Token Cost
+          description: Cost of prompt tokens in USD
+        completion_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Completion Token Cost
+          description: Cost of completion tokens in USD
+        total_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Token Cost
+          description: Total cost in USD
+        id:
+          type: string
+          title: Id
+        trace_id:
+          type: string
+          title: Trace Id
+        span_id:
+          type: string
+          title: Span Id
+        parent_span_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Span Id
+        span_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Kind
+        span_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Span Name
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        status_code:
+          type: string
+          title: Status Code
+          description: Status code for the span (Unset, Error, Ok)
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        raw_data:
+          additionalProperties: true
+          type: object
+          title: Raw Data
+        input_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Content
+          description: Span input value from raw_data.attributes.input.value
+        output_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Output Content
+          description: Span output value from raw_data.attributes.output.value
+        metric_results:
+          items:
+            $ref: '#/components/schemas/MetricResultResponse'
+          type: array
+          title: Metric Results
+          description: List of metric results for this span
+          default: []
+      type: object
+      required:
+      - id
+      - trace_id
+      - span_id
+      - start_time
+      - end_time
+      - status_code
+      - created_at
+      - updated_at
+      - raw_data
+      title: SpanWithMetricsResponse
     SpanMetadataResponse:
       properties:
         prompt_token_count:
@@ -2159,316 +2378,31 @@ components:
       - updated_at
       title: SpanMetadataResponse
       description: Lightweight span metadata for list operations
-    MetricResultResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the metric result
-        metric_type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the metric
-        details:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Details
-          description: JSON-serialized metric details
-        prompt_tokens:
-          type: integer
-          title: Prompt Tokens
-          description: Number of prompt tokens used
-        completion_tokens:
-          type: integer
-          title: Completion Tokens
-          description: Number of completion tokens used
-        latency_ms:
-          type: integer
-          title: Latency Ms
-          description: Latency in milliseconds
-        span_id:
-          type: string
-          title: Span Id
-          description: ID of the span this result belongs to
-        metric_id:
-          type: string
-          title: Metric Id
-          description: ID of the metric that generated this result
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the result was created
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the result was last updated
-      type: object
-      required:
-      - id
-      - metric_type
-      - prompt_tokens
-      - completion_tokens
-      - latency_ms
-      - span_id
-      - metric_id
-      - created_at
-      - updated_at
-      title: MetricResultResponse
-    AgenticAnnotationResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the annotation
-        annotation_type:
-          $ref: '#/components/schemas/AgenticAnnotationType'
-          description: Type of annotation
-        trace_id:
-          type: string
-          title: Trace Id
-          description: ID of the trace this annotation belongs to
-        continuous_eval_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Continuous Eval Id
-          description: ID of the continuous eval this annotation belongs to
-        continuous_eval_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Continuous Eval Name
-          description: Name of the continuous eval this annotation belongs to
-        eval_type:
-          anyOf:
-          - $ref: '#/components/schemas/EvalType'
-          - type: 'null'
-          description: 'Type of eval: ''llm_eval'' or ''ml_eval'''
-        eval_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Eval Name
-          description: Name of the eval the continuous eval used when scoring
-        eval_version:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Eval Version
-          description: Version of the eval the continuous eval used when scoring
-        annotation_score:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Annotation Score
-          description: Binary score for a positive or negative annotation.
-        annotation_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Annotation Description
-          description: Description of the annotation.
-        input_variables:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/VariableTemplateValue'
-            type: array
-          - type: 'null'
-          title: Input Variables
-          description: Input variables for the continuous eval
-        run_status:
-          anyOf:
-          - $ref: '#/components/schemas/ContinuousEvalRunStatus'
-          - type: 'null'
-          description: Status of the continuous eval run
-        cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Cost
-          description: Cost of the continuous eval run
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the annotation was created
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the annotation was last updated
-      type: object
-      required:
-      - id
-      - annotation_type
-      - trace_id
-      - created_at
-      - updated_at
-      title: AgenticAnnotationResponse
-    QuerySpansResponse:
+    ToolClassEnum:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      title: ToolClassEnum
+    QueryTracesWithMetricsResponse:
       properties:
         count:
           type: integer
           title: Count
           description: The total number of spans matching the query parameters
-        spans:
+        traces:
           items:
-            $ref: '#/components/schemas/SpanWithMetricsResponse'
+            $ref: '#/components/schemas/TraceResponse'
           type: array
-          title: Spans
-          description: List of spans with metrics matching the search filters
+          title: Traces
+          description: List of traces containing nested spans matching the search filters
       type: object
       required:
       - count
-      - spans
-      title: QuerySpansResponse
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
-    SpanListResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: Total number of spans matching filters
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        spans:
-          items:
-            $ref: '#/components/schemas/SpanMetadataResponse'
-          type: array
-          title: Spans
-          description: List of span metadata
-      type: object
-      required:
-      - count
-      - spans
-      title: SpanListResponse
-      description: Response for span list endpoint
-    EvalType:
-      type: string
-      enum:
-      - llm_eval
-      - ml_eval
-      title: EvalType
-    TraceResponse:
-      properties:
-        prompt_token_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Prompt Token Count
-          description: Number of prompt tokens
-        completion_token_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Completion Token Count
-          description: Number of completion tokens
-        total_token_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Token Count
-          description: Total number of tokens
-        prompt_token_cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Prompt Token Cost
-          description: Cost of prompt tokens in USD
-        completion_token_cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Completion Token Cost
-          description: Cost of completion tokens in USD
-        total_token_cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Total Token Cost
-          description: Total cost in USD
-        trace_id:
-          type: string
-          title: Trace Id
-          description: ID of the trace
-        start_time:
-          type: string
-          format: date-time
-          title: Start Time
-          description: Start time of the earliest span in this trace
-        end_time:
-          type: string
-          format: date-time
-          title: End Time
-          description: End time of the latest span in this trace
-        input_content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Input Content
-          description: Root span input value from trace metadata
-        output_content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Output Content
-          description: Root span output value from trace metadata
-        root_spans:
-          items:
-            $ref: '#/components/schemas/NestedSpanWithMetricsResponse'
-          type: array
-          title: Root Spans
-          description: Root spans (spans with no parent) in this trace, with children nested
-          default: []
-        annotations:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/AgenticAnnotationResponse'
-            type: array
-          - type: 'null'
-          title: Annotations
-          description: Annotations for this trace.
-      type: object
-      required:
-      - trace_id
-      - start_time
-      - end_time
-      title: TraceResponse
-      description: Response model for a single trace containing nested spans
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    TraceSortBy:
-      type: string
-      enum:
-      - start_time
-      - total_token_count
-      - total_token_cost
-      - span_count
-      title: TraceSortBy
+      - traces
+      title: QueryTracesWithMetricsResponse
+      description: New response format that groups spans into traces with nested structure
     NestedSpanWithMetricsResponse:
       properties:
         prompt_token_count:
@@ -2609,24 +2543,7 @@ components:
       - raw_data
       title: NestedSpanWithMetricsResponse
       description: Nested span response with children for building span trees
-    StatusCodeEnum:
-      type: string
-      enum:
-      - Ok
-      - Error
-      - Unset
-      title: StatusCodeEnum
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    SpanWithMetricsResponse:
+    TraceResponse:
       properties:
         prompt_token_count:
           anyOf:
@@ -2664,102 +2581,185 @@ components:
           - type: 'null'
           title: Total Token Cost
           description: Total cost in USD
-        id:
-          type: string
-          title: Id
         trace_id:
           type: string
           title: Trace Id
-        span_id:
-          type: string
-          title: Span Id
-        parent_span_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Parent Span Id
-        span_kind:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Span Kind
-        span_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Span Name
+          description: ID of the trace
         start_time:
           type: string
           format: date-time
           title: Start Time
+          description: Start time of the earliest span in this trace
         end_time:
           type: string
           format: date-time
           title: End Time
-        task_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Task Id
-        session_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Session Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        status_code:
-          type: string
-          title: Status Code
-          description: Status code for the span (Unset, Error, Ok)
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-        raw_data:
-          additionalProperties: true
-          type: object
-          title: Raw Data
+          description: End time of the latest span in this trace
         input_content:
           anyOf:
           - type: string
           - type: 'null'
           title: Input Content
-          description: Span input value from raw_data.attributes.input.value
+          description: Root span input value from trace metadata
         output_content:
           anyOf:
           - type: string
           - type: 'null'
           title: Output Content
-          description: Span output value from raw_data.attributes.output.value
-        metric_results:
+          description: Root span output value from trace metadata
+        root_spans:
           items:
-            $ref: '#/components/schemas/MetricResultResponse'
+            $ref: '#/components/schemas/NestedSpanWithMetricsResponse'
           type: array
-          title: Metric Results
-          description: List of metric results for this span
+          title: Root Spans
+          description: Root spans (spans with no parent) in this trace, with children nested
           default: []
+        annotations:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AgenticAnnotationResponse'
+            type: array
+          - type: 'null'
+          title: Annotations
+          description: Annotations for this trace.
+      type: object
+      required:
+      - trace_id
+      - start_time
+      - end_time
+      title: TraceResponse
+      description: Response model for a single trace containing nested spans
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    UnregisteredRootSpansResponse:
+      properties:
+        groups:
+          items:
+            $ref: '#/components/schemas/UnregisteredRootSpanGroup'
+          type: array
+          title: Groups
+          description: List of grouped root spans, ordered by count descending
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of root spans (and traces) across all groups
+      type: object
+      required:
+      - groups
+      - total_count
+      title: UnregisteredRootSpansResponse
+      description: Response for unregistered root spans endpoint
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    SpanListResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: Total number of spans matching filters
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        spans:
+          items:
+            $ref: '#/components/schemas/SpanMetadataResponse'
+          type: array
+          title: Spans
+          description: List of span metadata
+      type: object
+      required:
+      - count
+      - spans
+      title: SpanListResponse
+      description: Response for span list endpoint
+    QuerySpansResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of spans matching the query parameters
+        spans:
+          items:
+            $ref: '#/components/schemas/SpanWithMetricsResponse'
+          type: array
+          title: Spans
+          description: List of spans with metrics matching the search filters
+      type: object
+      required:
+      - count
+      - spans
+      title: QuerySpansResponse
+    MetricResultResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the metric result
+        metric_type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric
+        details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Details
+          description: JSON-serialized metric details
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          description: Number of prompt tokens used
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          description: Number of completion tokens used
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Latency in milliseconds
+        span_id:
+          type: string
+          title: Span Id
+          description: ID of the span this result belongs to
+        metric_id:
+          type: string
+          title: Metric Id
+          description: ID of the metric that generated this result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the result was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the result was last updated
       type: object
       required:
       - id
-      - trace_id
+      - metric_type
+      - prompt_tokens
+      - completion_tokens
+      - latency_ms
       - span_id
-      - start_time
-      - end_time
-      - status_code
+      - metric_id
       - created_at
       - updated_at
-      - raw_data
-      title: SpanWithMetricsResponse
+      title: MetricResultResponse
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

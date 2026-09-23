@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Alert Rules V1 API
-  version: 2.1.688
+  title: Arthur Scope Alert Rules V1 API
+  version: 0.1.0
 tags:
 - name: Alert Rules V1
 paths:
@@ -254,7 +254,7 @@ paths:
     get:
       tags:
       - Alert Rules V1
-      summary: Get Workspace Alert Rules.
+      summary: Get Workspace Alert Rules
       description: Returns alert rules across all models in the workspace, including rules attached indirectly via policy assignments. Applies the caller's per-model RBAC. Requires workspace_list_alert_rules permission.
       operationId: get_alert_rules_in_workspace
       security:
@@ -572,14 +572,92 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InternalServerError:
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    PostAlertRule:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        notification_webhook_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Notification Webhook Ids
+          description: The notification webhook IDs where the alert rule will send alert notification.
+          default: []
+      type: object
+      required:
+      - name
+      - threshold
+      - bound
+      - query
+      - metric_name
+      - interval
+      title: PostAlertRule
+    ResourceList_AlertRule_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AlertRule'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AlertRule]
+    AlertBound:
+      type: string
+      enum:
+      - upper_bound
+      - lower_bound
+      title: AlertBound
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Internal server error
       type: object
-      title: InternalServerError
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -606,176 +684,59 @@ components:
       - msg
       - type
       title: ValidationError
-    AlertRuleInterval:
+    PatchAlertRule:
       properties:
-        unit:
-          $ref: '#/components/schemas/IntervalUnit'
-          description: 'Unit of time interval. Example: ''minutes''.'
-        count:
-          type: integer
-          title: Count
-          description: 'Number of units in the interval. Example: ''5''.'
-      type: object
-      required:
-      - unit
-      - count
-      title: AlertRuleInterval
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    AlertRuleSQLValidationResp:
-      properties:
-        has_metric_timestamp_col:
-          type: boolean
-          title: Has Metric Timestamp Col
-          description: The name of the metric returned by the alert rule query.
-        has_metric_value_col:
-          type: boolean
-          title: Has Metric Value Col
-          description: The name of the metric returned by the alert rule query.
-        has_time_templates:
-          type: boolean
-          title: Has Time Templates
-          description: The name of the metric returned by the alert rule query.
-        has_interval_templates:
-          type: boolean
-          title: Has Interval Templates
-          description: The name of the metric returned by the alert rule query.
-      type: object
-      required:
-      - has_metric_timestamp_col
-      - has_metric_value_col
-      - has_time_templates
-      - has_interval_templates
-      title: AlertRuleSQLValidationResp
-    IntervalUnit:
-      type: string
-      enum:
-      - seconds
-      - minutes
-      - hours
-      - days
-      title: IntervalUnit
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    AlertRuleSort:
-      type: string
-      enum:
-      - created_at
-      - name
-      title: AlertRuleSort
-    ValidateAlertRuleQueryReq:
-      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          anyOf:
+          - $ref: '#/components/schemas/AlertBound'
+          - type: 'null'
+          description: The bound of the alert rule.
         query:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Query
           description: The query of the alert rule.
+        metric_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          anyOf:
+          - $ref: '#/components/schemas/AlertRuleInterval'
+          - type: 'null'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        notification_webhook_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Notification Webhook Ids
+          description: The notification webhook IDs where the alert rule will send alert notification.
       type: object
-      required:
-      - query
-      title: ValidateAlertRuleQueryReq
-    User:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        organization_id:
-          type: string
-          format: uuid4
-          title: Organization Id
-          description: The ID of the Arthur organization the user belongs to.
-        id:
-          type: string
-          format: uuid4
-          title: Id
-          description: Unique user ID assigned by Arthur.
-        first_name:
-          type: string
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: The user's email, if provided.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-        user_type:
-          $ref: '#/components/schemas/UserType'
-          description: The type of user.
-        data_plane_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Data Plane Id
-          description: Arthur data plane ID. Only set for data plane users.
-        client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Id
-          description: Arthur client ID for this user. Only set for service account type users.
-        organization_name:
-          type: string
-          title: Organization Name
-          description: Name of user's Arthur organization.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - organization_id
-      - id
-      - first_name
-      - last_name
-      - user_type
-      - organization_name
-      title: User
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
+      title: PatchAlertRule
     AlertRule:
       properties:
         created_at:
@@ -865,44 +826,28 @@ components:
       - interval
       - notification_webhooks
       title: AlertRule
-    AlertRuleNotificationWebhook:
+    NotFoundError:
       properties:
-        id:
+        detail:
           type: string
-          format: uuid
-          title: Id
-          description: Webhook ID.
-        name:
-          type: string
-          title: Name
-          description: Webhook name.
+          title: Detail
+          default: Resource not found
       type: object
-      required:
-      - id
-      - name
-      title: AlertRuleNotificationWebhook
-    AlertBound:
+      title: NotFoundError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    SortOrder:
       type: string
       enum:
-      - upper_bound
-      - lower_bound
-      title: AlertBound
-    ResourceList_AlertRule_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/AlertRule'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[AlertRule]
+      - asc
+      - desc
+      title: SortOrder
     UserType:
       type: string
       enum:
@@ -910,6 +855,37 @@ components:
       - data_plane
       - service_account
       title: UserType
+    AlertRuleSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: AlertRuleSort
+    AlertRuleSQLValidationResp:
+      properties:
+        has_metric_timestamp_col:
+          type: boolean
+          title: Has Metric Timestamp Col
+          description: The name of the metric returned by the alert rule query.
+        has_metric_value_col:
+          type: boolean
+          title: Has Metric Value Col
+          description: The name of the metric returned by the alert rule query.
+        has_time_templates:
+          type: boolean
+          title: Has Time Templates
+          description: The name of the metric returned by the alert rule query.
+        has_interval_templates:
+          type: boolean
+          title: Has Interval Templates
+          description: The name of the metric returned by the alert rule query.
+      type: object
+      required:
+      - has_metric_timestamp_col
+      - has_metric_value_col
+      - has_time_templates
+      - has_interval_templates
+      title: AlertRuleSQLValidationResp
     Pagination:
       properties:
         page:
@@ -935,108 +911,136 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    PatchAlertRule:
+    InternalServerError:
       properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: The name of the alert rule.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The description of the alert rule.
-        threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Threshold
-          description: The threshold that will trigger the alert rule.
-        bound:
-          anyOf:
-          - $ref: '#/components/schemas/AlertBound'
-          - type: 'null'
-          description: The bound of the alert rule.
-        query:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Query
-          description: The query of the alert rule.
-        metric_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Metric Name
-          description: The name of the metric returned by the alert rule query.
-        interval:
-          anyOf:
-          - $ref: '#/components/schemas/AlertRuleInterval'
-          - type: 'null'
-          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
-        notification_webhook_ids:
-          anyOf:
-          - items:
-              type: string
-              format: uuid
-            type: array
-          - type: 'null'
-          title: Notification Webhook Ids
-          description: The notification webhook IDs where the alert rule will send alert notification.
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
       type: object
-      title: PatchAlertRule
-    PostAlertRule:
+      title: InternalServerError
+    User:
       properties:
-        name:
+        created_at:
           type: string
-          title: Name
-          description: The name of the alert rule.
-        description:
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Description
-          description: The description of the alert rule.
-        threshold:
-          type: number
-          title: Threshold
-          description: The threshold that will trigger the alert rule.
-        bound:
-          $ref: '#/components/schemas/AlertBound'
-          description: The bound of the alert rule.
-        query:
-          type: string
-          title: Query
-          description: The query of the alert rule.
-        metric_name:
-          type: string
-          title: Metric Name
-          description: The name of the metric returned by the alert rule query.
-        interval:
-          $ref: '#/components/schemas/AlertRuleInterval'
-          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
-        notification_webhook_ids:
-          items:
-            type: string
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
             format: uuid
-          type: array
-          title: Notification Webhook Ids
-          description: The notification webhook IDs where the alert rule will send alert notification.
-          default: []
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
       type: object
       required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    AlertRuleNotificationWebhook:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Webhook ID.
+        name:
+          type: string
+          title: Name
+          description: Webhook name.
+      type: object
+      required:
+      - id
       - name
-      - threshold
-      - bound
+      title: AlertRuleNotificationWebhook
+    ValidateAlertRuleQueryReq:
+      properties:
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+      type: object
+      required:
       - query
-      - metric_name
-      - interval
-      title: PostAlertRule
+      title: ValidateAlertRuleQueryReq
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

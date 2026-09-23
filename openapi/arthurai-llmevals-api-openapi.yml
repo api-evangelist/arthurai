@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery LLMEvals API
+  title: Arthur GenAI Engine LLM Evals API
   version: 2.1.688
 tags:
 - name: LLMEvals
@@ -354,7 +354,6 @@ paths:
       tags:
       - LLMEvals
       summary: Run a saved llm eval
-      description: Run a saved llm eval
       operationId: run_saved_llm_eval_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__completions_post
       security:
       - API Key: []
@@ -477,7 +476,6 @@ paths:
       tags:
       - LLMEvals
       summary: Get an llm eval by name and tag
-      description: Get an llm eval by name and tag
       operationId: get_llm_eval_by_tag_api_v1_tasks__task_id__llm_evals__eval_name__versions_tags__tag__get
       security:
       - API Key: []
@@ -519,7 +517,6 @@ paths:
       tags:
       - LLMEvals
       summary: Add a tag to an llm eval version
-      description: Add a tag to an llm eval version
       operationId: add_tag_to_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags_put
       security:
       - API Key: []
@@ -569,7 +566,6 @@ paths:
       tags:
       - LLMEvals
       summary: Remove a tag from an llm eval version
-      description: Remove a tag from an llm eval version
       operationId: delete_tag_from_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags__tag__delete
       security:
       - API Key: []
@@ -612,58 +608,84 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    EvalKind:
-      type: string
-      enum:
-      - llm_as_a_judge
-      - pii
-      - pii_v1
-      - toxicity
-      - prompt_injection
-      title: EvalKind
-      description: Discriminator for all eval types stored in the llm_evals table.
-    ValidationError:
+    VariableTemplateValue:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        name:
           type: string
-          title: Message
-        type:
+          title: Name
+          description: Name of the variable
+        value:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Value
+          description: Value of the variable
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    LLMMetadataSortField:
-      type: string
-      enum:
       - name
-      - latest_version_created_at
-      title: LLMMetadataSortField
-      description: Sort field options for the LLM evals/prompts metadata list endpoints.
+      - value
+      title: VariableTemplateValue
+    EvalRunResponse:
+      properties:
+        reason:
+          type: string
+          title: Reason
+          description: Explanation for how the llm arrived at this answer.
+        score:
+          type: integer
+          title: Score
+          description: Score for this llm eval
+        cost:
+          type: string
+          title: Cost
+          description: Cost of this llm completion
+      type: object
+      required:
+      - reason
+      - score
+      - cost
+      title: EvalRunResponse
+    BaseCompletionRequest:
+      properties:
+        variables:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/VariableTemplateValue'
+            type: array
+          - type: 'null'
+          title: Variables
+          description: List of VariableTemplateValue fields that specify the values to fill in for each template in the prompt
+          default: []
+      type: object
+      title: BaseCompletionRequest
+    AnthropicThinkingParam-Input:
+      properties:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      type: object
+      title: AnthropicThinkingParam
+    LogitBiasItem:
+      properties:
+        token_id:
+          type: integer
+          title: Token Id
+          description: Token ID to bias
+        bias:
+          type: number
+          maximum: 100.0
+          minimum: -100.0
+          title: Bias
+          description: Bias value between -100 and 100
+      type: object
+      required:
+      - token_id
+      - bias
+      title: LogitBiasItem
     LLMBaseConfigSettings:
       properties:
         timeout:
@@ -753,193 +775,6 @@ components:
       additionalProperties: false
       type: object
       title: LLMBaseConfigSettings
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    ReasoningEffortEnum:
-      type: string
-      enum:
-      - none
-      - minimal
-      - low
-      - medium
-      - high
-      - default
-      title: ReasoningEffortEnum
-    BaseCompletionRequest:
-      properties:
-        variables:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/VariableTemplateValue'
-            type: array
-          - type: 'null'
-          title: Variables
-          description: List of VariableTemplateValue fields that specify the values to fill in for each template in the prompt
-          default: []
-      type: object
-      title: BaseCompletionRequest
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
-    LogitBiasItem:
-      properties:
-        token_id:
-          type: integer
-          title: Token Id
-          description: Token ID to bias
-        bias:
-          type: number
-          maximum: 100.0
-          minimum: -100.0
-          title: Bias
-          description: Bias value between -100 and 100
-      type: object
-      required:
-      - token_id
-      - bias
-      title: LogitBiasItem
-    Eval:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the llm eval
-        eval_kind:
-          type: string
-          title: Eval Kind
-          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
-          default: llm_as_a_judge
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet'). None for ML evals.
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: 'null'
-          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). None for ML evals.
-        instructions:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instructions
-          description: Instructions for the llm eval. None for ML evals.
-        variables:
-          items:
-            type: string
-          type: array
-          title: Variables
-          description: List of variable names for the llm eval
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          description: List of tags for this llm eval version
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/LLMBaseConfigSettings'
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: EvalConfig
-          description: Eval configuration. LLMBaseConfigSettings for LLM evals; type-specific dict for ML evals.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when the llm eval was created.
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-          description: Time that this llm eval was deleted
-        version:
-          type: integer
-          title: Version
-          description: Version of the llm eval
-          default: 1
-      type: object
-      required:
-      - name
-      - created_at
-      title: Eval
-    LLMVersionResponse:
-      properties:
-        version:
-          type: integer
-          title: Version
-          description: Version number of the llm eval
-        eval_kind:
-          $ref: '#/components/schemas/EvalKind'
-          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
-          default: llm_as_a_judge
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when the llm eval version was created
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-          description: Timestamp when the llm eval version was deleted (None if not deleted)
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: 'null'
-          description: Model provider chosen for this version of the llm eval. None for ML evals.
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-          description: Model name chosen for this version of the llm eval. None for ML evals.
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          description: List of tags for the llm asset
-      type: object
-      required:
-      - version
-      - created_at
-      - deleted_at
-      title: LLMVersionResponse
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
     LLMRequestConfigSettings:
       properties:
         timeout:
@@ -1028,47 +863,61 @@ components:
           description: Anthropic-specific thinking parameter for Claude models
       type: object
       title: LLMRequestConfigSettings
-    LLMGetAllMetadataListResponse:
+    ValidationError:
       properties:
-        llm_metadata:
+        loc:
           items:
-            $ref: '#/components/schemas/LLMGetAllMetadataResponse'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Llm Metadata
-          description: List of llm asset metadata
-        count:
-          type: integer
-          title: Count
-          description: Total number of llm assets matching filters
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - llm_metadata
-      - count
-      title: LLMGetAllMetadataListResponse
-    CreateEvalRequest:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
       properties:
-        model_name:
-          type: string
-          title: Model Name
-          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
-        model_provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure')
-        instructions:
-          type: string
-          title: Instructions
-          description: Instructions for the llm eval
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/LLMRequestConfigSettings'
-          - type: 'null'
-          description: LLM configurations for this eval (e.g. temperature, max_tokens, etc.)
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - model_name
-      - model_provider
-      - instructions
-      title: CreateEvalRequest
+      title: HTTPValidationError
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
+    EvalKind:
+      type: string
+      enum:
+      - llm_as_a_judge
+      - pii
+      - pii_v1
+      - toxicity
+      - prompt_injection
+      title: EvalKind
+      description: Discriminator for all eval types stored in the llm_evals table.
     LLMGetAllMetadataResponse:
       properties:
         name:
@@ -1113,6 +962,140 @@ components:
       - latest_version_created_at
       - deleted_versions
       title: LLMGetAllMetadataResponse
+    AnthropicThinkingParam-Output:
+      properties:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      additionalProperties: false
+      type: object
+      title: AnthropicThinkingParam
+    LLMVersionResponse:
+      properties:
+        version:
+          type: integer
+          title: Version
+          description: Version number of the llm eval
+        eval_kind:
+          $ref: '#/components/schemas/EvalKind'
+          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
+          default: llm_as_a_judge
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the llm eval version was created
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Timestamp when the llm eval version was deleted (None if not deleted)
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: 'null'
+          description: Model provider chosen for this version of the llm eval. None for ML evals.
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: Model name chosen for this version of the llm eval. None for ML evals.
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: List of tags for the llm asset
+      type: object
+      required:
+      - version
+      - created_at
+      - deleted_at
+      title: LLMVersionResponse
+    LLMMetadataSortField:
+      type: string
+      enum:
+      - name
+      - latest_version_created_at
+      title: LLMMetadataSortField
+      description: Sort field options for the LLM evals/prompts metadata list endpoints.
+    LLMGetAllMetadataListResponse:
+      properties:
+        llm_metadata:
+          items:
+            $ref: '#/components/schemas/LLMGetAllMetadataResponse'
+          type: array
+          title: Llm Metadata
+          description: List of llm asset metadata
+        count:
+          type: integer
+          title: Count
+          description: Total number of llm assets matching filters
+      type: object
+      required:
+      - llm_metadata
+      - count
+      title: LLMGetAllMetadataListResponse
+    CreateEvalRequest:
+      properties:
+        model_name:
+          type: string
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
+        model_provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure')
+        instructions:
+          type: string
+          title: Instructions
+          description: Instructions for the llm eval
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMRequestConfigSettings'
+          - type: 'null'
+          description: LLM configurations for this eval (e.g. temperature, max_tokens, etc.)
+      type: object
+      required:
+      - model_name
+      - model_provider
+      - instructions
+      title: CreateEvalRequest
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    Body_add_tag_to_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags_put:
+      properties:
+        tag:
+          type: string
+          title: Tag
+          description: Tag to add to this llm eval version
+      type: object
+      required:
+      - tag
+      title: Body_add_tag_to_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags_put
     LLMEvalsVersionListResponse:
       properties:
         versions:
@@ -1130,65 +1113,78 @@ components:
       - versions
       - count
       title: LLMEvalsVersionListResponse
-    AnthropicThinkingParam-Output:
+    Eval:
       properties:
-        type:
+        name:
           type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
+          title: Name
+          description: Name of the llm eval
+        eval_kind:
+          type: string
+          title: Eval Kind
+          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
+          default: llm_as_a_judge
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet'). None for ML evals.
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: 'null'
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). None for ML evals.
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+          description: Instructions for the llm eval. None for ML evals.
+        variables:
+          items:
+            type: string
+          type: array
+          title: Variables
+          description: List of variable names for the llm eval
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: List of tags for this llm eval version
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMBaseConfigSettings'
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: EvalConfig
+          description: Eval configuration. LLMBaseConfigSettings for LLM evals; type-specific dict for ML evals.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the llm eval was created.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Time that this llm eval was deleted
+        version:
           type: integer
-          title: Budget Tokens
-      additionalProperties: false
-      type: object
-      title: AnthropicThinkingParam
-    AnthropicThinkingParam-Input:
-      properties:
-        type:
-          type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
-          type: integer
-          title: Budget Tokens
-      type: object
-      title: AnthropicThinkingParam
-    Body_add_tag_to_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags_put:
-      properties:
-        tag:
-          type: string
-          title: Tag
-          description: Tag to add to this llm eval version
+          title: Version
+          description: Version of the llm eval
+          default: 1
       type: object
       required:
-      - tag
-      title: Body_add_tag_to_llm_eval_version_api_v1_tasks__task_id__llm_evals__eval_name__versions__eval_version__tags_put
-    EvalRunResponse:
-      properties:
-        reason:
-          type: string
-          title: Reason
-          description: Explanation for how the llm arrived at this answer.
-        score:
-          type: integer
-          title: Score
-          description: Score for this llm eval
-        cost:
-          type: string
-          title: Cost
-          description: Cost of this llm completion
-      type: object
-      required:
-      - reason
-      - score
-      - cost
-      title: EvalRunResponse
+      - name
+      - created_at
+      title: Eval
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

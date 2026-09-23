@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Data Retrieval V1 API
-  version: 2.1.688
+  title: Arthur Scope Data Retrieval V1 API
+  version: 0.1.0
 tags:
 - name: Data Retrieval V1
 paths:
@@ -433,6 +433,41 @@ components:
       - content
       - data_schema
       title: DataRetrievalData
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     InternalServerError:
       properties:
         detail:
@@ -441,6 +476,84 @@ components:
           default: Internal server error
       type: object
       title: InternalServerError
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
+    DataRetrievalStatus:
+      type: string
+      enum:
+      - pending_load
+      - loaded
+      - expired
+      title: DataRetrievalStatus
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    PutRetrievedData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+      type: object
+      required:
+      - content
+      title: PutRetrievedData
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    DataRetrievalOperation:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Operation ID used for tracking the state of the operation.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: Job ID executing the data retrieval.
+        status:
+          $ref: '#/components/schemas/DataRetrievalStatus'
+          description: Current status of the retrieval operation.
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/DataRetrievalData'
+          - type: 'null'
+          description: Data page of the read dataset. Null if data is not yet available or has expired.
+      type: object
+      required:
+      - id
+      - job_id
+      - status
+      title: DataRetrievalOperation
     DataResultFilter:
       properties:
         field_name:
@@ -486,121 +599,12 @@ components:
       - start_timestamp
       - end_timestamp
       title: PostDataRetrievalOperation
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    ConnectorPaginationOptions:
-      properties:
-        page:
-          type: integer
-          minimum: 1.0
-          title: Page
-          default: 1
-        page_size:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Page Size
-          default: 25
-      type: object
-      title: ConnectorPaginationOptions
-    DataResultFilterOp:
-      type: string
-      enum:
-      - greater_than
-      - less_than
-      - equals
-      - not_equals
-      - greater_than_or_equal
-      - less_than_or_equal
-      - in
-      - not_in
-      title: DataResultFilterOp
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DataRetrievalStatus:
-      type: string
-      enum:
-      - pending_load
-      - loaded
-      - expired
-      title: DataRetrievalStatus
-    PutRetrievedData:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Serialized content.
-      type: object
-      required:
-      - content
-      title: PutRetrievedData
-    DataRetrievalOperation:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Operation ID used for tracking the state of the operation.
-        job_id:
-          type: string
-          format: uuid
-          title: Job Id
-          description: Job ID executing the data retrieval.
-        status:
-          $ref: '#/components/schemas/DataRetrievalStatus'
-          description: Current status of the retrieval operation.
-        data:
-          anyOf:
-          - $ref: '#/components/schemas/DataRetrievalData'
-          - type: 'null'
-          description: Data page of the read dataset. Null if data is not yet available or has expired.
-      type: object
-      required:
-      - id
-      - job_id
-      - status
-      title: DataRetrievalOperation
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

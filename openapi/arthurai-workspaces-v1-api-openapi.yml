@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Workspaces V1 API
-  version: 2.1.688
+  title: Arthur Scope Workspaces V1 API
+  version: 0.1.0
 tags:
 - name: Workspaces V1
 paths:
@@ -9,7 +9,7 @@ paths:
     get:
       tags:
       - Workspaces V1
-      summary: Get Workspace.
+      summary: Get Workspace
       description: Requires workspace_read permission.
       operationId: get_workspace
       security:
@@ -51,7 +51,7 @@ paths:
     patch:
       tags:
       - Workspaces V1
-      summary: Patch Workspace.
+      summary: Patch Workspace
       description: Requires workspace_update permission.
       operationId: patch_workspace
       security:
@@ -99,7 +99,7 @@ paths:
     delete:
       tags:
       - Workspaces V1
-      summary: Delete Workspace.
+      summary: Delete Workspace
       description: Requires workspace_delete permission.
       operationId: delete_workspace
       security:
@@ -187,7 +187,7 @@ paths:
     post:
       tags:
       - Workspaces V1
-      summary: Post Workspace.
+      summary: Post Workspace
       description: Requires organization_create_workspace permission.
       operationId: post_workspace
       security:
@@ -233,7 +233,7 @@ paths:
     get:
       tags:
       - Workspaces V1
-      summary: Get Workspaces.
+      summary: Get Workspaces
       description: Requires organization_list_workspaces permission.
       operationId: get_workspaces
       security:
@@ -312,35 +312,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    WorkspaceSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: WorkspaceSort
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     PostWorkspace:
       properties:
         name:
@@ -351,6 +322,12 @@ components:
       required:
       - name
       title: PostWorkspace
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     ValidationError:
       properties:
         loc:
@@ -377,48 +354,6 @@ components:
       - msg
       - type
       title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    WorkspaceStatistics:
-      properties:
-        active_engine_count:
-          type: integer
-          title: Active Engine Count
-        total_engine_count:
-          type: integer
-          title: Total Engine Count
-        projects_count:
-          type: integer
-          title: Projects Count
-        custom_agg_count:
-          type: integer
-          title: Custom Agg Count
-        workspace_user_count:
-          type: integer
-          title: Workspace User Count
-      type: object
-      required:
-      - active_engine_count
-      - total_engine_count
-      - projects_count
-      - custom_agg_count
-      - workspace_user_count
-      title: WorkspaceStatistics
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     Workspace:
       properties:
         created_at:
@@ -453,6 +388,66 @@ components:
       - name
       - organization_id
       title: Workspace
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceList_Workspace_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Workspace'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Workspace]
+    WorkspaceStatistics:
+      properties:
+        active_engine_count:
+          type: integer
+          title: Active Engine Count
+        total_engine_count:
+          type: integer
+          title: Total Engine Count
+        projects_count:
+          type: integer
+          title: Projects Count
+        custom_agg_count:
+          type: integer
+          title: Custom Agg Count
+        workspace_user_count:
+          type: integer
+          title: Workspace User Count
+      type: object
+      required:
+      - active_engine_count
+      - total_engine_count
+      - projects_count
+      - custom_agg_count
+      - workspace_user_count
+      title: WorkspaceStatistics
+    PatchWorkspace:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+      type: object
+      required:
+      - name
+      title: PatchWorkspace
     Pagination:
       properties:
         page:
@@ -478,34 +473,43 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    ResourceList_Workspace_:
+    InternalServerError:
       properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Workspace'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Workspace]
-    PatchWorkspace:
-      properties:
-        name:
+        detail:
           type: string
-          title: Name
-          description: Name of the workspace.
+          title: Detail
+          default: Internal server error
       type: object
-      required:
+      title: InternalServerError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    WorkspaceSort:
+      type: string
+      enum:
       - name
-      title: PatchWorkspace
+      - created_at
+      - updated_at
+      title: WorkspaceSort
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

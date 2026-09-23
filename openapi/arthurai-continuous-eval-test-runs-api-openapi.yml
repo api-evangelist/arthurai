@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Continuous Eval Test Runs API
+  title: Arthur GenAI Engine Continuous Eval Test Runs API
   version: 2.1.688
 tags:
 - name: Continuous Eval Test Runs
@@ -219,116 +219,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AgenticAnnotationType:
-      type: string
-      enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
-    ContinuousEvalTestRunResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the test run.
-        continuous_eval_id:
-          type: string
-          format: uuid
-          title: Continuous Eval Id
-          description: ID of the continuous eval being tested.
-        task_id:
-          type: string
-          title: Task Id
-          description: ID of the parent task.
-        status:
-          $ref: '#/components/schemas/TestRunStatus'
-          description: Status of the test run.
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of traces in the test run.
-        completed_count:
-          type: integer
-          title: Completed Count
-          description: Number of completed test cases.
-        passed_count:
-          type: integer
-          title: Passed Count
-          description: Number of test cases that passed.
-        failed_count:
-          type: integer
-          title: Failed Count
-          description: Number of test cases that failed.
-        error_count:
-          type: integer
-          title: Error Count
-          description: Number of test cases that errored.
-        skipped_count:
-          type: integer
-          title: Skipped Count
-          description: Number of test cases that were skipped.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the test run was created.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: When the test run was last updated.
-      type: object
-      required:
-      - id
-      - continuous_eval_id
-      - task_id
-      - status
-      - total_count
-      - completed_count
-      - passed_count
-      - failed_count
-      - error_count
-      - skipped_count
-      - created_at
-      - updated_at
-      title: ContinuousEvalTestRunResponse
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AgenticAnnotationResponse:
       properties:
         id:
@@ -420,6 +310,107 @@ components:
       - created_at
       - updated_at
       title: AgenticAnnotationResponse
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreateTestRunRequest:
+      properties:
+        trace_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: Trace Ids
+          description: List of trace IDs to test the continuous eval against
+      type: object
+      required:
+      - trace_ids
+      title: CreateTestRunRequest
+      description: Request schema for creating a continuous eval test run
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
+    TestRunStatus:
+      type: string
+      enum:
+      - running
+      - completed
+      - partial_failure
+      - error
+      title: TestRunStatus
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
     ListContinuousEvalTestRunsResponse:
       properties:
         test_runs:
@@ -437,6 +428,74 @@ components:
       - test_runs
       - count
       title: ListContinuousEvalTestRunsResponse
+    ContinuousEvalTestRunResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the test run.
+        continuous_eval_id:
+          type: string
+          format: uuid
+          title: Continuous Eval Id
+          description: ID of the continuous eval being tested.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the parent task.
+        status:
+          $ref: '#/components/schemas/TestRunStatus'
+          description: Status of the test run.
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of traces in the test run.
+        completed_count:
+          type: integer
+          title: Completed Count
+          description: Number of completed test cases.
+        passed_count:
+          type: integer
+          title: Passed Count
+          description: Number of test cases that passed.
+        failed_count:
+          type: integer
+          title: Failed Count
+          description: Number of test cases that failed.
+        error_count:
+          type: integer
+          title: Error Count
+          description: Number of test cases that errored.
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          description: Number of test cases that were skipped.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the test run was created.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: When the test run was last updated.
+      type: object
+      required:
+      - id
+      - continuous_eval_id
+      - task_id
+      - status
+      - total_count
+      - completed_count
+      - passed_count
+      - failed_count
+      - error_count
+      - skipped_count
+      - created_at
+      - updated_at
+      title: ContinuousEvalTestRunResponse
     ListAgenticAnnotationsResponse:
       properties:
         annotations:
@@ -454,67 +513,8 @@ components:
       - annotations
       - count
       title: ListAgenticAnnotationsResponse
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EvalType:
-      type: string
-      enum:
-      - llm_eval
-      - ml_eval
-      title: EvalType
-    CreateTestRunRequest:
-      properties:
-        trace_ids:
-          items:
-            type: string
-          type: array
-          maxItems: 50
-          minItems: 1
-          title: Trace Ids
-          description: List of trace IDs to test the continuous eval against
-      type: object
-      required:
-      - trace_ids
-      title: CreateTestRunRequest
-      description: Request schema for creating a continuous eval test run
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    TestRunStatus:
-      type: string
-      enum:
-      - running
-      - completed
-      - partial_failure
-      - error
-      title: TestRunStatus
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

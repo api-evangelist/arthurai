@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery ML Evals API
+  title: Arthur GenAI Engine ML Evals API
   version: 2.1.688
 tags:
 - name: ML Evals
@@ -49,6 +49,227 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    AnthropicThinkingParam-Output:
+      properties:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      additionalProperties: false
+      type: object
+      title: AnthropicThinkingParam
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PIIEvalConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: List of PII entity types to disable (e.g. ['EMAIL_ADDRESS', 'PHONE_NUMBER'])
+        pii_confidence_threshold:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Pii Confidence Threshold
+          description: Minimum confidence score for a PII entity to be flagged
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: List of values that should not be flagged as PII
+      type: object
+      title: PIIEvalConfig
+      description: Configuration for PII detection evals.
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
+    CreateMLEvalRequest:
+      properties:
+        eval_type:
+          $ref: '#/components/schemas/EvalKind'
+          description: Type of ML eval (e.g. 'pii', 'toxicity', 'prompt_injection')
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/PIIEvalConfig'
+          - $ref: '#/components/schemas/ToxicityEvalConfig'
+          - $ref: '#/components/schemas/PromptInjectionEvalConfig'
+          title: MLEvalConfig
+          description: Configuration for the ML eval. Valid fields depend on eval_type.
+      type: object
+      required:
+      - eval_type
+      - config
+      title: CreateMLEvalRequest
+    LogitBiasItem:
+      properties:
+        token_id:
+          type: integer
+          title: Token Id
+          description: Token ID to bias
+        bias:
+          type: number
+          maximum: 100.0
+          minimum: -100.0
+          title: Bias
+          description: Bias value between -100 and 100
+      type: object
+      required:
+      - token_id
+      - bias
+      title: LogitBiasItem
+    ToxicityEvalConfig:
+      properties:
+        toxicity_threshold:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Toxicity Threshold
+          description: Minimum toxicity score for text to be flagged
+      type: object
+      title: ToxicityEvalConfig
+      description: Configuration for toxicity detection evals.
+    PromptInjectionEvalConfig:
+      properties: {}
+      type: object
+      title: PromptInjectionEvalConfig
+      description: Configuration for prompt injection detection evals.
+    Eval:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the llm eval
+        eval_kind:
+          type: string
+          title: Eval Kind
+          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
+          default: llm_as_a_judge
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet'). None for ML evals.
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: 'null'
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). None for ML evals.
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+          description: Instructions for the llm eval. None for ML evals.
+        variables:
+          items:
+            type: string
+          type: array
+          title: Variables
+          description: List of variable names for the llm eval
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: List of tags for this llm eval version
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMBaseConfigSettings'
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: EvalConfig
+          description: Eval configuration. LLMBaseConfigSettings for LLM evals; type-specific dict for ML evals.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the llm eval was created.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Time that this llm eval was deleted
+        version:
+          type: integer
+          title: Version
+          description: Version of the llm eval
+          default: 1
+      type: object
+      required:
+      - name
+      - created_at
+      title: Eval
     EvalKind:
       type: string
       enum:
@@ -148,229 +369,8 @@ components:
       additionalProperties: false
       type: object
       title: LLMBaseConfigSettings
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    CreateMLEvalRequest:
-      properties:
-        eval_type:
-          $ref: '#/components/schemas/EvalKind'
-          description: Type of ML eval (e.g. 'pii', 'toxicity', 'prompt_injection')
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/PIIEvalConfig'
-          - $ref: '#/components/schemas/ToxicityEvalConfig'
-          - $ref: '#/components/schemas/PromptInjectionEvalConfig'
-          title: MLEvalConfig
-          description: Configuration for the ML eval. Valid fields depend on eval_type.
-      type: object
-      required:
-      - eval_type
-      - config
-      title: CreateMLEvalRequest
-    PIIEvalConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: List of PII entity types to disable (e.g. ['EMAIL_ADDRESS', 'PHONE_NUMBER'])
-        pii_confidence_threshold:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Pii Confidence Threshold
-          description: Minimum confidence score for a PII entity to be flagged
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: List of values that should not be flagged as PII
-      type: object
-      title: PIIEvalConfig
-      description: Configuration for PII detection evals.
-    ReasoningEffortEnum:
-      type: string
-      enum:
-      - none
-      - minimal
-      - low
-      - medium
-      - high
-      - default
-      title: ReasoningEffortEnum
-    ToxicityEvalConfig:
-      properties:
-        toxicity_threshold:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Toxicity Threshold
-          description: Minimum toxicity score for text to be flagged
-      type: object
-      title: ToxicityEvalConfig
-      description: Configuration for toxicity detection evals.
-    LogitBiasItem:
-      properties:
-        token_id:
-          type: integer
-          title: Token Id
-          description: Token ID to bias
-        bias:
-          type: number
-          maximum: 100.0
-          minimum: -100.0
-          title: Bias
-          description: Bias value between -100 and 100
-      type: object
-      required:
-      - token_id
-      - bias
-      title: LogitBiasItem
-    Eval:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the llm eval
-        eval_kind:
-          type: string
-          title: Eval Kind
-          description: Eval kind discriminator (e.g. 'llm_as_a_judge', 'pii', 'toxicity')
-          default: llm_as_a_judge
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet'). None for ML evals.
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: 'null'
-          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). None for ML evals.
-        instructions:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instructions
-          description: Instructions for the llm eval. None for ML evals.
-        variables:
-          items:
-            type: string
-          type: array
-          title: Variables
-          description: List of variable names for the llm eval
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          description: List of tags for this llm eval version
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/LLMBaseConfigSettings'
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: EvalConfig
-          description: Eval configuration. LLMBaseConfigSettings for LLM evals; type-specific dict for ML evals.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when the llm eval was created.
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-          description: Time that this llm eval was deleted
-        version:
-          type: integer
-          title: Version
-          description: Version of the llm eval
-          default: 1
-      type: object
-      required:
-      - name
-      - created_at
-      title: Eval
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AnthropicThinkingParam-Output:
-      properties:
-        type:
-          type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
-          type: integer
-          title: Budget Tokens
-      additionalProperties: false
-      type: object
-      title: AnthropicThinkingParam
-    PromptInjectionEvalConfig:
-      properties: {}
-      type: object
-      title: PromptInjectionEvalConfig
-      description: Configuration for prompt injection detection evals.
   securitySchemes:
-    API Key:
+    API_Key:
       type: http
       description: Bearer token authentication with an API key
       scheme: bearer

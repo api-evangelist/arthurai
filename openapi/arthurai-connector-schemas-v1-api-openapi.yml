@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Connector Schemas V1 API
-  version: 2.1.688
+  title: Arthur Scope Connector Schemas V1 API
+  version: 0.1.0
 tags:
 - name: Connector Schemas V1
 paths:
@@ -71,22 +71,51 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    DatasetLocatorFieldDataType:
-      type: string
-      enum:
-      - UUID
-      - string
-      - enum
-      - regex_string
-      title: DatasetLocatorFieldDataType
-    InternalServerError:
+    ResourceList_ConnectorType_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/ConnectorType'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[ConnectorType]
+    DatasetLocatorSchema:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/DatasetLocatorSchemaField'
+          type: array
+          title: Fields
+          description: Schema for dataset locator fields for all datasets using the connector type.
+      type: object
+      required:
+      - fields
+      title: DatasetLocatorSchema
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Internal server error
       type: object
-      title: InternalServerError
+      title: HTTPValidationError
+    ConnectorFieldDataType:
+      type: string
+      enum:
+      - string
+      - dict
+      - enum
+      - int
+      title: ConnectorFieldDataType
     ValidationError:
       properties:
         loc:
@@ -113,34 +142,19 @@ components:
       - msg
       - type
       title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    DatasetLocatorSchema:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/DatasetLocatorSchemaField'
-          type: array
-          title: Fields
-          description: Schema for dataset locator fields for all datasets using the connector type.
-      type: object
-      required:
-      - fields
-      title: DatasetLocatorSchema
-    ConnectorFieldDataType:
+    ConnectorType:
       type: string
       enum:
-      - string
-      - dict
-      - enum
-      - int
-      title: ConnectorFieldDataType
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
     ConnectorSpecSchemaField:
       properties:
         name:
@@ -178,6 +192,55 @@ components:
       - d_type
       - description
       title: ConnectorSpecSchemaField
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    DatasetLocatorFieldDataType:
+      type: string
+      enum:
+      - UUID
+      - string
+      - enum
+      - regex_string
+      title: DatasetLocatorFieldDataType
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     ConnectorSpecSchema:
       properties:
         created_at:
@@ -215,56 +278,6 @@ components:
       - dataset_locator_schema
       - supports_dataset_listing
       title: ConnectorSpecSchema
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ResourceList_ConnectorType_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/ConnectorType'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[ConnectorType]
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
     DatasetLocatorSchemaField:
       properties:
         name:
@@ -297,21 +310,12 @@ components:
       - is_optional
       - description
       title: DatasetLocatorSchemaField
-    ConnectorType:
-      type: string
-      enum:
-      - shield
-      - S3
-      - GCS
-      - BigQuery
-      - engine_internal
-      - odbc
-      - snowflake
-      - databricks
-      - AzureBlob
-      title: ConnectorType
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

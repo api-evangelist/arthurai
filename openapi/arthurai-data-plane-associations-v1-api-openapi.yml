@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Data Plane Associations V1 API
-  version: 2.1.688
+  title: Arthur Scope Data Plane Associations V1 API
+  version: 0.1.0
 tags:
 - name: Data Plane Associations V1
 paths:
@@ -9,7 +9,7 @@ paths:
     post:
       tags:
       - Data Plane Associations V1
-      summary: Post Data Plane Association.
+      summary: Post Data Plane Association
       description: Requires workspace_create_data_plane_association permission.
       operationId: post_data_plane_association
       security:
@@ -63,7 +63,7 @@ paths:
     get:
       tags:
       - Data Plane Associations V1
-      summary: List Data Plane Associations For Workspace.
+      summary: List Data Plane Associations For Workspace
       description: Requires workspace_list_data_plane_associations permission.
       operationId: get_workspace_data_plane_associations
       security:
@@ -171,7 +171,7 @@ paths:
     get:
       tags:
       - Data Plane Associations V1
-      summary: List Data Plane Associations For Project.
+      summary: List Data Plane Associations For Project
       description: Requires project_list_data_plane_associations.
       operationId: get_project_data_plane_associations
       security:
@@ -390,6 +390,59 @@ components:
       - asc
       - desc
       title: SortOrder
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
     Pagination:
       properties:
         page:
@@ -415,14 +468,22 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    BadRequestError:
+    ResourceList_DataPlaneAssociation_:
       properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
+        records:
+          items:
+            $ref: '#/components/schemas/DataPlaneAssociation'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
-      title: BadRequestError
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataPlaneAssociation]
     InternalServerError:
       properties:
         detail:
@@ -431,6 +492,135 @@ components:
           default: Internal server error
       type: object
       title: InternalServerError
+    DataPlaneAssociation:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane association.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+        data_plane:
+          anyOf:
+          - $ref: '#/components/schemas/DataPlane'
+          - type: 'null'
+          description: Data plane associated with the project.
+        project:
+          anyOf:
+          - $ref: '#/components/schemas/Project'
+          - type: 'null'
+          description: Project associated with the data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - data_plane_id
+      - project_id
+      title: DataPlaneAssociation
+    PostDataPlaneAssociation:
+      properties:
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+      type: object
+      required:
+      - data_plane_id
+      - project_id
+      title: PostDataPlaneAssociation
+    DataPlaneAssociationSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      title: DataPlaneAssociationSort
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    Project:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the project.
+        name:
+          type: string
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        total_artifacts:
+          type: integer
+          title: Total Artifacts
+          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - total_artifacts
+      title: Project
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     DataPlane:
       properties:
         created_at:
@@ -492,198 +682,12 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
-    DataPlaneAssociationSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      title: DataPlaneAssociationSort
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    DataPlaneAssociation:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane association.
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-        data_plane:
-          anyOf:
-          - $ref: '#/components/schemas/DataPlane'
-          - type: 'null'
-          description: Data plane associated with the project.
-        project:
-          anyOf:
-          - $ref: '#/components/schemas/Project'
-          - type: 'null'
-          description: Project associated with the data plane.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - data_plane_id
-      - project_id
-      title: DataPlaneAssociation
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PostDataPlaneAssociation:
-      properties:
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-      type: object
-      required:
-      - data_plane_id
-      - project_id
-      title: PostDataPlaneAssociation
-    Project:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the project.
-        name:
-          type: string
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        total_artifacts:
-          type: integer
-          title: Total Artifacts
-          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - total_artifacts
-      title: Project
-    ResourceList_DataPlaneAssociation_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataPlaneAssociation'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataPlaneAssociation]
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

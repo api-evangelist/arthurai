@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arthur GenAI Engine Agent Discovery Models V1 API
-  version: 2.1.688
+  title: Arthur Scope Models V1 API
+  version: 0.1.0
 tags:
 - name: Models V1
 paths:
@@ -276,7 +276,7 @@ paths:
     get:
       tags:
       - Models V1
-      summary: Get Workspace Models.
+      summary: Get Workspace Models
       description: Returns the applications the requesting user has access to across all projects in the workspace, matching the filter and sorting criteria. If multiple filters are specified, results will only be returned that match all of the specified criteria. Requires the workspace_list_models permission (granted by the Workspace Reader role); results are further limited to the projects in which the user has access to models.
       operationId: get_models_in_workspace
       security:
@@ -403,7 +403,7 @@ paths:
     get:
       tags:
       - Models V1
-      summary: Get Organization Models.
+      summary: Get Organization Models
       description: Returns all models (applications) across every workspace in the organization, matching the filter and sorting criteria. If multiple filters are specified, only results matching all criteria are returned. Requires the organization_list_models permission; results are further limited to the projects in which the caller has access to models.
       operationId: get_organization_models
       security:
@@ -698,7 +698,7 @@ paths:
     post:
       tags:
       - Models V1
-      summary: Generates A Metrics Spec.
+      summary: Generates A Metrics Spec
       description: Generates a metric spec for a model based on one or several datasets. Requires project_generate_metrics_spec permission.
       operationId: generate_metrics_spec
       security:
@@ -745,47 +745,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ModelsSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      - name
-      title: ModelsSort
     DatasetReference:
       properties:
         dataset_id:
@@ -808,51 +767,6 @@ components:
       - dataset_name
       - dataset_connector_type
       title: DatasetReference
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PostModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the model.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of model.
-        onboarding_identifier:
-          anyOf:
-          - type: string
-            maxLength: 1024
-          - type: 'null'
-          title: Onboarding Identifier
-          description: An optional label to help identify the model. Used by the task creation onboarding flow.
-        metric_config:
-          anyOf:
-          - $ref: '#/components/schemas/PutModelMetricSpec'
-          - type: 'null'
-          description: Metric configuration of the model. If left undefined, one will be derived
-        dataset_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Dataset Ids
-          description: IDs of datasets for the model.
-      type: object
-      required:
-      - name
-      - dataset_ids
-      title: PostModel
     PutModelMetricsSchedule:
       properties:
         cron:
@@ -874,155 +788,6 @@ components:
       - cron
       - lookback_period_seconds
       title: PutModelMetricsSchedule
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    DataPlane:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane.
-        name:
-          type: string
-          title: Name
-          description: Name of data plane.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        description:
-          type: string
-          title: Description
-          description: Description of data plane.
-        user_id:
-          type: string
-          format: uuid
-          title: User Id
-          description: ID of the data plane's underlying user.
-        infrastructure:
-          $ref: '#/components/schemas/Infrastructure'
-          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
-        last_check_in_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Check In Time
-          description: Last time the data plane was confirmed to be connected.
-        capabilities:
-          $ref: '#/components/schemas/DataPlaneCapabilities'
-          description: Capabilities for this data plane.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - description
-      - user_id
-      - infrastructure
-      - last_check_in_time
-      - capabilities
-      title: DataPlane
-    ModelMetricSpec:
-      properties:
-        aggregation_specs:
-          items:
-            $ref: '#/components/schemas/AggregationSpec'
-          type: array
-          title: Aggregation Specs
-          description: List of aggregations configured for the metric spec.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique ID of the metric spec.
-      type: object
-      required:
-      - aggregation_specs
-      - id
-      title: ModelMetricSpec
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    ModelMetricsSchedule:
-      properties:
-        cron:
-          type: string
-          title: Cron
-          description: Cron expression defining a cadence to run the model's metrics job on. Must specify a period greater than or equal to 5 minutes.
-        lookback_period_seconds:
-          type: integer
-          title: Lookback Period Seconds
-          description: Lookback period of the scheduled job.
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Optional name of the schedule.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique id of the schedule.
-      type: object
-      required:
-      - cron
-      - lookback_period_seconds
-      - id
-      title: ModelMetricsSchedule
-    AggregationKind:
-      type: string
-      enum:
-      - default
-      - custom
-      title: AggregationKind
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    PutModelMetricSpec:
-      properties:
-        aggregation_specs:
-          items:
-            $ref: '#/components/schemas/AggregationSpec'
-          type: array
-          title: Aggregation Specs
-          description: List of aggregations configured for the metric spec.
-      type: object
-      required:
-      - aggregation_specs
-      title: PutModelMetricSpec
     Model:
       properties:
         created_at:
@@ -1120,6 +885,414 @@ components:
       - data_plane
       - project_name
       title: Model
+    ModelMetricsSchedule:
+      properties:
+        cron:
+          type: string
+          title: Cron
+          description: Cron expression defining a cadence to run the model's metrics job on. Must specify a period greater than or equal to 5 minutes.
+        lookback_period_seconds:
+          type: integer
+          title: Lookback Period Seconds
+          description: Lookback period of the scheduled job.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Optional name of the schedule.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique id of the schedule.
+      type: object
+      required:
+      - cron
+      - lookback_period_seconds
+      - id
+      title: ModelMetricsSchedule
+    AggregationSpec:
+      properties:
+        aggregation_id:
+          type: string
+          format: uuid
+          title: Aggregation Id
+          description: Unique identifier of the aggregation.
+        aggregation_init_args:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Init Args
+          description: List of arguments to the aggregation's init function.
+        aggregation_args:
+          items:
+            $ref: '#/components/schemas/MetricsArgSpec'
+          type: array
+          title: Aggregation Args
+          description: List of arguments to the aggregation's aggregate function.
+        aggregation_kind:
+          $ref: '#/components/schemas/AggregationKind'
+          description: Type of aggregation to use for the metric spec.
+          default: default
+        aggregation_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Aggregation Version
+          description: Version of the custom aggregation to use for the metric spec.
+      type: object
+      required:
+      - aggregation_id
+      - aggregation_init_args
+      - aggregation_args
+      title: AggregationSpec
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PatchModel:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the model.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of model.
+        dataset_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Dataset Ids
+          description: IDs of datasets for the model.
+        agent_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Agent Id
+          description: ID of the unregistered agent to register with this model.
+      type: object
+      title: PatchModel
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    MetricsArgSpec:
+      properties:
+        arg_key:
+          type: string
+          title: Arg Key
+          description: Name of the argument.
+        arg_value:
+          title: Arg Value
+          description: Value of the argument.
+      type: object
+      required:
+      - arg_key
+      - arg_value
+      title: MetricsArgSpec
+    ModelMetricSpec:
+      properties:
+        aggregation_specs:
+          items:
+            $ref: '#/components/schemas/AggregationSpec'
+          type: array
+          title: Aggregation Specs
+          description: List of aggregations configured for the metric spec.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the metric spec.
+      type: object
+      required:
+      - aggregation_specs
+      - id
+      title: ModelMetricSpec
+    ResourceList_Model_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Model'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Model]
+    GenerateMetricsSpecRequest:
+      properties:
+        dataset_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Dataset Ids
+          description: List of dataset IDs for which to generate a model metrics spec. Datasets must be in the project in the path.
+      type: object
+      required:
+      - dataset_ids
+      title: GenerateMetricsSpecRequest
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    PostModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of model.
+        onboarding_identifier:
+          anyOf:
+          - type: string
+            maxLength: 1024
+          - type: 'null'
+          title: Onboarding Identifier
+          description: An optional label to help identify the model. Used by the task creation onboarding flow.
+        metric_config:
+          anyOf:
+          - $ref: '#/components/schemas/PutModelMetricSpec'
+          - type: 'null'
+          description: Metric configuration of the model. If left undefined, one will be derived
+        dataset_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Dataset Ids
+          description: IDs of datasets for the model.
+      type: object
+      required:
+      - name
+      - dataset_ids
+      title: PostModel
+    DataPlane:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane.
+        name:
+          type: string
+          title: Name
+          description: Name of data plane.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        description:
+          type: string
+          title: Description
+          description: Description of data plane.
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: ID of the data plane's underlying user.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        last_check_in_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Check In Time
+          description: Last time the data plane was confirmed to be connected.
+        capabilities:
+          $ref: '#/components/schemas/DataPlaneCapabilities'
+          description: Capabilities for this data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - description
+      - user_id
+      - infrastructure
+      - last_check_in_time
+      - capabilities
+      title: DataPlane
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    AggregationKind:
+      type: string
+      enum:
+      - default
+      - custom
+      title: AggregationKind
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    PutModelMetricSpec:
+      properties:
+        aggregation_specs:
+          items:
+            $ref: '#/components/schemas/AggregationSpec'
+          type: array
+          title: Aggregation Specs
+          description: List of aggregations configured for the metric spec.
+      type: object
+      required:
+      - aggregation_specs
+      title: PutModelMetricSpec
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     User:
       properties:
         created_at:
@@ -1196,188 +1369,19 @@ components:
       - user_type
       - organization_name
       title: User
-    SortOrder:
+    ModelsSort:
       type: string
       enum:
-      - asc
-      - desc
-      title: SortOrder
-    PatchModel:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the model.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of model.
-        dataset_ids:
-          anyOf:
-          - items:
-              type: string
-              format: uuid
-            type: array
-          - type: 'null'
-          title: Dataset Ids
-          description: IDs of datasets for the model.
-        agent_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Agent Id
-          description: ID of the unregistered agent to register with this model.
-      type: object
-      title: PatchModel
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    GenerateMetricsSpecRequest:
-      properties:
-        dataset_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Dataset Ids
-          description: List of dataset IDs for which to generate a model metrics spec. Datasets must be in the project in the path.
-      type: object
-      required:
-      - dataset_ids
-      title: GenerateMetricsSpecRequest
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
-    ResourceList_Model_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Model'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Model]
-    MetricsArgSpec:
-      properties:
-        arg_key:
-          type: string
-          title: Arg Key
-          description: Name of the argument.
-        arg_value:
-          title: Arg Value
-          description: Value of the argument.
-      type: object
-      required:
-      - arg_key
-      - arg_value
-      title: MetricsArgSpec
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    ModelProblemType:
-      type: string
-      enum:
-      - regression
-      - binary_classification
-      - arthur_shield
-      - custom
-      - multiclass_classification
-      - agentic_trace
-      title: ModelProblemType
-    ConnectorType:
-      type: string
-      enum:
-      - shield
-      - S3
-      - GCS
-      - BigQuery
-      - engine_internal
-      - odbc
-      - snowflake
-      - databricks
-      - AzureBlob
-      title: ConnectorType
-    AggregationSpec:
-      properties:
-        aggregation_id:
-          type: string
-          format: uuid
-          title: Aggregation Id
-          description: Unique identifier of the aggregation.
-        aggregation_init_args:
-          items:
-            $ref: '#/components/schemas/MetricsArgSpec'
-          type: array
-          title: Aggregation Init Args
-          description: List of arguments to the aggregation's init function.
-        aggregation_args:
-          items:
-            $ref: '#/components/schemas/MetricsArgSpec'
-          type: array
-          title: Aggregation Args
-          description: List of arguments to the aggregation's aggregate function.
-        aggregation_kind:
-          $ref: '#/components/schemas/AggregationKind'
-          description: Type of aggregation to use for the metric spec.
-          default: default
-        aggregation_version:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Aggregation Version
-          description: Version of the custom aggregation to use for the metric spec.
-      type: object
-      required:
-      - aggregation_id
-      - aggregation_init_args
-      - aggregation_args
-      title: AggregationSpec
+      - created_at
+      - updated_at
+      - name
+      title: ModelsSort
   securitySchemes:
-    API Key:
-      type: http
-      description: Bearer token authentication with an API key
-      scheme: bearer
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
