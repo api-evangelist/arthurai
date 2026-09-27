@@ -49,6 +49,35 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    PIIEvalConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: List of PII entity types to disable (e.g. ['EMAIL_ADDRESS', 'PHONE_NUMBER'])
+        pii_confidence_threshold:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Pii Confidence Threshold
+          description: Minimum confidence score for a PII entity to be flagged
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: List of values that should not be flagged as PII
+      type: object
+      title: PIIEvalConfig
+      description: Configuration for PII detection evals.
     AnthropicThinkingParam-Output:
       properties:
         type:
@@ -98,56 +127,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    PIIEvalConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: List of PII entity types to disable (e.g. ['EMAIL_ADDRESS', 'PHONE_NUMBER'])
-        pii_confidence_threshold:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Pii Confidence Threshold
-          description: Minimum confidence score for a PII entity to be flagged
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: List of values that should not be flagged as PII
-      type: object
-      title: PIIEvalConfig
-      description: Configuration for PII detection evals.
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    ReasoningEffortEnum:
-      type: string
-      enum:
-      - none
-      - minimal
-      - low
-      - medium
-      - high
-      - default
-      title: ReasoningEffortEnum
     CreateMLEvalRequest:
       properties:
         eval_type:
@@ -165,6 +144,29 @@ components:
       - eval_type
       - config
       title: CreateMLEvalRequest
+    ToxicityEvalConfig:
+      properties:
+        toxicity_threshold:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Toxicity Threshold
+          description: Minimum toxicity score for text to be flagged
+      type: object
+      title: ToxicityEvalConfig
+      description: Configuration for toxicity detection evals.
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
     LogitBiasItem:
       properties:
         token_id:
@@ -182,19 +184,6 @@ components:
       - token_id
       - bias
       title: LogitBiasItem
-    ToxicityEvalConfig:
-      properties:
-        toxicity_threshold:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Toxicity Threshold
-          description: Minimum toxicity score for text to be flagged
-      type: object
-      title: ToxicityEvalConfig
-      description: Configuration for toxicity detection evals.
     PromptInjectionEvalConfig:
       properties: {}
       type: object
@@ -270,6 +259,17 @@ components:
       - name
       - created_at
       title: Eval
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
     EvalKind:
       type: string
       enum:

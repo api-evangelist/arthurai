@@ -255,69 +255,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    FeedbackRequest:
-      properties:
-        target:
-          $ref: '#/components/schemas/InferenceFeedbackTarget'
-        score:
-          type: integer
-          title: Score
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-      type: object
-      required:
-      - target
-      - score
-      - reason
-      title: FeedbackRequest
-    InferenceFeedbackResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        inference_id:
-          type: string
-          title: Inference Id
-        target:
-          $ref: '#/components/schemas/InferenceFeedbackTarget'
-        score:
-          type: integer
-          title: Score
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - id
-      - inference_id
-      - target
-      - score
-      - created_at
-      - updated_at
-      title: InferenceFeedbackResponse
     QueryFeedbackResponse:
       properties:
         feedback:
@@ -372,6 +309,69 @@ components:
         page_size: 10
         total_count: 2
         total_pages: 1
+    InferenceFeedbackResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        inference_id:
+          type: string
+          title: Inference Id
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - inference_id
+      - target
+      - score
+      - created_at
+      - updated_at
+      title: InferenceFeedbackResponse
+    FeedbackRequest:
+      properties:
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      type: object
+      required:
+      - target
+      - score
+      - reason
+      title: FeedbackRequest
     InferenceFeedbackTarget:
       type: string
       enum:

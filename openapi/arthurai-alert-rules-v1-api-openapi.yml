@@ -572,118 +572,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    IntervalUnit:
-      type: string
-      enum:
-      - seconds
-      - minutes
-      - hours
-      - days
-      title: IntervalUnit
-    PostAlertRule:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The name of the alert rule.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The description of the alert rule.
-        threshold:
-          type: number
-          title: Threshold
-          description: The threshold that will trigger the alert rule.
-        bound:
-          $ref: '#/components/schemas/AlertBound'
-          description: The bound of the alert rule.
-        query:
-          type: string
-          title: Query
-          description: The query of the alert rule.
-        metric_name:
-          type: string
-          title: Metric Name
-          description: The name of the metric returned by the alert rule query.
-        interval:
-          $ref: '#/components/schemas/AlertRuleInterval'
-          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
-        notification_webhook_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Notification Webhook Ids
-          description: The notification webhook IDs where the alert rule will send alert notification.
-          default: []
-      type: object
-      required:
-      - name
-      - threshold
-      - bound
-      - query
-      - metric_name
-      - interval
-      title: PostAlertRule
-    ResourceList_AlertRule_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/AlertRule'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[AlertRule]
-    AlertBound:
-      type: string
-      enum:
-      - upper_bound
-      - lower_bound
-      title: AlertBound
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     PatchAlertRule:
       properties:
         name:
@@ -737,6 +625,37 @@ components:
           description: The notification webhook IDs where the alert rule will send alert notification.
       type: object
       title: PatchAlertRule
+    AlertRuleSQLValidationResp:
+      properties:
+        has_metric_timestamp_col:
+          type: boolean
+          title: Has Metric Timestamp Col
+          description: The name of the metric returned by the alert rule query.
+        has_metric_value_col:
+          type: boolean
+          title: Has Metric Value Col
+          description: The name of the metric returned by the alert rule query.
+        has_time_templates:
+          type: boolean
+          title: Has Time Templates
+          description: The name of the metric returned by the alert rule query.
+        has_interval_templates:
+          type: boolean
+          title: Has Interval Templates
+          description: The name of the metric returned by the alert rule query.
+      type: object
+      required:
+      - has_metric_timestamp_col
+      - has_metric_value_col
+      - has_time_templates
+      - has_interval_templates
+      title: AlertRuleSQLValidationResp
+    AlertBound:
+      type: string
+      enum:
+      - upper_bound
+      - lower_bound
+      title: AlertBound
     AlertRule:
       properties:
         created_at:
@@ -826,99 +745,6 @@ components:
       - interval
       - notification_webhooks
       title: AlertRule
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    AlertRuleSort:
-      type: string
-      enum:
-      - created_at
-      - name
-      title: AlertRuleSort
-    AlertRuleSQLValidationResp:
-      properties:
-        has_metric_timestamp_col:
-          type: boolean
-          title: Has Metric Timestamp Col
-          description: The name of the metric returned by the alert rule query.
-        has_metric_value_col:
-          type: boolean
-          title: Has Metric Value Col
-          description: The name of the metric returned by the alert rule query.
-        has_time_templates:
-          type: boolean
-          title: Has Time Templates
-          description: The name of the metric returned by the alert rule query.
-        has_interval_templates:
-          type: boolean
-          title: Has Interval Templates
-          description: The name of the metric returned by the alert rule query.
-      type: object
-      required:
-      - has_metric_timestamp_col
-      - has_metric_value_col
-      - has_time_templates
-      - has_interval_templates
-      title: AlertRuleSQLValidationResp
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     User:
       properties:
         created_at:
@@ -995,6 +821,23 @@ components:
       - user_type
       - organization_name
       title: User
+    ValidateAlertRuleQueryReq:
+      properties:
+        query:
+          type: string
+          title: Query
+          description: The query of the alert rule.
+      type: object
+      required:
+      - query
+      title: ValidateAlertRuleQueryReq
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
     AlertRuleNotificationWebhook:
       properties:
         id:
@@ -1011,16 +854,159 @@ components:
       - id
       - name
       title: AlertRuleNotificationWebhook
-    ValidateAlertRuleQueryReq:
+    PostAlertRule:
       properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the alert rule.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the alert rule.
+        threshold:
+          type: number
+          title: Threshold
+          description: The threshold that will trigger the alert rule.
+        bound:
+          $ref: '#/components/schemas/AlertBound'
+          description: The bound of the alert rule.
         query:
           type: string
           title: Query
           description: The query of the alert rule.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: The name of the metric returned by the alert rule query.
+        interval:
+          $ref: '#/components/schemas/AlertRuleInterval'
+          description: The interval of the alert rule, commonly '1 day', '1 hour', etc.
+        notification_webhook_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Notification Webhook Ids
+          description: The notification webhook IDs where the alert rule will send alert notification.
+          default: []
       type: object
       required:
+      - name
+      - threshold
+      - bound
       - query
-      title: ValidateAlertRuleQueryReq
+      - metric_name
+      - interval
+      title: PostAlertRule
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    ResourceList_AlertRule_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AlertRule'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AlertRule]
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     AlertRuleInterval:
       properties:
         unit:
@@ -1035,6 +1021,20 @@ components:
       - unit
       - count
       title: AlertRuleInterval
+    AlertRuleSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: AlertRuleSort
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

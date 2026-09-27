@@ -384,243 +384,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ResourceList_DataPlaneAssociation_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataPlaneAssociation'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataPlaneAssociation]
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    DataPlaneAssociation:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane association.
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-        data_plane:
-          anyOf:
-          - $ref: '#/components/schemas/DataPlane'
-          - type: 'null'
-          description: Data plane associated with the project.
-        project:
-          anyOf:
-          - $ref: '#/components/schemas/Project'
-          - type: 'null'
-          description: Project associated with the data plane.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - data_plane_id
-      - project_id
-      title: DataPlaneAssociation
-    PostDataPlaneAssociation:
-      properties:
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-      type: object
-      required:
-      - data_plane_id
-      - project_id
-      title: PostDataPlaneAssociation
-    DataPlaneAssociationSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      title: DataPlaneAssociationSort
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    Project:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the project.
-        name:
-          type: string
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        total_artifacts:
-          type: integer
-          title: Total Artifacts
-          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - total_artifacts
-      title: Project
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     DataPlane:
       properties:
         created_at:
@@ -682,6 +445,243 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
+    PostDataPlaneAssociation:
+      properties:
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+      type: object
+      required:
+      - data_plane_id
+      - project_id
+      title: PostDataPlaneAssociation
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceList_DataPlaneAssociation_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DataPlaneAssociation'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataPlaneAssociation]
+    DataPlaneAssociation:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane association.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+        data_plane:
+          anyOf:
+          - $ref: '#/components/schemas/DataPlane'
+          - type: 'null'
+          description: Data plane associated with the project.
+        project:
+          anyOf:
+          - $ref: '#/components/schemas/Project'
+          - type: 'null'
+          description: Project associated with the data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - data_plane_id
+      - project_id
+      title: DataPlaneAssociation
+    DataPlaneAssociationSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      title: DataPlaneAssociationSort
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    Project:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the project.
+        name:
+          type: string
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        total_artifacts:
+          type: integer
+          title: Total Artifacts
+          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - total_artifacts
+      title: Project
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

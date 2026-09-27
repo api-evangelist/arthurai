@@ -771,15 +771,335 @@ components:
       - name
       - value
       title: VariableTemplateValue
-    MessageRole:
+    ToolCall:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool call. Currently the only type supported is 'function'.
+          default: function
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the tool call
+        function:
+          $ref: '#/components/schemas/ToolCallFunction'
+          description: Function details
+      type: object
+      required:
+      - id
+      - function
+      title: ToolCall
+    ToolChoiceFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the function
+      type: object
+      required:
+      - name
+      title: ToolChoiceFunction
+    OpenAIMessage-Input:
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+          description: Role of the message
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/OpenAIMessageItem'
+            type: array
+          - type: 'null'
+          title: Content
+          description: Content of the message
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+          description: Tool calls made by assistant
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+          description: ID of the tool call this message is responding to
+      type: object
+      required:
+      - role
+      title: OpenAIMessage
+      description: 'The message schema class for the prompts playground.
+
+        This class adheres to OpenAI''s message schema.'
+    OpenAIMessageType:
       type: string
       enum:
-      - developer
-      - system
-      - user
-      - assistant
-      - tool
-      title: MessageRole
+      - text
+      - image_url
+      - input_audio
+      title: OpenAIMessageType
+    LLMResponseSchema-Output:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the schema
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the schema
+        schema:
+          $ref: '#/components/schemas/JsonSchema'
+          description: The JSON schema object
+        strict:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Strict
+          description: Whether to enforce strict schema adherence
+      type: object
+      required:
+      - name
+      - schema
+      title: LLMResponseSchema
+    ToolChoice:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool choice. Should always be 'function'
+          default: function
+        function:
+          anyOf:
+          - $ref: '#/components/schemas/ToolChoiceFunction'
+          - type: 'null'
+          description: The tool choice fucntion name
+      type: object
+      title: ToolChoice
+    UnsavedPromptVariablesListResponse:
+      properties:
+        variables:
+          items:
+            type: string
+          type: array
+          title: Variables
+          description: List of variables needed to run an unsaved prompt
+      type: object
+      required:
+      - variables
+      title: UnsavedPromptVariablesListResponse
+    Body_add_tag_to_agentic_prompt_version_api_v1_tasks__task_id__prompts__prompt_name__versions__prompt_version__tags_put:
+      properties:
+        tag:
+          type: string
+          title: Tag
+          description: Tag to add to this prompt version
+      type: object
+      required:
+      - tag
+      title: Body_add_tag_to_agentic_prompt_version_api_v1_tasks__task_id__prompts__prompt_name__versions__prompt_version__tags_put
+    LLMPromptRequestConfigSettings:
+      properties:
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+          description: Request timeout in seconds
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+          description: Sampling temperature (0.0 to 2.0). Higher values make output more random
+        top_p:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Top P
+          description: Top-p sampling parameter (0.0 to 1.0). Alternative to temperature
+        max_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Tokens
+          description: Maximum number of tokens to generate in the response
+        stop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stop
+          description: Stop sequence(s) where the model should stop generating
+        presence_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Presence Penalty
+          description: Presence penalty (-2.0 to 2.0). Positive values penalize new tokens based on their presence
+        frequency_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Frequency Penalty
+          description: Frequency penalty (-2.0 to 2.0). Positive values penalize tokens based on frequency
+        seed:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Seed
+          description: Random seed for reproducible outputs
+        logprobs:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Logprobs
+          description: Whether to return log probabilities of output tokens
+        top_logprobs:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Top Logprobs
+          description: Number of most likely tokens to return log probabilities for (1-20)
+        logit_bias:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LogitBiasItem'
+            type: array
+          - type: 'null'
+          title: Logit Bias
+          description: Modify likelihood of specified tokens appearing in completion
+        max_completion_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Completion Tokens
+          description: Maximum number of completion tokens (alternative to max_tokens)
+        reasoning_effort:
+          anyOf:
+          - $ref: '#/components/schemas/ReasoningEffortEnum'
+          - type: 'null'
+          description: Reasoning effort level for models that support it (e.g., OpenAI o1 series)
+        thinking:
+          anyOf:
+          - $ref: '#/components/schemas/AnthropicThinkingParam-Input'
+          - type: 'null'
+          description: Anthropic-specific thinking parameter for Claude models
+        response_format:
+          anyOf:
+          - $ref: '#/components/schemas/LLMResponseFormat-Input'
+          - type: 'null'
+          description: 'Response format specification (e.g., {''type'': ''json_object''} for JSON mode)'
+        tool_choice:
+          anyOf:
+          - $ref: '#/components/schemas/ToolChoiceEnum'
+          - $ref: '#/components/schemas/ToolChoice'
+          - type: 'null'
+          title: Tool Choice
+          description: Tool choice configuration ('auto', 'none', 'required', or a specific tool selection)
+        stream_options:
+          anyOf:
+          - $ref: '#/components/schemas/StreamOptions'
+          - type: 'null'
+          description: Additional streaming configuration options
+      type: object
+      title: LLMPromptRequestConfigSettings
+    AgenticPrompt:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the agentic prompt
+        messages:
+          items:
+            $ref: '#/components/schemas/OpenAIMessage-Output'
+          type: array
+          title: Messages
+          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
+        model_name:
+          type: string
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: string
+            const: empty
+          title: Model Provider
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). The sentinel value 'empty' indicates the system default placeholder has not been configured.
+        version:
+          type: integer
+          title: Version
+          description: Version of the agentic prompt
+          default: 1
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LLMTool-Output'
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Available tools/functions for the model to call, in OpenAI function calling format
+        variables:
+          items:
+            type: string
+          type: array
+          title: Variables
+          description: List of variable names for the agentic prompt
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: List of tags for this agentic prompt version
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMConfigSettings'
+          - type: 'null'
+          description: LLM configurations for this prompt (e.g. temperature, max_tokens, etc.)
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the prompt was created.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Time that this prompt was deleted
+      type: object
+      required:
+      - name
+      - messages
+      - model_name
+      - model_provider
+      - created_at
+      title: AgenticPrompt
+    RenderedPromptResponse:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/OpenAIMessage-Output'
+          type: array
+          title: Messages
+          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
+      type: object
+      required:
+      - messages
+      title: RenderedPromptResponse
     AgenticPromptVersionListResponse:
       properties:
         versions:
@@ -797,19 +1117,6 @@ components:
       - versions
       - count
       title: AgenticPromptVersionListResponse
-    AnthropicThinkingParam-Input:
-      properties:
-        type:
-          type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
-          type: integer
-          title: Budget Tokens
-      type: object
-      title: AnthropicThinkingParam
     AgenticPromptVersionResponse:
       properties:
         version:
@@ -865,115 +1172,101 @@ components:
       - num_messages
       - num_tools
       title: AgenticPromptVersionResponse
-    LLMTool-Output:
+    StreamOptions:
       properties:
-        type:
-          type: string
-          title: Type
-          description: The type of tool. Should always be 'function'
-          default: function
-        function:
-          $ref: '#/components/schemas/ToolFunction-Output'
-          description: The function definition
-        strict:
+        include_usage:
           anyOf:
           - type: boolean
           - type: 'null'
-          title: Strict
-          description: Whether the function definition should use OpenAI's strict mode
+          title: Include Usage
+          description: Whether to include usage information in the stream
       type: object
-      required:
-      - function
-      title: LLMTool
-    OpenAIMessageType:
+      title: StreamOptions
+    ToolChoiceEnum:
       type: string
       enum:
-      - text
-      - image_url
-      - input_audio
-      title: OpenAIMessageType
-    UnsavedPromptRenderingRequest:
+      - auto
+      - none
+      - required
+      title: ToolChoiceEnum
+    AnthropicThinkingParam-Output:
       properties:
-        completion_request:
-          $ref: '#/components/schemas/VariableRenderingRequest'
-          description: Rendering configuration for the unsaved prompt
-        messages:
-          items:
-            $ref: '#/components/schemas/OpenAIMessage-Input'
-          type: array
-          title: Messages
-          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
-      type: object
-      required:
-      - messages
-      title: UnsavedPromptRenderingRequest
-      description: Request schema for rendering an unsaved agentic prompt with variables
-    UnsavedPromptVariablesRequest:
-      properties:
-        messages:
-          items:
-            $ref: '#/components/schemas/OpenAIMessage-Input'
-          type: array
-          title: Messages
-          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
-      type: object
-      required:
-      - messages
-      title: UnsavedPromptVariablesRequest
-      description: Request schema for getting the list of variables needed from an unsaved prompt's messages
-    LogitBiasItem:
-      properties:
-        token_id:
-          type: integer
-          title: Token Id
-          description: Token ID to bias
-        bias:
-          type: number
-          maximum: 100.0
-          minimum: -100.0
-          title: Bias
-          description: Bias value between -100 and 100
-      type: object
-      required:
-      - token_id
-      - bias
-      title: LogitBiasItem
-    SavedPromptRenderingRequest:
-      properties:
-        completion_request:
-          $ref: '#/components/schemas/VariableRenderingRequest'
-          description: Rendering configuration for the unsaved prompt
-      type: object
-      title: SavedPromptRenderingRequest
-      description: Request schema for rendering an unsaved agentic prompt with variables
-    LLMResponseFormatEnum:
-      type: string
-      enum:
-      - text
-      - json_object
-      - json_schema
-      title: LLMResponseFormatEnum
-    ToolFunction-Output:
-      properties:
-        name:
+        type:
           type: string
-          title: Name
-          description: The name of the tool/function
-        description:
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      additionalProperties: false
+      type: object
+      title: AnthropicThinkingParam
+    OpenAIMessage-Output:
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+          description: Role of the message
+        name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Description
-          description: Description of what the tool does
-        parameters:
+          title: Name
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        content:
           anyOf:
-          - $ref: '#/components/schemas/JsonSchema'
+          - type: string
+          - items:
+              $ref: '#/components/schemas/OpenAIMessageItem'
+            type: array
           - type: 'null'
-          description: The function's parameter schema
+          title: Content
+          description: Content of the message
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+          description: Tool calls made by assistant
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+          description: ID of the tool call this message is responding to
       type: object
       required:
-      - name
-      title: ToolFunction
+      - role
+      title: OpenAIMessage
+      description: 'The message schema class for the prompts playground.
+
+        This class adheres to OpenAI''s message schema.'
+    LLMResponseFormat-Input:
+      properties:
+        type:
+          $ref: '#/components/schemas/LLMResponseFormatEnum'
+          description: 'Response format type: ''text'', ''json_object'', or ''json_schema'''
+          examples:
+          - json_schema
+        json_schema:
+          anyOf:
+          - $ref: '#/components/schemas/LLMResponseSchema-Input'
+          - type: 'null'
+          description: JSON schema definition (required when type is 'json_schema')
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      title: LLMResponseFormat
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
     JsonPropertySchema:
       properties:
         type:
@@ -1003,162 +1296,42 @@ components:
           description: For array types, describes the items
       type: object
       title: JsonPropertySchema
-    CompletionRequest:
+    AgenticPromptRunResponse:
       properties:
-        messages:
-          items:
-            $ref: '#/components/schemas/OpenAIMessage-Input'
-          type: array
-          title: Messages
-          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
-        model_name:
-          type: string
-          title: Model Name
-          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
-        model_provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure')
-        tools:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        tool_calls:
           anyOf:
           - items:
-              $ref: '#/components/schemas/LLMTool-Input'
+              $ref: '#/components/schemas/ChatCompletionMessageToolCall'
             type: array
           - type: 'null'
-          title: Tools
-          description: Available tools/functions for the model to call, in OpenAI function calling format
-        config:
+          title: Tool Calls
+        cost:
+          type: string
+          title: Cost
+        input_tokens:
           anyOf:
-          - $ref: '#/components/schemas/LLMPromptRequestConfigSettings'
+          - type: integer
           - type: 'null'
-          description: LLM configurations for this prompt (e.g. temperature, max_tokens, etc.)
-        completion_request:
-          $ref: '#/components/schemas/PromptCompletionRequest'
-          description: Run configuration for the unsaved prompt
-      type: object
-      required:
-      - messages
-      - model_name
-      - model_provider
-      title: CompletionRequest
-      description: Request schema for running an unsaved agentic prompt
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ReasoningEffortEnum:
-      type: string
-      enum:
-      - none
-      - minimal
-      - low
-      - medium
-      - high
-      - default
-      title: ReasoningEffortEnum
-    ToolChoiceFunction:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The name of the function
-      type: object
-      required:
-      - name
-      title: ToolChoiceFunction
-    ToolCall:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: The type of tool call. Currently the only type supported is 'function'.
-          default: function
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the tool call
-        function:
-          $ref: '#/components/schemas/ToolCallFunction'
-          description: Function details
-      type: object
-      required:
-      - id
-      - function
-      title: ToolCall
-    Body_add_tag_to_agentic_prompt_version_api_v1_tasks__task_id__prompts__prompt_name__versions__prompt_version__tags_put:
-      properties:
-        tag:
-          type: string
-          title: Tag
-          description: Tag to add to this prompt version
-      type: object
-      required:
-      - tag
-      title: Body_add_tag_to_agentic_prompt_version_api_v1_tasks__task_id__prompts__prompt_name__versions__prompt_version__tags_put
-    LLMResponseFormat-Output:
-      properties:
-        type:
-          $ref: '#/components/schemas/LLMResponseFormatEnum'
-          description: 'Response format type: ''text'', ''json_object'', or ''json_schema'''
-          examples:
-          - json_schema
-        json_schema:
+          title: Input Tokens
+        output_tokens:
           anyOf:
-          - $ref: '#/components/schemas/LLMResponseSchema-Output'
+          - type: integer
           - type: 'null'
-          description: JSON schema definition (required when type is 'json_schema')
-      additionalProperties: false
-      type: object
-      required:
-      - type
-      title: LLMResponseFormat
-    LLMResponseFormat-Input:
-      properties:
-        type:
-          $ref: '#/components/schemas/LLMResponseFormatEnum'
-          description: 'Response format type: ''text'', ''json_object'', or ''json_schema'''
-          examples:
-          - json_schema
-        json_schema:
+          title: Output Tokens
+        total_tokens:
           anyOf:
-          - $ref: '#/components/schemas/LLMResponseSchema-Input'
+          - type: integer
           - type: 'null'
-          description: JSON schema definition (required when type is 'json_schema')
-      additionalProperties: false
+          title: Total Tokens
       type: object
       required:
-      - type
-      title: LLMResponseFormat
+      - cost
+      title: AgenticPromptRunResponse
     VariableRenderingRequest:
       properties:
         variables:
@@ -1179,57 +1352,76 @@ components:
           default: false
       type: object
       title: VariableRenderingRequest
-    EvalKind:
+    SavedPromptRenderingRequest:
+      properties:
+        completion_request:
+          $ref: '#/components/schemas/VariableRenderingRequest'
+          description: Rendering configuration for the unsaved prompt
+      type: object
+      title: SavedPromptRenderingRequest
+      description: Request schema for rendering an unsaved agentic prompt with variables
+    LogitBiasItem:
+      properties:
+        token_id:
+          type: integer
+          title: Token Id
+          description: Token ID to bias
+        bias:
+          type: number
+          maximum: 100.0
+          minimum: -100.0
+          title: Bias
+          description: Bias value between -100 and 100
+      type: object
+      required:
+      - token_id
+      - bias
+      title: LogitBiasItem
+    LLMResponseFormatEnum:
       type: string
       enum:
-      - llm_as_a_judge
-      - pii
-      - pii_v1
-      - toxicity
-      - prompt_injection
-      title: EvalKind
-      description: Discriminator for all eval types stored in the llm_evals table.
-    LLMResponseSchema-Output:
+      - text
+      - json_object
+      - json_schema
+      title: LLMResponseFormatEnum
+    ToolFunction-Output:
       properties:
         name:
           type: string
           title: Name
-          description: Name of the schema
+          description: The name of the tool/function
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-          description: Description of the schema
-        schema:
-          $ref: '#/components/schemas/JsonSchema'
-          description: The JSON schema object
-        strict:
+          description: Description of what the tool does
+        parameters:
           anyOf:
-          - type: boolean
+          - $ref: '#/components/schemas/JsonSchema'
           - type: 'null'
-          title: Strict
-          description: Whether to enforce strict schema adherence
+          description: The function's parameter schema
       type: object
       required:
       - name
-      - schema
-      title: LLMResponseSchema
-    InputAudio:
+      title: ToolFunction
+    LLMGetAllMetadataListResponse:
       properties:
-        data:
-          type: string
-          title: Data
-          description: Base64 encoded audio data
-        format:
-          type: string
-          title: Format
-          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
+        llm_metadata:
+          items:
+            $ref: '#/components/schemas/LLMGetAllMetadataResponse'
+          type: array
+          title: Llm Metadata
+          description: List of llm asset metadata
+        count:
+          type: integer
+          title: Count
+          description: Total number of llm assets matching filters
       type: object
       required:
-      - data
-      - format
-      title: InputAudio
+      - llm_metadata
+      - count
+      title: LLMGetAllMetadataListResponse
     LLMGetAllMetadataResponse:
       properties:
         name:
@@ -1274,134 +1466,73 @@ components:
       - latest_version_created_at
       - deleted_versions
       title: LLMGetAllMetadataResponse
-    AnthropicThinkingParam-Output:
+    InputAudio:
       properties:
-        type:
+        data:
           type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
-          type: integer
-          title: Budget Tokens
-      additionalProperties: false
-      type: object
-      title: AnthropicThinkingParam
-    ToolChoiceEnum:
-      type: string
-      enum:
-      - auto
-      - none
-      - required
-      title: ToolChoiceEnum
-    ChatCompletionMessageToolCall:
-      properties: {}
-      additionalProperties: true
-      type: object
-      title: ChatCompletionMessageToolCall
-    ImageURL:
-      properties:
-        url:
+          title: Data
+          description: Base64 encoded audio data
+        format:
           type: string
-          title: Url
-          description: URL of the image
+          title: Format
+          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
       type: object
       required:
-      - url
-      title: ImageURL
-    OpenAIMessageItem:
+      - data
+      - format
+      title: InputAudio
+    LLMResponseSchema-Input:
       properties:
-        type:
-          $ref: '#/components/schemas/OpenAIMessageType'
-          description: Type of the message (either 'text', 'image_url', or 'input_audio')
-        text:
+        name:
+          type: string
+          title: Name
+          description: Name of the schema
+        description:
           anyOf:
           - type: string
           - type: 'null'
-          title: Text
-          description: Text content of the message if type is 'text'
-        image_url:
-          anyOf:
-          - $ref: '#/components/schemas/ImageURL'
-          - type: 'null'
-          description: Image URL content of the message if type is 'image_url'
-        input_audio:
-          anyOf:
-          - $ref: '#/components/schemas/InputAudio'
-          - type: 'null'
-          description: Input audio content of the message if type is 'input_audio'
-      type: object
-      required:
-      - type
-      title: OpenAIMessageItem
-    PromptCompletionRequest:
-      properties:
-        variables:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/VariableTemplateValue'
-            type: array
-          - type: 'null'
-          title: Variables
-          description: List of VariableTemplateValue fields that specify the values to fill in for each template in the prompt
-          default: []
+          title: Description
+          description: Description of the schema
+        schema:
+          $ref: '#/components/schemas/JsonSchema'
+          description: The JSON schema object
         strict:
           anyOf:
           - type: boolean
           - type: 'null'
           title: Strict
-          description: Whether to enforce strict validation of variables. If True, any variables that are found in the prompt but not in the variables list will raise an error.
-          default: false
-        stream:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Stream
-          description: Whether to stream the response
-          default: false
+          description: Whether to enforce strict schema adherence
       type: object
-      title: PromptCompletionRequest
-      description: Request schema for running an agentic prompt
-    LLMMetadataSortField:
-      type: string
-      enum:
+      required:
       - name
-      - latest_version_created_at
-      title: LLMMetadataSortField
-      description: Sort field options for the LLM evals/prompts metadata list endpoints.
-    LLMTool-Input:
+      - schema
+      title: LLMResponseSchema
+    ValidationError:
       properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
         type:
           type: string
-          title: Type
-          description: The type of tool. Should always be 'function'
-          default: function
-        function:
-          $ref: '#/components/schemas/ToolFunction-Input'
-          description: The function definition
-        strict:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Strict
-          description: Whether the function definition should use OpenAI's strict mode
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - function
-      title: LLMTool
-    RenderedPromptResponse:
-      properties:
-        messages:
-          items:
-            $ref: '#/components/schemas/OpenAIMessage-Output'
-          type: array
-          title: Messages
-          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
-      type: object
-      required:
-      - messages
-      title: RenderedPromptResponse
+      - loc
+      - msg
+      - type
+      title: ValidationError
     LLMConfigSettings:
       properties:
         timeout:
@@ -1510,176 +1641,250 @@ components:
       additionalProperties: false
       type: object
       title: LLMConfigSettings
-    LLMGetAllMetadataListResponse:
+    OpenAIMessageItem:
       properties:
-        llm_metadata:
-          items:
-            $ref: '#/components/schemas/LLMGetAllMetadataResponse'
-          type: array
-          title: Llm Metadata
-          description: List of llm asset metadata
-        count:
-          type: integer
-          title: Count
-          description: Total number of llm assets matching filters
-      type: object
-      required:
-      - llm_metadata
-      - count
-      title: LLMGetAllMetadataListResponse
-    UnsavedPromptVariablesListResponse:
-      properties:
-        variables:
-          items:
-            type: string
-          type: array
-          title: Variables
-          description: List of variables needed to run an unsaved prompt
-      type: object
-      required:
-      - variables
-      title: UnsavedPromptVariablesListResponse
-    LLMPromptRequestConfigSettings:
-      properties:
-        timeout:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Timeout
-          description: Request timeout in seconds
-        temperature:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Temperature
-          description: Sampling temperature (0.0 to 2.0). Higher values make output more random
-        top_p:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Top P
-          description: Top-p sampling parameter (0.0 to 1.0). Alternative to temperature
-        max_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Tokens
-          description: Maximum number of tokens to generate in the response
-        stop:
+        type:
+          $ref: '#/components/schemas/OpenAIMessageType'
+          description: Type of the message (either 'text', 'image_url', or 'input_audio')
+        text:
           anyOf:
           - type: string
           - type: 'null'
-          title: Stop
-          description: Stop sequence(s) where the model should stop generating
-        presence_penalty:
+          title: Text
+          description: Text content of the message if type is 'text'
+        image_url:
           anyOf:
-          - type: number
+          - $ref: '#/components/schemas/ImageURL'
           - type: 'null'
-          title: Presence Penalty
-          description: Presence penalty (-2.0 to 2.0). Positive values penalize new tokens based on their presence
-        frequency_penalty:
+          description: Image URL content of the message if type is 'image_url'
+        input_audio:
           anyOf:
-          - type: number
+          - $ref: '#/components/schemas/InputAudio'
           - type: 'null'
-          title: Frequency Penalty
-          description: Frequency penalty (-2.0 to 2.0). Positive values penalize tokens based on frequency
-        seed:
+          description: Input audio content of the message if type is 'input_audio'
+      type: object
+      required:
+      - type
+      title: OpenAIMessageItem
+    LLMResponseFormat-Output:
+      properties:
+        type:
+          $ref: '#/components/schemas/LLMResponseFormatEnum'
+          description: 'Response format type: ''text'', ''json_object'', or ''json_schema'''
+          examples:
+          - json_schema
+        json_schema:
           anyOf:
-          - type: integer
+          - $ref: '#/components/schemas/LLMResponseSchema-Output'
           - type: 'null'
-          title: Seed
-          description: Random seed for reproducible outputs
-        logprobs:
+          description: JSON schema definition (required when type is 'json_schema')
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      title: LLMResponseFormat
+    EvalKind:
+      type: string
+      enum:
+      - llm_as_a_judge
+      - pii
+      - pii_v1
+      - toxicity
+      - prompt_injection
+      title: EvalKind
+      description: Discriminator for all eval types stored in the llm_evals table.
+    PromptCompletionRequest:
+      properties:
+        variables:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/VariableTemplateValue'
+            type: array
+          - type: 'null'
+          title: Variables
+          description: List of VariableTemplateValue fields that specify the values to fill in for each template in the prompt
+          default: []
+        strict:
           anyOf:
           - type: boolean
           - type: 'null'
-          title: Logprobs
-          description: Whether to return log probabilities of output tokens
-        top_logprobs:
+          title: Strict
+          description: Whether to enforce strict validation of variables. If True, any variables that are found in the prompt but not in the variables list will raise an error.
+          default: false
+        stream:
           anyOf:
-          - type: integer
+          - type: boolean
           - type: 'null'
-          title: Top Logprobs
-          description: Number of most likely tokens to return log probabilities for (1-20)
-        logit_bias:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/LogitBiasItem'
-            type: array
-          - type: 'null'
-          title: Logit Bias
-          description: Modify likelihood of specified tokens appearing in completion
-        max_completion_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Completion Tokens
-          description: Maximum number of completion tokens (alternative to max_tokens)
-        reasoning_effort:
-          anyOf:
-          - $ref: '#/components/schemas/ReasoningEffortEnum'
-          - type: 'null'
-          description: Reasoning effort level for models that support it (e.g., OpenAI o1 series)
-        thinking:
-          anyOf:
-          - $ref: '#/components/schemas/AnthropicThinkingParam-Input'
-          - type: 'null'
-          description: Anthropic-specific thinking parameter for Claude models
-        response_format:
-          anyOf:
-          - $ref: '#/components/schemas/LLMResponseFormat-Input'
-          - type: 'null'
-          description: 'Response format specification (e.g., {''type'': ''json_object''} for JSON mode)'
-        tool_choice:
-          anyOf:
-          - $ref: '#/components/schemas/ToolChoiceEnum'
-          - $ref: '#/components/schemas/ToolChoice'
-          - type: 'null'
-          title: Tool Choice
-          description: Tool choice configuration ('auto', 'none', 'required', or a specific tool selection)
-        stream_options:
-          anyOf:
-          - $ref: '#/components/schemas/StreamOptions'
-          - type: 'null'
-          description: Additional streaming configuration options
+          title: Stream
+          description: Whether to stream the response
+          default: false
       type: object
-      title: LLMPromptRequestConfigSettings
-    AgenticPromptRunResponse:
+      title: PromptCompletionRequest
+      description: Request schema for running an agentic prompt
+    AnthropicThinkingParam-Input:
       properties:
-        content:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      type: object
+      title: AnthropicThinkingParam
+    LLMTool-Input:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool. Should always be 'function'
+          default: function
+        function:
+          $ref: '#/components/schemas/ToolFunction-Input'
+          description: The function definition
+        strict:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Strict
+          description: Whether the function definition should use OpenAI's strict mode
+      type: object
+      required:
+      - function
+      title: LLMTool
+    LLMMetadataSortField:
+      type: string
+      enum:
+      - name
+      - latest_version_created_at
+      title: LLMMetadataSortField
+      description: Sort field options for the LLM evals/prompts metadata list endpoints.
+    ToolFunction-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the tool/function
+        description:
           anyOf:
           - type: string
           - type: 'null'
-          title: Content
-        tool_calls:
+          title: Description
+          description: Description of what the tool does
+        parameters:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/ChatCompletionMessageToolCall'
-            type: array
+          - $ref: '#/components/schemas/JsonSchema'
           - type: 'null'
-          title: Tool Calls
-        cost:
-          type: string
-          title: Cost
-        input_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Input Tokens
-        output_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Output Tokens
-        total_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Tokens
+          description: The function's parameter schema
       type: object
       required:
-      - cost
-      title: AgenticPromptRunResponse
+      - name
+      title: ToolFunction
+    ToolCallFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the function to call
+        arguments:
+          type: string
+          title: Arguments
+          description: JSON string of function arguments
+      type: object
+      required:
+      - name
+      - arguments
+      title: ToolCallFunction
+    UnsavedPromptVariablesRequest:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/OpenAIMessage-Input'
+          type: array
+          title: Messages
+          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
+      type: object
+      required:
+      - messages
+      title: UnsavedPromptVariablesRequest
+      description: Request schema for getting the list of variables needed from an unsaved prompt's messages
+    JsonSchema:
+      properties:
+        type:
+          type: string
+          title: Type
+          default: object
+        properties:
+          additionalProperties:
+            $ref: '#/components/schemas/JsonPropertySchema'
+          type: object
+          title: Properties
+          description: 'The name of the property and the property schema (e.g. {''topic'': {''type'': ''string'', ''description'': ''the topic to generate a joke for''})'
+        required:
+          items:
+            type: string
+          type: array
+          title: Required
+          description: The required properties of the function
+        additionalProperties:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Additionalproperties
+          description: Whether the function definition should allow additional properties
+      type: object
+      required:
+      - properties
+      title: JsonSchema
+    CompletionRequest:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/OpenAIMessage-Input'
+          type: array
+          title: Messages
+          description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
+        model_name:
+          type: string
+          title: Model Name
+          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
+        model_provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure')
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LLMTool-Input'
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Available tools/functions for the model to call, in OpenAI function calling format
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMPromptRequestConfigSettings'
+          - type: 'null'
+          description: LLM configurations for this prompt (e.g. temperature, max_tokens, etc.)
+        completion_request:
+          $ref: '#/components/schemas/PromptCompletionRequest'
+          description: Run configuration for the unsaved prompt
+      type: object
+      required:
+      - messages
+      - model_name
+      - model_provider
+      title: CompletionRequest
+      description: Request schema for running an unsaved agentic prompt
+    MessageRole:
+      type: string
+      enum:
+      - developer
+      - system
+      - user
+      - assistant
+      - tool
+      title: MessageRole
     CreateAgenticPromptRequest:
       properties:
         messages:
@@ -1714,40 +1919,35 @@ components:
       - model_name
       - model_provider
       title: CreateAgenticPromptRequest
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    JsonSchema:
+    ImageURL:
       properties:
-        type:
+        url:
           type: string
-          title: Type
-          default: object
-        properties:
-          additionalProperties:
-            $ref: '#/components/schemas/JsonPropertySchema'
-          type: object
-          title: Properties
-          description: 'The name of the property and the property schema (e.g. {''topic'': {''type'': ''string'', ''description'': ''the topic to generate a joke for''})'
-        required:
-          items:
-            type: string
-          type: array
-          title: Required
-          description: The required properties of the function
-        additionalProperties:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Additionalproperties
-          description: Whether the function definition should allow additional properties
+          title: Url
+          description: URL of the image
       type: object
       required:
-      - properties
-      title: JsonSchema
+      - url
+      title: ImageURL
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
     ModelProvider:
       type: string
       enum:
@@ -1759,247 +1959,47 @@ components:
       - hosted_vllm
       - azure
       title: ModelProvider
-    ToolChoice:
+    LLMTool-Output:
       properties:
         type:
           type: string
           title: Type
-          description: The type of tool choice. Should always be 'function'
+          description: The type of tool. Should always be 'function'
           default: function
         function:
-          anyOf:
-          - $ref: '#/components/schemas/ToolChoiceFunction'
-          - type: 'null'
-          description: The tool choice fucntion name
-      type: object
-      title: ToolChoice
-    OpenAIMessage-Output:
-      properties:
-        role:
-          $ref: '#/components/schemas/MessageRole'
-          description: Role of the message
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
-        content:
-          anyOf:
-          - type: string
-          - items:
-              $ref: '#/components/schemas/OpenAIMessageItem'
-            type: array
-          - type: 'null'
-          title: Content
-          description: Content of the message
-        tool_calls:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ToolCall'
-            type: array
-          - type: 'null'
-          title: Tool Calls
-          description: Tool calls made by assistant
-        tool_call_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tool Call Id
-          description: ID of the tool call this message is responding to
-      type: object
-      required:
-      - role
-      title: OpenAIMessage
-      description: 'The message schema class for the prompts playground.
-
-        This class adheres to OpenAI''s message schema.'
-    ToolCallFunction:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the function to call
-        arguments:
-          type: string
-          title: Arguments
-          description: JSON string of function arguments
-      type: object
-      required:
-      - name
-      - arguments
-      title: ToolCallFunction
-    OpenAIMessage-Input:
-      properties:
-        role:
-          $ref: '#/components/schemas/MessageRole'
-          description: Role of the message
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
-        content:
-          anyOf:
-          - type: string
-          - items:
-              $ref: '#/components/schemas/OpenAIMessageItem'
-            type: array
-          - type: 'null'
-          title: Content
-          description: Content of the message
-        tool_calls:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ToolCall'
-            type: array
-          - type: 'null'
-          title: Tool Calls
-          description: Tool calls made by assistant
-        tool_call_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tool Call Id
-          description: ID of the tool call this message is responding to
-      type: object
-      required:
-      - role
-      title: OpenAIMessage
-      description: 'The message schema class for the prompts playground.
-
-        This class adheres to OpenAI''s message schema.'
-    ToolFunction-Input:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The name of the tool/function
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of what the tool does
-        parameters:
-          anyOf:
-          - $ref: '#/components/schemas/JsonSchema'
-          - type: 'null'
-          description: The function's parameter schema
-      type: object
-      required:
-      - name
-      title: ToolFunction
-    LLMResponseSchema-Input:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the schema
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the schema
-        schema:
-          $ref: '#/components/schemas/JsonSchema'
-          description: The JSON schema object
+          $ref: '#/components/schemas/ToolFunction-Output'
+          description: The function definition
         strict:
           anyOf:
           - type: boolean
           - type: 'null'
           title: Strict
-          description: Whether to enforce strict schema adherence
+          description: Whether the function definition should use OpenAI's strict mode
       type: object
       required:
-      - name
-      - schema
-      title: LLMResponseSchema
-    AgenticPrompt:
+      - function
+      title: LLMTool
+    ChatCompletionMessageToolCall:
+      properties: {}
+      additionalProperties: true
+      type: object
+      title: ChatCompletionMessageToolCall
+    UnsavedPromptRenderingRequest:
       properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the agentic prompt
+        completion_request:
+          $ref: '#/components/schemas/VariableRenderingRequest'
+          description: Rendering configuration for the unsaved prompt
         messages:
           items:
-            $ref: '#/components/schemas/OpenAIMessage-Output'
+            $ref: '#/components/schemas/OpenAIMessage-Input'
           type: array
           title: Messages
           description: 'List of chat messages in OpenAI format (e.g., [{''role'': ''user'', ''content'': ''Hello''}])'
-        model_name:
-          type: string
-          title: Model Name
-          description: Name of the LLM model (e.g., 'gpt-4o', 'claude-3-sonnet')
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: string
-            const: empty
-          title: Model Provider
-          description: Provider of the LLM model (e.g., 'openai', 'anthropic', 'azure'). The sentinel value 'empty' indicates the system default placeholder has not been configured.
-        version:
-          type: integer
-          title: Version
-          description: Version of the agentic prompt
-          default: 1
-        tools:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/LLMTool-Output'
-            type: array
-          - type: 'null'
-          title: Tools
-          description: Available tools/functions for the model to call, in OpenAI function calling format
-        variables:
-          items:
-            type: string
-          type: array
-          title: Variables
-          description: List of variable names for the agentic prompt
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          description: List of tags for this agentic prompt version
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/LLMConfigSettings'
-          - type: 'null'
-          description: LLM configurations for this prompt (e.g. temperature, max_tokens, etc.)
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when the prompt was created.
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-          description: Time that this prompt was deleted
       type: object
       required:
-      - name
       - messages
-      - model_name
-      - model_provider
-      - created_at
-      title: AgenticPrompt
-    StreamOptions:
-      properties:
-        include_usage:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Include Usage
-          description: Whether to include usage information in the stream
-      type: object
-      title: StreamOptions
+      title: UnsavedPromptRenderingRequest
+      description: Request schema for rendering an unsaved agentic prompt with variables
   securitySchemes:
     API_Key:
       type: http

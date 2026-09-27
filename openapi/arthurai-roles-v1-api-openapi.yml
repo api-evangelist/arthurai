@@ -76,64 +76,6 @@ components:
       - policy_attestation_rule
       - policy_assignment
       title: ResourceKind
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BaseRole:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the role this role inherits permissions from.
-        name:
-          type: string
-          title: Name
-          description: Name of the role this role inherits permissions from.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the role this role inherits permissions from.
-      type: object
-      required:
-      - id
-      - name
-      - description
-      title: BaseRole
     PermissionName:
       type: string
       enum:
@@ -338,40 +280,41 @@ components:
       - organization_list_agent_llm_models
       - organization_list_models
       title: PermissionName
-    Permission:
+    ValidationError:
       properties:
-        name:
-          $ref: '#/components/schemas/PermissionName'
-          description: Name of permission. Must be unique.
-        description:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Description
-          description: Description of the permission.
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the permission references.
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - name
-      - description
-      - resource_kind
-      title: Permission
-    InternalServerError:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Internal server error
       type: object
-      title: InternalServerError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
+      title: HTTPValidationError
     ExtendedRole:
       properties:
         created_at:
@@ -441,6 +384,63 @@ components:
       - permissions
       - base_roles
       title: ExtendedRole
+    BaseRole:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the role this role inherits permissions from.
+        name:
+          type: string
+          title: Name
+          description: Name of the role this role inherits permissions from.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role this role inherits permissions from.
+      type: object
+      required:
+      - id
+      - name
+      - description
+      title: BaseRole
+    Permission:
+      properties:
+        name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Name of permission. Must be unique.
+        description:
+          type: string
+          title: Description
+          description: Description of the permission.
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the permission references.
+      type: object
+      required:
+      - name
+      - description
+      - resource_kind
+      title: Permission
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

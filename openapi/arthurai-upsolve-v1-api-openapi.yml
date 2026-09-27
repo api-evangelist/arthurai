@@ -109,29 +109,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    PostUpsolveTenant:
-      properties:
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: ID of the resource.
-      type: object
-      required:
-      - resource_kind
-      - resource_id
-      title: PostUpsolveTenant
     UpsolveToken:
       properties:
         token:
@@ -150,6 +127,29 @@ components:
           default: Resource not found
       type: object
       title: NotFoundError
+    PostUpsolveTenant:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: ID of the resource.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      title: PostUpsolveTenant
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

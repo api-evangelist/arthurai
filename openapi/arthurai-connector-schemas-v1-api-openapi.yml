@@ -71,51 +71,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ResourceList_ConnectorType_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/ConnectorType'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[ConnectorType]
-    DatasetLocatorSchema:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/DatasetLocatorSchemaField'
-          type: array
-          title: Fields
-          description: Schema for dataset locator fields for all datasets using the connector type.
-      type: object
-      required:
-      - fields
-      title: DatasetLocatorSchema
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ConnectorFieldDataType:
-      type: string
-      enum:
-      - string
-      - dict
-      - enum
-      - int
-      title: ConnectorFieldDataType
     ValidationError:
       properties:
         loc:
@@ -142,19 +97,35 @@ components:
       - msg
       - type
       title: ValidationError
-    ConnectorType:
+    DatasetLocatorFieldDataType:
       type: string
       enum:
-      - shield
-      - S3
-      - GCS
-      - BigQuery
-      - engine_internal
-      - odbc
-      - snowflake
-      - databricks
-      - AzureBlob
-      title: ConnectorType
+      - UUID
+      - string
+      - enum
+      - regex_string
+      title: DatasetLocatorFieldDataType
+    DatasetLocatorSchema:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/DatasetLocatorSchemaField'
+          type: array
+          title: Fields
+          description: Schema for dataset locator fields for all datasets using the connector type.
+      type: object
+      required:
+      - fields
+      title: DatasetLocatorSchema
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ConnectorSpecSchemaField:
       properties:
         name:
@@ -192,6 +163,27 @@ components:
       - d_type
       - description
       title: ConnectorSpecSchemaField
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     Pagination:
       properties:
         page:
@@ -217,30 +209,62 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    InternalServerError:
+    ResourceList_ConnectorType_:
       properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
+        records:
+          items:
+            $ref: '#/components/schemas/ConnectorType'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
-      title: InternalServerError
-    DatasetLocatorFieldDataType:
+      required:
+      - records
+      - pagination
+      title: ResourceList[ConnectorType]
+    ConnectorFieldDataType:
       type: string
       enum:
-      - UUID
       - string
+      - dict
       - enum
-      - regex_string
-      title: DatasetLocatorFieldDataType
-    NotFoundError:
+      - int
+      title: ConnectorFieldDataType
+    DatasetLocatorSchemaField:
       properties:
-        detail:
+        name:
           type: string
-          title: Detail
-          default: Resource not found
+          title: Name
+          description: Name of dataset locator field.
+        d_type:
+          $ref: '#/components/schemas/DatasetLocatorFieldDataType'
+          description: Data type of the value stored by the field.
+        is_optional:
+          type: boolean
+          title: Is Optional
+          description: If field is optional or required.
+        description:
+          type: string
+          title: Description
+          description: Description of dataset locator schema field.
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+          description: List of allowed values for field. Relevant to enum data type fields.
       type: object
-      title: NotFoundError
+      required:
+      - name
+      - d_type
+      - is_optional
+      - description
+      title: DatasetLocatorSchemaField
     ConnectorSpecSchema:
       properties:
         created_at:
@@ -278,38 +302,14 @@ components:
       - dataset_locator_schema
       - supports_dataset_listing
       title: ConnectorSpecSchema
-    DatasetLocatorSchemaField:
+    InternalServerError:
       properties:
-        name:
+        detail:
           type: string
-          title: Name
-          description: Name of dataset locator field.
-        d_type:
-          $ref: '#/components/schemas/DatasetLocatorFieldDataType'
-          description: Data type of the value stored by the field.
-        is_optional:
-          type: boolean
-          title: Is Optional
-          description: If field is optional or required.
-        description:
-          type: string
-          title: Description
-          description: Description of dataset locator schema field.
-        allowed_values:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allowed Values
-          description: List of allowed values for field. Relevant to enum data type fields.
+          title: Detail
+          default: Internal server error
       type: object
-      required:
-      - name
-      - d_type
-      - is_optional
-      - description
-      title: DatasetLocatorSchemaField
+      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

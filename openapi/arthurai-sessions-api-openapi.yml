@@ -234,6 +234,87 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    SessionListResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: Total number of sessions matching filters
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        sessions:
+          items:
+            $ref: '#/components/schemas/SessionMetadataResponse'
+          type: array
+          title: Sessions
+          description: List of session metadata
+      type: object
+      required:
+      - count
+      - sessions
+      title: SessionListResponse
+      description: Response for session list endpoint
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AgenticAnnotationResponse:
       properties:
         id:
@@ -325,12 +406,6 @@ components:
       - created_at
       - updated_at
       title: AgenticAnnotationResponse
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
     NestedSpanWithMetricsResponse:
       properties:
         prompt_token_count:
@@ -471,32 +546,6 @@ components:
       - raw_data
       title: NestedSpanWithMetricsResponse
       description: Nested span response with children for building span trees
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -506,27 +555,99 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
-    AgenticAnnotationType:
+    MetricType:
       type: string
       enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    MetricResultResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the metric result
+        metric_type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric
+        details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Details
+          description: JSON-serialized metric details
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          description: Number of prompt tokens used
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          description: Number of completion tokens used
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Latency in milliseconds
+        span_id:
+          type: string
+          title: Span Id
+          description: ID of the span this result belongs to
+        metric_id:
+          type: string
+          title: Metric Id
+          description: ID of the metric that generated this result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the result was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the result was last updated
+      type: object
+      required:
+      - id
+      - metric_type
+      - prompt_tokens
+      - completion_tokens
+      - latency_ms
+      - span_id
+      - metric_id
+      - created_at
+      - updated_at
+      title: MetricResultResponse
+    SessionTracesResponse:
+      properties:
+        session_id:
+          type: string
+          title: Session Id
+          description: Session identifier
+        count:
+          type: integer
+          title: Count
+          description: Number of traces in this session
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        traces:
+          items:
+            $ref: '#/components/schemas/TraceResponse'
+          type: array
+          title: Traces
+          description: List of full trace trees
+      type: object
+      required:
+      - session_id
+      - count
+      - traces
+      title: SessionTracesResponse
+      description: Response for session traces endpoint
     TraceResponse:
       properties:
         prompt_token_count:
@@ -613,139 +734,12 @@ components:
       - end_time
       title: TraceResponse
       description: Response model for a single trace containing nested spans
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    MetricResultResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the metric result
-        metric_type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the metric
-        details:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Details
-          description: JSON-serialized metric details
-        prompt_tokens:
-          type: integer
-          title: Prompt Tokens
-          description: Number of prompt tokens used
-        completion_tokens:
-          type: integer
-          title: Completion Tokens
-          description: Number of completion tokens used
-        latency_ms:
-          type: integer
-          title: Latency Ms
-          description: Latency in milliseconds
-        span_id:
-          type: string
-          title: Span Id
-          description: ID of the span this result belongs to
-        metric_id:
-          type: string
-          title: Metric Id
-          description: ID of the metric that generated this result
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the result was created
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the result was last updated
-      type: object
-      required:
-      - id
-      - metric_type
-      - prompt_tokens
-      - completion_tokens
-      - latency_ms
-      - span_id
-      - metric_id
-      - created_at
-      - updated_at
-      title: MetricResultResponse
     EvalType:
       type: string
       enum:
       - llm_eval
       - ml_eval
       title: EvalType
-    SessionListResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: Total number of sessions matching filters
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        sessions:
-          items:
-            $ref: '#/components/schemas/SessionMetadataResponse'
-          type: array
-          title: Sessions
-          description: List of session metadata
-      type: object
-      required:
-      - count
-      - sessions
-      title: SessionListResponse
-      description: Response for session list endpoint
-    SessionTracesResponse:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-          description: Session identifier
-        count:
-          type: integer
-          title: Count
-          description: Number of traces in this session
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        traces:
-          items:
-            $ref: '#/components/schemas/TraceResponse'
-          type: array
-          title: Traces
-          description: List of full trace trees
-      type: object
-      required:
-      - session_id
-      - count
-      - traces
-      title: SessionTracesResponse
-      description: Response for session traces endpoint
-    MetricType:
-      type: string
-      enum:
-      - QueryRelevance
-      - ResponseRelevance
-      - ToolSelection
-      title: MetricType
     SessionMetadataResponse:
       properties:
         prompt_token_count:
@@ -838,6 +832,12 @@ components:
       - duration_ms
       title: SessionMetadataResponse
       description: Session summary metadata
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
   securitySchemes:
     API_Key:
       type: http

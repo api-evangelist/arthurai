@@ -166,6 +166,30 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    TraceUserListResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: Total number of users matching filters
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        users:
+          items:
+            $ref: '#/components/schemas/TraceUserMetadataResponse'
+          type: array
+          title: Users
+          description: List of user metadata
+      type: object
+      required:
+      - count
+      - users
+      title: TraceUserListResponse
+      description: Response for trace user list endpoint
     TraceUserMetadataResponse:
       properties:
         prompt_token_count:
@@ -259,30 +283,6 @@ components:
       - latest_end_time
       title: TraceUserMetadataResponse
       description: User summary metadata in trace context
-    TraceUserListResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: Total number of users matching filters
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        users:
-          items:
-            $ref: '#/components/schemas/TraceUserMetadataResponse'
-          type: array
-          title: Users
-          description: List of user metadata
-      type: object
-      required:
-      - count
-      - users
-      title: TraceUserListResponse
-      description: Response for trace user list endpoint
   securitySchemes:
     API_Key:
       type: http
