@@ -384,6 +384,48 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    PostDataPlaneAssociation:
+      properties:
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+      type: object
+      required:
+      - data_plane_id
+      - project_id
+      title: PostDataPlaneAssociation
     DataPlane:
       properties:
         created_at:
@@ -445,83 +487,6 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
-    PostDataPlaneAssociation:
-      properties:
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-      type: object
-      required:
-      - data_plane_id
-      - project_id
-      title: PostDataPlaneAssociation
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ResourceList_DataPlaneAssociation_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataPlaneAssociation'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataPlaneAssociation]
     DataPlaneAssociation:
       properties:
         created_at:
@@ -567,12 +532,6 @@ components:
       - data_plane_id
       - project_id
       title: DataPlaneAssociation
-    DataPlaneAssociationSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      title: DataPlaneAssociationSort
     NotFoundError:
       properties:
         detail:
@@ -581,39 +540,6 @@ components:
           default: Resource not found
       type: object
       title: NotFoundError
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
     Infrastructure:
       type: string
       enum:
@@ -623,6 +549,30 @@ components:
       - Docker
       - Kubernetes
       title: Infrastructure
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     Project:
       properties:
         created_at:
@@ -668,12 +618,62 @@ components:
       - workspace_id
       - total_artifacts
       title: Project
-    SortOrder:
+    DataPlaneAssociationSort:
       type: string
       enum:
-      - asc
-      - desc
-      title: SortOrder
+      - created_at
+      - updated_at
+      title: DataPlaneAssociationSort
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ResourceList_DataPlaneAssociation_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DataPlaneAssociation'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataPlaneAssociation]
     InternalServerError:
       properties:
         detail:

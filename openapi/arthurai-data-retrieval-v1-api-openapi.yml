@@ -415,21 +415,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ConnectorPaginationOptions:
-      properties:
-        page:
-          type: integer
-          minimum: 1.0
-          title: Page
-          default: 1
-        page_size:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Page Size
-          default: 25
-      type: object
-      title: ConnectorPaginationOptions
     DataRetrievalOperation:
       properties:
         id:
@@ -456,6 +441,50 @@ components:
       - job_id
       - status
       title: DataRetrievalOperation
+    DataRetrievalData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+        data_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data Schema
+          description: Schema of the read dataset. Optional for available datasets, required for datasets.
+      type: object
+      required:
+      - content
+      - data_schema
+      title: DataRetrievalData
+    DataResultFilter:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+          description: Field name to use for filtering data.
+        op:
+          $ref: '#/components/schemas/DataResultFilterOp'
+          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - field_name
+      - op
+      - value
+      title: DataResultFilter
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -491,24 +520,18 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    DataResultFilter:
-      properties:
-        field_name:
-          type: string
-          title: Field Name
-          description: Field name to use for filtering data.
-        op:
-          $ref: '#/components/schemas/DataResultFilterOp'
-          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
-        value:
-          title: Value
-          description: Value used filtering the metrics.
-      type: object
-      required:
-      - field_name
-      - op
-      - value
-      title: DataResultFilter
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
     PostDataRetrievalOperation:
       properties:
         start_timestamp:
@@ -536,44 +559,6 @@ components:
       - start_timestamp
       - end_timestamp
       title: PostDataRetrievalOperation
-    DataResultFilterOp:
-      type: string
-      enum:
-      - greater_than
-      - less_than
-      - equals
-      - not_equals
-      - greater_than_or_equal
-      - less_than_or_equal
-      - in
-      - not_in
-      title: DataResultFilterOp
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    DataRetrievalData:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Serialized content.
-        data_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Data Schema
-          description: Schema of the read dataset. Optional for available datasets, required for datasets.
-      type: object
-      required:
-      - content
-      - data_schema
-      title: DataRetrievalData
     PutRetrievedData:
       properties:
         content:
@@ -584,6 +569,21 @@ components:
       required:
       - content
       title: PutRetrievedData
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
     DataRetrievalStatus:
       type: string
       enum:

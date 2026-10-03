@@ -108,126 +108,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    GCPServiceAccountCredentialsRequest:
-      properties:
-        type:
-          type: string
-          format: password
-          title: Type
-          writeOnly: true
-        project_id:
-          type: string
-          format: password
-          title: Project Id
-          writeOnly: true
-        private_key_id:
-          type: string
-          format: password
-          title: Private Key Id
-          writeOnly: true
-        private_key:
-          type: string
-          format: password
-          title: Private Key
-          writeOnly: true
-        client_email:
-          type: string
-          format: password
-          title: Client Email
-          writeOnly: true
-        client_id:
-          type: string
-          format: password
-          title: Client Id
-          writeOnly: true
-        auth_uri:
-          type: string
-          format: password
-          title: Auth Uri
-          writeOnly: true
-        token_uri:
-          type: string
-          format: password
-          title: Token Uri
-          writeOnly: true
-        auth_provider_x509_cert_url:
-          type: string
-          format: password
-          title: Auth Provider X509 Cert Url
-          writeOnly: true
-        client_x509_cert_url:
-          type: string
-          format: password
-          title: Client X509 Cert Url
-          writeOnly: true
-        universe_domain:
-          type: string
-          format: password
-          title: Universe Domain
-          writeOnly: true
-      type: object
-      required:
-      - type
-      - project_id
-      - private_key_id
-      - private_key
-      - client_email
-      - client_id
-      - auth_uri
-      - token_uri
-      - auth_provider_x509_cert_url
-      - client_x509_cert_url
-      - universe_domain
-      title: GCPServiceAccountCredentialsRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ModelProviderResponse:
-      properties:
-        provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: The model provider
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether the provider is enabled with credentials
-      type: object
-      required:
-      - provider
-      - enabled
-      title: ModelProviderResponse
     PutModelProviderCredentials:
       properties:
         api_key:
@@ -311,6 +191,137 @@ components:
           description: Optional GCP service account credentials JSON
       type: object
       title: PutModelProviderCredentials
+    ModelProviderResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: The model provider
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the provider is enabled with credentials
+      type: object
+      required:
+      - provider
+      - enabled
+      title: ModelProviderResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    GCPServiceAccountCredentialsRequest:
+      properties:
+        type:
+          type: string
+          format: password
+          title: Type
+          writeOnly: true
+        project_id:
+          type: string
+          format: password
+          title: Project Id
+          writeOnly: true
+        private_key_id:
+          type: string
+          format: password
+          title: Private Key Id
+          writeOnly: true
+        private_key:
+          type: string
+          format: password
+          title: Private Key
+          writeOnly: true
+        client_email:
+          type: string
+          format: password
+          title: Client Email
+          writeOnly: true
+        client_id:
+          type: string
+          format: password
+          title: Client Id
+          writeOnly: true
+        auth_uri:
+          type: string
+          format: password
+          title: Auth Uri
+          writeOnly: true
+        token_uri:
+          type: string
+          format: password
+          title: Token Uri
+          writeOnly: true
+        auth_provider_x509_cert_url:
+          type: string
+          format: password
+          title: Auth Provider X509 Cert Url
+          writeOnly: true
+        client_x509_cert_url:
+          type: string
+          format: password
+          title: Client X509 Cert Url
+          writeOnly: true
+        universe_domain:
+          type: string
+          format: password
+          title: Universe Domain
+          writeOnly: true
+      type: object
+      required:
+      - type
+      - project_id
+      - private_key_id
+      - private_key
+      - client_email
+      - client_id
+      - auth_uri
+      - token_uri
+      - auth_provider_x509_cert_url
+      - client_x509_cert_url
+      - universe_domain
+      title: GCPServiceAccountCredentialsRequest
     ModelProviderModelList:
       properties:
         provider:
@@ -339,17 +350,6 @@ components:
       required:
       - providers
       title: ModelProviderList
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
   securitySchemes:
     API_Key:
       type: http

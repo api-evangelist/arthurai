@@ -50,39 +50,30 @@ paths:
       - Configuration
 components:
   schemas:
-    ApplicationConfigurationResponse:
+    DocumentStorageConfigurationResponse:
       properties:
-        chat_task_id:
+        storage_environment:
           anyOf:
           - type: string
           - type: 'null'
-          title: Chat Task Id
-        default_currency:
+          title: Storage Environment
+        bucket_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Default Currency
-        document_storage_configuration:
+          title: Bucket Name
+        container_name:
           anyOf:
-          - $ref: '#/components/schemas/DocumentStorageConfigurationResponse'
+          - type: string
           - type: 'null'
-        max_llm_rules_per_task_count:
-          type: integer
-          title: Max Llm Rules Per Task Count
-        trace_retention_days:
-          type: integer
-          title: Trace Retention Days
-        allowed_trace_retention_days:
-          items:
-            type: integer
-          type: array
-          title: Allowed Trace Retention Days
-          default: []
+          title: Container Name
+        assumable_role_arn:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assumable Role Arn
       type: object
-      required:
-      - max_llm_rules_per_task_count
-      - trace_retention_days
-      title: ApplicationConfigurationResponse
+      title: DocumentStorageConfigurationResponse
     ValidationError:
       properties:
         loc:
@@ -118,12 +109,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    DocumentStorageEnvironment:
-      type: string
-      enum:
-      - aws
-      - azure
-      title: DocumentStorageEnvironment
     ApplicationConfigurationUpdateRequest:
       properties:
         chat_task_id:
@@ -152,30 +137,6 @@ components:
           title: Trace Retention Days
       type: object
       title: ApplicationConfigurationUpdateRequest
-    DocumentStorageConfigurationResponse:
-      properties:
-        storage_environment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Storage Environment
-        bucket_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bucket Name
-        container_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Container Name
-        assumable_role_arn:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assumable Role Arn
-      type: object
-      title: DocumentStorageConfigurationResponse
     DocumentStorageConfigurationUpdateRequest:
       properties:
         environment:
@@ -204,6 +165,45 @@ components:
       required:
       - environment
       title: DocumentStorageConfigurationUpdateRequest
+    DocumentStorageEnvironment:
+      type: string
+      enum:
+      - aws
+      - azure
+      title: DocumentStorageEnvironment
+    ApplicationConfigurationResponse:
+      properties:
+        chat_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Chat Task Id
+        default_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Currency
+        document_storage_configuration:
+          anyOf:
+          - $ref: '#/components/schemas/DocumentStorageConfigurationResponse'
+          - type: 'null'
+        max_llm_rules_per_task_count:
+          type: integer
+          title: Max Llm Rules Per Task Count
+        trace_retention_days:
+          type: integer
+          title: Trace Retention Days
+        allowed_trace_retention_days:
+          items:
+            type: integer
+          type: array
+          title: Allowed Trace Retention Days
+          default: []
+      type: object
+      required:
+      - max_llm_rules_per_task_count
+      - trace_retention_days
+      title: ApplicationConfigurationResponse
   securitySchemes:
     API_Key:
       type: http

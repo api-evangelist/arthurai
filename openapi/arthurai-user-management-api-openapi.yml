@@ -23,6 +23,20 @@ paths:
       - API Key: []
 components:
   schemas:
+    OrganizationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: OrganizationResponse
     MeResponse:
       properties:
         user_id:
@@ -48,20 +62,6 @@ components:
       - user_id
       - roles
       title: MeResponse
-    OrganizationResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - id
-      - name
-      title: OrganizationResponse
   securitySchemes:
     API_Key:
       type: http

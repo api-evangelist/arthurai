@@ -412,21 +412,26 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    RagProviderQueryResponse:
-      properties:
-        response:
-          $ref: '#/components/schemas/WeaviateQueryResults'
-      type: object
-      required:
-      - response
-      title: RagProviderQueryResponse
-    ApiKeyRagAuthenticationConfigResponse:
+    HybridFusion:
+      type: string
+      enum:
+      - FUSION_TYPE_RANKED
+      - FUSION_TYPE_RELATIVE_SCORE
+      title: HybridFusion
+      description: Define how the query's hybrid fusion operation should be performed.
+    ApiKeyRagAuthenticationConfigRequest:
       properties:
         authentication_method:
           type: string
           const: api_key
           title: Authentication Method
           default: api_key
+        api_key:
+          type: string
+          format: password
+          title: Api Key
+          description: API key to use for authentication.
+          writeOnly: true
         host_url:
           type: string
           minLength: 1
@@ -438,136 +443,43 @@ components:
           description: Name of RAG provider to authenticate with.
       type: object
       required:
+      - api_key
       - host_url
       - rag_provider
-      title: ApiKeyRagAuthenticationConfigResponse
-    WeaviateVectorSimilarityTextSearchSettingsRequest:
+      title: ApiKeyRagAuthenticationConfigRequest
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    RagKeywordSearchSettingRequest:
       properties:
-        collection_name:
-          type: string
-          title: Collection Name
-          description: Name of the vector collection used for the search.
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-          description: Maximum number of objects to return.
-        include_vector:
-          anyOf:
-          - type: boolean
-          - type: string
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Include Vector
-          description: Boolean value whether to include vector embeddings in the response or can be used to specify the names of the vectors to include in the response if your collection uses named vectors. Will be included as a dictionary in the vector property in the response.
-          default: false
-        offset:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Offset
-          description: Skips first N results in similarity response. Useful for pagination.
-        auto_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Auto Limit
-          description: Automatically limit search results to groups of objects with similar distances, stopping after auto_limit number of significant jumps.
-        return_metadata:
-          anyOf:
-          - items:
-              type: string
-              enum:
-              - creation_time
-              - last_update_time
-              - distance
-              - certainty
-              - score
-              - explain_score
-              - is_consistent
-              - query_profile
-            type: array
-          - $ref: '#/components/schemas/MetadataQuery'
-          - type: 'null'
-          title: Return Metadata
-          description: Specify metadata fields to return.
-        return_properties:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Return Properties
-          description: Specify which properties to return for each object.
+        settings:
+          $ref: '#/components/schemas/WeaviateKeywordSearchSettingsRequest'
+          description: Settings for the keyword search request to the vector database.
+      type: object
+      required:
+      - settings
+      title: RagKeywordSearchSettingRequest
+    WeaviateQueryResults:
+      properties:
         rag_provider:
           type: string
           const: weaviate
           title: Rag Provider
           default: weaviate
-        certainty:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Certainty
-          description: Minimum similarity score to return. Higher values correspond to more similar results. Only one of distance and certainty can be specified.
-        distance:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Distance
-          description: Maximum allowed distance between the query and result vectors. Lower values corresponds to more similar results. Only one of distance and certainty can be specified.
-        target_vector:
-          anyOf:
-          - type: string
-          - items:
-              type: string
-            type: array
-          - $ref: '#/components/schemas/_MultiTargetVectorJoin'
-          - type: 'null'
-          title: Target Vector
-          description: Specifies vector to use for similarity search when using named vectors.
-        query:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: string
-          title: Query
-          description: Input text to find objects with near vectors for.
-      type: object
-      required:
-      - collection_name
-      - query
-      title: WeaviateVectorSimilarityTextSearchSettingsRequest
-    SearchRagProviderConfigurationsResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: The total number of RAG provider configurations matching the parameters.
-        rag_provider_configurations:
+        objects:
           items:
-            $ref: '#/components/schemas/RagProviderConfigurationResponse'
+            $ref: '#/components/schemas/WeaviateQueryResult'
           type: array
-          title: Rag Provider Configurations
-          description: List of RAG provider configurations matching the search filters. Length is less than or equal to page_size parameter
+          title: Objects
+          description: List of search result objects
       type: object
       required:
-      - count
-      - rag_provider_configurations
-      title: SearchRagProviderConfigurationsResponse
-    HybridFusion:
-      type: string
-      enum:
-      - FUSION_TYPE_RANKED
-      - FUSION_TYPE_RELATIVE_SCORE
-      title: HybridFusion
-      description: Define how the query's hybrid fusion operation should be performed.
+      - objects
+      title: WeaviateQueryResults
+      description: Response from Weaviate similarity text search
     WeaviateQueryResultMetadata:
       properties:
         creation_time:
@@ -619,12 +531,6 @@ components:
       description: 'Metadata from weaviate for a vector object:
 
         https://weaviate-python-client.readthedocs.io/en/latest/weaviate.collections.classes.html#module-weaviate.collections.classes.internal'
-    ConnectionCheckOutcome:
-      type: string
-      enum:
-      - passed
-      - failed
-      title: ConnectionCheckOutcome
     ApiKeyRagAuthenticationConfigUpdateRequest:
       properties:
         authentication_method:
@@ -655,40 +561,22 @@ components:
           description: Name of RAG provider to authenticate with.
       type: object
       title: ApiKeyRagAuthenticationConfigUpdateRequest
-    ConnectionCheckResult:
+    RagHybridSearchSettingRequest:
       properties:
-        connection_check_outcome:
-          $ref: '#/components/schemas/ConnectionCheckOutcome'
-          description: Result of the connection check.
-        failure_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason
-          description: Explainer of the connection check failure result.
+        settings:
+          $ref: '#/components/schemas/WeaviateHybridSearchSettingsRequest'
+          description: Settings for the hybrid search request to the vector database.
       type: object
       required:
-      - connection_check_outcome
-      title: ConnectionCheckResult
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    ApiKeyRagAuthenticationConfigRequest:
+      - settings
+      title: RagHybridSearchSettingRequest
+    ApiKeyRagAuthenticationConfigResponse:
       properties:
         authentication_method:
           type: string
           const: api_key
           title: Authentication Method
           default: api_key
-        api_key:
-          type: string
-          format: password
-          title: Api Key
-          description: API key to use for authentication.
-          writeOnly: true
         host_url:
           type: string
           minLength: 1
@@ -700,35 +588,9 @@ components:
           description: Name of RAG provider to authenticate with.
       type: object
       required:
-      - api_key
       - host_url
       - rag_provider
-      title: ApiKeyRagAuthenticationConfigRequest
-    _MultiTargetVectorJoin:
-      properties:
-        combination:
-          $ref: '#/components/schemas/_MultiTargetVectorJoinEnum'
-        target_vectors:
-          items:
-            type: string
-          type: array
-          title: Target Vectors
-        weights:
-          anyOf:
-          - additionalProperties:
-              anyOf:
-              - type: number
-              - items:
-                  type: number
-                type: array
-            type: object
-          - type: 'null'
-          title: Weights
-      type: object
-      required:
-      - combination
-      - target_vectors
-      title: _MultiTargetVectorJoin
+      title: ApiKeyRagAuthenticationConfigResponse
     WeaviateHybridSearchSettingsRequest:
       properties:
         collection_name:
@@ -850,33 +712,31 @@ components:
       - collection_name
       - query
       title: WeaviateHybridSearchSettingsRequest
-    RagVectorSimilarityTextSearchSettingRequest:
+    _MultiTargetVectorJoin:
       properties:
-        settings:
-          $ref: '#/components/schemas/WeaviateVectorSimilarityTextSearchSettingsRequest'
-          description: Settings for the similarity text search request to the vector database.
+        combination:
+          $ref: '#/components/schemas/_MultiTargetVectorJoinEnum'
+        target_vectors:
+          items:
+            type: string
+          type: array
+          title: Target Vectors
+        weights:
+          anyOf:
+          - additionalProperties:
+              anyOf:
+              - type: number
+              - items:
+                  type: number
+                type: array
+            type: object
+          - type: 'null'
+          title: Weights
       type: object
       required:
-      - settings
-      title: RagVectorSimilarityTextSearchSettingRequest
-    RagKeywordSearchSettingRequest:
-      properties:
-        settings:
-          $ref: '#/components/schemas/WeaviateKeywordSearchSettingsRequest'
-          description: Settings for the keyword search request to the vector database.
-      type: object
-      required:
-      - settings
-      title: RagKeywordSearchSettingRequest
-    RagProviderTestConfigurationRequest:
-      properties:
-        authentication_config:
-          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigRequest'
-          description: Configuration of the authentication strategy.
-      type: object
-      required:
-      - authentication_config
-      title: RagProviderTestConfigurationRequest
+      - combination
+      - target_vectors
+      title: _MultiTargetVectorJoin
     _MultiTargetVectorJoinEnum:
       type: integer
       enum:
@@ -887,42 +747,6 @@ components:
       - 5
       title: _MultiTargetVectorJoinEnum
       description: Define how multi target vector searches should be combined.
-    RagProviderConfigurationRequest:
-      properties:
-        authentication_config:
-          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigRequest'
-          description: Configuration of the authentication strategy.
-        name:
-          type: string
-          title: Name
-          description: Name of RAG provider configuration.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of RAG provider configuration.
-      type: object
-      required:
-      - authentication_config
-      - name
-      title: RagProviderConfigurationRequest
-    SearchRagProviderCollectionsResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: The total number of RAG provider collections matching the parameters.
-        rag_provider_collections:
-          items:
-            $ref: '#/components/schemas/RagProviderCollectionResponse'
-          type: array
-          title: Rag Provider Collections
-      type: object
-      required:
-      - count
-      - rag_provider_collections
-      title: SearchRagProviderCollectionsResponse
     RagProviderCollectionResponse:
       properties:
         identifier:
@@ -939,6 +763,145 @@ components:
       required:
       - identifier
       title: RagProviderCollectionResponse
+    RagProviderConfigurationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique identifier of the RAG provider configuration.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of parent task.
+        authentication_config:
+          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigResponse'
+          description: Configuration of the authentication strategy.
+        name:
+          type: string
+          title: Name
+          description: Name of RAG provider configuration.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of RAG provider configuration.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the RAG provider configuration was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the RAG provider configuration was updated in unix milliseconds
+      type: object
+      required:
+      - id
+      - task_id
+      - authentication_config
+      - name
+      - created_at
+      - updated_at
+      title: RagProviderConfigurationResponse
+    MetadataQuery:
+      properties:
+        creation_time:
+          type: boolean
+          title: Creation Time
+          default: false
+        last_update_time:
+          type: boolean
+          title: Last Update Time
+          default: false
+        distance:
+          type: boolean
+          title: Distance
+          default: false
+        certainty:
+          type: boolean
+          title: Certainty
+          default: false
+        score:
+          type: boolean
+          title: Score
+          default: false
+        explain_score:
+          type: boolean
+          title: Explain Score
+          default: false
+        is_consistent:
+          type: boolean
+          title: Is Consistent
+          default: false
+        query_profile:
+          type: boolean
+          title: Query Profile
+          default: false
+      additionalProperties: false
+      type: object
+      title: MetadataQuery
+      description: Define which metadata should be returned in the query's results.
+    WeaviateQueryResult:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          title: Uuid
+          description: Unique identifier of the result
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/WeaviateQueryResultMetadata'
+          - type: 'null'
+          description: Search metadata including distance, score, etc.
+        properties:
+          additionalProperties: true
+          type: object
+          title: Properties
+          description: Properties of the result object
+        vector:
+          anyOf:
+          - additionalProperties:
+              anyOf:
+              - items:
+                  type: number
+                type: array
+              - items:
+                  items:
+                    type: number
+                  type: array
+                type: array
+            type: object
+          - type: 'null'
+          title: Vector
+          description: Vector representation
+      type: object
+      required:
+      - uuid
+      - properties
+      title: WeaviateQueryResult
+      description: Individual search result from Weaviate
+    RagProviderAuthenticationMethodEnum:
+      type: string
+      enum:
+      - api_key
+      title: RagProviderAuthenticationMethodEnum
+    SearchRagProviderCollectionsResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of RAG provider collections matching the parameters.
+        rag_provider_collections:
+          items:
+            $ref: '#/components/schemas/RagProviderCollectionResponse'
+          type: array
+          title: Rag Provider Collections
+      type: object
+      required:
+      - count
+      - rag_provider_collections
+      title: SearchRagProviderCollectionsResponse
     ValidationError:
       properties:
         loc:
@@ -965,24 +928,164 @@ components:
       - msg
       - type
       title: ValidationError
-    WeaviateQueryResults:
+    HTTPValidationError:
       properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RagAPIKeyAuthenticationProviderEnum:
+      type: string
+      enum:
+      - weaviate
+      title: RagAPIKeyAuthenticationProviderEnum
+    ConnectionCheckResult:
+      properties:
+        connection_check_outcome:
+          $ref: '#/components/schemas/ConnectionCheckOutcome'
+          description: Result of the connection check.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Explainer of the connection check failure result.
+      type: object
+      required:
+      - connection_check_outcome
+      title: ConnectionCheckResult
+    RagProviderTestConfigurationRequest:
+      properties:
+        authentication_config:
+          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigRequest'
+          description: Configuration of the authentication strategy.
+      type: object
+      required:
+      - authentication_config
+      title: RagProviderTestConfigurationRequest
+    RagVectorSimilarityTextSearchSettingRequest:
+      properties:
+        settings:
+          $ref: '#/components/schemas/WeaviateVectorSimilarityTextSearchSettingsRequest'
+          description: Settings for the similarity text search request to the vector database.
+      type: object
+      required:
+      - settings
+      title: RagVectorSimilarityTextSearchSettingRequest
+    RagProviderQueryResponse:
+      properties:
+        response:
+          $ref: '#/components/schemas/WeaviateQueryResults'
+      type: object
+      required:
+      - response
+      title: RagProviderQueryResponse
+    WeaviateVectorSimilarityTextSearchSettingsRequest:
+      properties:
+        collection_name:
+          type: string
+          title: Collection Name
+          description: Name of the vector collection used for the search.
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+          description: Maximum number of objects to return.
+        include_vector:
+          anyOf:
+          - type: boolean
+          - type: string
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Include Vector
+          description: Boolean value whether to include vector embeddings in the response or can be used to specify the names of the vectors to include in the response if your collection uses named vectors. Will be included as a dictionary in the vector property in the response.
+          default: false
+        offset:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Offset
+          description: Skips first N results in similarity response. Useful for pagination.
+        auto_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Auto Limit
+          description: Automatically limit search results to groups of objects with similar distances, stopping after auto_limit number of significant jumps.
+        return_metadata:
+          anyOf:
+          - items:
+              type: string
+              enum:
+              - creation_time
+              - last_update_time
+              - distance
+              - certainty
+              - score
+              - explain_score
+              - is_consistent
+              - query_profile
+            type: array
+          - $ref: '#/components/schemas/MetadataQuery'
+          - type: 'null'
+          title: Return Metadata
+          description: Specify metadata fields to return.
+        return_properties:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Return Properties
+          description: Specify which properties to return for each object.
         rag_provider:
           type: string
           const: weaviate
           title: Rag Provider
           default: weaviate
-        objects:
-          items:
-            $ref: '#/components/schemas/WeaviateQueryResult'
-          type: array
-          title: Objects
-          description: List of search result objects
+        certainty:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Certainty
+          description: Minimum similarity score to return. Higher values correspond to more similar results. Only one of distance and certainty can be specified.
+        distance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance
+          description: Maximum allowed distance between the query and result vectors. Lower values corresponds to more similar results. Only one of distance and certainty can be specified.
+        target_vector:
+          anyOf:
+          - type: string
+          - items:
+              type: string
+            type: array
+          - $ref: '#/components/schemas/_MultiTargetVectorJoin'
+          - type: 'null'
+          title: Target Vector
+          description: Specifies vector to use for similarity search when using named vectors.
+        query:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: string
+          title: Query
+          description: Input text to find objects with near vectors for.
       type: object
       required:
-      - objects
-      title: WeaviateQueryResults
-      description: Response from Weaviate similarity text search
+      - collection_name
+      - query
+      title: WeaviateVectorSimilarityTextSearchSettingsRequest
     RagProviderConfigurationUpdateRequest:
       properties:
         authentication_config:
@@ -1004,6 +1107,23 @@ components:
           description: Description of RAG provider configuration.
       type: object
       title: RagProviderConfigurationUpdateRequest
+    SearchRagProviderConfigurationsResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of RAG provider configurations matching the parameters.
+        rag_provider_configurations:
+          items:
+            $ref: '#/components/schemas/RagProviderConfigurationResponse'
+          type: array
+          title: Rag Provider Configurations
+          description: List of RAG provider configurations matching the search filters. Length is less than or equal to page_size parameter
+      type: object
+      required:
+      - count
+      - rag_provider_configurations
+      title: SearchRagProviderConfigurationsResponse
     WeaviateKeywordSearchSettingsRequest:
       properties:
         collection_name:
@@ -1091,124 +1211,10 @@ components:
       - collection_name
       - query
       title: WeaviateKeywordSearchSettingsRequest
-    RagProviderAuthenticationMethodEnum:
-      type: string
-      enum:
-      - api_key
-      title: RagProviderAuthenticationMethodEnum
-    WeaviateQueryResult:
+    RagProviderConfigurationRequest:
       properties:
-        uuid:
-          type: string
-          format: uuid
-          title: Uuid
-          description: Unique identifier of the result
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/WeaviateQueryResultMetadata'
-          - type: 'null'
-          description: Search metadata including distance, score, etc.
-        properties:
-          additionalProperties: true
-          type: object
-          title: Properties
-          description: Properties of the result object
-        vector:
-          anyOf:
-          - additionalProperties:
-              anyOf:
-              - items:
-                  type: number
-                type: array
-              - items:
-                  items:
-                    type: number
-                  type: array
-                type: array
-            type: object
-          - type: 'null'
-          title: Vector
-          description: Vector representation
-      type: object
-      required:
-      - uuid
-      - properties
-      title: WeaviateQueryResult
-      description: Individual search result from Weaviate
-    MetadataQuery:
-      properties:
-        creation_time:
-          type: boolean
-          title: Creation Time
-          default: false
-        last_update_time:
-          type: boolean
-          title: Last Update Time
-          default: false
-        distance:
-          type: boolean
-          title: Distance
-          default: false
-        certainty:
-          type: boolean
-          title: Certainty
-          default: false
-        score:
-          type: boolean
-          title: Score
-          default: false
-        explain_score:
-          type: boolean
-          title: Explain Score
-          default: false
-        is_consistent:
-          type: boolean
-          title: Is Consistent
-          default: false
-        query_profile:
-          type: boolean
-          title: Query Profile
-          default: false
-      additionalProperties: false
-      type: object
-      title: MetadataQuery
-      description: Define which metadata should be returned in the query's results.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RagHybridSearchSettingRequest:
-      properties:
-        settings:
-          $ref: '#/components/schemas/WeaviateHybridSearchSettingsRequest'
-          description: Settings for the hybrid search request to the vector database.
-      type: object
-      required:
-      - settings
-      title: RagHybridSearchSettingRequest
-    RagAPIKeyAuthenticationProviderEnum:
-      type: string
-      enum:
-      - weaviate
-      title: RagAPIKeyAuthenticationProviderEnum
-    RagProviderConfigurationResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique identifier of the RAG provider configuration.
-        task_id:
-          type: string
-          title: Task Id
-          description: ID of parent task.
         authentication_config:
-          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigResponse'
+          $ref: '#/components/schemas/ApiKeyRagAuthenticationConfigRequest'
           description: Configuration of the authentication strategy.
         name:
           type: string
@@ -1220,23 +1226,17 @@ components:
           - type: 'null'
           title: Description
           description: Description of RAG provider configuration.
-        created_at:
-          type: integer
-          title: Created At
-          description: Time the RAG provider configuration was created in unix milliseconds
-        updated_at:
-          type: integer
-          title: Updated At
-          description: Time the RAG provider configuration was updated in unix milliseconds
       type: object
       required:
-      - id
-      - task_id
       - authentication_config
       - name
-      - created_at
-      - updated_at
-      title: RagProviderConfigurationResponse
+      title: RagProviderConfigurationRequest
+    ConnectionCheckOutcome:
+      type: string
+      enum:
+      - passed
+      - failed
+      title: ConnectionCheckOutcome
   securitySchemes:
     API_Key:
       type: http

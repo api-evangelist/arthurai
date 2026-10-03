@@ -403,6 +403,128 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ConnectorCheckResult:
+      properties:
+        connection_check_outcome:
+          $ref: '#/components/schemas/ConnectorCheckOutcome'
+          description: Result of the connector check.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Explainer of the connector check failure result.
+      type: object
+      required:
+      - connection_check_outcome
+      title: ConnectorCheckResult
+    ConnectorSpec:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Connector id.
+        connector_type:
+          $ref: '#/components/schemas/ConnectorType'
+          description: Type of connector.
+        name:
+          type: string
+          title: Name
+          description: Name of connector.
+        temporary:
+          type: boolean
+          title: Temporary
+          description: True if connector is temporary (ie for testing only), false otherwise.
+        fields:
+          items:
+            $ref: '#/components/schemas/ConnectorSpecFieldWithMetadata'
+          type: array
+          title: Fields
+          description: List of fields for the connector.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for user who last updated the connector.
+        connector_check_result:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorCheckResult'
+          - type: 'null'
+          description: Connection test results of the connector.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of parent project.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane that will execute the connection. Should be formatted as a UUID.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - connector_type
+      - name
+      - temporary
+      - fields
+      - project_id
+      - data_plane_id
+      title: ConnectorSpec
+    ResourceList_ConnectorSpec_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/ConnectorSpec'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[ConnectorSpec]
     User:
       properties:
         created_at:
@@ -479,13 +601,102 @@ components:
       - user_type
       - organization_name
       title: User
-    UserType:
+    PatchConnectorSpec:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of connector.
+        temporary:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Temporary
+          description: True if connector is temporary (ie for testing only), false otherwise.
+        fields:
+          items:
+            $ref: '#/components/schemas/ConnectorSpecField'
+          type: array
+          title: Fields
+          description: List of non-sensitive and sensitive fields for the connector.
+          default: []
+      type: object
+      title: PatchConnectorSpec
+    ConnectorSpecFieldWithMetadata:
+      properties:
+        key:
+          type: string
+          title: Key
+          description: Name of connector field.
+        value:
+          type: string
+          title: Value
+          description: Value of connector field.
+        d_type:
+          $ref: '#/components/schemas/ConnectorFieldDataType'
+          description: Data type of connector field.
+        is_sensitive:
+          type: boolean
+          title: Is Sensitive
+          description: Whether or not this is a sensitive field.
+      type: object
+      required:
+      - key
+      - value
+      - d_type
+      - is_sensitive
+      title: ConnectorSpecFieldWithMetadata
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SortOrder:
       type: string
       enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
+      - asc
+      - desc
+      title: SortOrder
     PostConnectorSpec:
       properties:
         connector_type:
@@ -518,44 +729,6 @@ components:
       - fields
       - data_plane_id
       title: PostConnectorSpec
-    ConnectorCheckOutcome:
-      type: string
-      enum:
-      - succeeded
-      - failed
-      title: ConnectorCheckOutcome
-    ConnectorSpecFieldWithMetadata:
-      properties:
-        key:
-          type: string
-          title: Key
-          description: Name of connector field.
-        value:
-          type: string
-          title: Value
-          description: Value of connector field.
-        d_type:
-          $ref: '#/components/schemas/ConnectorFieldDataType'
-          description: Data type of connector field.
-        is_sensitive:
-          type: boolean
-          title: Is Sensitive
-          description: Whether or not this is a sensitive field.
-      type: object
-      required:
-      - key
-      - value
-      - d_type
-      - is_sensitive
-      title: ConnectorSpecFieldWithMetadata
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     ConnectorFieldDataType:
       type: string
       enum:
@@ -564,6 +737,47 @@ components:
       - enum
       - int
       title: ConnectorFieldDataType
+    ConnectorCheckOutcome:
+      type: string
+      enum:
+      - succeeded
+      - failed
+      title: ConnectorCheckOutcome
+    ConnectorsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - name
+      title: ConnectorsSort
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
     ConnectorSpecField:
       properties:
         key:
@@ -579,220 +793,6 @@ components:
       - key
       - value
       title: ConnectorSpecField
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ConnectorCheckResult:
-      properties:
-        connection_check_outcome:
-          $ref: '#/components/schemas/ConnectorCheckOutcome'
-          description: Result of the connector check.
-        failure_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason
-          description: Explainer of the connector check failure result.
-      type: object
-      required:
-      - connection_check_outcome
-      title: ConnectorCheckResult
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ResourceList_ConnectorSpec_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/ConnectorSpec'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[ConnectorSpec]
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    PatchConnectorSpec:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of connector.
-        temporary:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Temporary
-          description: True if connector is temporary (ie for testing only), false otherwise.
-        fields:
-          items:
-            $ref: '#/components/schemas/ConnectorSpecField'
-          type: array
-          title: Fields
-          description: List of non-sensitive and sensitive fields for the connector.
-          default: []
-      type: object
-      title: PatchConnectorSpec
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ConnectorsSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      - name
-      title: ConnectorsSort
-    ConnectorType:
-      type: string
-      enum:
-      - shield
-      - S3
-      - GCS
-      - BigQuery
-      - engine_internal
-      - odbc
-      - snowflake
-      - databricks
-      - AzureBlob
-      title: ConnectorType
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    ConnectorSpec:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Connector id.
-        connector_type:
-          $ref: '#/components/schemas/ConnectorType'
-          description: Type of connector.
-        name:
-          type: string
-          title: Name
-          description: Name of connector.
-        temporary:
-          type: boolean
-          title: Temporary
-          description: True if connector is temporary (ie for testing only), false otherwise.
-        fields:
-          items:
-            $ref: '#/components/schemas/ConnectorSpecFieldWithMetadata'
-          type: array
-          title: Fields
-          description: List of fields for the connector.
-        last_updated_by_user:
-          anyOf:
-          - $ref: '#/components/schemas/User'
-          - type: 'null'
-          description: Information for user who last updated the connector.
-        connector_check_result:
-          anyOf:
-          - $ref: '#/components/schemas/ConnectorCheckResult'
-          - type: 'null'
-          description: Connection test results of the connector.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of parent project.
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane that will execute the connection. Should be formatted as a UUID.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - connector_type
-      - name
-      - temporary
-      - fields
-      - project_id
-      - data_plane_id
-      title: ConnectorSpec
     InternalServerError:
       properties:
         detail:

@@ -47,33 +47,39 @@ paths:
       - OAuth2AuthorizationCode: []
 components:
   schemas:
-    ResourceKind:
-      type: string
-      enum:
-      - platform
-      - organization
-      - workspace
-      - project
-      - model
-      - connector
-      - available_dataset
-      - dataset
-      - role_binding
-      - role
-      - user
-      - group
-      - data_plane_association
-      - data_plane
-      - alert_rule
-      - webhook
-      - custom_aggregation
-      - custom_aggregation_test
-      - agent
-      - policy
-      - policy_alert_rule
-      - policy_attestation_rule
-      - policy_assignment
-      title: ResourceKind
+    PostUpsolveTenant:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: ID of the resource.
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      title: PostUpsolveTenant
+    UpsolveToken:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: JWT for use with Upsolve API.
+      type: object
+      required:
+      - token
+      title: UpsolveToken
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -109,39 +115,33 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    UpsolveToken:
-      properties:
-        token:
-          type: string
-          title: Token
-          description: JWT for use with Upsolve API.
-      type: object
-      required:
-      - token
-      title: UpsolveToken
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    PostUpsolveTenant:
-      properties:
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: ID of the resource.
-      type: object
-      required:
-      - resource_kind
-      - resource_id
-      title: PostUpsolveTenant
+    ResourceKind:
+      type: string
+      enum:
+      - platform
+      - organization
+      - workspace
+      - project
+      - model
+      - connector
+      - available_dataset
+      - dataset
+      - role_binding
+      - role
+      - user
+      - group
+      - data_plane_association
+      - data_plane
+      - alert_rule
+      - webhook
+      - custom_aggregation
+      - custom_aggregation_test
+      - agent
+      - policy
+      - policy_alert_rule
+      - policy_attestation_rule
+      - policy_assignment
+      title: ResourceKind
     InternalServerError:
       properties:
         detail:

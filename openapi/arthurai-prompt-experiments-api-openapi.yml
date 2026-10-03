@@ -339,105 +339,22 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    EvalRef-Input:
+    DatasetColumnVariableSource:
       properties:
-        name:
+        type:
           type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/EvalVariableMapping-Input'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources
+          const: dataset_column
+          title: Type
+          description: 'Type of source: ''dataset_column'''
+        dataset_column:
+          $ref: '#/components/schemas/DatasetColumnSource'
+          description: Dataset column source
       type: object
       required:
-      - name
-      - version
-      - variable_mapping
-      title: EvalRef
-      description: Reference to an evaluation configuration
-    PromptEvalResultSummaries:
-      properties:
-        prompt_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prompt Key
-          description: 'Prompt key: ''saved:name:version'' or ''unsaved:auto_name'''
-        prompt_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prompt Type
-          description: 'Type: ''saved'' or ''unsaved'''
-        prompt_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prompt Name
-          description: Name of the prompt (for saved prompts, or auto_name for unsaved)
-        prompt_version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prompt Version
-          description: Version of the prompt (for saved prompts only)
-        eval_results:
-          items:
-            $ref: '#/components/schemas/EvalResultSummary'
-          type: array
-          title: Eval Results
-          description: Results for each evaluation run on this prompt version
-      type: object
-      required:
-      - eval_results
-      title: PromptEvalResultSummaries
-      description: Summary of evaluation results for a prompt version
-    EvalVariableMapping-Output:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the eval variable
-        source:
-          oneOf:
-          - $ref: '#/components/schemas/DatasetColumnVariableSource'
-          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
-          title: Source
-          description: Source of the variable value
-          discriminator:
-            propertyName: type
-            mapping:
-              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
-              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
-      type: object
-      required:
-      - variable_name
-      - source
-      title: EvalVariableMapping
-      description: Mapping of an eval variable to its source (dataset column or experiment output)
-    InputVariable:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - variable_name
-      - value
-      title: InputVariable
-      description: Input variable for a test case
+      - type
+      - dataset_column
+      title: DatasetColumnVariableSource
+      description: Variable source from a dataset column
     SavedPromptConfig:
       properties:
         type:
@@ -459,50 +376,7 @@ components:
       - version
       title: SavedPromptConfig
       description: Configuration for a saved prompt
-    EvalExecutionResult:
-      properties:
-        score:
-          type: number
-          title: Score
-          description: Score from the evaluation
-        explanation:
-          type: string
-          title: Explanation
-          description: Explanation of the score
-        cost:
-          type: string
-          title: Cost
-          description: Cost of the evaluation
-      type: object
-      required:
-      - score
-      - explanation
-      - cost
-      title: EvalExecutionResult
-      description: Results from an eval execution
-    DatasetColumnVariableSource:
-      properties:
-        type:
-          type: string
-          const: dataset_column
-          title: Type
-          description: 'Type of source: ''dataset_column'''
-        dataset_column:
-          $ref: '#/components/schemas/DatasetColumnSource'
-          description: Dataset column source
-      type: object
-      required:
-      - type
-      - dataset_column
-      title: DatasetColumnVariableSource
-      description: Variable source from a dataset column
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    EvalExecution:
+    EvalResultSummary:
       properties:
         eval_name:
           type: string
@@ -512,100 +386,31 @@ components:
           type: string
           title: Eval Version
           description: Version of the evaluation
-        eval_input_variables:
-          items:
-            $ref: '#/components/schemas/InputVariable'
-          type: array
-          title: Eval Input Variables
-          description: Input variables used for the eval
-        eval_results:
-          anyOf:
-          - $ref: '#/components/schemas/EvalExecutionResult'
-          - type: 'null'
-          description: Results from the eval (None if not yet executed)
+        pass_count:
+          type: integer
+          title: Pass Count
+          description: Number of test cases that passed
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of test cases evaluated
       type: object
       required:
       - eval_name
       - eval_version
-      - eval_input_variables
-      title: EvalExecution
-      description: Details of an eval execution
-    TestCaseStatus:
+      - pass_count
+      - total_count
+      title: EvalResultSummary
+      description: Results for a single eval
+    ExperimentStatus:
       type: string
       enum:
       - queued
       - running
-      - evaluating
       - failed
       - completed
-      title: TestCaseStatus
-      description: Status of a test case
-    PromptExperimentListResponse:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
-          items:
-            $ref: '#/components/schemas/PromptExperimentSummary'
-          type: array
-          title: Data
-          description: List of prompt experiment summaries
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: PromptExperimentListResponse
-      description: Paginated list of prompt experiments
-    PromptOutput:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Content of the prompt response
-        tool_calls:
-          items:
-            $ref: '#/components/schemas/ChatCompletionMessageToolCall'
-          type: array
-          title: Tool Calls
-          description: Tool calls made by the prompt
-        cost:
-          type: string
-          title: Cost
-          description: Cost of the prompt execution
-      type: object
-      required:
-      - content
-      - cost
-      title: PromptOutput
-      description: Output from a prompt execution
-    ExperimentOutputSource:
-      properties:
-        json_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Json Path
-          description: Optional JSON path to extract from experiment output. Should use dot notation for array indexing (eg. response.objects.0.properties.category)
-      type: object
-      title: ExperimentOutputSource
-      description: Reference to experiment output
+      title: ExperimentStatus
+      description: Status of an experiment
     CreatePromptExperimentRequest:
       properties:
         name:
@@ -663,210 +468,6 @@ components:
       - prompt_variable_mapping
       title: CreatePromptExperimentRequest
       description: Request to create a new prompt experiment
-    PromptVariableMapping-Input:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the prompt variable
-        source:
-          $ref: '#/components/schemas/DatasetColumnVariableSource'
-          description: Dataset column source
-      type: object
-      required:
-      - variable_name
-      - source
-      title: PromptVariableMapping
-      description: Mapping of a prompt variable to a dataset column source
-    PromptVersionResult:
-      properties:
-        status:
-          $ref: '#/components/schemas/TestCaseStatus'
-          description: Status of the test case
-        dataset_row_id:
-          type: string
-          title: Dataset Row Id
-          description: ID of the dataset row
-        evals:
-          items:
-            $ref: '#/components/schemas/EvalExecution'
-          type: array
-          title: Evals
-          description: Evaluation results for this specific config
-        total_cost:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Total Cost
-          description: Total cost for this config test case execution
-        prompt_input_variables:
-          items:
-            $ref: '#/components/schemas/InputVariable'
-          type: array
-          title: Prompt Input Variables
-          description: Input variables for the prompt
-        rendered_prompt:
-          type: string
-          title: Rendered Prompt
-          description: Prompt with variables replaced
-        output:
-          anyOf:
-          - $ref: '#/components/schemas/PromptOutput'
-          - type: 'null'
-          description: Output from the prompt (None if not yet executed)
-      type: object
-      required:
-      - status
-      - dataset_row_id
-      - evals
-      - prompt_input_variables
-      - rendered_prompt
-      title: PromptVersionResult
-      description: Result for a specific prompt version within a test case
-    EvalVariableMapping-Input:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the eval variable
-        source:
-          oneOf:
-          - $ref: '#/components/schemas/DatasetColumnVariableSource'
-          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
-          title: Source
-          description: Source of the variable value
-          discriminator:
-            propertyName: type
-            mapping:
-              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
-              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
-      type: object
-      required:
-      - variable_name
-      - source
-      title: EvalVariableMapping
-      description: Mapping of an eval variable to its source (dataset column or experiment output)
-    EvalResultSummary:
-      properties:
-        eval_name:
-          type: string
-          title: Eval Name
-          description: Name of the evaluation
-        eval_version:
-          type: string
-          title: Eval Version
-          description: Version of the evaluation
-        pass_count:
-          type: integer
-          title: Pass Count
-          description: Number of test cases that passed
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of test cases evaluated
-      type: object
-      required:
-      - eval_name
-      - eval_version
-      - pass_count
-      - total_count
-      title: EvalResultSummary
-      description: Results for a single eval
-    EvalRef-Output:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/EvalVariableMapping-Output'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources
-      type: object
-      required:
-      - name
-      - version
-      - variable_mapping
-      title: EvalRef
-      description: Reference to an evaluation configuration
-    TestCase:
-      properties:
-        status:
-          $ref: '#/components/schemas/TestCaseStatus'
-          description: Status of the test case
-        dataset_row_id:
-          type: string
-          title: Dataset Row Id
-          description: ID of the dataset row
-        total_cost:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Total Cost
-          description: Total cost for this test case
-        prompt_input_variables:
-          items:
-            $ref: '#/components/schemas/InputVariable'
-          type: array
-          title: Prompt Input Variables
-          description: Input variables for the prompt
-        prompt_results:
-          items:
-            $ref: '#/components/schemas/PromptResult'
-          type: array
-          title: Prompt Results
-          description: Results for each prompt version tested
-      type: object
-      required:
-      - status
-      - dataset_row_id
-      - prompt_input_variables
-      - prompt_results
-      title: TestCase
-      description: Individual test case result
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DatasetColumnSource:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dataset column
-      type: object
-      required:
-      - name
-      title: DatasetColumnSource
-      description: Reference to a dataset column
     PromptResult:
       properties:
         evals:
@@ -912,132 +513,119 @@ components:
       - rendered_prompt
       title: PromptResult
       description: Results from a prompt execution with evals
-    NewDatasetVersionRowColumnItemRequest:
+    TestCaseStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - evaluating
+      - failed
+      - completed
+      title: TestCaseStatus
+      description: Status of a test case
+    PromptVariableMapping-Input:
       properties:
-        column_name:
+        variable_name:
           type: string
-          title: Column Name
-          description: Name of column.
-        column_value:
+          title: Variable Name
+          description: Name of the prompt variable
+        source:
+          $ref: '#/components/schemas/DatasetColumnVariableSource'
+          description: Dataset column source
+      type: object
+      required:
+      - variable_name
+      - source
+      title: PromptVariableMapping
+      description: Mapping of a prompt variable to a dataset column source
+    PromptEvalResultSummaries:
+      properties:
+        prompt_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Key
+          description: 'Prompt key: ''saved:name:version'' or ''unsaved:auto_name'''
+        prompt_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Type
+          description: 'Type: ''saved'' or ''unsaved'''
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Name
+          description: Name of the prompt (for saved prompts, or auto_name for unsaved)
+        prompt_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Version
+          description: Version of the prompt (for saved prompts only)
+        eval_results:
+          items:
+            $ref: '#/components/schemas/EvalResultSummary'
+          type: array
+          title: Eval Results
+          description: Results for each evaluation run on this prompt version
+      type: object
+      required:
+      - eval_results
+      title: PromptEvalResultSummaries
+      description: Summary of evaluation results for a prompt version
+    PromptVersionResult:
+      properties:
+        status:
+          $ref: '#/components/schemas/TestCaseStatus'
+          description: Status of the test case
+        dataset_row_id:
           type: string
-          title: Column Value
-          description: Value of column for the row.
-      type: object
-      required:
-      - column_name
-      - column_value
-      title: NewDatasetVersionRowColumnItemRequest
-      description: Represents a single column-value pair in a dataset row.
-    SummaryResults:
-      properties:
-        prompt_eval_summaries:
+          title: Dataset Row Id
+          description: ID of the dataset row
+        evals:
           items:
-            $ref: '#/components/schemas/PromptEvalResultSummaries'
+            $ref: '#/components/schemas/EvalExecution'
           type: array
-          title: Prompt Eval Summaries
-          description: Summary for each prompt version tested
-      type: object
-      required:
-      - prompt_eval_summaries
-      title: SummaryResults
-      description: Summary results across all prompt versions and evaluations
-    DatasetRefInput:
-      properties:
-        id:
+          title: Evals
+          description: Evaluation results for this specific config
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost for this config test case execution
+        prompt_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Prompt Input Variables
+          description: Input variables for the prompt
+        rendered_prompt:
           type: string
-          format: uuid
-          title: Id
-          description: Dataset ID
-        version:
-          type: integer
-          title: Version
-          description: Dataset version number
+          title: Rendered Prompt
+          description: Prompt with variables replaced
+        output:
+          anyOf:
+          - $ref: '#/components/schemas/PromptOutput'
+          - type: 'null'
+          description: Output from the prompt (None if not yet executed)
       type: object
       required:
-      - id
-      - version
-      title: DatasetRefInput
-      description: Reference to a dataset and version for input (without name)
-    TestCaseListResponse:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
-          items:
-            $ref: '#/components/schemas/TestCase'
-          type: array
-          title: Data
-          description: List of test cases
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: TestCaseListResponse
-      description: Paginated list of test cases
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ChatCompletionMessageToolCall:
-      properties: {}
-      additionalProperties: true
-      type: object
-      title: ChatCompletionMessageToolCall
-    PromptVersionResultListResponse:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
-          items:
-            $ref: '#/components/schemas/PromptVersionResult'
-          type: array
-          title: Data
-          description: List of results for the prompt version
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: PromptVersionResultListResponse
-      description: Paginated list of results for a specific prompt version
+      - status
+      - dataset_row_id
+      - evals
+      - prompt_input_variables
+      - rendered_prompt
+      title: PromptVersionResult
+      description: Result for a specific prompt version within a test case
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
     PromptExperimentSummary:
       properties:
         id:
@@ -1126,16 +714,65 @@ components:
       - prompt_configs
       title: PromptExperimentSummary
       description: Summary of a prompt experiment
-    ExperimentStatus:
-      type: string
-      enum:
-      - queued
-      - running
-      - failed
-      - completed
-      title: ExperimentStatus
-      description: Status of an experiment
-    DatasetRef:
+    EvalVariableMapping-Input:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    TestCase:
+      properties:
+        status:
+          $ref: '#/components/schemas/TestCaseStatus'
+          description: Status of the test case
+        dataset_row_id:
+          type: string
+          title: Dataset Row Id
+          description: ID of the dataset row
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost for this test case
+        prompt_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Prompt Input Variables
+          description: Input variables for the prompt
+        prompt_results:
+          items:
+            $ref: '#/components/schemas/PromptResult'
+          type: array
+          title: Prompt Results
+          description: Results for each prompt version tested
+      type: object
+      required:
+      - status
+      - dataset_row_id
+      - prompt_input_variables
+      - prompt_results
+      title: TestCase
+      description: Individual test case result
+    DatasetRefInput:
       properties:
         id:
           type: string
@@ -1146,17 +783,44 @@ components:
           type: integer
           title: Version
           description: Dataset version number
-        name:
-          type: string
-          title: Name
-          description: Dataset name
       type: object
       required:
       - id
       - version
-      - name
-      title: DatasetRef
-      description: Reference to a dataset and version (with name)
+      title: DatasetRefInput
+      description: Reference to a dataset and version for input (without name)
+    NewDatasetVersionRowColumnItemRequest:
+      properties:
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column.
+        column_value:
+          type: string
+          title: Column Value
+          description: Value of column for the row.
+      type: object
+      required:
+      - column_name
+      - column_value
+      title: NewDatasetVersionRowColumnItemRequest
+      description: Represents a single column-value pair in a dataset row.
+    ExperimentOutputVariableSource:
+      properties:
+        type:
+          type: string
+          const: experiment_output
+          title: Type
+          description: 'Type of source: ''experiment_output'''
+        experiment_output:
+          $ref: '#/components/schemas/ExperimentOutputSource'
+          description: Experiment output source
+      type: object
+      required:
+      - type
+      - experiment_output
+      title: ExperimentOutputVariableSource
+      description: Variable source from experiment output
     ModelProvider:
       type: string
       enum:
@@ -1183,22 +847,63 @@ components:
       - source
       title: PromptVariableMapping
       description: Mapping of a prompt variable to a dataset column source
-    ExperimentOutputVariableSource:
+    PromptExperimentListResponse:
       properties:
-        type:
-          type: string
-          const: experiment_output
-          title: Type
-          description: 'Type of source: ''experiment_output'''
-        experiment_output:
-          $ref: '#/components/schemas/ExperimentOutputSource'
-          description: Experiment output source
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/PromptExperimentSummary'
+          type: array
+          title: Data
+          description: List of prompt experiment summaries
       type: object
       required:
-      - type
-      - experiment_output
-      title: ExperimentOutputVariableSource
-      description: Variable source from experiment output
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: PromptExperimentListResponse
+      description: Paginated list of prompt experiments
+    SummaryResults:
+      properties:
+        prompt_eval_summaries:
+          items:
+            $ref: '#/components/schemas/PromptEvalResultSummaries'
+          type: array
+          title: Prompt Eval Summaries
+          description: Summary for each prompt version tested
+      type: object
+      required:
+      - prompt_eval_summaries
+      title: SummaryResults
+      description: Summary results across all prompt versions and evaluations
+    DatasetColumnSource:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset column
+      type: object
+      required:
+      - name
+      title: DatasetColumnSource
+      description: Reference to a dataset column
     UnsavedPromptConfig:
       properties:
         type:
@@ -1257,6 +962,279 @@ components:
       - model_provider
       title: UnsavedPromptConfig
       description: Configuration for an unsaved prompt
+    EvalRef-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Input'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
+      type: object
+      required:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    TestCaseListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/TestCase'
+          type: array
+          title: Data
+          description: List of test cases
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: TestCaseListResponse
+      description: Paginated list of test cases
+    EvalVariableMapping-Output:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EvalExecutionResult:
+      properties:
+        score:
+          type: number
+          title: Score
+          description: Score from the evaluation
+        explanation:
+          type: string
+          title: Explanation
+          description: Explanation of the score
+        cost:
+          type: string
+          title: Cost
+          description: Cost of the evaluation
+      type: object
+      required:
+      - score
+      - explanation
+      - cost
+      title: EvalExecutionResult
+      description: Results from an eval execution
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EvalRef-Output:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Output'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
+      type: object
+      required:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    PromptVersionResultListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/PromptVersionResult'
+          type: array
+          title: Data
+          description: List of results for the prompt version
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: PromptVersionResultListResponse
+      description: Paginated list of results for a specific prompt version
+    InputVariable:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - variable_name
+      - value
+      title: InputVariable
+      description: Input variable for a test case
+    EvalExecution:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        eval_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Eval Input Variables
+          description: Input variables used for the eval
+        eval_results:
+          anyOf:
+          - $ref: '#/components/schemas/EvalExecutionResult'
+          - type: 'null'
+          description: Results from the eval (None if not yet executed)
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - eval_input_variables
+      title: EvalExecution
+      description: Details of an eval execution
+    ExperimentOutputSource:
+      properties:
+        json_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Json Path
+          description: Optional JSON path to extract from experiment output. Should use dot notation for array indexing (eg. response.objects.0.properties.category)
+      type: object
+      title: ExperimentOutputSource
+      description: Reference to experiment output
+    ChatCompletionMessageToolCall:
+      properties: {}
+      additionalProperties: true
+      type: object
+      title: ChatCompletionMessageToolCall
+    DatasetRef:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dataset ID
+        version:
+          type: integer
+          title: Version
+          description: Dataset version number
+        name:
+          type: string
+          title: Name
+          description: Dataset name
+      type: object
+      required:
+      - id
+      - version
+      - name
+      title: DatasetRef
+      description: Reference to a dataset and version (with name)
     PromptExperimentDetail:
       properties:
         id:
@@ -1365,6 +1343,28 @@ components:
       - summary_results
       title: PromptExperimentDetail
       description: Detailed information about a prompt experiment
+    PromptOutput:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Content of the prompt response
+        tool_calls:
+          items:
+            $ref: '#/components/schemas/ChatCompletionMessageToolCall'
+          type: array
+          title: Tool Calls
+          description: Tool calls made by the prompt
+        cost:
+          type: string
+          title: Cost
+          description: Cost of the prompt execution
+      type: object
+      required:
+      - content
+      - cost
+      title: PromptOutput
+      description: Output from a prompt execution
   securitySchemes:
     API_Key:
       type: http

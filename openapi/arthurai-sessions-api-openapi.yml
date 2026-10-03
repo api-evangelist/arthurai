@@ -234,37 +234,35 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    VariableTemplateValue:
+    SessionTracesResponse:
       properties:
-        name:
+        session_id:
           type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
+          title: Session Id
+          description: Session identifier
+        count:
+          type: integer
+          title: Count
+          description: Number of traces in this session
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        traces:
+          items:
+            $ref: '#/components/schemas/TraceResponse'
+          type: array
+          title: Traces
+          description: List of full trace trees
       type: object
       required:
-      - name
-      - value
-      title: VariableTemplateValue
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
+      - session_id
+      - count
+      - traces
+      title: SessionTracesResponse
+      description: Response for session traces endpoint
     SessionListResponse:
       properties:
         count:
@@ -289,123 +287,21 @@ components:
       - sessions
       title: SessionListResponse
       description: Response for session list endpoint
-    ValidationError:
+    VariableTemplateValue:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        name:
           type: string
-          title: Message
-        type:
+          title: Name
+          description: Name of the variable
+        value:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Value
+          description: Value of the variable
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    AgenticAnnotationResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the annotation
-        annotation_type:
-          $ref: '#/components/schemas/AgenticAnnotationType'
-          description: Type of annotation
-        trace_id:
-          type: string
-          title: Trace Id
-          description: ID of the trace this annotation belongs to
-        continuous_eval_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Continuous Eval Id
-          description: ID of the continuous eval this annotation belongs to
-        continuous_eval_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Continuous Eval Name
-          description: Name of the continuous eval this annotation belongs to
-        eval_type:
-          anyOf:
-          - $ref: '#/components/schemas/EvalType'
-          - type: 'null'
-          description: 'Type of eval: ''llm_eval'' or ''ml_eval'''
-        eval_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Eval Name
-          description: Name of the eval the continuous eval used when scoring
-        eval_version:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Eval Version
-          description: Version of the eval the continuous eval used when scoring
-        annotation_score:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Annotation Score
-          description: Binary score for a positive or negative annotation.
-        annotation_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Annotation Description
-          description: Description of the annotation.
-        input_variables:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/VariableTemplateValue'
-            type: array
-          - type: 'null'
-          title: Input Variables
-          description: Input variables for the continuous eval
-        run_status:
-          anyOf:
-          - $ref: '#/components/schemas/ContinuousEvalRunStatus'
-          - type: 'null'
-          description: Status of the continuous eval run
-        cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Cost
-          description: Cost of the continuous eval run
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the annotation was created
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the annotation was last updated
-      type: object
-      required:
-      - id
-      - annotation_type
-      - trace_id
-      - created_at
-      - updated_at
-      title: AgenticAnnotationResponse
+      - name
+      - value
+      title: VariableTemplateValue
     NestedSpanWithMetricsResponse:
       properties:
         prompt_token_count:
@@ -546,108 +442,6 @@ components:
       - raw_data
       title: NestedSpanWithMetricsResponse
       description: Nested span response with children for building span trees
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MetricType:
-      type: string
-      enum:
-      - QueryRelevance
-      - ResponseRelevance
-      - ToolSelection
-      title: MetricType
-    MetricResultResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the metric result
-        metric_type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the metric
-        details:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Details
-          description: JSON-serialized metric details
-        prompt_tokens:
-          type: integer
-          title: Prompt Tokens
-          description: Number of prompt tokens used
-        completion_tokens:
-          type: integer
-          title: Completion Tokens
-          description: Number of completion tokens used
-        latency_ms:
-          type: integer
-          title: Latency Ms
-          description: Latency in milliseconds
-        span_id:
-          type: string
-          title: Span Id
-          description: ID of the span this result belongs to
-        metric_id:
-          type: string
-          title: Metric Id
-          description: ID of the metric that generated this result
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the result was created
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the result was last updated
-      type: object
-      required:
-      - id
-      - metric_type
-      - prompt_tokens
-      - completion_tokens
-      - latency_ms
-      - span_id
-      - metric_id
-      - created_at
-      - updated_at
-      title: MetricResultResponse
-    SessionTracesResponse:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-          description: Session identifier
-        count:
-          type: integer
-          title: Count
-          description: Number of traces in this session
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        traces:
-          items:
-            $ref: '#/components/schemas/TraceResponse'
-          type: array
-          title: Traces
-          description: List of full trace trees
-      type: object
-      required:
-      - session_id
-      - count
-      - traces
-      title: SessionTracesResponse
-      description: Response for session traces endpoint
     TraceResponse:
       properties:
         prompt_token_count:
@@ -734,6 +528,218 @@ components:
       - end_time
       title: TraceResponse
       description: Response model for a single trace containing nested spans
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
+    MetricResultResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the metric result
+        metric_type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric
+        details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Details
+          description: JSON-serialized metric details
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          description: Number of prompt tokens used
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          description: Number of completion tokens used
+        latency_ms:
+          type: integer
+          title: Latency Ms
+          description: Latency in milliseconds
+        span_id:
+          type: string
+          title: Span Id
+          description: ID of the span this result belongs to
+        metric_id:
+          type: string
+          title: Metric Id
+          description: ID of the metric that generated this result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the result was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the result was last updated
+      type: object
+      required:
+      - id
+      - metric_type
+      - prompt_tokens
+      - completion_tokens
+      - latency_ms
+      - span_id
+      - metric_id
+      - created_at
+      - updated_at
+      title: MetricResultResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgenticAnnotationResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the annotation
+        annotation_type:
+          $ref: '#/components/schemas/AgenticAnnotationType'
+          description: Type of annotation
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace this annotation belongs to
+        continuous_eval_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Id
+          description: ID of the continuous eval this annotation belongs to
+        continuous_eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Continuous Eval Name
+          description: Name of the continuous eval this annotation belongs to
+        eval_type:
+          anyOf:
+          - $ref: '#/components/schemas/EvalType'
+          - type: 'null'
+          description: 'Type of eval: ''llm_eval'' or ''ml_eval'''
+        eval_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eval Name
+          description: Name of the eval the continuous eval used when scoring
+        eval_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Eval Version
+          description: Version of the eval the continuous eval used when scoring
+        annotation_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Annotation Score
+          description: Binary score for a positive or negative annotation.
+        annotation_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Annotation Description
+          description: Description of the annotation.
+        input_variables:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/VariableTemplateValue'
+            type: array
+          - type: 'null'
+          title: Input Variables
+          description: Input variables for the continuous eval
+        run_status:
+          anyOf:
+          - $ref: '#/components/schemas/ContinuousEvalRunStatus'
+          - type: 'null'
+          description: Status of the continuous eval run
+        cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cost
+          description: Cost of the continuous eval run
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the annotation was created
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the annotation was last updated
+      type: object
+      required:
+      - id
+      - annotation_type
+      - trace_id
+      - created_at
+      - updated_at
+      title: AgenticAnnotationResponse
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
     EvalType:
       type: string
       enum:
@@ -832,12 +838,6 @@ components:
       - duration_ms
       title: SessionMetadataResponse
       description: Session summary metadata
-    AgenticAnnotationType:
-      type: string
-      enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
   securitySchemes:
     API_Key:
       type: http

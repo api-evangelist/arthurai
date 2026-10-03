@@ -365,6 +365,38 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    DataPlaneSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: DataPlaneSort
     DataPlane:
       properties:
         created_at:
@@ -426,32 +458,81 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
-    ResourceList_DataPlane_:
+    PatchDataPlane:
       properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataPlane'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of data plane.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of data plane.
+        infrastructure:
+          anyOf:
+          - $ref: '#/components/schemas/Infrastructure'
+          - type: 'null'
+          description: Optional. If set will update the infrastructure for the engine. Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        capabilities:
+          anyOf:
+          - $ref: '#/components/schemas/PatchDataPlaneCapabilities'
+          - type: 'null'
+          description: Capabilities for this data plane.
       type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataPlane]
-    PatchDataPlaneCapabilities:
+      title: PatchDataPlane
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    DataPlaneCapabilities:
       properties:
         gen_ai_enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
+          type: boolean
           title: Gen Ai Enabled
-          description: Optional. If set will update the gen_ai_enabled capability for the engine.
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
       type: object
-      title: PatchDataPlaneCapabilities
+      title: DataPlaneCapabilities
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     ValidationError:
       properties:
         loc:
@@ -478,15 +559,35 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    ResourceList_DataPlane_:
       properties:
-        detail:
+        records:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/DataPlane'
           type: array
-          title: Detail
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
-      title: HTTPValidationError
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataPlane]
+    InfrastructureList:
+      properties:
+        infrastructures:
+          items:
+            $ref: '#/components/schemas/Infrastructure'
+          type: array
+          title: Infrastructures
+          description: List of supported infrastructure values.
+      type: object
+      required:
+      - infrastructures
+      title: InfrastructureList
+      description: List of supported infrastructure values for engines.
     SensitiveDataPlane:
       properties:
         created_at:
@@ -562,80 +663,6 @@ components:
       - client_id
       - client_secret
       title: SensitiveDataPlane
-    DataPlaneSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: DataPlaneSort
-    PatchDataPlane:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of data plane.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of data plane.
-        infrastructure:
-          anyOf:
-          - $ref: '#/components/schemas/Infrastructure'
-          - type: 'null'
-          description: Optional. If set will update the infrastructure for the engine. Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
-        capabilities:
-          anyOf:
-          - $ref: '#/components/schemas/PatchDataPlaneCapabilities'
-          - type: 'null'
-          description: Capabilities for this data plane.
-      type: object
-      title: PatchDataPlane
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
     PostDataPlane:
       properties:
         name:
@@ -658,43 +685,16 @@ components:
       - name
       - description
       title: PostDataPlane
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    DataPlaneCapabilities:
+    PatchDataPlaneCapabilities:
       properties:
         gen_ai_enabled:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
           title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
+          description: Optional. If set will update the gen_ai_enabled capability for the engine.
       type: object
-      title: DataPlaneCapabilities
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    InfrastructureList:
-      properties:
-        infrastructures:
-          items:
-            $ref: '#/components/schemas/Infrastructure'
-          type: array
-          title: Infrastructures
-          description: List of supported infrastructure values.
-      type: object
-      required:
-      - infrastructures
-      title: InfrastructureList
-      description: List of supported infrastructure values for engines.
+      title: PatchDataPlaneCapabilities
     InternalServerError:
       properties:
         detail:
