@@ -247,6 +247,84 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    SketchPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: string
+          title: Value
+          description: Base64-encoded string representation of a sketch.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: SketchPoint
     SketchTimeSeries:
       properties:
         dimensions:
@@ -266,23 +344,6 @@ components:
       - dimensions
       - values
       title: SketchTimeSeries
-    MetricsUpload:
-      properties:
-        metrics:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/NumericMetric'
-            - $ref: '#/components/schemas/SketchMetric'
-          type: array
-          title: Metrics
-          description: List of metrics to upload.
-      type: object
-      required:
-      - metrics
-      title: MetricsUpload
-      description: 'The set of metrics that are available to submit via the PostMetrics API
-
-        Notably, this does not include systems metrics jobs'
     PostMetricsVersions:
       properties:
         range_start:
@@ -300,7 +361,58 @@ components:
       - range_start
       - range_end
       title: PostMetricsVersions
-    SketchPoint:
+    PostMetricsQueryTimeRange:
+      properties:
+        start:
+          type: string
+          format: date-time
+          title: Start
+          description: Start timestamp of the metrics range.
+        end:
+          type: string
+          format: date-time
+          title: End
+          description: End timestamp of the metrics range.
+      type: object
+      required:
+      - start
+      - end
+      title: PostMetricsQueryTimeRange
+    MetricsUpload:
+      properties:
+        metrics:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumericMetric'
+            - $ref: '#/components/schemas/SketchMetric'
+          type: array
+          title: Metrics
+          description: List of metrics to upload.
+      type: object
+      required:
+      - metrics
+      title: MetricsUpload
+      description: 'The set of metrics that are available to submit via the PostMetrics API
+
+        Notably, this does not include systems metrics jobs'
+    NumericMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        numeric_series:
+          items:
+            $ref: '#/components/schemas/NumericTimeSeries'
+          type: array
+          title: Numeric Series
+          description: List of numeric time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - numeric_series
+      title: NumericMetric
+    NumericPoint:
       properties:
         timestamp:
           type: string
@@ -308,64 +420,32 @@ components:
           title: Timestamp
           description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
         value:
-          type: string
+          type: number
           title: Value
-          description: Base64-encoded string representation of a sketch.
+          description: Floating point value for the metric.
       type: object
       required:
       - timestamp
       - value
-      title: SketchPoint
-    Pagination:
+      title: NumericPoint
+    PostMetricsQueryResultFilter:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    IntervalUnit:
-      type: string
-      enum:
-      - seconds
-      - minutes
-      - hours
-      - days
-      title: IntervalUnit
-    SketchMetric:
-      properties:
-        name:
+        column:
           type: string
-          title: Name
-          description: Name of the metric.
-        sketch_series:
-          items:
-            $ref: '#/components/schemas/SketchTimeSeries'
-          type: array
-          title: Sketch Series
-          description: List of sketch-based time series to upload for the metric.
+          title: Column
+          description: Column name to use for filtering metrics.
+        op:
+          $ref: '#/components/schemas/MetricsResultFilterOp'
+          description: Operation to filter metrics. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
       type: object
       required:
-      - name
-      - sketch_series
-      title: SketchMetric
+      - column
+      - op
+      - value
+      title: PostMetricsQueryResultFilter
     MetricsQueryResult:
       properties:
         results:
@@ -394,69 +474,31 @@ components:
       required:
       - or
       title: PostMetricsQueryResultFilterOrGroup
-    MetricsResultFilterOp:
-      type: string
-      enum:
-      - greater_than
-      - less_than
-      - equals
-      - not_equals
-      - greater_than_or_equal
-      - less_than_or_equal
-      - in
-      - not_in
-      title: MetricsResultFilterOp
-    NumericTimeSeries:
+    Pagination:
       properties:
-        dimensions:
-          items:
-            $ref: '#/components/schemas/Dimension'
-          type: array
-          title: Dimensions
-          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
-        values:
-          items:
-            $ref: '#/components/schemas/NumericPoint'
-          type: array
-          title: Values
-          description: List of numeric time series points.
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - dimensions
-      - values
-      title: NumericTimeSeries
-    NumericMetric:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the metric.
-        numeric_series:
-          items:
-            $ref: '#/components/schemas/NumericTimeSeries'
-          type: array
-          title: Numeric Series
-          description: List of numeric time series to upload for the metric.
-      type: object
-      required:
-      - name
-      - numeric_series
-      title: NumericMetric
-    PostMetricsQueryResultFilterAndGroup:
-      properties:
-        and:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/PostMetricsQueryResultFilterAndGroup'
-            - $ref: '#/components/schemas/PostMetricsQueryResultFilterOrGroup'
-            - $ref: '#/components/schemas/PostMetricsQueryResultFilter'
-          type: array
-          title: And
-          description: List of filters to apply with AND operator. Needs to be provided if `or` is empty.
-      type: object
-      required:
-      - and
-      title: PostMetricsQueryResultFilterAndGroup
+      - total_pages
+      - total_records
+      title: Pagination
     PostMetricsQuery:
       properties:
         query:
@@ -489,6 +531,81 @@ components:
       - query
       - time_range
       title: PostMetricsQuery
+    ResourceList_MetricsVersion_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/MetricsVersion'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[MetricsVersion]
+    SketchMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        sketch_series:
+          items:
+            $ref: '#/components/schemas/SketchTimeSeries'
+          type: array
+          title: Sketch Series
+          description: List of sketch-based time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - sketch_series
+      title: SketchMetric
+    MetricsResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: MetricsResultFilterOp
+    PostMetricsQueryResultFilterAndGroup:
+      properties:
+        and:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterAndGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilterOrGroup'
+            - $ref: '#/components/schemas/PostMetricsQueryResultFilter'
+          type: array
+          title: And
+          description: List of filters to apply with AND operator. Needs to be provided if `or` is empty.
+      type: object
+      required:
+      - and
+      title: PostMetricsQueryResultFilterAndGroup
+    Dimension:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dimension.
+        value:
+          type: string
+          title: Value
+          description: Value of the dimension.
+      type: object
+      required:
+      - name
+      - value
+      title: Dimension
     MetricsUploadResult:
       properties:
         total_metrics:
@@ -514,56 +631,31 @@ components:
       - num_sketch_metrics
       - num_series
       title: MetricsUploadResult
-    NotFoundError:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MetricsVersionsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - range_start
+      - range_end
+      title: MetricsVersionsSort
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Resource not found
+          default: Bad Request
       type: object
-      title: NotFoundError
-    ResourceList_MetricsVersion_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/MetricsVersion'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[MetricsVersion]
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: BadRequestError
     MetricsVersion:
       properties:
         created_at:
@@ -604,125 +696,33 @@ components:
       - range_start
       - range_end
       title: MetricsVersion
-    NumericPoint:
+    NumericTimeSeries:
       properties:
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp
-          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
-        value:
-          type: number
-          title: Value
-          description: Floating point value for the metric.
-      type: object
-      required:
-      - timestamp
-      - value
-      title: NumericPoint
-    HTTPValidationError:
-      properties:
-        detail:
+        dimensions:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Dimension'
           type: array
-          title: Detail
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/NumericPoint'
+          type: array
+          title: Values
+          description: List of numeric time series points.
       type: object
-      title: HTTPValidationError
-    SortOrder:
+      required:
+      - dimensions
+      - values
+      title: NumericTimeSeries
+    IntervalUnit:
       type: string
       enum:
-      - asc
-      - desc
-      title: SortOrder
-    Dimension:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dimension.
-        value:
-          type: string
-          title: Value
-          description: Value of the dimension.
-      type: object
-      required:
-      - name
-      - value
-      title: Dimension
-    MetricsVersionsSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      - range_start
-      - range_end
-      title: MetricsVersionsSort
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    PostMetricsQueryResultFilter:
-      properties:
-        column:
-          type: string
-          title: Column
-          description: Column name to use for filtering metrics.
-        op:
-          $ref: '#/components/schemas/MetricsResultFilterOp'
-          description: Operation to filter metrics. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
-        value:
-          title: Value
-          description: Value used filtering the metrics.
-      type: object
-      required:
-      - column
-      - op
-      - value
-      title: PostMetricsQueryResultFilter
-    PostMetricsQueryTimeRange:
-      properties:
-        start:
-          type: string
-          format: date-time
-          title: Start
-          description: Start timestamp of the metrics range.
-        end:
-          type: string
-          format: date-time
-          title: End
-          description: End timestamp of the metrics range.
-      type: object
-      required:
-      - start
-      - end
-      title: PostMetricsQueryTimeRange
-    AlertRuleInterval:
-      properties:
-        unit:
-          $ref: '#/components/schemas/IntervalUnit'
-          description: 'Unit of time interval. Example: ''minutes''.'
-        count:
-          type: integer
-          title: Count
-          description: 'Number of units in the interval. Example: ''5''.'
-      type: object
-      required:
-      - unit
-      - count
-      title: AlertRuleInterval
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

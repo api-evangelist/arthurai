@@ -112,6 +112,36 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    APIKeysRolesEnum:
+      type: string
+      enum:
+      - DEFAULT-RULE-ADMIN
+      - TASK-ADMIN
+      - VALIDATION-USER
+      - ORG-AUDITOR
+      - ORG-ADMIN
+      - TENANT-USER
+      title: APIKeysRolesEnum
+    NewApiKeyRequest:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the API key. Optional.
+        roles:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/APIKeysRolesEnum'
+            type: array
+          - type: 'null'
+          title: Roles
+          description: 'Role that will be assigned to API key. Allowed values: [<APIKeysRolesEnum.DEFAULT_RULE_ADMIN: ''DEFAULT-RULE-ADMIN''>, <APIKeysRolesEnum.TASK_ADMIN: ''TASK-ADMIN''>, <APIKeysRolesEnum.VALIDATION_USER: ''VALIDATION-USER''>, <APIKeysRolesEnum.ORG_AUDITOR: ''ORG-AUDITOR''>, <APIKeysRolesEnum.ORG_ADMIN: ''ORG-ADMIN''>, <APIKeysRolesEnum.TENANT_USER: ''TENANT-USER''>]'
+          default:
+          - VALIDATION-USER
+      type: object
+      title: NewApiKeyRequest
     ValidationError:
       properties:
         loc:
@@ -200,36 +230,6 @@ components:
       - is_active
       - created_at
       title: ApiKeyResponse
-    APIKeysRolesEnum:
-      type: string
-      enum:
-      - DEFAULT-RULE-ADMIN
-      - TASK-ADMIN
-      - VALIDATION-USER
-      - ORG-AUDITOR
-      - ORG-ADMIN
-      - TENANT-USER
-      title: APIKeysRolesEnum
-    NewApiKeyRequest:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the API key. Optional.
-        roles:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/APIKeysRolesEnum'
-            type: array
-          - type: 'null'
-          title: Roles
-          description: 'Role that will be assigned to API key. Allowed values: [<APIKeysRolesEnum.DEFAULT_RULE_ADMIN: ''DEFAULT-RULE-ADMIN''>, <APIKeysRolesEnum.TASK_ADMIN: ''TASK-ADMIN''>, <APIKeysRolesEnum.VALIDATION_USER: ''VALIDATION-USER''>, <APIKeysRolesEnum.ORG_AUDITOR: ''ORG-AUDITOR''>, <APIKeysRolesEnum.ORG_ADMIN: ''ORG-ADMIN''>, <APIKeysRolesEnum.TENANT_USER: ''TENANT-USER''>]'
-          default:
-          - VALIDATION-USER
-      type: object
-      title: NewApiKeyRequest
   securitySchemes:
     API_Key:
       type: http

@@ -236,139 +236,61 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    RuleResponse:
+    ExampleConfig:
       properties:
-        id:
+        example:
           type: string
-          title: Id
-          description: ID of the Rule
-        name:
-          type: string
-          title: Name
-          description: Name of the Rule
-        type:
-          $ref: '#/components/schemas/RuleType'
-          description: Type of Rule
-        apply_to_prompt:
+          title: Example
+          description: Custom example for the sensitive data
+        result:
           type: boolean
-          title: Apply To Prompt
-          description: Rule applies to prompt
-        apply_to_response:
-          type: boolean
-          title: Apply To Response
-          description: Rule applies to response
-        enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Enabled
-          description: Rule is enabled for the task
-        scope:
-          $ref: '#/components/schemas/RuleScope'
-          description: Scope of the rule. The rule can be set at default level or task level.
-        created_at:
-          type: integer
-          title: Created At
-          description: Time the rule was created in unix milliseconds
-        updated_at:
-          type: integer
-          title: Updated At
-          description: Time the rule was updated in unix milliseconds
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/KeywordsConfig'
-          - $ref: '#/components/schemas/RegexConfig'
-          - $ref: '#/components/schemas/ExamplesConfig'
-          - $ref: '#/components/schemas/ToxicityConfig'
-          - $ref: '#/components/schemas/PIIConfig'
-          - type: 'null'
-          title: Config
-          description: Config of the rule
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
       type: object
       required:
-      - id
-      - name
-      - type
-      - apply_to_prompt
-      - apply_to_response
-      - scope
-      - created_at
-      - updated_at
-      title: RuleResponse
-    KeywordsConfig:
-      properties:
-        keywords:
-          items:
-            type: string
-          type: array
-          title: Keywords
-          description: List of Keywords
-      type: object
-      required:
-      - keywords
-      title: KeywordsConfig
+      - example
+      - result
+      title: ExampleConfig
       example:
-        keywords:
-        - Blocked_Keyword_1
-        - Blocked_Keyword_2
-    RuleType:
-      type: string
-      enum:
-      - KeywordRule
-      - ModelHallucinationRuleV2
-      - ModelSensitiveDataRule
-      - PIIDataRule
-      - PromptInjectionRule
-      - RegexRule
-      - ToxicityRule
-      title: RuleType
-    ToxicityConfig:
+        example: John has O negative blood group
+        result: true
+    PIIConfig:
       properties:
-        threshold:
-          type: number
-          title: Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
-          default: 0.5
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
       additionalProperties: false
       type: object
-      title: ToxicityConfig
+      title: PIIConfig
       example:
-        threshold: 0.5
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
     NewRuleRequest:
       properties:
         name:
@@ -509,12 +431,76 @@ components:
             threshold: 0.5
           name: Toxicity Rule
           type: ToxicityRule
-    RuleScope:
+    RuleType:
       type: string
       enum:
-      - default
-      - task
-      title: RuleScope
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
     RegexConfig:
       properties:
         regex_patterns:
@@ -532,24 +518,6 @@ components:
         regex_patterns:
         - \d{3}-\d{2}-\d{4}
         - \d{5}-\d{6}-\d{7}
-    ExampleConfig:
-      properties:
-        example:
-          type: string
-          title: Example
-          description: Custom example for the sensitive data
-        result:
-          type: boolean
-          title: Result
-          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
-      type: object
-      required:
-      - example
-      - result
-      title: ExampleConfig
-      example:
-        example: John has O negative blood group
-        result: true
     PaginationSortMethod:
       type: string
       enum:
@@ -573,43 +541,6 @@ components:
       - count
       - rules
       title: SearchRulesResponse
-    PIIConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
-        confidence_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Confidence Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
-          default: 0
-          deprecated: true
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: Optional. List of strings to pass PII validation.
-      additionalProperties: false
-      type: object
-      title: PIIConfig
-      example:
-        allow_list:
-        - arthur.ai
-        - Arthur
-        confidence_threshold: '0.5'
-        disabled_pii_entities:
-        - PERSON
-        - URL
     SearchRulesRequest:
       properties:
         rule_ids:
@@ -650,6 +581,75 @@ components:
           description: List of rule types to search for.
       type: object
       title: SearchRulesRequest
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
     ExamplesConfig:
       properties:
         examples:

@@ -47,6 +47,24 @@ paths:
       - OAuth2AuthorizationCode: []
 components:
   schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    UpsolveToken:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: JWT for use with Upsolve API.
+      type: object
+      required:
+      - token
+      title: UpsolveToken
     PostUpsolveTenant:
       properties:
         resource_kind:
@@ -62,24 +80,6 @@ components:
       - resource_kind
       - resource_id
       title: PostUpsolveTenant
-    UpsolveToken:
-      properties:
-        token:
-          type: string
-          title: Token
-          description: JWT for use with Upsolve API.
-      type: object
-      required:
-      - token
-      title: UpsolveToken
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -115,6 +115,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     ResourceKind:
       type: string
       enum:
@@ -142,14 +150,6 @@ components:
       - policy_attestation_rule
       - policy_assignment
       title: ResourceKind
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

@@ -125,6 +125,36 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    TraceUserListResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: Total number of users matching filters
+        display_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Currency
+          description: Currency code for cost fields
+        users:
+          items:
+            $ref: '#/components/schemas/TraceUserMetadataResponse'
+          type: array
+          title: Users
+          description: List of user metadata
+      type: object
+      required:
+      - count
+      - users
+      title: TraceUserListResponse
+      description: Response for trace user list endpoint
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
     TraceUserMetadataResponse:
       properties:
         prompt_token_count:
@@ -253,36 +283,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    TraceUserListResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: Total number of users matching filters
-        display_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display Currency
-          description: Currency code for cost fields
-        users:
-          items:
-            $ref: '#/components/schemas/TraceUserMetadataResponse'
-          type: array
-          title: Users
-          description: List of user metadata
-      type: object
-      required:
-      - count
-      - users
-      title: TraceUserListResponse
-      description: Response for trace user list endpoint
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
   securitySchemes:
     API_Key:
       type: http

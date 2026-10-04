@@ -554,46 +554,138 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    SyntheticDataPromptStatus:
+    ImageURL:
       properties:
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: string
-            const: empty
-          title: Model Provider
-          description: Model provider stored in the SDG system prompt. The sentinel 'empty' indicates the prompt has not yet been configured.
-        model_name:
+        url:
           type: string
-          title: Model Name
-          description: Model name stored in the SDG system prompt
-        is_placeholder:
-          type: boolean
-          title: Is Placeholder
-          description: True when the prompt uses the empty placeholder model
+          title: Url
+          description: URL of the image
       type: object
       required:
-      - model_provider
-      - model_name
-      - is_placeholder
-      title: SyntheticDataPromptStatus
-    LogitBiasItem:
+      - url
+      title: ImageURL
+    DatasetUpdateRequest:
       properties:
-        token_id:
-          type: integer
-          title: Token Id
-          description: Token ID to bias
-        bias:
-          type: number
-          maximum: 100.0
-          minimum: -100.0
-          title: Bias
-          description: Bias value between -100 and 100
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the dataset.
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Any metadata to include that describes additional information about the dataset.
+          examples:
+          - created_by: John Doe
       type: object
       required:
-      - token_id
-      - bias
-      title: LogitBiasItem
+      - name
+      title: DatasetUpdateRequest
+    DatasetVersionMetadataResponse:
+      properties:
+        version_number:
+          type: integer
+          title: Version Number
+          description: Version number of the dataset version.
+        created_at:
+          type: integer
+          title: Created At
+          description: Timestamp representing the time of dataset version creation in unix milliseconds.
+        dataset_id:
+          type: string
+          format: uuid
+          title: Dataset Id
+          description: ID of the dataset.
+        column_names:
+          items:
+            type: string
+          type: array
+          title: Column Names
+          description: Names of all columns in the dataset version.
+      type: object
+      required:
+      - version_number
+      - created_at
+      - dataset_id
+      - column_names
+      title: DatasetVersionMetadataResponse
+    ListDatasetVersionsResponse:
+      properties:
+        versions:
+          items:
+            $ref: '#/components/schemas/DatasetVersionMetadataResponse'
+          type: array
+          title: Versions
+          description: List of existing versions for the dataset.
+        page:
+          type: integer
+          title: Page
+          description: The current page number for the included rows.
+        page_size:
+          type: integer
+          title: Page Size
+          description: The number of rows per page.
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: The total number of pages.
+        total_count:
+          type: integer
+          title: Total Count
+          description: The total number of rows in the dataset version.
+      type: object
+      required:
+      - versions
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: ListDatasetVersionsResponse
+    NewDatasetVersionRequest:
+      properties:
+        rows_to_add:
+          items:
+            $ref: '#/components/schemas/NewDatasetVersionRowRequest'
+          type: array
+          title: Rows To Add
+          description: List of rows to be added to the new dataset version.
+        rows_to_delete:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rows To Delete
+          description: List of IDs of rows to be deleted from the new dataset version.
+        rows_to_delete_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Rows To Delete Filter
+          description: Optional list of column name and value filters. Rows matching ALL specified column name-value pairs (AND condition) will be deleted from the new dataset version. This filter is applied in addition to rows_to_delete.
+        rows_to_update:
+          items:
+            $ref: '#/components/schemas/NewDatasetVersionUpdateRowRequest'
+          type: array
+          title: Rows To Update
+          description: List of IDs of rows to be updated in the new dataset version with their new values. Should include the value in the row for every column in the dataset, not just the updated column values.
+      type: object
+      required:
+      - rows_to_add
+      - rows_to_delete
+      - rows_to_update
+      title: NewDatasetVersionRequest
     SyntheticDataConversationRequest:
       properties:
         message:
@@ -645,47 +737,32 @@ components:
       - model_name
       title: SyntheticDataConversationRequest
       description: Request for continuing a synthetic data generation conversation.
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    OpenAIMessageType:
-      type: string
-      enum:
-      - text
-      - image_url
-      - input_audio
-      title: OpenAIMessageType
-    MessageRole:
-      type: string
-      enum:
-      - developer
-      - system
-      - user
-      - assistant
-      - tool
-      title: MessageRole
-    ToolCall:
+    ValidationError:
       properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
         type:
           type: string
-          title: Type
-          description: The type of tool call. Currently the only type supported is 'function'.
-          default: function
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the tool call
-        function:
-          $ref: '#/components/schemas/ToolCallFunction'
-          description: Function details
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - id
-      - function
-      title: ToolCall
+      - loc
+      - msg
+      - type
+      title: ValidationError
     DatasetVersionResponse:
       properties:
         version_number:
@@ -741,89 +818,309 @@ components:
       - total_pages
       - total_count
       title: DatasetVersionResponse
-    InputAudio:
-      properties:
-        data:
-          type: string
-          title: Data
-          description: Base64 encoded audio data
-        format:
-          type: string
-          title: Format
-          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
-      type: object
-      required:
-      - data
-      - format
-      title: InputAudio
-    NewDatasetVersionRowColumnItemRequest:
+    DatasetVersionRowColumnItemResponse:
       properties:
         column_name:
           type: string
           title: Column Name
-          description: Name of column.
+          description: Name of the column.
         column_value:
           type: string
           title: Column Value
-          description: Value of column for the row.
+          description: Value of the column.
       type: object
       required:
       - column_name
       - column_value
-      title: NewDatasetVersionRowColumnItemRequest
-      description: Represents a single column-value pair in a dataset row.
-    OpenAIMessage-Output:
+      title: DatasetVersionRowColumnItemResponse
+    OpenAIMessageItem:
       properties:
-        role:
-          $ref: '#/components/schemas/MessageRole'
-          description: Role of the message
-        name:
+        type:
+          $ref: '#/components/schemas/OpenAIMessageType'
+          description: Type of the message (either 'text', 'image_url', or 'input_audio')
+        text:
           anyOf:
           - type: string
           - type: 'null'
-          title: Name
-          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
-        content:
+          title: Text
+          description: Text content of the message if type is 'text'
+        image_url:
           anyOf:
-          - type: string
-          - items:
-              $ref: '#/components/schemas/OpenAIMessageItem'
-            type: array
+          - $ref: '#/components/schemas/ImageURL'
           - type: 'null'
-          title: Content
-          description: Content of the message
-        tool_calls:
+          description: Image URL content of the message if type is 'image_url'
+        input_audio:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/ToolCall'
-            type: array
+          - $ref: '#/components/schemas/InputAudio'
           - type: 'null'
-          title: Tool Calls
-          description: Tool calls made by assistant
-        tool_call_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tool Call Id
-          description: ID of the tool call this message is responding to
+          description: Input audio content of the message if type is 'input_audio'
       type: object
       required:
-      - role
-      title: OpenAIMessage
-      description: 'The message schema class for the prompts playground.
-
-        This class adheres to OpenAI''s message schema.'
-    ModelProvider:
+      - type
+      title: OpenAIMessageItem
+    NewDatasetRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the dataset.
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Any metadata to include that describes additional information about the dataset.
+      type: object
+      required:
+      - name
+      title: NewDatasetRequest
+    SyntheticDataPromptStatus:
+      properties:
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: string
+            const: empty
+          title: Model Provider
+          description: Model provider stored in the SDG system prompt. The sentinel 'empty' indicates the prompt has not yet been configured.
+        model_name:
+          type: string
+          title: Model Name
+          description: Model name stored in the SDG system prompt
+        is_placeholder:
+          type: boolean
+          title: Is Placeholder
+          description: True when the prompt uses the empty placeholder model
+      type: object
+      required:
+      - model_provider
+      - model_name
+      - is_placeholder
+      title: SyntheticDataPromptStatus
+    LogitBiasItem:
+      properties:
+        token_id:
+          type: integer
+          title: Token Id
+          description: Token ID to bias
+        bias:
+          type: number
+          maximum: 100.0
+          minimum: -100.0
+          title: Bias
+          description: Bias value between -100 and 100
+      type: object
+      required:
+      - token_id
+      - bias
+      title: LogitBiasItem
+    AnthropicThinkingParam-Input:
+      properties:
+        type:
+          type: string
+          enum:
+          - enabled
+          - adaptive
+          title: Type
+        budget_tokens:
+          type: integer
+          title: Budget Tokens
+      type: object
+      title: AnthropicThinkingParam
+    SyntheticDataColumnDescription:
+      properties:
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of the column to generate data for.
+        description:
+          type: string
+          title: Description
+          description: Description of what this column contains and how to generate realistic values.
+      type: object
+      required:
+      - column_name
+      - description
+      title: SyntheticDataColumnDescription
+      description: Description of a column for synthetic data generation.
+    OpenAIMessageType:
       type: string
       enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
+      - text
+      - image_url
+      - input_audio
+      title: OpenAIMessageType
+    SearchDatasetsResponse:
+      properties:
+        count:
+          type: integer
+          title: Count
+          description: The total number of datasets matching the parameters.
+        datasets:
+          items:
+            $ref: '#/components/schemas/DatasetResponse'
+          type: array
+          title: Datasets
+          description: List of datasets matching the search filters. Length is less than or equal to page_size parameter
+      type: object
+      required:
+      - count
+      - datasets
+      title: SearchDatasetsResponse
+    ReasoningEffortEnum:
+      type: string
+      enum:
+      - none
+      - minimal
+      - low
+      - medium
+      - high
+      - default
+      title: ReasoningEffortEnum
+    NewDatasetVersionRowRequest:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+          description: Optional ID for the row (used for synthetic data generation).
+        data:
+          items:
+            $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+          type: array
+          title: Data
+          description: List of column-value pairs in the new dataset row.
+      type: object
+      required:
+      - data
+      title: NewDatasetVersionRowRequest
+      description: Represents a row to be added to a dataset version.
+    SyntheticDataGenerationResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/SyntheticDataRowResponse'
+          type: array
+          title: Rows
+          description: Full current state of all generated rows.
+        assistant_message:
+          $ref: '#/components/schemas/OpenAIMessage-Output'
+          description: The assistant's response message explaining what was done.
+        rows_added:
+          items:
+            type: string
+          type: array
+          title: Rows Added
+          description: IDs of newly added rows in this response.
+        rows_modified:
+          items:
+            type: string
+          type: array
+          title: Rows Modified
+          description: IDs of rows that were modified in this response.
+        rows_removed:
+          items:
+            type: string
+          type: array
+          title: Rows Removed
+          description: IDs of rows that were removed in this response.
+      type: object
+      required:
+      - rows
+      - assistant_message
+      title: SyntheticDataGenerationResponse
+      description: Response for synthetic data generation (both initial and conversation).
+    DatasetResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the dataset.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the task the dataset belongs to.
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the dataset.
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Any metadata to include that describes additional information about the dataset.
+        created_at:
+          type: integer
+          title: Created At
+          description: Timestamp representing the time of dataset creation in unix milliseconds.
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Timestamp representing the time of the last dataset update in unix milliseconds.
+        latest_version_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Latest Version Number
+          description: Version number representing the latest version of the dataset. If unset, no versions exist for the dataset yet.
+      type: object
+      required:
+      - id
+      - task_id
+      - name
+      - created_at
+      - updated_at
+      title: DatasetResponse
+    MessageRole:
+      type: string
+      enum:
+      - developer
+      - system
+      - user
+      - assistant
+      - tool
+      title: MessageRole
+    ToolCallFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the function to call
+        arguments:
+          type: string
+          title: Arguments
+          description: JSON string of function arguments
+      type: object
+      required:
+      - name
+      - arguments
+      title: ToolCallFunction
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     OpenAIMessage-Input:
       properties:
         role:
@@ -865,6 +1162,213 @@ components:
       description: 'The message schema class for the prompts playground.
 
         This class adheres to OpenAI''s message schema.'
+    SyntheticDataGenerationRequest:
+      properties:
+        dataset_purpose:
+          type: string
+          title: Dataset Purpose
+          description: Description of the dataset's purpose and what the data represents.
+        column_descriptions:
+          items:
+            $ref: '#/components/schemas/SyntheticDataColumnDescription'
+          type: array
+          title: Column Descriptions
+          description: Descriptions for each column to guide generation.
+        num_rows:
+          type: integer
+          maximum: 25.0
+          minimum: 1.0
+          title: Num Rows
+          description: Number of rows to generate (1-25).
+          default: 10
+        model_provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: Provider of the LLM model to use for generation.
+        model_name:
+          type: string
+          title: Model Name
+          description: Name of the LLM model to use for generation.
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/LLMRequestConfigSettings'
+          - type: 'null'
+          description: Optional LLM configuration settings (temperature, max_tokens, etc.).
+      type: object
+      required:
+      - dataset_purpose
+      - column_descriptions
+      - model_provider
+      - model_name
+      title: SyntheticDataGenerationRequest
+      description: Request for initial synthetic data generation.
+    SyntheticDataRowResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Temporary client-side ID for tracking this row during the session.
+        data:
+          items:
+            $ref: '#/components/schemas/DatasetVersionRowColumnItemResponse'
+          type: array
+          title: Data
+          description: List of column names and values in the generated row.
+      type: object
+      required:
+      - id
+      - data
+      title: SyntheticDataRowResponse
+      description: A single generated row with a temporary client-side ID for tracking.
+    DatasetVersionRowResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the version field.
+        data:
+          items:
+            $ref: '#/components/schemas/DatasetVersionRowColumnItemResponse'
+          type: array
+          title: Data
+          description: List of column names and values in the row.
+        created_at:
+          type: integer
+          title: Created At
+          description: Timestamp representing the time of dataset row creation in unix milliseconds. May differ within a version if a row already existed in a past version of the dataset.
+      type: object
+      required:
+      - id
+      - data
+      - created_at
+      title: DatasetVersionRowResponse
+    NewDatasetVersionRowColumnItemRequest:
+      properties:
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column.
+        column_value:
+          type: string
+          title: Column Value
+          description: Value of column for the row.
+      type: object
+      required:
+      - column_name
+      - column_value
+      title: NewDatasetVersionRowColumnItemRequest
+      description: Represents a single column-value pair in a dataset row.
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+          description: Base64 encoded audio data
+        format:
+          type: string
+          title: Format
+          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
+      type: object
+      required:
+      - data
+      - format
+      title: InputAudio
+    OpenAIMessage-Output:
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+          description: Role of the message
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/OpenAIMessageItem'
+            type: array
+          - type: 'null'
+          title: Content
+          description: Content of the message
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+          description: Tool calls made by assistant
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+          description: ID of the tool call this message is responding to
+      type: object
+      required:
+      - role
+      title: OpenAIMessage
+      description: 'The message schema class for the prompts playground.
+
+        This class adheres to OpenAI''s message schema.'
+    ToolCall:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool call. Currently the only type supported is 'function'.
+          default: function
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the tool call
+        function:
+          $ref: '#/components/schemas/ToolCallFunction'
+          description: Function details
+      type: object
+      required:
+      - id
+      - function
+      title: ToolCall
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    NewDatasetVersionUpdateRowRequest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: UUID of row to be updated.
+        data:
+          items:
+            $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+          type: array
+          title: Data
+          description: List of column-value pairs in the updated row.
+      type: object
+      required:
+      - id
+      - data
+      title: NewDatasetVersionUpdateRowRequest
+      description: Represents a row to be updated in a dataset version.
     LLMRequestConfigSettings:
       properties:
         timeout:
@@ -953,510 +1457,6 @@ components:
           description: Anthropic-specific thinking parameter for Claude models
       type: object
       title: LLMRequestConfigSettings
-    SyntheticDataRowResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Temporary client-side ID for tracking this row during the session.
-        data:
-          items:
-            $ref: '#/components/schemas/DatasetVersionRowColumnItemResponse'
-          type: array
-          title: Data
-          description: List of column names and values in the generated row.
-      type: object
-      required:
-      - id
-      - data
-      title: SyntheticDataRowResponse
-      description: A single generated row with a temporary client-side ID for tracking.
-    AnthropicThinkingParam-Input:
-      properties:
-        type:
-          type: string
-          enum:
-          - enabled
-          - adaptive
-          title: Type
-        budget_tokens:
-          type: integer
-          title: Budget Tokens
-      type: object
-      title: AnthropicThinkingParam
-    ToolCallFunction:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the function to call
-        arguments:
-          type: string
-          title: Arguments
-          description: JSON string of function arguments
-      type: object
-      required:
-      - name
-      - arguments
-      title: ToolCallFunction
-    DatasetVersionMetadataResponse:
-      properties:
-        version_number:
-          type: integer
-          title: Version Number
-          description: Version number of the dataset version.
-        created_at:
-          type: integer
-          title: Created At
-          description: Timestamp representing the time of dataset version creation in unix milliseconds.
-        dataset_id:
-          type: string
-          format: uuid
-          title: Dataset Id
-          description: ID of the dataset.
-        column_names:
-          items:
-            type: string
-          type: array
-          title: Column Names
-          description: Names of all columns in the dataset version.
-      type: object
-      required:
-      - version_number
-      - created_at
-      - dataset_id
-      - column_names
-      title: DatasetVersionMetadataResponse
-    SearchDatasetsResponse:
-      properties:
-        count:
-          type: integer
-          title: Count
-          description: The total number of datasets matching the parameters.
-        datasets:
-          items:
-            $ref: '#/components/schemas/DatasetResponse'
-          type: array
-          title: Datasets
-          description: List of datasets matching the search filters. Length is less than or equal to page_size parameter
-      type: object
-      required:
-      - count
-      - datasets
-      title: SearchDatasetsResponse
-    ImageURL:
-      properties:
-        url:
-          type: string
-          title: Url
-          description: URL of the image
-      type: object
-      required:
-      - url
-      title: ImageURL
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    NewDatasetVersionRowRequest:
-      properties:
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-          description: Optional ID for the row (used for synthetic data generation).
-        data:
-          items:
-            $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-          type: array
-          title: Data
-          description: List of column-value pairs in the new dataset row.
-      type: object
-      required:
-      - data
-      title: NewDatasetVersionRowRequest
-      description: Represents a row to be added to a dataset version.
-    DatasetVersionRowColumnItemResponse:
-      properties:
-        column_name:
-          type: string
-          title: Column Name
-          description: Name of the column.
-        column_value:
-          type: string
-          title: Column Value
-          description: Value of the column.
-      type: object
-      required:
-      - column_name
-      - column_value
-      title: DatasetVersionRowColumnItemResponse
-    DatasetResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the dataset.
-        task_id:
-          type: string
-          title: Task Id
-          description: ID of the task the dataset belongs to.
-        name:
-          type: string
-          title: Name
-          description: Name of the dataset.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the dataset.
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Any metadata to include that describes additional information about the dataset.
-        created_at:
-          type: integer
-          title: Created At
-          description: Timestamp representing the time of dataset creation in unix milliseconds.
-        updated_at:
-          type: integer
-          title: Updated At
-          description: Timestamp representing the time of the last dataset update in unix milliseconds.
-        latest_version_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Latest Version Number
-          description: Version number representing the latest version of the dataset. If unset, no versions exist for the dataset yet.
-      type: object
-      required:
-      - id
-      - task_id
-      - name
-      - created_at
-      - updated_at
-      title: DatasetResponse
-    DatasetUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the dataset.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the dataset.
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Any metadata to include that describes additional information about the dataset.
-          examples:
-          - created_by: John Doe
-      type: object
-      required:
-      - name
-      title: DatasetUpdateRequest
-    ReasoningEffortEnum:
-      type: string
-      enum:
-      - none
-      - minimal
-      - low
-      - medium
-      - high
-      - default
-      title: ReasoningEffortEnum
-    NewDatasetVersionUpdateRowRequest:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: UUID of row to be updated.
-        data:
-          items:
-            $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-          type: array
-          title: Data
-          description: List of column-value pairs in the updated row.
-      type: object
-      required:
-      - id
-      - data
-      title: NewDatasetVersionUpdateRowRequest
-      description: Represents a row to be updated in a dataset version.
-    NewDatasetRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dataset.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the dataset.
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Any metadata to include that describes additional information about the dataset.
-      type: object
-      required:
-      - name
-      title: NewDatasetRequest
-    SyntheticDataGenerationResponse:
-      properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/SyntheticDataRowResponse'
-          type: array
-          title: Rows
-          description: Full current state of all generated rows.
-        assistant_message:
-          $ref: '#/components/schemas/OpenAIMessage-Output'
-          description: The assistant's response message explaining what was done.
-        rows_added:
-          items:
-            type: string
-          type: array
-          title: Rows Added
-          description: IDs of newly added rows in this response.
-        rows_modified:
-          items:
-            type: string
-          type: array
-          title: Rows Modified
-          description: IDs of rows that were modified in this response.
-        rows_removed:
-          items:
-            type: string
-          type: array
-          title: Rows Removed
-          description: IDs of rows that were removed in this response.
-      type: object
-      required:
-      - rows
-      - assistant_message
-      title: SyntheticDataGenerationResponse
-      description: Response for synthetic data generation (both initial and conversation).
-    NewDatasetVersionRequest:
-      properties:
-        rows_to_add:
-          items:
-            $ref: '#/components/schemas/NewDatasetVersionRowRequest'
-          type: array
-          title: Rows To Add
-          description: List of rows to be added to the new dataset version.
-        rows_to_delete:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Rows To Delete
-          description: List of IDs of rows to be deleted from the new dataset version.
-        rows_to_delete_filter:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-            type: array
-          - type: 'null'
-          title: Rows To Delete Filter
-          description: Optional list of column name and value filters. Rows matching ALL specified column name-value pairs (AND condition) will be deleted from the new dataset version. This filter is applied in addition to rows_to_delete.
-        rows_to_update:
-          items:
-            $ref: '#/components/schemas/NewDatasetVersionUpdateRowRequest'
-          type: array
-          title: Rows To Update
-          description: List of IDs of rows to be updated in the new dataset version with their new values. Should include the value in the row for every column in the dataset, not just the updated column values.
-      type: object
-      required:
-      - rows_to_add
-      - rows_to_delete
-      - rows_to_update
-      title: NewDatasetVersionRequest
-    OpenAIMessageItem:
-      properties:
-        type:
-          $ref: '#/components/schemas/OpenAIMessageType'
-          description: Type of the message (either 'text', 'image_url', or 'input_audio')
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-          description: Text content of the message if type is 'text'
-        image_url:
-          anyOf:
-          - $ref: '#/components/schemas/ImageURL'
-          - type: 'null'
-          description: Image URL content of the message if type is 'image_url'
-        input_audio:
-          anyOf:
-          - $ref: '#/components/schemas/InputAudio'
-          - type: 'null'
-          description: Input audio content of the message if type is 'input_audio'
-      type: object
-      required:
-      - type
-      title: OpenAIMessageItem
-    ListDatasetVersionsResponse:
-      properties:
-        versions:
-          items:
-            $ref: '#/components/schemas/DatasetVersionMetadataResponse'
-          type: array
-          title: Versions
-          description: List of existing versions for the dataset.
-        page:
-          type: integer
-          title: Page
-          description: The current page number for the included rows.
-        page_size:
-          type: integer
-          title: Page Size
-          description: The number of rows per page.
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: The total number of pages.
-        total_count:
-          type: integer
-          title: Total Count
-          description: The total number of rows in the dataset version.
-      type: object
-      required:
-      - versions
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      title: ListDatasetVersionsResponse
-    DatasetVersionRowResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the version field.
-        data:
-          items:
-            $ref: '#/components/schemas/DatasetVersionRowColumnItemResponse'
-          type: array
-          title: Data
-          description: List of column names and values in the row.
-        created_at:
-          type: integer
-          title: Created At
-          description: Timestamp representing the time of dataset row creation in unix milliseconds. May differ within a version if a row already existed in a past version of the dataset.
-      type: object
-      required:
-      - id
-      - data
-      - created_at
-      title: DatasetVersionRowResponse
-    SyntheticDataColumnDescription:
-      properties:
-        column_name:
-          type: string
-          title: Column Name
-          description: Name of the column to generate data for.
-        description:
-          type: string
-          title: Description
-          description: Description of what this column contains and how to generate realistic values.
-      type: object
-      required:
-      - column_name
-      - description
-      title: SyntheticDataColumnDescription
-      description: Description of a column for synthetic data generation.
-    SyntheticDataGenerationRequest:
-      properties:
-        dataset_purpose:
-          type: string
-          title: Dataset Purpose
-          description: Description of the dataset's purpose and what the data represents.
-        column_descriptions:
-          items:
-            $ref: '#/components/schemas/SyntheticDataColumnDescription'
-          type: array
-          title: Column Descriptions
-          description: Descriptions for each column to guide generation.
-        num_rows:
-          type: integer
-          maximum: 25.0
-          minimum: 1.0
-          title: Num Rows
-          description: Number of rows to generate (1-25).
-          default: 10
-        model_provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: Provider of the LLM model to use for generation.
-        model_name:
-          type: string
-          title: Model Name
-          description: Name of the LLM model to use for generation.
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/LLMRequestConfigSettings'
-          - type: 'null'
-          description: Optional LLM configuration settings (temperature, max_tokens, etc.).
-      type: object
-      required:
-      - dataset_purpose
-      - column_descriptions
-      - model_provider
-      - model_name
-      title: SyntheticDataGenerationRequest
-      description: Request for initial synthetic data generation.
   securitySchemes:
     API_Key:
       type: http

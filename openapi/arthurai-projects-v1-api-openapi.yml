@@ -284,6 +284,46 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ResourceList_Project_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Project'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Project]
+    PatchProject:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+      type: object
+      title: PatchProject
     Pagination:
       properties:
         page:
@@ -309,37 +349,6 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    ResourceList_Project_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Project'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Project]
-    ProjectSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: ProjectSort
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -375,12 +384,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     Project:
       properties:
         created_at:
@@ -426,14 +437,6 @@ components:
       - workspace_id
       - total_artifacts
       title: Project
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     PostProject:
       properties:
         name:
@@ -450,30 +453,27 @@ components:
       required:
       - name
       title: PostProject
-    PatchProject:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-      type: object
-      title: PatchProject
-    InternalServerError:
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    ProjectSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: ProjectSort
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Internal server error
+          default: Bad Request
       type: object
-      title: InternalServerError
+      title: BadRequestError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

@@ -339,134 +339,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    WebhookSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      - name
-      title: WebhookSort
-    PostWebhook:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of webhook.
-        url:
-          type: string
-          title: Url
-          description: URL of the webhook.
-        headers:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          type: object
-          title: Headers
-          description: List of headers for the webhook.
-          default: {}
-        body:
-          type: string
-          title: Body
-          description: Body of the webhook.
-      type: object
-      required:
-      - name
-      - url
-      - body
-      title: PostWebhook
-    WebhookResult:
-      properties:
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-        response:
-          anyOf:
-          - $ref: '#/components/schemas/WebhookResponse'
-          - type: 'null'
-      type: object
-      required:
-      - error
-      - response
-      title: WebhookResult
-    WebhookResponse:
-      properties:
-        status_code:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Status Code
-        response:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Response
-      type: object
-      required:
-      - status_code
-      - response
-      title: WebhookResponse
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     PatchWebhook:
       properties:
         name:
@@ -499,36 +371,64 @@ components:
           description: Body of the webhook.
       type: object
       title: PatchWebhook
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    BadRequestError:
+    Webhook:
       properties:
-        detail:
+        name:
           type: string
-          title: Detail
-          default: Bad Request
+          title: Name
+          description: Name of webhook.
+        url:
+          type: string
+          title: Url
+          description: URL of the webhook.
+        headers:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Headers
+          description: List of headers for the webhook.
+          default: {}
+        body:
+          type: string
+          title: Body
+          description: Body of the webhook.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The id of the webhook.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for user who last updated the webhook.
       type: object
-      title: BadRequestError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      required:
+      - name
+      - url
+      - body
+      - created_at
+      - updated_at
+      - id
+      - workspace_id
+      title: Webhook
     ResourceList_Webhook_:
       properties:
         records:
@@ -545,6 +445,172 @@ components:
       - records
       - pagination
       title: ResourceList[Webhook]
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    WebhookResponse:
+      properties:
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+        response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Response
+      type: object
+      required:
+      - status_code
+      - response
+      title: WebhookResponse
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    WebhookSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      - name
+      title: WebhookSort
+    WebhookResult:
+      properties:
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        response:
+          anyOf:
+          - $ref: '#/components/schemas/WebhookResponse'
+          - type: 'null'
+      type: object
+      required:
+      - error
+      - response
+      title: WebhookResult
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostWebhook:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of webhook.
+        url:
+          type: string
+          title: Url
+          description: URL of the webhook.
+        headers:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Headers
+          description: List of headers for the webhook.
+          default: {}
+        body:
+          type: string
+          title: Body
+          description: Body of the webhook.
+      type: object
+      required:
+      - name
+      - url
+      - body
+      title: PostWebhook
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     User:
       properties:
         created_at:
@@ -621,72 +687,6 @@ components:
       - user_type
       - organization_name
       title: User
-    Webhook:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of webhook.
-        url:
-          type: string
-          title: Url
-          description: URL of the webhook.
-        headers:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          type: object
-          title: Headers
-          description: List of headers for the webhook.
-          default: {}
-        body:
-          type: string
-          title: Body
-          description: Body of the webhook.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: The id of the webhook.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        last_updated_by_user:
-          anyOf:
-          - $ref: '#/components/schemas/User'
-          - type: 'null'
-          description: Information for user who last updated the webhook.
-      type: object
-      required:
-      - name
-      - url
-      - body
-      - created_at
-      - updated_at
-      - id
-      - workspace_id
-      title: Webhook
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

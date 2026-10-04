@@ -253,6 +253,32 @@ components:
       - organization_list_agent_llm_models
       - organization_list_models
       title: PermissionName
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    Permission:
+      properties:
+        name:
+          $ref: '#/components/schemas/PermissionName'
+          description: Name of permission. Must be unique.
+        description:
+          type: string
+          title: Description
+          description: Description of the permission.
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the permission references.
+      type: object
+      required:
+      - name
+      - description
+      - resource_kind
+      title: Permission
     ExtendedRole:
       properties:
         created_at:
@@ -322,37 +348,6 @@ components:
       - permissions
       - base_roles
       title: ExtendedRole
-    BaseRole:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the role this role inherits permissions from.
-        name:
-          type: string
-          title: Name
-          description: Name of the role this role inherits permissions from.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the role this role inherits permissions from.
-      type: object
-      required:
-      - id
-      - name
-      - description
-      title: BaseRole
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -388,24 +383,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    Permission:
+    NotFoundError:
       properties:
-        name:
-          $ref: '#/components/schemas/PermissionName'
-          description: Name of permission. Must be unique.
-        description:
+        detail:
           type: string
-          title: Description
-          description: Description of the permission.
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the permission references.
+          title: Detail
+          default: Resource not found
       type: object
-      required:
-      - name
-      - description
-      - resource_kind
-      title: Permission
+      title: NotFoundError
     ResourceKind:
       type: string
       enum:
@@ -433,14 +418,29 @@ components:
       - policy_attestation_rule
       - policy_assignment
       title: ResourceKind
-    InternalServerError:
+    BaseRole:
       properties:
-        detail:
+        id:
           type: string
-          title: Detail
-          default: Internal server error
+          format: uuid
+          title: Id
+          description: ID of the role this role inherits permissions from.
+        name:
+          type: string
+          title: Name
+          description: Name of the role this role inherits permissions from.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the role this role inherits permissions from.
       type: object
-      title: InternalServerError
+      required:
+      - id
+      - name
+      - description
+      title: BaseRole
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

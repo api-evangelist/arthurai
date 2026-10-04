@@ -384,48 +384,30 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Pagination:
+    ResourceList_DataPlaneAssociation_:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
+        records:
+          items:
+            $ref: '#/components/schemas/DataPlaneAssociation'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
       required:
-      - total_pages
-      - total_records
-      title: Pagination
-    PostDataPlaneAssociation:
+      - records
+      - pagination
+      title: ResourceList[DataPlaneAssociation]
+    InternalServerError:
       properties:
-        data_plane_id:
+        detail:
           type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
+          title: Detail
+          default: Internal server error
       type: object
-      required:
-      - data_plane_id
-      - project_id
-      title: PostDataPlaneAssociation
+      title: InternalServerError
     DataPlane:
       properties:
         created_at:
@@ -487,59 +469,31 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
-    DataPlaneAssociation:
+    Pagination:
       properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane association.
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-        data_plane:
-          anyOf:
-          - $ref: '#/components/schemas/DataPlane'
-          - type: 'null'
-          description: Data plane associated with the project.
-        project:
-          anyOf:
-          - $ref: '#/components/schemas/Project'
-          - type: 'null'
-          description: Project associated with the data plane.
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - created_at
-      - updated_at
-      - id
-      - data_plane_id
-      - project_id
-      title: DataPlaneAssociation
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
+      - total_pages
+      - total_records
+      title: Pagination
     Infrastructure:
       type: string
       enum:
@@ -549,6 +503,32 @@ components:
       - Docker
       - Kubernetes
       title: Infrastructure
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     DataPlaneCapabilities:
       properties:
         gen_ai_enabled:
@@ -567,12 +547,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     Project:
       properties:
         created_at:
@@ -618,6 +600,57 @@ components:
       - workspace_id
       - total_artifacts
       title: Project
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DataPlaneAssociation:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane association.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+        data_plane:
+          anyOf:
+          - $ref: '#/components/schemas/DataPlane'
+          - type: 'null'
+          description: Data plane associated with the project.
+        project:
+          anyOf:
+          - $ref: '#/components/schemas/Project'
+          - type: 'null'
+          description: Project associated with the data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - data_plane_id
+      - project_id
+      title: DataPlaneAssociation
     DataPlaneAssociationSort:
       type: string
       enum:
@@ -632,56 +665,23 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
-    ValidationError:
+    PostDataPlaneAssociation:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        data_plane_id:
           type: string
-          title: Message
-        type:
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          format: uuid
+          title: Project Id
+          description: ID of the project.
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ResourceList_DataPlaneAssociation_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataPlaneAssociation'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataPlaneAssociation]
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
+      - data_plane_id
+      - project_id
+      title: PostDataPlaneAssociation
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

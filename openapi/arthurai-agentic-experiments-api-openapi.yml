@@ -268,97 +268,149 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HttpTemplate:
+    AgenticExperimentListResponse:
       properties:
-        endpoint_name:
-          type: string
-          title: Endpoint Name
-          description: Name of the endpoint
-        endpoint_url:
-          type: string
-          title: Endpoint Url
-          description: URL of the endpoint
-        headers:
-          items:
-            $ref: '#/components/schemas/HttpHeader'
-          type: array
-          title: Headers
-          description: HTTP headers (supports {{variable}} placeholders in names and values)
-        request_body:
-          type: string
-          title: Request Body
-          description: Request body as a string (supports {{variable}} placeholders)
-      type: object
-      required:
-      - endpoint_name
-      - endpoint_url
-      - request_body
-      title: HttpTemplate
-      description: HTTP template configuration for agent endpoint
-    DatasetColumnVariableSource:
-      properties:
-        type:
-          type: string
-          const: dataset_column
-          title: Type
-          description: 'Type of source: ''dataset_column'''
-        dataset_column:
-          $ref: '#/components/schemas/DatasetColumnSource'
-          description: Dataset column source
-      type: object
-      required:
-      - type
-      - dataset_column
-      title: DatasetColumnVariableSource
-      description: Variable source from a dataset column
-    ExperimentStatus:
-      type: string
-      enum:
-      - queued
-      - running
-      - failed
-      - completed
-      title: ExperimentStatus
-      description: Status of an experiment
-    EvalResultSummary:
-      properties:
-        eval_name:
-          type: string
-          title: Eval Name
-          description: Name of the evaluation
-        eval_version:
-          type: string
-          title: Eval Version
-          description: Version of the evaluation
-        pass_count:
+        page:
           type: integer
-          title: Pass Count
-          description: Number of test cases that passed
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
         total_count:
           type: integer
           title: Total Count
-          description: Total number of test cases evaluated
-      type: object
-      required:
-      - eval_name
-      - eval_version
-      - pass_count
-      - total_count
-      title: EvalResultSummary
-      description: Results for a single eval
-    AgenticSummaryResults:
-      properties:
-        eval_summaries:
+          description: Total number of records
+        data:
           items:
-            $ref: '#/components/schemas/AgenticEvalResultSummaries'
+            $ref: '#/components/schemas/AgenticExperimentSummary'
           type: array
-          title: Eval Summaries
-          description: Summary for each evaluation run
+          title: Data
+          description: List of agentic experiment summaries
       type: object
       required:
-      - eval_summaries
-      title: AgenticSummaryResults
-      description: Summary results across all evaluations
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: AgenticExperimentListResponse
+      description: Paginated list of agentic experiments
+    AgenticEvalRef-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the transform to apply to the trace before evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/AgenticEvalVariableMapping-Input'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources (supports transform variables for agentic experiments)
+      type: object
+      required:
+      - name
+      - version
+      - transform_id
+      - variable_mapping
+      title: AgenticEvalRef
+      description: Reference to an evaluation configuration with transform
+    CreateAgenticExperimentRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name for the experiment
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the experiment
+        dataset_ref:
+          $ref: '#/components/schemas/DatasetRefInput'
+          description: Reference to the dataset to use
+        dataset_row_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Dataset Row Filter
+          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included in the experiment. If not specified, all rows from the dataset will be used.
+        http_template:
+          $ref: '#/components/schemas/HttpTemplate'
+          description: HTTP template configuration for the agent endpoint
+        template_variable_mapping:
+          items:
+            $ref: '#/components/schemas/TemplateVariableMapping-Input'
+          type: array
+          title: Template Variable Mapping
+          description: Mapping of template variables to their sources (dataset columns, request-time parameters, or generated variables like UUIDs)
+        request_time_parameters:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RequestTimeParameter'
+            type: array
+          - type: 'null'
+          title: Request Time Parameters
+          description: List of request-time parameters (e.g., API keys, tokens). These are NOT stored in the database for security reasons - they are passed directly to the execution thread.
+        eval_list:
+          items:
+            $ref: '#/components/schemas/AgenticEvalRef-Input'
+          type: array
+          title: Eval List
+          description: List of evaluations to run, each with an associated transform
+      type: object
+      required:
+      - name
+      - dataset_ref
+      - http_template
+      - template_variable_mapping
+      - eval_list
+      title: CreateAgenticExperimentRequest
+      description: Request to create a new agentic experiment
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     TemplateVariableMapping-Output:
       properties:
         variable_name:
@@ -394,100 +446,55 @@ components:
       - completed
       title: TestCaseStatus
       description: Status of a test case
-    AgenticTestCaseListResponse:
+    AgenticTestCase:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
-          items:
-            $ref: '#/components/schemas/AgenticTestCase'
-          type: array
-          title: Data
-          description: List of test cases
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: AgenticTestCaseListResponse
-      description: Paginated list of agentic test cases
-    RequestTimeParameter:
-      properties:
-        name:
+        status:
+          $ref: '#/components/schemas/TestCaseStatus'
+          description: Status of the test case
+        dataset_row_id:
           type: string
-          title: Name
-          description: Name of the request-time parameter (must match variable_name in template_variable_mapping)
-        value:
-          type: string
-          title: Value
-          description: Value of the request-time parameter (not saved, provided at execution time)
-      type: object
-      required:
-      - name
-      - value
-      title: RequestTimeParameter
-      description: Request-time parameter with name and value (e.g., API keys, tokens)
-    AgenticExperimentListResponse:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
+          title: Dataset Row Id
+          description: ID of the dataset row
+        total_cost:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Total Cost
+          description: Total cost for this test case
+        template_input_variables:
           items:
-            $ref: '#/components/schemas/AgenticExperimentSummary'
+            $ref: '#/components/schemas/InputVariable'
           type: array
-          title: Data
-          description: List of agentic experiment summaries
+          title: Template Input Variables
+          description: Input variables used in the template (with values resolved)
+        agentic_result:
+          $ref: '#/components/schemas/AgenticResult'
+          description: Result from the agent execution
       type: object
       required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: AgenticExperimentListResponse
-      description: Paginated list of agentic experiments
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    AgenticExperimentGeneratorType:
-      type: string
-      enum:
-      - uuid
-      - session_id
-      title: AgenticExperimentGeneratorType
+      - status
+      - dataset_row_id
+      - template_input_variables
+      - agentic_result
+      title: AgenticTestCase
+      description: Individual test case result for agentic experiment
+    TransformVariableExperimentOutputSource:
+      properties:
+        type:
+          type: string
+          const: transform_variable
+          title: Type
+          description: Type of experiment output source
+          default: transform_variable
+        transform_variable_name:
+          type: string
+          title: Transform Variable Name
+          description: Name of the variable to extract from the transform. The transform_id comes from the eval configuration.
+      type: object
+      required:
+      - transform_variable_name
+      title: TransformVariableExperimentOutputSource
+      description: Reference to experiment output using transform variable extraction (agentic experiments only)
     AgenticResult:
       properties:
         evals:
@@ -523,7 +530,176 @@ components:
       - request_body
       title: AgenticResult
       description: Results from an agent execution with evals
-    AgenticEvalVariableMapping-Input:
+    HttpTemplate:
+      properties:
+        endpoint_name:
+          type: string
+          title: Endpoint Name
+          description: Name of the endpoint
+        endpoint_url:
+          type: string
+          title: Endpoint Url
+          description: URL of the endpoint
+        headers:
+          items:
+            $ref: '#/components/schemas/HttpHeader'
+          type: array
+          title: Headers
+          description: HTTP headers (supports {{variable}} placeholders in names and values)
+        request_body:
+          type: string
+          title: Request Body
+          description: Request body as a string (supports {{variable}} placeholders)
+      type: object
+      required:
+      - endpoint_name
+      - endpoint_url
+      - request_body
+      title: HttpTemplate
+      description: HTTP template configuration for agent endpoint
+    EvalExecution:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        eval_input_variables:
+          items:
+            $ref: '#/components/schemas/InputVariable'
+          type: array
+          title: Eval Input Variables
+          description: Input variables used for the eval
+        eval_results:
+          anyOf:
+          - $ref: '#/components/schemas/EvalExecutionResult'
+          - type: 'null'
+          description: Results from the eval (None if not yet executed)
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - eval_input_variables
+      title: EvalExecution
+      description: Details of an eval execution
+    EvalExecutionResult:
+      properties:
+        score:
+          type: number
+          title: Score
+          description: Score from the evaluation
+        explanation:
+          type: string
+          title: Explanation
+          description: Explanation of the score
+        cost:
+          type: string
+          title: Cost
+          description: Cost of the evaluation
+      type: object
+      required:
+      - score
+      - explanation
+      - cost
+      title: EvalExecutionResult
+      description: Results from an eval execution
+    AgenticTestCaseListResponse:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/AgenticTestCase'
+          type: array
+          title: Data
+          description: List of test cases
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: AgenticTestCaseListResponse
+      description: Paginated list of agentic test cases
+    ExperimentStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - failed
+      - completed
+      title: ExperimentStatus
+      description: Status of an experiment
+    AgenticEvalResultSummaries:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the transform used for this evaluation
+        eval_results:
+          items:
+            $ref: '#/components/schemas/EvalResultSummary'
+          type: array
+          title: Eval Results
+          description: Results for this evaluation
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - transform_id
+      - eval_results
+      title: AgenticEvalResultSummaries
+      description: Summary of evaluation results for an agentic experiment
+    DatasetRef:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dataset ID
+        version:
+          type: integer
+          title: Version
+          description: Dataset version number
+        name:
+          type: string
+          title: Name
+          description: Dataset name
+      type: object
+      required:
+      - id
+      - version
+      - name
+      title: DatasetRef
+      description: Reference to a dataset and version (with name)
+    AgenticEvalVariableMapping-Output:
       properties:
         variable_name:
           type: string
@@ -551,39 +727,130 @@ components:
         For transform variables, use ExperimentOutputVariableSource with transform_variable_name
 
         in the experiment_output field. The transform_id comes from the associated AgenticEvalRef.'
-    DatasetRefInput:
+    HttpHeader:
       properties:
-        id:
+        name:
           type: string
-          format: uuid
-          title: Id
-          description: Dataset ID
+          title: Name
+          description: Header name (supports {{variable}} placeholders)
+        value:
+          type: string
+          title: Value
+          description: Header value (supports {{variable}} placeholders)
+      type: object
+      required:
+      - name
+      - value
+      title: HttpHeader
+      description: HTTP header with support for variable placeholders
+    DatasetColumnSource:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset column
+      type: object
+      required:
+      - name
+      title: DatasetColumnSource
+      description: Reference to a dataset column
+    RequestTimeParameterSource:
+      properties:
+        type:
+          type: string
+          const: request_time_parameter
+          title: Type
+          description: 'Type of source: ''request_time_parameter'''
+      type: object
+      required:
+      - type
+      title: RequestTimeParameterSource
+      description: Variable source from request-time parameters (e.g., tokens, API keys)
+    AgenticEvalRef-Output:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
         version:
           type: integer
           title: Version
-          description: Dataset version number
+          description: Version of the evaluation
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the transform to apply to the trace before evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/AgenticEvalVariableMapping-Output'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources (supports transform variables for agentic experiments)
       type: object
       required:
-      - id
+      - name
       - version
-      title: DatasetRefInput
-      description: Reference to a dataset and version for input (without name)
-    NewDatasetVersionRowColumnItemRequest:
+      - transform_id
+      - variable_mapping
+      title: AgenticEvalRef
+      description: Reference to an evaluation configuration with transform
+    InputVariable:
       properties:
-        column_name:
+        variable_name:
           type: string
-          title: Column Name
-          description: Name of column.
-        column_value:
+          title: Variable Name
+          description: Name of the variable
+        value:
           type: string
-          title: Column Value
-          description: Value of column for the row.
+          title: Value
+          description: Value of the variable
       type: object
       required:
-      - column_name
-      - column_value
-      title: NewDatasetVersionRowColumnItemRequest
-      description: Represents a single column-value pair in a dataset row.
+      - variable_name
+      - value
+      title: InputVariable
+      description: Input variable for a test case
+    AgenticOutput:
+      properties:
+        response_body:
+          additionalProperties: true
+          type: object
+          title: Response Body
+          description: Response body from the agent endpoint
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+          description: HTTP status code (None if request failed before receiving a response)
+        trace_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trace Id
+          description: Trace ID if available from the response
+      type: object
+      required:
+      - response_body
+      title: AgenticOutput
+      description: Output from an agent HTTP request execution
+    RequestTimeParameter:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the request-time parameter (must match variable_name in template_variable_mapping)
+        value:
+          type: string
+          title: Value
+          description: Value of the request-time parameter (not saved, provided at execution time)
+      type: object
+      required:
+      - name
+      - value
+      title: RequestTimeParameter
+      description: Request-time parameter with name and value (e.g., API keys, tokens)
     TemplateVariableMapping-Input:
       properties:
         variable_name:
@@ -609,6 +876,47 @@ components:
       - source
       title: TemplateVariableMapping
       description: Mapping of a template variable to its source
+    AgenticExperimentGeneratorType:
+      type: string
+      enum:
+      - uuid
+      - session_id
+      title: AgenticExperimentGeneratorType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EvalResultSummary:
+      properties:
+        eval_name:
+          type: string
+          title: Eval Name
+          description: Name of the evaluation
+        eval_version:
+          type: string
+          title: Eval Version
+          description: Version of the evaluation
+        pass_count:
+          type: integer
+          title: Pass Count
+          description: Number of test cases that passed
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of test cases evaluated
+      type: object
+      required:
+      - eval_name
+      - eval_version
+      - pass_count
+      - total_count
+      title: EvalResultSummary
+      description: Results for a single eval
     AgenticExperimentDetail:
       properties:
         id:
@@ -707,86 +1015,6 @@ components:
       - summary_results
       title: AgenticExperimentDetail
       description: Detailed information about an agentic experiment
-    AgenticOutput:
-      properties:
-        response_body:
-          additionalProperties: true
-          type: object
-          title: Response Body
-          description: Response body from the agent endpoint
-        status_code:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Status Code
-          description: HTTP status code (None if request failed before receiving a response)
-        trace_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Trace Id
-          description: Trace ID if available from the response
-      type: object
-      required:
-      - response_body
-      title: AgenticOutput
-      description: Output from an agent HTTP request execution
-    AgenticEvalRef-Input:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        transform_id:
-          type: string
-          format: uuid
-          title: Transform Id
-          description: ID of the transform to apply to the trace before evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/AgenticEvalVariableMapping-Input'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources (supports transform variables for agentic experiments)
-      type: object
-      required:
-      - name
-      - version
-      - transform_id
-      - variable_mapping
-      title: AgenticEvalRef
-      description: Reference to an evaluation configuration with transform
-    AgenticExperimentOutputVariableSource:
-      properties:
-        type:
-          type: string
-          const: experiment_output
-          title: Type
-          description: 'Type of source: ''experiment_output'''
-        experiment_output:
-          $ref: '#/components/schemas/TransformVariableExperimentOutputSource'
-          description: Experiment output source (only transform variables supported)
-      type: object
-      required:
-      - type
-      - experiment_output
-      title: AgenticExperimentOutputVariableSource
-      description: Variable source from experiment output (agentic experiments only support transform variables)
-    DatasetColumnSource:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dataset column
-      type: object
-      required:
-      - name
-      title: DatasetColumnSource
-      description: Reference to a dataset column
     AgenticExperimentSummary:
       properties:
         id:
@@ -865,175 +1093,7 @@ components:
       - http_template
       title: AgenticExperimentSummary
       description: Summary of an agentic experiment
-    RequestTimeParameterSource:
-      properties:
-        type:
-          type: string
-          const: request_time_parameter
-          title: Type
-          description: 'Type of source: ''request_time_parameter'''
-      type: object
-      required:
-      - type
-      title: RequestTimeParameterSource
-      description: Variable source from request-time parameters (e.g., tokens, API keys)
-    EvalExecutionResult:
-      properties:
-        score:
-          type: number
-          title: Score
-          description: Score from the evaluation
-        explanation:
-          type: string
-          title: Explanation
-          description: Explanation of the score
-        cost:
-          type: string
-          title: Cost
-          description: Cost of the evaluation
-      type: object
-      required:
-      - score
-      - explanation
-      - cost
-      title: EvalExecutionResult
-      description: Results from an eval execution
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    AgenticEvalRef-Output:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        transform_id:
-          type: string
-          format: uuid
-          title: Transform Id
-          description: ID of the transform to apply to the trace before evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/AgenticEvalVariableMapping-Output'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources (supports transform variables for agentic experiments)
-      type: object
-      required:
-      - name
-      - version
-      - transform_id
-      - variable_mapping
-      title: AgenticEvalRef
-      description: Reference to an evaluation configuration with transform
-    CreateAgenticExperimentRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name for the experiment
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the experiment
-        dataset_ref:
-          $ref: '#/components/schemas/DatasetRefInput'
-          description: Reference to the dataset to use
-        dataset_row_filter:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-            type: array
-          - type: 'null'
-          title: Dataset Row Filter
-          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included in the experiment. If not specified, all rows from the dataset will be used.
-        http_template:
-          $ref: '#/components/schemas/HttpTemplate'
-          description: HTTP template configuration for the agent endpoint
-        template_variable_mapping:
-          items:
-            $ref: '#/components/schemas/TemplateVariableMapping-Input'
-          type: array
-          title: Template Variable Mapping
-          description: Mapping of template variables to their sources (dataset columns, request-time parameters, or generated variables like UUIDs)
-        request_time_parameters:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/RequestTimeParameter'
-            type: array
-          - type: 'null'
-          title: Request Time Parameters
-          description: List of request-time parameters (e.g., API keys, tokens). These are NOT stored in the database for security reasons - they are passed directly to the execution thread.
-        eval_list:
-          items:
-            $ref: '#/components/schemas/AgenticEvalRef-Input'
-          type: array
-          title: Eval List
-          description: List of evaluations to run, each with an associated transform
-      type: object
-      required:
-      - name
-      - dataset_ref
-      - http_template
-      - template_variable_mapping
-      - eval_list
-      title: CreateAgenticExperimentRequest
-      description: Request to create a new agentic experiment
-    InputVariable:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - variable_name
-      - value
-      title: InputVariable
-      description: Input variable for a test case
-    AgenticEvalVariableMapping-Output:
+    AgenticEvalVariableMapping-Input:
       properties:
         variable_name:
           type: string
@@ -1061,51 +1121,6 @@ components:
         For transform variables, use ExperimentOutputVariableSource with transform_variable_name
 
         in the experiment_output field. The transform_id comes from the associated AgenticEvalRef.'
-    TransformVariableExperimentOutputSource:
-      properties:
-        type:
-          type: string
-          const: transform_variable
-          title: Type
-          description: Type of experiment output source
-          default: transform_variable
-        transform_variable_name:
-          type: string
-          title: Transform Variable Name
-          description: Name of the variable to extract from the transform. The transform_id comes from the eval configuration.
-      type: object
-      required:
-      - transform_variable_name
-      title: TransformVariableExperimentOutputSource
-      description: Reference to experiment output using transform variable extraction (agentic experiments only)
-    EvalExecution:
-      properties:
-        eval_name:
-          type: string
-          title: Eval Name
-          description: Name of the evaluation
-        eval_version:
-          type: string
-          title: Eval Version
-          description: Version of the evaluation
-        eval_input_variables:
-          items:
-            $ref: '#/components/schemas/InputVariable'
-          type: array
-          title: Eval Input Variables
-          description: Input variables used for the eval
-        eval_results:
-          anyOf:
-          - $ref: '#/components/schemas/EvalExecutionResult'
-          - type: 'null'
-          description: Results from the eval (None if not yet executed)
-      type: object
-      required:
-      - eval_name
-      - eval_version
-      - eval_input_variables
-      title: EvalExecution
-      description: Details of an eval execution
     GeneratedVariableSource:
       properties:
         type:
@@ -1122,55 +1137,23 @@ components:
       - generator_type
       title: GeneratedVariableSource
       description: Variable source for generated values (e.g., UUIDs, timestamps)
-    HttpHeader:
+    NewDatasetVersionRowColumnItemRequest:
       properties:
-        name:
+        column_name:
           type: string
-          title: Name
-          description: Header name (supports {{variable}} placeholders)
-        value:
+          title: Column Name
+          description: Name of column.
+        column_value:
           type: string
-          title: Value
-          description: Header value (supports {{variable}} placeholders)
+          title: Column Value
+          description: Value of column for the row.
       type: object
       required:
-      - name
-      - value
-      title: HttpHeader
-      description: HTTP header with support for variable placeholders
-    AgenticTestCase:
-      properties:
-        status:
-          $ref: '#/components/schemas/TestCaseStatus'
-          description: Status of the test case
-        dataset_row_id:
-          type: string
-          title: Dataset Row Id
-          description: ID of the dataset row
-        total_cost:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Total Cost
-          description: Total cost for this test case
-        template_input_variables:
-          items:
-            $ref: '#/components/schemas/InputVariable'
-          type: array
-          title: Template Input Variables
-          description: Input variables used in the template (with values resolved)
-        agentic_result:
-          $ref: '#/components/schemas/AgenticResult'
-          description: Result from the agent execution
-      type: object
-      required:
-      - status
-      - dataset_row_id
-      - template_input_variables
-      - agentic_result
-      title: AgenticTestCase
-      description: Individual test case result for agentic experiment
-    DatasetRef:
+      - column_name
+      - column_value
+      title: NewDatasetVersionRowColumnItemRequest
+      description: Represents a single column-value pair in a dataset row.
+    DatasetRefInput:
       properties:
         id:
           type: string
@@ -1181,46 +1164,63 @@ components:
           type: integer
           title: Version
           description: Dataset version number
-        name:
-          type: string
-          title: Name
-          description: Dataset name
       type: object
       required:
       - id
       - version
-      - name
-      title: DatasetRef
-      description: Reference to a dataset and version (with name)
-    AgenticEvalResultSummaries:
+      title: DatasetRefInput
+      description: Reference to a dataset and version for input (without name)
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    AgenticExperimentOutputVariableSource:
       properties:
-        eval_name:
+        type:
           type: string
-          title: Eval Name
-          description: Name of the evaluation
-        eval_version:
-          type: string
-          title: Eval Version
-          description: Version of the evaluation
-        transform_id:
-          type: string
-          format: uuid
-          title: Transform Id
-          description: ID of the transform used for this evaluation
-        eval_results:
-          items:
-            $ref: '#/components/schemas/EvalResultSummary'
-          type: array
-          title: Eval Results
-          description: Results for this evaluation
+          const: experiment_output
+          title: Type
+          description: 'Type of source: ''experiment_output'''
+        experiment_output:
+          $ref: '#/components/schemas/TransformVariableExperimentOutputSource'
+          description: Experiment output source (only transform variables supported)
       type: object
       required:
-      - eval_name
-      - eval_version
-      - transform_id
-      - eval_results
-      title: AgenticEvalResultSummaries
-      description: Summary of evaluation results for an agentic experiment
+      - type
+      - experiment_output
+      title: AgenticExperimentOutputVariableSource
+      description: Variable source from experiment output (agentic experiments only support transform variables)
+    DatasetColumnVariableSource:
+      properties:
+        type:
+          type: string
+          const: dataset_column
+          title: Type
+          description: 'Type of source: ''dataset_column'''
+        dataset_column:
+          $ref: '#/components/schemas/DatasetColumnSource'
+          description: Dataset column source
+      type: object
+      required:
+      - type
+      - dataset_column
+      title: DatasetColumnVariableSource
+      description: Variable source from a dataset column
+    AgenticSummaryResults:
+      properties:
+        eval_summaries:
+          items:
+            $ref: '#/components/schemas/AgenticEvalResultSummaries'
+          type: array
+          title: Eval Summaries
+          description: Summary for each evaluation run
+      type: object
+      required:
+      - eval_summaries
+      title: AgenticSummaryResults
+      description: Summary results across all evaluations
   securitySchemes:
     API_Key:
       type: http

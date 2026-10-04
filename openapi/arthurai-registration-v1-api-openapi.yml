@@ -44,6 +44,31 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    RegisterUser:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+          description: The user's email.
+        recaptcha_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Recaptcha Token
+          description: reCAPTCHA Enterprise token obtained client-side. Required when reCAPTCHA is configured server-side; ignored otherwise.
+      type: object
+      required:
+      - email
+      title: RegisterUser
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     ValidationError:
       properties:
         loc:
@@ -87,31 +112,6 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
-    RegisterUser:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-          description: The user's email.
-        recaptcha_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Recaptcha Token
-          description: reCAPTCHA Enterprise token obtained client-side. Required when reCAPTCHA is configured server-side; ignored otherwise.
-      type: object
-      required:
-      - email
-      title: RegisterUser
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

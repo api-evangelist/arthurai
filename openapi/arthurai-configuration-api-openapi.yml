@@ -50,6 +50,39 @@ paths:
       - Configuration
 components:
   schemas:
+    ApplicationConfigurationResponse:
+      properties:
+        chat_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Chat Task Id
+        default_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Currency
+        document_storage_configuration:
+          anyOf:
+          - $ref: '#/components/schemas/DocumentStorageConfigurationResponse'
+          - type: 'null'
+        max_llm_rules_per_task_count:
+          type: integer
+          title: Max Llm Rules Per Task Count
+        trace_retention_days:
+          type: integer
+          title: Trace Retention Days
+        allowed_trace_retention_days:
+          items:
+            type: integer
+          type: array
+          title: Allowed Trace Retention Days
+          default: []
+      type: object
+      required:
+      - max_llm_rules_per_task_count
+      - trace_retention_days
+      title: ApplicationConfigurationResponse
     DocumentStorageConfigurationResponse:
       properties:
         storage_environment:
@@ -109,34 +142,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ApplicationConfigurationUpdateRequest:
-      properties:
-        chat_task_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Chat Task Id
-        default_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Default Currency
-        document_storage_configuration:
-          anyOf:
-          - $ref: '#/components/schemas/DocumentStorageConfigurationUpdateRequest'
-          - type: 'null'
-        max_llm_rules_per_task_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Llm Rules Per Task Count
-        trace_retention_days:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Trace Retention Days
-      type: object
-      title: ApplicationConfigurationUpdateRequest
     DocumentStorageConfigurationUpdateRequest:
       properties:
         environment:
@@ -165,13 +170,7 @@ components:
       required:
       - environment
       title: DocumentStorageConfigurationUpdateRequest
-    DocumentStorageEnvironment:
-      type: string
-      enum:
-      - aws
-      - azure
-      title: DocumentStorageEnvironment
-    ApplicationConfigurationResponse:
+    ApplicationConfigurationUpdateRequest:
       properties:
         chat_task_id:
           anyOf:
@@ -185,25 +184,26 @@ components:
           title: Default Currency
         document_storage_configuration:
           anyOf:
-          - $ref: '#/components/schemas/DocumentStorageConfigurationResponse'
+          - $ref: '#/components/schemas/DocumentStorageConfigurationUpdateRequest'
           - type: 'null'
         max_llm_rules_per_task_count:
-          type: integer
+          anyOf:
+          - type: integer
+          - type: 'null'
           title: Max Llm Rules Per Task Count
         trace_retention_days:
-          type: integer
+          anyOf:
+          - type: integer
+          - type: 'null'
           title: Trace Retention Days
-        allowed_trace_retention_days:
-          items:
-            type: integer
-          type: array
-          title: Allowed Trace Retention Days
-          default: []
       type: object
-      required:
-      - max_llm_rules_per_task_count
-      - trace_retention_days
-      title: ApplicationConfigurationResponse
+      title: ApplicationConfigurationUpdateRequest
+    DocumentStorageEnvironment:
+      type: string
+      enum:
+      - aws
+      - azure
+      title: DocumentStorageEnvironment
   securitySchemes:
     API_Key:
       type: http

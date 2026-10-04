@@ -33,30 +33,28 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    TenantSignupRequest:
+    DemoTaskSignupResponse:
       properties:
-        form_variant:
-          anyOf:
-          - type: string
-            enum:
-            - linear
-            - wizard
-          - type: 'null'
-          title: Form Variant
-          description: Which onboarding form variant was submitted.
-        form_data:
-          $ref: '#/components/schemas/OnboardingTryItOutFormData'
-        recaptcha_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Recaptcha Token
-          description: reCAPTCHA Enterprise token obtained client-side. Required when reCAPTCHA is configured server-side; ignored otherwise.
+        org_id:
+          type: string
+          format: uuid
+          title: Org Id
+        task_id:
+          type: string
+          title: Task Id
+        task_name:
+          type: string
+          title: Task Name
+        api_key:
+          type: string
+          title: Api Key
       type: object
       required:
-      - form_data
-      title: TenantSignupRequest
-      description: Public tenant signup payload; includes try-it-out onboarding form data.
+      - org_id
+      - task_id
+      - task_name
+      - api_key
+      title: DemoTaskSignupResponse
     OnboardingTryItOutFormData:
       properties:
         first_name:
@@ -124,28 +122,30 @@ components:
       - attribution
       title: OnboardingTryItOutFormData
       description: Try-it-out onboarding form fields (matches UI TryItOutSubmission).
-    DemoTaskSignupResponse:
+    TenantSignupRequest:
       properties:
-        org_id:
-          type: string
-          format: uuid
-          title: Org Id
-        task_id:
-          type: string
-          title: Task Id
-        task_name:
-          type: string
-          title: Task Name
-        api_key:
-          type: string
-          title: Api Key
+        form_variant:
+          anyOf:
+          - type: string
+            enum:
+            - linear
+            - wizard
+          - type: 'null'
+          title: Form Variant
+          description: Which onboarding form variant was submitted.
+        form_data:
+          $ref: '#/components/schemas/OnboardingTryItOutFormData'
+        recaptcha_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Recaptcha Token
+          description: reCAPTCHA Enterprise token obtained client-side. Required when reCAPTCHA is configured server-side; ignored otherwise.
       type: object
       required:
-      - org_id
-      - task_id
-      - task_name
-      - api_key
-      title: DemoTaskSignupResponse
+      - form_data
+      title: TenantSignupRequest
+      description: Public tenant signup payload; includes try-it-out onboarding form data.
     ValidationError:
       properties:
         loc:

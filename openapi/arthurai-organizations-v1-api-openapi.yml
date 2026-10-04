@@ -106,14 +106,52 @@ paths:
         - organization_update
 components:
   schemas:
-    NotFoundError:
+    InternalServerError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Resource not found
+          default: Internal server error
       type: object
-      title: NotFoundError
+      title: InternalServerError
+    Organization:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the organization.
+        name:
+          type: string
+          title: Name
+          description: Name of the organization. Must be globally unique across all Arthur organizations.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      title: Organization
+    PatchOrganization:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the organization. Must be globally unique across all Arthur organizations.
+      type: object
+      title: PatchOrganization
     ValidationError:
       properties:
         loc:
@@ -149,6 +187,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     BadRequestError:
       properties:
         detail:
@@ -157,52 +203,6 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
-    PatchOrganization:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the organization. Must be globally unique across all Arthur organizations.
-      type: object
-      title: PatchOrganization
-    Organization:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the organization.
-        name:
-          type: string
-          title: Name
-          description: Name of the organization. Must be globally unique across all Arthur organizations.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      title: Organization
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

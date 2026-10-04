@@ -361,348 +361,12 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ListType:
-      properties:
-        items:
-          anyOf:
-          - $ref: '#/components/schemas/ScalarType'
-          - $ref: '#/components/schemas/ObjectType'
-          - $ref: '#/components/schemas/ListType'
-          title: Items
-      type: object
-      required:
-      - items
-      title: ListType
-    SketchTimeSeries:
-      properties:
-        dimensions:
-          items:
-            $ref: '#/components/schemas/Dimension'
-          type: array
-          title: Dimensions
-          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
-        values:
-          items:
-            $ref: '#/components/schemas/SketchPoint'
-          type: array
-          title: Values
-          description: List of sketch-based time series points.
-      type: object
-      required:
-      - dimensions
-      - values
-      title: SketchTimeSeries
-    NumericCustomAggregationTestResult:
-      properties:
-        metric_kind:
-          type: string
-          const: numeric
-          title: Metric Kind
-          default: numeric
-        value:
-          type: number
-          title: Value
-          description: Value of the time series metric.
-      type: object
-      required:
-      - value
-      title: NumericCustomAggregationTestResult
-    CustomAggregationTestStatus:
-      type: string
-      enum:
-      - completed
-      - queued
-      title: CustomAggregationTestStatus
-    MetricsUpload:
-      properties:
-        metrics:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/NumericMetric'
-            - $ref: '#/components/schemas/SketchMetric'
-          type: array
-          title: Metrics
-          description: List of metrics to upload.
-      type: object
-      required:
-      - metrics
-      title: MetricsUpload
-      description: 'The set of metrics that are available to submit via the PostMetrics API
-
-        Notably, this does not include systems metrics jobs'
     AggregationMetricType:
       type: string
       enum:
       - sketch
       - numeric
       title: AggregationMetricType
-    SketchPoint:
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp
-          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
-        value:
-          type: string
-          title: Value
-          description: Base64-encoded string representation of a sketch.
-      type: object
-      required:
-      - timestamp
-      - value
-      title: SketchPoint
-    ScopeSchemaTag:
-      type: string
-      enum:
-      - llm_context
-      - llm_prompt
-      - llm_response
-      - primary_timestamp
-      - categorical
-      - continuous
-      - prediction
-      - ground_truth
-      - pin_in_deep_dive
-      - possible_segmentation
-      title: ScopeSchemaTag
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ResourceList_CustomAggregationTestResult_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/CustomAggregationTestResult'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[CustomAggregationTestResult]
-    MetricsArgSpec:
-      properties:
-        arg_key:
-          type: string
-          title: Arg Key
-          description: Name of the argument.
-        arg_value:
-          title: Arg Value
-          description: Value of the argument.
-      type: object
-      required:
-      - arg_key
-      - arg_value
-      title: MetricsArgSpec
-    ResourceList_CustomAggregationTestSpec_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/CustomAggregationTestSpec'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[CustomAggregationTestSpec]
-    BaseDatasetParameterSchema:
-      properties:
-        parameter_key:
-          type: string
-          title: Parameter Key
-          description: Name of the parameter.
-        friendly_name:
-          type: string
-          title: Friendly Name
-          description: User facing name of the parameter.
-        description:
-          type: string
-          title: Description
-          description: Description of the parameter.
-        parameter_type:
-          type: string
-          const: dataset
-          title: Parameter Type
-          default: dataset
-        model_problem_type:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProblemType'
-          - type: 'null'
-          description: Model problem type of the parameter. If not set, any model problem type is allowed.
-      type: object
-      required:
-      - parameter_key
-      - friendly_name
-      - description
-      title: BaseDatasetParameterSchema
-    User:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        organization_id:
-          type: string
-          format: uuid4
-          title: Organization Id
-          description: The ID of the Arthur organization the user belongs to.
-        id:
-          type: string
-          format: uuid4
-          title: Id
-          description: Unique user ID assigned by Arthur.
-        first_name:
-          type: string
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: The user's email, if provided.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-        user_type:
-          $ref: '#/components/schemas/UserType'
-          description: The type of user.
-        data_plane_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Data Plane Id
-          description: Arthur data plane ID. Only set for data plane users.
-        client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Id
-          description: Arthur client ID for this user. Only set for service account type users.
-        organization_name:
-          type: string
-          title: Organization Name
-          description: Name of user's Arthur organization.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - organization_id
-      - id
-      - first_name
-      - last_name
-      - user_type
-      - organization_name
-      title: User
-    DType:
-      type: string
-      enum:
-      - undefined
-      - int
-      - float
-      - bool
-      - str
-      - uuid
-      - timestamp
-      - date
-      - json
-      - image
-      title: DType
-    NumericTimeSeries:
-      properties:
-        dimensions:
-          items:
-            $ref: '#/components/schemas/Dimension'
-          type: array
-          title: Dimensions
-          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
-        values:
-          items:
-            $ref: '#/components/schemas/NumericPoint'
-          type: array
-          title: Values
-          description: List of numeric time series points.
-      type: object
-      required:
-      - dimensions
-      - values
-      title: NumericTimeSeries
-    NumericMetric:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the metric.
-        numeric_series:
-          items:
-            $ref: '#/components/schemas/NumericTimeSeries'
-          type: array
-          title: Numeric Series
-          description: List of numeric time series to upload for the metric.
-      type: object
-      required:
-      - name
-      - numeric_series
-      title: NumericMetric
-    ModelProblemType:
-      type: string
-      enum:
-      - regression
-      - binary_classification
-      - arthur_shield
-      - custom
-      - multiclass_classification
-      - agentic_trace
-      title: ModelProblemType
     InternalServerError:
       properties:
         detail:
@@ -764,31 +428,71 @@ components:
       - description
       - source_dataset_parameter_key
       title: BaseColumnParameterSchema
-    MetricsUploadResult:
+    MetricsArgSpec:
       properties:
-        total_metrics:
-          type: integer
-          title: Total Metrics
-          description: Total number of metrics uploaded.
-        num_counter_metrics:
-          type: integer
-          title: Num Counter Metrics
-          description: Number of counter type metrics uploaded.
-        num_sketch_metrics:
-          type: integer
-          title: Num Sketch Metrics
-          description: Number of sketch type metrics uploaded.
-        num_series:
-          type: integer
-          title: Num Series
-          description: Number of series uploaded.
+        arg_key:
+          type: string
+          title: Arg Key
+          description: Name of the argument.
+        arg_value:
+          title: Arg Value
+          description: Value of the argument.
       type: object
       required:
-      - total_metrics
-      - num_counter_metrics
-      - num_sketch_metrics
-      - num_series
-      title: MetricsUploadResult
+      - arg_key
+      - arg_value
+      title: MetricsArgSpec
+    CustomAggregationTestResult:
+      properties:
+        test_run_id:
+          type: string
+          format: uuid
+          title: Test Run Id
+          description: ID of the custom aggregation test run.
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the generated metric.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp for the time bucket the aggregation value is for.
+        value:
+          anyOf:
+          - $ref: '#/components/schemas/NumericCustomAggregationTestResult'
+          - $ref: '#/components/schemas/SketchCustomAggregationTestResult'
+          title: Value
+          description: Number or data sketch values representing the aggregation.
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the value.
+      type: object
+      required:
+      - test_run_id
+      - metric_name
+      - timestamp
+      - value
+      - dimensions
+      title: CustomAggregationTestResult
+    NumericCustomAggregationTestResult:
+      properties:
+        metric_kind:
+          type: string
+          const: numeric
+          title: Metric Kind
+          default: numeric
+        value:
+          type: number
+          title: Value
+          description: Value of the time series metric.
+      type: object
+      required:
+      - value
+      title: NumericCustomAggregationTestResult
     CustomAggregationTestSpec:
       properties:
         reported_aggregations:
@@ -888,14 +592,6 @@ components:
       - created_at
       - job_id
       title: CustomAggregationTestSpec
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     ValidationError:
       properties:
         loc:
@@ -922,6 +618,194 @@ components:
       - msg
       - type
       title: ValidationError
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SketchPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp with timezone. Should be the timestamp of the start of the interval covered by 'value'.
+        value:
+          type: string
+          title: Value
+          description: Base64-encoded string representation of a sketch.
+      type: object
+      required:
+      - timestamp
+      - value
+      title: SketchPoint
+    SketchTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/SketchPoint'
+          type: array
+          title: Values
+          description: List of sketch-based time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: SketchTimeSeries
+    ListType:
+      properties:
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/ScalarType'
+          - $ref: '#/components/schemas/ObjectType'
+          - $ref: '#/components/schemas/ListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: ListType
+    MetricsUpload:
+      properties:
+        metrics:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumericMetric'
+            - $ref: '#/components/schemas/SketchMetric'
+          type: array
+          title: Metrics
+          description: List of metrics to upload.
+      type: object
+      required:
+      - metrics
+      title: MetricsUpload
+      description: 'The set of metrics that are available to submit via the PostMetrics API
+
+        Notably, this does not include systems metrics jobs'
+    BaseLiteralParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: literal
+          title: Parameter Type
+          default: literal
+        parameter_dtype:
+          $ref: '#/components/schemas/DType'
+          description: Data type of the parameter.
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      - parameter_dtype
+      title: BaseLiteralParameterSchema
+    ModelProblemType:
+      type: string
+      enum:
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    ReportedCustomAggregation:
+      properties:
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the reported aggregation metric.
+        description:
+          type: string
+          title: Description
+          description: Description of the reported aggregation metric and what it aggregates.
+        value_column:
+          type: string
+          title: Value Column
+          description: Name of the column returned from the SQL query holding the metric value.
+        timestamp_column:
+          type: string
+          title: Timestamp Column
+          description: Name of the column returned from the SQL query holding the timestamp buckets.
+        metric_kind:
+          $ref: '#/components/schemas/AggregationMetricType'
+          description: Return type of the reported aggregation metric value.
+        dimension_columns:
+          items:
+            type: string
+          type: array
+          title: Dimension Columns
+          description: Name of any dimension columns returned from the SQL query. Max length is 1.
+      type: object
+      required:
+      - metric_name
+      - description
+      - value_column
+      - timestamp_column
+      - metric_kind
+      - dimension_columns
+      title: ReportedCustomAggregation
+    ScalarType:
+      properties:
+        dtype:
+          $ref: '#/components/schemas/DType'
+      type: object
+      required:
+      - dtype
+      title: ScalarType
+    ResourceList_CustomAggregationTestResult_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/CustomAggregationTestResult'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[CustomAggregationTestResult]
+    NumericMetric:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the metric.
+        numeric_series:
+          items:
+            $ref: '#/components/schemas/NumericTimeSeries'
+          type: array
+          title: Numeric Series
+          description: List of numeric time series to upload for the metric.
+      type: object
+      required:
+      - name
+      - numeric_series
+      title: NumericMetric
     NumericPoint:
       properties:
         timestamp:
@@ -938,38 +822,22 @@ components:
       - timestamp
       - value
       title: NumericPoint
-    HTTPValidationError:
+    ResourceList_CustomAggregationTestSpec_:
       properties:
-        detail:
+        records:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/CustomAggregationTestSpec'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ScalarType:
-      properties:
-        dtype:
-          $ref: '#/components/schemas/DType'
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
       required:
-      - dtype
-      title: ScalarType
-    Dimension:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dimension.
-        value:
-          type: string
-          title: Value
-          description: Value of the dimension.
-      type: object
-      required:
-      - name
-      - value
-      title: Dimension
+      - records
+      - pagination
+      title: ResourceList[CustomAggregationTestSpec]
     SketchCustomAggregationTestResult:
       properties:
         metric_kind:
@@ -1069,122 +937,31 @@ components:
       - end_timestamp
       - dataset_id
       title: PostCustomAggregationTest
-    ReportedCustomAggregation:
+    Pagination:
       properties:
-        metric_name:
-          type: string
-          title: Metric Name
-          description: Name of the reported aggregation metric.
-        description:
-          type: string
-          title: Description
-          description: Description of the reported aggregation metric and what it aggregates.
-        value_column:
-          type: string
-          title: Value Column
-          description: Name of the column returned from the SQL query holding the metric value.
-        timestamp_column:
-          type: string
-          title: Timestamp Column
-          description: Name of the column returned from the SQL query holding the timestamp buckets.
-        metric_kind:
-          $ref: '#/components/schemas/AggregationMetricType'
-          description: Return type of the reported aggregation metric value.
-        dimension_columns:
-          items:
-            type: string
-          type: array
-          title: Dimension Columns
-          description: Name of any dimension columns returned from the SQL query. Max length is 1.
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - metric_name
-      - description
-      - value_column
-      - timestamp_column
-      - metric_kind
-      - dimension_columns
-      title: ReportedCustomAggregation
-    BaseLiteralParameterSchema:
-      properties:
-        parameter_key:
-          type: string
-          title: Parameter Key
-          description: Name of the parameter.
-        friendly_name:
-          type: string
-          title: Friendly Name
-          description: User facing name of the parameter.
-        description:
-          type: string
-          title: Description
-          description: Description of the parameter.
-        parameter_type:
-          type: string
-          const: literal
-          title: Parameter Type
-          default: literal
-        parameter_dtype:
-          $ref: '#/components/schemas/DType'
-          description: Data type of the parameter.
-      type: object
-      required:
-      - parameter_key
-      - friendly_name
-      - description
-      - parameter_dtype
-      title: BaseLiteralParameterSchema
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    CustomAggregationTestResult:
-      properties:
-        test_run_id:
-          type: string
-          format: uuid
-          title: Test Run Id
-          description: ID of the custom aggregation test run.
-        metric_name:
-          type: string
-          title: Metric Name
-          description: Name of the generated metric.
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp
-          description: Timestamp for the time bucket the aggregation value is for.
-        value:
-          anyOf:
-          - $ref: '#/components/schemas/NumericCustomAggregationTestResult'
-          - $ref: '#/components/schemas/SketchCustomAggregationTestResult'
-          title: Value
-          description: Number or data sketch values representing the aggregation.
-        dimensions:
-          items:
-            $ref: '#/components/schemas/Dimension'
-          type: array
-          title: Dimensions
-          description: List of dimensions for the value.
-      type: object
-      required:
-      - test_run_id
-      - metric_name
-      - timestamp
-      - value
-      - dimensions
-      title: CustomAggregationTestResult
+      - total_pages
+      - total_records
+      title: Pagination
     ObjectType:
       properties:
         object:
@@ -1216,6 +993,229 @@ components:
       - name
       - sketch_series
       title: SketchMetric
+    Dimension:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dimension.
+        value:
+          type: string
+          title: Value
+          description: Value of the dimension.
+      type: object
+      required:
+      - name
+      - value
+      title: Dimension
+    MetricsUploadResult:
+      properties:
+        total_metrics:
+          type: integer
+          title: Total Metrics
+          description: Total number of metrics uploaded.
+        num_counter_metrics:
+          type: integer
+          title: Num Counter Metrics
+          description: Number of counter type metrics uploaded.
+        num_sketch_metrics:
+          type: integer
+          title: Num Sketch Metrics
+          description: Number of sketch type metrics uploaded.
+        num_series:
+          type: integer
+          title: Num Series
+          description: Number of series uploaded.
+      type: object
+      required:
+      - total_metrics
+      - num_counter_metrics
+      - num_sketch_metrics
+      - num_series
+      title: MetricsUploadResult
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    DType:
+      type: string
+      enum:
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    NumericTimeSeries:
+      properties:
+        dimensions:
+          items:
+            $ref: '#/components/schemas/Dimension'
+          type: array
+          title: Dimensions
+          description: List of dimensions for the series. If multiple dimensions are uploaded with the same key, the one that is kept is undefined.
+        values:
+          items:
+            $ref: '#/components/schemas/NumericPoint'
+          type: array
+          title: Values
+          description: List of numeric time series points.
+      type: object
+      required:
+      - dimensions
+      - values
+      title: NumericTimeSeries
+    CustomAggregationTestStatus:
+      type: string
+      enum:
+      - completed
+      - queued
+      title: CustomAggregationTestStatus
+    BaseDatasetParameterSchema:
+      properties:
+        parameter_key:
+          type: string
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: dataset
+          title: Parameter Type
+          default: dataset
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type of the parameter. If not set, any model problem type is allowed.
+      type: object
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      title: BaseDatasetParameterSchema
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

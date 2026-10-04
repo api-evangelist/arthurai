@@ -27,6 +27,14 @@ paths:
       - Health
 components:
   schemas:
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     HealthStatus:
       properties:
         message:
@@ -44,14 +52,6 @@ components:
           description: Platform release version.
       type: object
       title: HealthStatus
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

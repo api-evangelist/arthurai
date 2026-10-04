@@ -557,59 +557,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    ContinuousEvalTransformVariableMappingResponse:
-      properties:
-        transform_variable:
-          type: string
-          title: Transform Variable
-          description: Name of the transform variable.
-        eval_variable:
-          type: string
-          title: Eval Variable
-          description: Name of the eval variable.
-      type: object
-      required:
-      - transform_variable
-      - eval_variable
-      title: ContinuousEvalTransformVariableMappingResponse
-    ListAgenticAnnotationsResponse:
-      properties:
-        annotations:
-          items:
-            $ref: '#/components/schemas/AgenticAnnotationResponse'
-          type: array
-          title: Annotations
-          description: List of annotations
-        count:
-          type: integer
-          title: Count
-          description: Total number of annotations
-      type: object
-      required:
-      - annotations
-      - count
-      title: ListAgenticAnnotationsResponse
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
     UpdateContinuousEvalRequest:
       properties:
         name:
@@ -668,6 +615,205 @@ components:
       type: object
       title: UpdateContinuousEvalRequest
       description: Request schema for creating a continuous eval
+    ContinuousEvalTransformVariableMappingResponse:
+      properties:
+        transform_variable:
+          type: string
+          title: Transform Variable
+          description: Name of the transform variable.
+        eval_variable:
+          type: string
+          title: Eval Variable
+          description: Name of the eval variable.
+      type: object
+      required:
+      - transform_variable
+      - eval_variable
+      title: ContinuousEvalTransformVariableMappingResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
+    ListAgenticAnnotationsResponse:
+      properties:
+        annotations:
+          items:
+            $ref: '#/components/schemas/AgenticAnnotationResponse'
+          type: array
+          title: Annotations
+          description: List of annotations
+        count:
+          type: integer
+          title: Count
+          description: Total number of annotations
+      type: object
+      required:
+      - annotations
+      - count
+      title: ListAgenticAnnotationsResponse
+    ContinuousEvalVariableMappingResponse:
+      properties:
+        matching_variables:
+          items:
+            type: string
+          type: array
+          title: Matching Variables
+          description: List of matching variables.
+        transform_variables:
+          items:
+            type: string
+          type: array
+          title: Transform Variables
+          description: List of transform variables.
+        eval_variables:
+          items:
+            type: string
+          type: array
+          title: Eval Variables
+          description: List of eval variables.
+      type: object
+      required:
+      - matching_variables
+      - transform_variables
+      - eval_variables
+      title: ContinuousEvalVariableMappingResponse
+    DailyAgenticAnnotationStats:
+      properties:
+        date:
+          type: string
+          title: Date
+          description: Date in YYYY-MM-DD format
+        passed_count:
+          type: integer
+          title: Passed Count
+          description: Count of annotations with score=1
+        failed_count:
+          type: integer
+          title: Failed Count
+          description: Count of annotations with score=0
+        error_count:
+          type: integer
+          title: Error Count
+          description: Count of annotations with run_status='error'
+        skipped_count:
+          type: integer
+          title: Skipped Count
+          description: Count of annotations with run_status='skipped'
+        total_cost:
+          type: number
+          title: Total Cost
+          description: Total cost for the day
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total annotations for the day
+      type: object
+      required:
+      - date
+      - passed_count
+      - failed_count
+      - error_count
+      - skipped_count
+      - total_cost
+      - total_count
+      title: DailyAgenticAnnotationStats
+      description: Statistics for a single day of agentic annotations.
+    ContinuousEvalRerunResponse:
+      properties:
+        run_id:
+          type: string
+          format: uuid
+          title: Run Id
+          description: ID of the continuous eval run that was rerun.
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace that was rerun.
+      type: object
+      required:
+      - run_id
+      - trace_id
+      title: ContinuousEvalRerunResponse
+    AgenticAnnotationAnalyticsResponse:
+      properties:
+        stats:
+          items:
+            $ref: '#/components/schemas/DailyAgenticAnnotationStats'
+          type: array
+          title: Stats
+          description: Daily statistics ordered by date descending
+        count:
+          type: integer
+          title: Count
+          description: Number of days with data
+      type: object
+      required:
+      - stats
+      - count
+      title: AgenticAnnotationAnalyticsResponse
+      description: Response containing daily aggregated statistics.
+    ContinuousEvalTransformVariableMappingRequest:
+      properties:
+        transform_variable:
+          type: string
+          title: Transform Variable
+          description: Name of the transform variable
+        eval_variable:
+          type: string
+          title: Eval Variable
+          description: Name of the eval variable
+      type: object
+      required:
+      - transform_variable
+      - eval_variable
+      title: ContinuousEvalTransformVariableMappingRequest
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AgenticAnnotationResponse:
       properties:
         id:
@@ -759,84 +905,6 @@ components:
       - created_at
       - updated_at
       title: AgenticAnnotationResponse
-    ContinuousEvalTransformVariableMappingRequest:
-      properties:
-        transform_variable:
-          type: string
-          title: Transform Variable
-          description: Name of the transform variable
-        eval_variable:
-          type: string
-          title: Eval Variable
-          description: Name of the eval variable
-      type: object
-      required:
-      - transform_variable
-      - eval_variable
-      title: ContinuousEvalTransformVariableMappingRequest
-    AgenticAnnotationAnalyticsResponse:
-      properties:
-        stats:
-          items:
-            $ref: '#/components/schemas/DailyAgenticAnnotationStats'
-          type: array
-          title: Stats
-          description: Daily statistics ordered by date descending
-        count:
-          type: integer
-          title: Count
-          description: Number of days with data
-      type: object
-      required:
-      - stats
-      - count
-      title: AgenticAnnotationAnalyticsResponse
-      description: Response containing daily aggregated statistics.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
     EvalType:
       type: string
       enum:
@@ -939,69 +1007,12 @@ components:
       - created_at
       - updated_at
       title: ContinuousEvalResponse
-    DailyAgenticAnnotationStats:
-      properties:
-        date:
-          type: string
-          title: Date
-          description: Date in YYYY-MM-DD format
-        passed_count:
-          type: integer
-          title: Passed Count
-          description: Count of annotations with score=1
-        failed_count:
-          type: integer
-          title: Failed Count
-          description: Count of annotations with score=0
-        error_count:
-          type: integer
-          title: Error Count
-          description: Count of annotations with run_status='error'
-        skipped_count:
-          type: integer
-          title: Skipped Count
-          description: Count of annotations with run_status='skipped'
-        total_cost:
-          type: number
-          title: Total Cost
-          description: Total cost for the day
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total annotations for the day
-      type: object
-      required:
-      - date
-      - passed_count
-      - failed_count
-      - error_count
-      - skipped_count
-      - total_cost
-      - total_count
-      title: DailyAgenticAnnotationStats
-      description: Statistics for a single day of agentic annotations.
-    ContinuousEvalRerunResponse:
-      properties:
-        run_id:
-          type: string
-          format: uuid
-          title: Run Id
-          description: ID of the continuous eval run that was rerun.
-        trace_id:
-          type: string
-          title: Trace Id
-          description: ID of the trace that was rerun.
-      type: object
-      required:
-      - run_id
-      - trace_id
-      title: ContinuousEvalRerunResponse
-    AgenticAnnotationType:
+    PaginationSortMethod:
       type: string
       enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
+      - asc
+      - desc
+      title: PaginationSortMethod
     ContinuousEvalCreateRequest:
       properties:
         name:
@@ -1064,32 +1075,21 @@ components:
       - transform_variable_mapping
       title: ContinuousEvalCreateRequest
       description: Request schema for creating a continuous eval
-    ContinuousEvalVariableMappingResponse:
+    VariableTemplateValue:
       properties:
-        matching_variables:
-          items:
-            type: string
-          type: array
-          title: Matching Variables
-          description: List of matching variables.
-        transform_variables:
-          items:
-            type: string
-          type: array
-          title: Transform Variables
-          description: List of transform variables.
-        eval_variables:
-          items:
-            type: string
-          type: array
-          title: Eval Variables
-          description: List of eval variables.
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
       type: object
       required:
-      - matching_variables
-      - transform_variables
-      - eval_variables
-      title: ContinuousEvalVariableMappingResponse
+      - name
+      - value
+      title: VariableTemplateValue
   securitySchemes:
     API_Key:
       type: http

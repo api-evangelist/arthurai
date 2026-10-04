@@ -616,80 +616,26 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PostAlertLog:
+    InternalServerError:
       properties:
-        alert_rule_id:
+        detail:
           type: string
-          format: uuid
-          title: Alert Rule Id
-          description: The ID of the alert rule that was evaluated.
-        job_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Job Id
-          description: The ID of the job that triggered this evaluation.
-        policy_model_assignment_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Policy Model Assignment Id
-          description: The ID of the policy model assignment, if this is a policy-managed alert rule.
-        status:
-          $ref: '#/components/schemas/AlertLogStatus'
-          description: The outcome of the alert rule evaluation.
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp
-          description: Start timestamp of the evaluation bucket this log covers.
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PostAlertLogs:
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/PostAlertLog'
+          type: array
+          title: Logs
+          description: The list of alert rule evaluation logs to create.
       type: object
       required:
-      - alert_rule_id
-      - status
-      - timestamp
-      title: PostAlertLog
-    InfinitePagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-      type: object
-      title: InfinitePagination
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
+      - logs
+      title: PostAlertLogs
     Alert:
       properties:
         description:
@@ -788,30 +734,99 @@ components:
       - alert_rule_name
       - alert_rule_metric_name
       title: Alert
-    IntervalUnit:
-      type: string
-      enum:
-      - seconds
-      - minutes
-      - hours
-      - days
-      title: IntervalUnit
-    InfiniteResourceList_AlertGroup_:
+    WebhookResult:
+      properties:
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        response:
+          anyOf:
+          - $ref: '#/components/schemas/WebhookResponse'
+          - type: 'null'
+      type: object
+      required:
+      - error
+      - response
+      title: WebhookResult
+    ResourceList_AlertLog_:
       properties:
         records:
           items:
-            $ref: '#/components/schemas/AlertGroup'
+            $ref: '#/components/schemas/AlertLog'
           type: array
           title: Records
           description: List of records.
         pagination:
-          $ref: '#/components/schemas/InfinitePagination'
+          $ref: '#/components/schemas/Pagination'
           description: Pagination information.
       type: object
       required:
       - records
       - pagination
-      title: InfiniteResourceList[AlertGroup]
+      title: ResourceList[AlertLog]
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AlertRuleInterval:
+      properties:
+        unit:
+          $ref: '#/components/schemas/IntervalUnit'
+          description: 'Unit of time interval. Example: ''minutes''.'
+        count:
+          type: integer
+          title: Count
+          description: 'Number of units in the interval. Example: ''5''.'
+      type: object
+      required:
+      - unit
+      - count
+      title: AlertRuleInterval
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    AlertLogStatus:
+      type: string
+      enum:
+      - fired
+      - okay
+      - no_data
+      title: AlertLogStatus
     PostAlert:
       properties:
         description:
@@ -869,28 +884,67 @@ components:
       - dimensions
       - alert_rule_id
       title: PostAlert
-    WebhookResult:
+    InfiniteResourceList_AlertGroup_:
       properties:
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-        response:
-          anyOf:
-          - $ref: '#/components/schemas/WebhookResponse'
-          - type: 'null'
+        records:
+          items:
+            $ref: '#/components/schemas/AlertGroup'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/InfinitePagination'
+          description: Pagination information.
       type: object
       required:
-      - error
-      - response
-      title: WebhookResult
-    AlertSort:
-      type: string
-      enum:
-      - created_at
-      - timestamp
-      title: AlertSort
+      - records
+      - pagination
+      title: InfiniteResourceList[AlertGroup]
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    CreatedAlerts:
+      properties:
+        alerts:
+          items:
+            $ref: '#/components/schemas/Alert'
+          type: array
+          title: Alerts
+          description: The list of created alerts.
+        webhooks_called:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AlertWebhookCalled'
+            type: array
+          - type: 'null'
+          title: Webhooks Called
+          description: The list of webhooks that were triggered by the alerts.
+      type: object
+      required:
+      - alerts
+      title: CreatedAlerts
     PostAlerts:
       properties:
         alerts:
@@ -904,80 +958,12 @@ components:
       required:
       - alerts
       title: PostAlerts
-    AlertLogStatus:
+    AlertSort:
       type: string
       enum:
-      - fired
-      - okay
-      - no_data
-      title: AlertLogStatus
-    WebhookResponse:
-      properties:
-        status_code:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Status Code
-        response:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Response
-      type: object
-      required:
-      - status_code
-      - response
-      title: WebhookResponse
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    InfiniteResourceList_Alert_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Alert'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/InfinitePagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: InfiniteResourceList[Alert]
+      - created_at
+      - timestamp
+      title: AlertSort
     HTTPValidationError:
       properties:
         detail:
@@ -987,32 +973,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    AlertWebhookCalled:
-      properties:
-        webhook_id:
-          type: string
-          format: uuid
-          title: Webhook Id
-          description: The id of the webhook that was triggered by the alert.
-        webhook_name:
-          type: string
-          title: Webhook Name
-          description: The name of the webhook.
-        webhook_result:
-          $ref: '#/components/schemas/WebhookResult'
-          description: The result of the webhook call.
-      type: object
-      required:
-      - webhook_id
-      - webhook_name
-      - webhook_result
-      title: AlertWebhookCalled
     AlertGroup:
       properties:
         alert_rule_id:
@@ -1062,54 +1022,22 @@ components:
       - bound
       - alerts
       title: AlertGroup
-    PostAlertLogs:
-      properties:
-        logs:
-          items:
-            $ref: '#/components/schemas/PostAlertLog'
-          type: array
-          title: Logs
-          description: The list of alert rule evaluation logs to create.
-      type: object
-      required:
-      - logs
-      title: PostAlertLogs
-    CreatedAlerts:
-      properties:
-        alerts:
-          items:
-            $ref: '#/components/schemas/Alert'
-          type: array
-          title: Alerts
-          description: The list of created alerts.
-        webhooks_called:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/AlertWebhookCalled'
-            type: array
-          - type: 'null'
-          title: Webhooks Called
-          description: The list of webhooks that were triggered by the alerts.
-      type: object
-      required:
-      - alerts
-      title: CreatedAlerts
-    ResourceList_AlertLog_:
+    InfiniteResourceList_Alert_:
       properties:
         records:
           items:
-            $ref: '#/components/schemas/AlertLog'
+            $ref: '#/components/schemas/Alert'
           type: array
           title: Records
           description: List of records.
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: '#/components/schemas/InfinitePagination'
           description: Pagination information.
       type: object
       required:
       - records
       - pagination
-      title: ResourceList[AlertLog]
+      title: InfiniteResourceList[Alert]
     BadRequestError:
       properties:
         detail:
@@ -1118,12 +1046,106 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
+    PostAlertLog:
+      properties:
+        alert_rule_id:
+          type: string
+          format: uuid
+          title: Alert Rule Id
+          description: The ID of the alert rule that was evaluated.
+        job_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+          description: The ID of the job that triggered this evaluation.
+        policy_model_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Model Assignment Id
+          description: The ID of the policy model assignment, if this is a policy-managed alert rule.
+        status:
+          $ref: '#/components/schemas/AlertLogStatus'
+          description: The outcome of the alert rule evaluation.
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Start timestamp of the evaluation bucket this log covers.
+      type: object
+      required:
+      - alert_rule_id
+      - status
+      - timestamp
+      title: PostAlertLog
     AlertBound:
       type: string
       enum:
       - upper_bound
       - lower_bound
       title: AlertBound
+    InfinitePagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+      type: object
+      title: InfinitePagination
+    WebhookResponse:
+      properties:
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+        response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Response
+      type: object
+      required:
+      - status_code
+      - response
+      title: WebhookResponse
+    AlertWebhookCalled:
+      properties:
+        webhook_id:
+          type: string
+          format: uuid
+          title: Webhook Id
+          description: The id of the webhook that was triggered by the alert.
+        webhook_name:
+          type: string
+          title: Webhook Name
+          description: The name of the webhook.
+        webhook_result:
+          $ref: '#/components/schemas/WebhookResult'
+          description: The result of the webhook call.
+      type: object
+      required:
+      - webhook_id
+      - webhook_name
+      - webhook_result
+      title: AlertWebhookCalled
+    IntervalUnit:
+      type: string
+      enum:
+      - seconds
+      - minutes
+      - hours
+      - days
+      title: IntervalUnit
     AlertLog:
       properties:
         created_at:
@@ -1183,28 +1205,6 @@ components:
       - status
       - timestamp
       title: AlertLog
-    AlertRuleInterval:
-      properties:
-        unit:
-          $ref: '#/components/schemas/IntervalUnit'
-          description: 'Unit of time interval. Example: ''minutes''.'
-        count:
-          type: integer
-          title: Count
-          description: 'Number of units in the interval. Example: ''5''.'
-      type: object
-      required:
-      - unit
-      - count
-      title: AlertRuleInterval
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

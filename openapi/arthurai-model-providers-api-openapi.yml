@@ -108,89 +108,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PutModelProviderCredentials:
-      properties:
-        api_key:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Api Key
-          description: The API key for the provider.
-        project_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Project Id
-          description: The vertex AI project ID. Will override the project ID in the key file if provided.
-        region:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Region
-          description: The vertex AI region to use
-        aws_access_key_id:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Aws Access Key Id
-          description: The AWS access key ID.
-        aws_secret_access_key:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Aws Secret Access Key
-          description: The AWS secret access key.
-        aws_bedrock_runtime_endpoint:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Aws Bedrock Runtime Endpoint
-          description: The AWS Bedrock runtime endpoint.
-        aws_role_name:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Aws Role Name
-          description: The AWS role name.
-        aws_session_name:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Aws Session Name
-          description: The AWS session name.
-        api_base:
-          anyOf:
-          - type: string
-            format: password
-            writeOnly: true
-          - type: 'null'
-          title: Api Base
-          description: The API base URL. Required for Azure (endpoint URL) and vLLM models.
-        api_version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Version
-          description: The API version. Required for Azure (e.g. '2024-02-01').
-        credentials_file:
-          anyOf:
-          - $ref: '#/components/schemas/GCPServiceAccountCredentialsRequest'
-          - type: 'null'
-          description: Optional GCP service account credentials JSON
-      type: object
-      title: PutModelProviderCredentials
     ModelProviderResponse:
       properties:
         provider:
@@ -205,52 +122,6 @@ components:
       - provider
       - enabled
       title: ModelProviderResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     GCPServiceAccountCredentialsRequest:
       properties:
         type:
@@ -350,6 +221,135 @@ components:
       required:
       - providers
       title: ModelProviderList
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
+    PutModelProviderCredentials:
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Api Key
+          description: The API key for the provider.
+        project_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+          description: The vertex AI project ID. Will override the project ID in the key file if provided.
+        region:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Region
+          description: The vertex AI region to use
+        aws_access_key_id:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Access Key Id
+          description: The AWS access key ID.
+        aws_secret_access_key:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Secret Access Key
+          description: The AWS secret access key.
+        aws_bedrock_runtime_endpoint:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Bedrock Runtime Endpoint
+          description: The AWS Bedrock runtime endpoint.
+        aws_role_name:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Role Name
+          description: The AWS role name.
+        aws_session_name:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Aws Session Name
+          description: The AWS session name.
+        api_base:
+          anyOf:
+          - type: string
+            format: password
+            writeOnly: true
+          - type: 'null'
+          title: Api Base
+          description: The API base URL. Required for Azure (endpoint URL) and vLLM models.
+        api_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Version
+          description: The API version. Required for Azure (e.g. '2024-02-01').
+        credentials_file:
+          anyOf:
+          - $ref: '#/components/schemas/GCPServiceAccountCredentialsRequest'
+          - type: 'null'
+          description: Optional GCP service account credentials JSON
+      type: object
+      title: PutModelProviderCredentials
   securitySchemes:
     API_Key:
       type: http
