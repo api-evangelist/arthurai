@@ -494,6 +494,126 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    BoundResourceKind:
+      type: string
+      enum:
+      - organization
+      - workspace
+      - project
+      - data_plane
+      title: BoundResourceKind
+    PatchServiceAccountUser:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the service account user.
+      type: object
+      title: PatchServiceAccountUser
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InviteNewUser:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+          description: The user's email.
+        role_binding:
+          anyOf:
+          - $ref: '#/components/schemas/PostGlobalRoleBinding'
+          - type: 'null'
+          description: Metadata of the role to grant to the user after creation.
+        group_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Group Ids
+          description: IDs of groups to add the user to after creation.
+      type: object
+      required:
+      - email
+      title: InviteNewUser
+    PostServiceAccount:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The service account's name.
+      type: object
+      required:
+      - name
+      title: PostServiceAccount
+    ConflictError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Conflict
+      type: object
+      title: ConflictError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     InternalServerError:
       properties:
         detail:
@@ -502,6 +622,290 @@ components:
           default: Internal server error
       type: object
       title: InternalServerError
+    PostGlobalRoleBinding:
+      properties:
+        role_id:
+          type: string
+          format: uuid
+          title: Role Id
+          description: ID of the bound role.
+        bound_resource_kind:
+          $ref: '#/components/schemas/BoundResourceKind'
+          description: Kind of the bound resource.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: Id of the bound resource.
+      type: object
+      required:
+      - role_id
+      - bound_resource_kind
+      - resource_id
+      title: PostGlobalRoleBinding
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    UserServiceAccountCredentials:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+        credentials:
+          $ref: '#/components/schemas/ServiceAccountCredentials'
+          description: The service account credentials.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      - credentials
+      title: UserServiceAccountCredentials
+    UserCredentials:
+      properties:
+        password:
+          type: string
+          format: password
+          title: Password
+          description: The user's password.
+          writeOnly: true
+      type: object
+      required:
+      - password
+      title: UserCredentials
+    ServiceAccountCredentials:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: The service account client ID.
+        client_secret:
+          type: string
+          format: password
+          title: Client Secret
+          description: The service account client secret.
+          writeOnly: true
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: ServiceAccountCredentials
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    PatchUser:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+      type: object
+      title: PatchUser
+    PostEndUser:
+      properties:
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          type: string
+          format: email
+          title: Email
+          description: The user's email.
+        password:
+          type: string
+          title: Password
+          description: One time password for the user.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+      type: object
+      required:
+      - first_name
+      - email
+      - password
+      title: PostEndUser
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     SensitiveUser:
       properties:
         created_at:
@@ -585,45 +989,12 @@ components:
       - organization_name
       - credentials
       title: SensitiveUser
-    PatchUser:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: The user's email.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-      type: object
-      title: PatchUser
-    PostServiceAccount:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The service account's name.
-      type: object
-      required:
-      - name
-      title: PostServiceAccount
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     ResourceList_User_:
       properties:
         records:
@@ -640,360 +1011,6 @@ components:
       - records
       - pagination
       title: ResourceList[User]
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    ServiceAccountCredentials:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-          description: The service account client ID.
-        client_secret:
-          type: string
-          format: password
-          title: Client Secret
-          description: The service account client secret.
-          writeOnly: true
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: ServiceAccountCredentials
-    BoundResourceKind:
-      type: string
-      enum:
-      - organization
-      - workspace
-      - project
-      - data_plane
-      title: BoundResourceKind
-    PostGlobalRoleBinding:
-      properties:
-        role_id:
-          type: string
-          format: uuid
-          title: Role Id
-          description: ID of the bound role.
-        bound_resource_kind:
-          $ref: '#/components/schemas/BoundResourceKind'
-          description: Kind of the bound resource.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: Id of the bound resource.
-      type: object
-      required:
-      - role_id
-      - bound_resource_kind
-      - resource_id
-      title: PostGlobalRoleBinding
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    PostEndUser:
-      properties:
-        first_name:
-          type: string
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          type: string
-          format: email
-          title: Email
-          description: The user's email.
-        password:
-          type: string
-          title: Password
-          description: One time password for the user.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-      type: object
-      required:
-      - first_name
-      - email
-      - password
-      title: PostEndUser
-    UserServiceAccountCredentials:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        organization_id:
-          type: string
-          format: uuid4
-          title: Organization Id
-          description: The ID of the Arthur organization the user belongs to.
-        id:
-          type: string
-          format: uuid4
-          title: Id
-          description: Unique user ID assigned by Arthur.
-        first_name:
-          type: string
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: The user's email, if provided.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-        user_type:
-          $ref: '#/components/schemas/UserType'
-          description: The type of user.
-        data_plane_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Data Plane Id
-          description: Arthur data plane ID. Only set for data plane users.
-        client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Id
-          description: Arthur client ID for this user. Only set for service account type users.
-        organization_name:
-          type: string
-          title: Organization Name
-          description: Name of user's Arthur organization.
-        credentials:
-          $ref: '#/components/schemas/ServiceAccountCredentials'
-          description: The service account credentials.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - organization_id
-      - id
-      - first_name
-      - last_name
-      - user_type
-      - organization_name
-      - credentials
-      title: UserServiceAccountCredentials
-    ConflictError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Conflict
-      type: object
-      title: ConflictError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UserCredentials:
-      properties:
-        password:
-          type: string
-          format: password
-          title: Password
-          description: The user's password.
-          writeOnly: true
-      type: object
-      required:
-      - password
-      title: UserCredentials
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    User:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        organization_id:
-          type: string
-          format: uuid4
-          title: Organization Id
-          description: The ID of the Arthur organization the user belongs to.
-        id:
-          type: string
-          format: uuid4
-          title: Id
-          description: Unique user ID assigned by Arthur.
-        first_name:
-          type: string
-          title: First Name
-          description: The user's first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: The user's last name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: The user's email, if provided.
-        picture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Picture
-          description: A url to the user's profile picture, if one exists.
-        user_type:
-          $ref: '#/components/schemas/UserType'
-          description: The type of user.
-        data_plane_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Data Plane Id
-          description: Arthur data plane ID. Only set for data plane users.
-        client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Id
-          description: Arthur client ID for this user. Only set for service account type users.
-        organization_name:
-          type: string
-          title: Organization Name
-          description: Name of user's Arthur organization.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - organization_id
-      - id
-      - first_name
-      - last_name
-      - user_type
-      - organization_name
-      title: User
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    PatchServiceAccountUser:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: The name of the service account user.
-      type: object
-      title: PatchServiceAccountUser
     UserSort:
       type: string
       enum:
@@ -1002,31 +1019,14 @@ components:
       - created_at
       - updated_at
       title: UserSort
-    InviteNewUser:
+    NotFoundError:
       properties:
-        email:
+        detail:
           type: string
-          format: email
-          title: Email
-          description: The user's email.
-        role_binding:
-          anyOf:
-          - $ref: '#/components/schemas/PostGlobalRoleBinding'
-          - type: 'null'
-          description: Metadata of the role to grant to the user after creation.
-        group_ids:
-          anyOf:
-          - items:
-              type: string
-              format: uuid
-            type: array
-          - type: 'null'
-          title: Group Ids
-          description: IDs of groups to add the user to after creation.
+          title: Detail
+          default: Resource not found
       type: object
-      required:
-      - email
-      title: InviteNewUser
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

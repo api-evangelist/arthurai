@@ -384,6 +384,142 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DataPlaneAssociationSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      title: DataPlaneAssociationSort
+    PostDataPlaneAssociation:
+      properties:
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the data plane.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: ID of the project.
+      type: object
+      required:
+      - data_plane_id
+      - project_id
+      title: PostDataPlaneAssociation
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Project:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the project.
+        name:
+          type: string
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        total_artifacts:
+          type: integer
+          title: Total Artifacts
+          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - total_artifacts
+      title: Project
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     ResourceList_DataPlaneAssociation_:
       properties:
         records:
@@ -400,14 +536,38 @@ components:
       - records
       - pagination
       title: ResourceList[DataPlaneAssociation]
-    InternalServerError:
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Internal server error
+          default: Bad Request
       type: object
-      title: InternalServerError
+      title: BadRequestError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
     DataPlane:
       properties:
         created_at:
@@ -469,143 +629,6 @@ components:
       - last_check_in_time
       - capabilities
       title: DataPlane
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    Project:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the project.
-        name:
-          type: string
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        total_artifacts:
-          type: integer
-          title: Total Artifacts
-          description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - total_artifacts
-      title: Project
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
     DataPlaneAssociation:
       properties:
         created_at:
@@ -651,37 +674,14 @@ components:
       - data_plane_id
       - project_id
       title: DataPlaneAssociation
-    DataPlaneAssociationSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      title: DataPlaneAssociationSort
-    BadRequestError:
+    NotFoundError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Bad Request
+          default: Resource not found
       type: object
-      title: BadRequestError
-    PostDataPlaneAssociation:
-      properties:
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: ID of the data plane.
-        project_id:
-          type: string
-          format: uuid
-          title: Project Id
-          description: ID of the project.
-      type: object
-      required:
-      - data_plane_id
-      - project_id
-      title: PostDataPlaneAssociation
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

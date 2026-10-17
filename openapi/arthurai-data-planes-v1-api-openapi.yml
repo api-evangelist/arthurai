@@ -365,27 +365,57 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InfrastructureList:
+    Pagination:
       properties:
-        infrastructures:
-          items:
-            $ref: '#/components/schemas/Infrastructure'
-          type: array
-          title: Infrastructures
-          description: List of supported infrastructure values.
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - infrastructures
-      title: InfrastructureList
-      description: List of supported infrastructure values for engines.
-    InternalServerError:
+      - total_pages
+      - total_records
+      title: Pagination
+    ValidationError:
       properties:
-        detail:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Detail
-          default: Internal server error
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: InternalServerError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     PostDataPlane:
       properties:
         name:
@@ -408,67 +438,15 @@ components:
       - name
       - description
       title: PostDataPlane
-    DataPlane:
+    HTTPValidationError:
       properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane.
-        name:
-          type: string
-          title: Name
-          description: Name of data plane.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        description:
-          type: string
-          title: Description
-          description: Description of data plane.
-        user_id:
-          type: string
-          format: uuid
-          title: User Id
-          description: ID of the data plane's underlying user.
-        infrastructure:
-          $ref: '#/components/schemas/Infrastructure'
-          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
-        last_check_in_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Check In Time
-          description: Last time the data plane was confirmed to be connected.
-        capabilities:
-          $ref: '#/components/schemas/DataPlaneCapabilities'
-          description: Capabilities for this data plane.
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - description
-      - user_id
-      - infrastructure
-      - last_check_in_time
-      - capabilities
-      title: DataPlane
+      title: HTTPValidationError
     ResourceList_DataPlane_:
       properties:
         records:
@@ -560,57 +538,41 @@ components:
       - client_id
       - client_secret
       title: SensitiveDataPlane
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    DataPlaneSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: DataPlaneSort
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
+    InternalServerError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Internal server error
       type: object
-      title: HTTPValidationError
+      title: InternalServerError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    InfrastructureList:
+      properties:
+        infrastructures:
+          items:
+            $ref: '#/components/schemas/Infrastructure'
+          type: array
+          title: Infrastructures
+          description: List of supported infrastructure values.
+      type: object
+      required:
+      - infrastructures
+      title: InfrastructureList
+      description: List of supported infrastructure values for engines.
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     PatchDataPlane:
       properties:
         name:
@@ -637,20 +599,13 @@ components:
           description: Capabilities for this data plane.
       type: object
       title: PatchDataPlane
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    SortOrder:
+    DataPlaneSort:
       type: string
       enum:
-      - asc
-      - desc
-      title: SortOrder
+      - name
+      - created_at
+      - updated_at
+      title: DataPlaneSort
     DataPlaneCapabilities:
       properties:
         gen_ai_enabled:
@@ -660,39 +615,76 @@ components:
           default: false
       type: object
       title: DataPlaneCapabilities
-    Pagination:
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    DataPlane:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data plane.
+        name:
+          type: string
+          title: Name
+          description: Name of data plane.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        description:
+          type: string
+          title: Description
+          description: Description of data plane.
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: ID of the data plane's underlying user.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        last_check_in_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Check In Time
+          description: Last time the data plane was confirmed to be connected.
+        capabilities:
+          $ref: '#/components/schemas/DataPlaneCapabilities'
+          description: Capabilities for this data plane.
       type: object
       required:
-      - total_pages
-      - total_records
-      title: Pagination
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - description
+      - user_id
+      - infrastructure
+      - last_check_in_time
+      - capabilities
+      title: DataPlane
     PatchDataPlaneCapabilities:
       properties:
         gen_ai_enabled:
@@ -703,6 +695,14 @@ components:
           description: Optional. If set will update the gen_ai_enabled capability for the engine.
       type: object
       title: PatchDataPlaneCapabilities
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

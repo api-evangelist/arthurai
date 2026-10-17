@@ -1625,25 +1625,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    SubAgent:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the sub-agent.
-      type: object
-      required:
-      - name
-      title: SubAgent
-      description: Sub-agent definition.
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     RuleType:
       type: string
       enum:
@@ -1655,17 +1636,292 @@ components:
       - RegexRule
       - ToxicityRule
       title: RuleType
-    DataSource:
+    PIIConfig:
       properties:
-        url:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    Tool:
+      properties:
+        name:
           type: string
-          title: Url
-          description: URL of the data source.
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgument'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
       type: object
       required:
-      - url
-      title: DataSource
-      description: Data source used by an agent.
+      - name
+      title: Tool
+      description: Tool definition with arguments.
+    ToolArgumentResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the tool argument.
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - id
+      - name
+      - type
+      title: ToolArgumentResponse
+      description: Response model for a tool argument with assigned ID.
+    ResourceList_AgentResponse_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AgentResponse]
+    ManualAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: MANUAL
+          title: Type
+          default: MANUAL
+      type: object
+      title: ManualAgentCreationSource
+      description: Creation source for manually created tasks.
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PutAgents:
+      properties:
+        agents:
+          items:
+            $ref: '#/components/schemas/Agent'
+          type: array
+          title: Agents
+          description: List of agents to create or update.
+      type: object
+      required:
+      - agents
+      title: PutAgents
+      description: Request body for creating or updating agents.
+    RuleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Rule
+        name:
+          type: string
+          title: Name
+          description: Name of the Rule
+        type:
+          $ref: '#/components/schemas/RuleType'
+          description: Type of Rule
+        apply_to_prompt:
+          type: boolean
+          title: Apply To Prompt
+          description: Rule applies to prompt
+        apply_to_response:
+          type: boolean
+          title: Apply To Response
+          description: Rule applies to response
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Rule is enabled for the task
+        scope:
+          $ref: '#/components/schemas/RuleScope'
+          description: Scope of the rule. The rule can be set at default level or task level.
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the rule was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the rule was updated in unix milliseconds
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/KeywordsConfig'
+          - $ref: '#/components/schemas/RegexConfig'
+          - $ref: '#/components/schemas/ExamplesConfig'
+          - $ref: '#/components/schemas/ToxicityConfig'
+          - $ref: '#/components/schemas/PIIConfig'
+          - type: 'null'
+          title: Config
+          description: Config of the rule
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - apply_to_prompt
+      - apply_to_response
+      - scope
+      - created_at
+      - updated_at
+      title: RuleResponse
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    GCPAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: GCP
+          title: Type
+          default: GCP
+        gcp_project_id:
+          type: string
+          title: Gcp Project Id
+          description: GCP project ID
+        gcp_region:
+          type: string
+          title: Gcp Region
+          description: GCP region
+        gcp_reasoning_engine_id:
+          type: string
+          title: Gcp Reasoning Engine Id
+          description: GCP Vertex AI Reasoning Engine ID
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      required:
+      - gcp_project_id
+      - gcp_region
+      - gcp_reasoning_engine_id
+      title: GCPAgentCreationSource
+      description: Creation source for GCP-discovered agents.
     LLMModelResponse:
       properties:
         id:
@@ -1683,6 +1939,182 @@ components:
       - name
       title: LLMModelResponse
       description: Response model for an LLM model with assigned ID.
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    SubAgentResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the sub-agent.
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - id
+      - name
+      title: SubAgentResponse
+      description: Response model for a sub-agent with assigned ID.
+    SubAgent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - name
+      title: SubAgent
+      description: Sub-agent definition.
+    ResourceList_DataSource_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DataSource'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataSource]
+    ToolArgument:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - name
+      - type
+      title: ToolArgument
+      description: Argument definition for a tool.
+    ToolResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the tool.
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgumentResponse'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - id
+      - name
+      title: ToolResponse
+      description: Response model for a tool with assigned ID.
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    LLMModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+      type: object
+      required:
+      - name
+      title: LLMModel
+      description: Model used by an agent.
+    DataSource:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - url
+      title: DataSource
+      description: Data source used by an agent.
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    AgentCreationSource:
+      anyOf:
+      - $ref: '#/components/schemas/GCPAgentCreationSource'
+      - $ref: '#/components/schemas/OTELAgentCreationSource'
+      - $ref: '#/components/schemas/ManualAgentCreationSource'
+      title: AgentCreationSource
+    PutAgentsResponse:
+      properties:
+        agents:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Agents
+          description: List of agents that were created or updated.
+      type: object
+      required:
+      - agents
+      title: PutAgentsResponse
+      description: Response body for creating or updating agents.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PatchUnregisteredAgentRequest:
       properties:
         muted_until:
@@ -1695,6 +2127,76 @@ components:
       type: object
       title: PatchUnregisteredAgentRequest
       description: Request body for partially updating an unregistered agent.
+    AgentSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      title: AgentSort
+    DataSourceResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data source entry.
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - id
+      - url
+      title: DataSourceResponse
+      description: Response model for a data source with assigned ID.
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    OTELAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: OTEL
+          title: Type
+          default: OTEL
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent
+      type: object
+      title: OTELAgentCreationSource
+      description: Creation source for OTEL-discovered agents (auto-created from traces).
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     KeywordsConfig:
       properties:
         keywords:
@@ -1799,68 +2301,11 @@ components:
       - creation_source
       title: Agent
       description: Request model for agent upsert - nested entities without IDs.
-    DataSourceResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data source entry.
-        url:
-          type: string
-          title: Url
-          description: URL of the data source.
-      type: object
-      required:
-      - id
-      - url
-      title: DataSourceResponse
-      description: Response model for a data source with assigned ID.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    ResourceList_Tool_:
+    ResourceList_LLMModel_:
       properties:
         records:
           items:
-            $ref: '#/components/schemas/Tool'
+            $ref: '#/components/schemas/LLMModel'
           type: array
           title: Records
           description: List of records.
@@ -1871,228 +2316,7 @@ components:
       required:
       - records
       - pagination
-      title: ResourceList[Tool]
-    PutAgentsResponse:
-      properties:
-        agents:
-          items:
-            $ref: '#/components/schemas/AgentResponse'
-          type: array
-          title: Agents
-          description: List of agents that were created or updated.
-      type: object
-      required:
-      - agents
-      title: PutAgentsResponse
-      description: Response body for creating or updating agents.
-    SubAgentResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the sub-agent.
-        name:
-          type: string
-          title: Name
-          description: Name of the sub-agent.
-      type: object
-      required:
-      - id
-      - name
-      title: SubAgentResponse
-      description: Response model for a sub-agent with assigned ID.
-    ExamplesConfig:
-      properties:
-        examples:
-          items:
-            $ref: '#/components/schemas/ExampleConfig'
-          type: array
-          title: Examples
-          description: List of all the examples for Sensitive Data Rule
-        hint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hint
-          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
-      type: object
-      required:
-      - examples
-      title: ExamplesConfig
-      example:
-        examples:
-        - example: John has O negative blood group
-          result: true
-        - example: Most of the people have A positive blood group
-          result: false
-        hint: specific individual's blood type
-    OTELAgentCreationSource:
-      properties:
-        type:
-          type: string
-          const: OTEL
-          title: Type
-          default: OTEL
-        service_names:
-          items:
-            type: string
-          type: array
-          title: Service Names
-          description: Service names associated with this agent
-      type: object
-      title: OTELAgentCreationSource
-      description: Creation source for OTEL-discovered agents (auto-created from traces).
-    ResourceList_SubAgent_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/SubAgent'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[SubAgent]
-    PIIConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
-        confidence_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Confidence Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
-          default: 0
-          deprecated: true
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: Optional. List of strings to pass PII validation.
-      additionalProperties: false
-      type: object
-      title: PIIConfig
-      example:
-        allow_list:
-        - arthur.ai
-        - Arthur
-        confidence_threshold: '0.5'
-        disabled_pii_entities:
-        - PERSON
-        - URL
-    AgentSort:
-      type: string
-      enum:
-      - created_at
-      - name
-      title: AgentSort
-    RuleResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the Rule
-        name:
-          type: string
-          title: Name
-          description: Name of the Rule
-        type:
-          $ref: '#/components/schemas/RuleType'
-          description: Type of Rule
-        apply_to_prompt:
-          type: boolean
-          title: Apply To Prompt
-          description: Rule applies to prompt
-        apply_to_response:
-          type: boolean
-          title: Apply To Response
-          description: Rule applies to response
-        enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Enabled
-          description: Rule is enabled for the task
-        scope:
-          $ref: '#/components/schemas/RuleScope'
-          description: Scope of the rule. The rule can be set at default level or task level.
-        created_at:
-          type: integer
-          title: Created At
-          description: Time the rule was created in unix milliseconds
-        updated_at:
-          type: integer
-          title: Updated At
-          description: Time the rule was updated in unix milliseconds
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/KeywordsConfig'
-          - $ref: '#/components/schemas/RegexConfig'
-          - $ref: '#/components/schemas/ExamplesConfig'
-          - $ref: '#/components/schemas/ToxicityConfig'
-          - $ref: '#/components/schemas/PIIConfig'
-          - type: 'null'
-          title: Config
-          description: Config of the rule
-      type: object
-      required:
-      - id
-      - name
-      - type
-      - apply_to_prompt
-      - apply_to_response
-      - scope
-      - created_at
-      - updated_at
-      title: RuleResponse
-    GCPAgentCreationSource:
-      properties:
-        type:
-          type: string
-          const: GCP
-          title: Type
-          default: GCP
-        gcp_project_id:
-          type: string
-          title: Gcp Project Id
-          description: GCP project ID
-        gcp_region:
-          type: string
-          title: Gcp Region
-          description: GCP region
-        gcp_reasoning_engine_id:
-          type: string
-          title: Gcp Reasoning Engine Id
-          description: GCP Vertex AI Reasoning Engine ID
-        service_names:
-          items:
-            type: string
-          type: array
-          title: Service Names
-          description: Service names associated with this agent
-      type: object
-      required:
-      - gcp_project_id
-      - gcp_region
-      - gcp_reasoning_engine_id
-      title: GCPAgentCreationSource
-      description: Creation source for GCP-discovered agents.
+      title: ResourceList[LLMModel]
     AgentResponse:
       properties:
         created_at:
@@ -2214,276 +2438,52 @@ components:
         Extends the structure of EnrichedTaskResponse with agent-specific fields
 
         and database-assigned IDs for nested entities.'
-    ManualAgentCreationSource:
+    ResourceList_Tool_:
       properties:
-        type:
-          type: string
-          const: MANUAL
-          title: Type
-          default: MANUAL
+        records:
+          items:
+            $ref: '#/components/schemas/Tool'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
-      title: ManualAgentCreationSource
-      description: Creation source for manually created tasks.
+      required:
+      - records
+      - pagination
+      title: ResourceList[Tool]
+    ResourceList_SubAgent_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/SubAgent'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[SubAgent]
     RuleScope:
       type: string
       enum:
       - default
       - task
       title: RuleScope
-    ResourceList_DataSource_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataSource'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataSource]
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ToxicityConfig:
-      properties:
-        threshold:
-          type: number
-          title: Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
-          default: 0.5
-      additionalProperties: false
-      type: object
-      title: ToxicityConfig
-      example:
-        threshold: 0.5
-    AgentCreationSource:
-      anyOf:
-      - $ref: '#/components/schemas/GCPAgentCreationSource'
-      - $ref: '#/components/schemas/OTELAgentCreationSource'
-      - $ref: '#/components/schemas/ManualAgentCreationSource'
-      title: AgentCreationSource
-    RegexConfig:
-      properties:
-        regex_patterns:
-          items:
-            type: string
-          type: array
-          title: Regex Patterns
-          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
-      additionalProperties: false
-      type: object
-      required:
-      - regex_patterns
-      title: RegexConfig
-      example:
-        regex_patterns:
-        - \d{3}-\d{2}-\d{4}
-        - \d{5}-\d{6}-\d{7}
-    LLMModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the model.
-      type: object
-      required:
-      - name
-      title: LLMModel
-      description: Model used by an agent.
-    ToolArgument:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the tool argument.
-        type:
-          type: string
-          title: Type
-          description: Type of the tool argument.
-      type: object
-      required:
-      - name
-      - type
-      title: ToolArgument
-      description: Argument definition for a tool.
-    Tool:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the tool.
-        arguments:
-          items:
-            $ref: '#/components/schemas/ToolArgument'
-          type: array
-          title: Arguments
-          description: List of arguments for this tool.
-      type: object
-      required:
-      - name
-      title: Tool
-      description: Tool definition with arguments.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BadRequestError:
+    NotFoundError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Bad Request
+          default: Resource not found
       type: object
-      title: BadRequestError
-    ResourceList_LLMModel_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/LLMModel'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[LLMModel]
-    ExampleConfig:
-      properties:
-        example:
-          type: string
-          title: Example
-          description: Custom example for the sensitive data
-        result:
-          type: boolean
-          title: Result
-          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
-      type: object
-      required:
-      - example
-      - result
-      title: ExampleConfig
-      example:
-        example: John has O negative blood group
-        result: true
-    ToolArgumentResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the tool argument.
-        name:
-          type: string
-          title: Name
-          description: Name of the tool argument.
-        type:
-          type: string
-          title: Type
-          description: Type of the tool argument.
-      type: object
-      required:
-      - id
-      - name
-      - type
-      title: ToolArgumentResponse
-      description: Response model for a tool argument with assigned ID.
-    ToolResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the tool.
-        name:
-          type: string
-          title: Name
-          description: Name of the tool.
-        arguments:
-          items:
-            $ref: '#/components/schemas/ToolArgumentResponse'
-          type: array
-          title: Arguments
-          description: List of arguments for this tool.
-      type: object
-      required:
-      - id
-      - name
-      title: ToolResponse
-      description: Response model for a tool with assigned ID.
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    ResourceList_AgentResponse_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/AgentResponse'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[AgentResponse]
-    PutAgents:
-      properties:
-        agents:
-          items:
-            $ref: '#/components/schemas/Agent'
-          type: array
-          title: Agents
-          description: List of agents to create or update.
-      type: object
-      required:
-      - agents
-      title: PutAgents
-      description: Request body for creating or updating agents.
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

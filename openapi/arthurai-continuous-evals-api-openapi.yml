@@ -557,79 +557,106 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    UpdateContinuousEvalRequest:
+    ContinuousEvalResponse:
       properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the transform.
         name:
-          anyOf:
-          - type: string
-          - type: 'null'
+          type: string
           title: Name
-          description: Name of the continuous eval
+          description: Name of the continuous eval.
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-          description: Description of the continuous eval
+          description: Description of the continuous eval.
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the parent task.
+        eval_type:
+          $ref: '#/components/schemas/EvalType'
+          description: 'Type of evaluator: ''llm_eval'' or ''ml_eval''.'
+          default: llm_eval
         llm_eval_name:
           anyOf:
           - type: string
           - type: 'null'
           title: Llm Eval Name
-          description: Name of the llm eval to create the continuous eval for
+          description: Name of the eval.
         llm_eval_version:
           anyOf:
-          - type: string
           - type: integer
           - type: 'null'
           title: Llm Eval Version
-          description: Version of the llm eval to create the continuous eval for. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag.
+          description: Version of the eval.
         transform_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
+          type: string
+          format: uuid
           title: Transform Id
-          description: ID of the transform to create the continuous eval for
+          description: ID of the transform.
         transform_version_id:
           anyOf:
           - type: string
             format: uuid
           - type: 'null'
           title: Transform Version Id
-          description: ID of the transform version to pin. When set, the continuous eval will always execute using this version's configuration snapshot.
+          description: ID of the pinned transform version. When set, the continuous eval will always execute using this version's configuration snapshot.
         transform_variable_mapping:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ContinuousEvalTransformVariableMappingRequest'
-            type: array
-          - type: 'null'
+          items:
+            $ref: '#/components/schemas/ContinuousEvalTransformVariableMappingResponse'
+          type: array
           title: Transform Variable Mapping
           description: Mapping of transform variables to eval variables.
         enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
+          type: boolean
           title: Enabled
-          description: Whether to enable or disable a continuous eval.
+          description: Whether the continuous eval is enabled.
+          default: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp representing the time the transform was added to the llm eval.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Timestamp representing the time the continuous eval was last updated.
       type: object
-      title: UpdateContinuousEvalRequest
-      description: Request schema for creating a continuous eval
-    ContinuousEvalTransformVariableMappingResponse:
+      required:
+      - id
+      - name
+      - task_id
+      - transform_id
+      - created_at
+      - updated_at
+      title: ContinuousEvalResponse
+    ContinuousEvalTransformVariableMappingRequest:
       properties:
         transform_variable:
           type: string
           title: Transform Variable
-          description: Name of the transform variable.
+          description: Name of the transform variable
         eval_variable:
           type: string
           title: Eval Variable
-          description: Name of the eval variable.
+          description: Name of the eval variable
       type: object
       required:
       - transform_variable
       - eval_variable
-      title: ContinuousEvalTransformVariableMappingResponse
+      title: ContinuousEvalTransformVariableMappingRequest
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
     ValidationError:
       properties:
         loc:
@@ -662,23 +689,6 @@ components:
       - human
       - continuous_eval
       title: AgenticAnnotationType
-    ListAgenticAnnotationsResponse:
-      properties:
-        annotations:
-          items:
-            $ref: '#/components/schemas/AgenticAnnotationResponse'
-          type: array
-          title: Annotations
-          description: List of annotations
-        count:
-          type: integer
-          title: Count
-          description: Total number of annotations
-      type: object
-      required:
-      - annotations
-      - count
-      title: ListAgenticAnnotationsResponse
     ContinuousEvalVariableMappingResponse:
       properties:
         matching_variables:
@@ -705,6 +715,16 @@ components:
       - transform_variables
       - eval_variables
       title: ContinuousEvalVariableMappingResponse
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
     DailyAgenticAnnotationStats:
       properties:
         date:
@@ -746,22 +766,6 @@ components:
       - total_count
       title: DailyAgenticAnnotationStats
       description: Statistics for a single day of agentic annotations.
-    ContinuousEvalRerunResponse:
-      properties:
-        run_id:
-          type: string
-          format: uuid
-          title: Run Id
-          description: ID of the continuous eval run that was rerun.
-        trace_id:
-          type: string
-          title: Trace Id
-          description: ID of the trace that was rerun.
-      type: object
-      required:
-      - run_id
-      - trace_id
-      title: ContinuousEvalRerunResponse
     AgenticAnnotationAnalyticsResponse:
       properties:
         stats:
@@ -780,40 +784,52 @@ components:
       - count
       title: AgenticAnnotationAnalyticsResponse
       description: Response containing daily aggregated statistics.
-    ContinuousEvalTransformVariableMappingRequest:
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    ContinuousEvalTransformVariableMappingResponse:
       properties:
         transform_variable:
           type: string
           title: Transform Variable
-          description: Name of the transform variable
+          description: Name of the transform variable.
         eval_variable:
           type: string
           title: Eval Variable
-          description: Name of the eval variable
+          description: Name of the eval variable.
       type: object
       required:
       - transform_variable
       - eval_variable
-      title: ContinuousEvalTransformVariableMappingRequest
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    HTTPValidationError:
+      title: ContinuousEvalTransformVariableMappingResponse
+    ContinuousEvalRerunResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        run_id:
+          type: string
+          format: uuid
+          title: Run Id
+          description: ID of the continuous eval run that was rerun.
+        trace_id:
+          type: string
+          title: Trace Id
+          description: ID of the trace that was rerun.
       type: object
-      title: HTTPValidationError
+      required:
+      - run_id
+      - trace_id
+      title: ContinuousEvalRerunResponse
     AgenticAnnotationResponse:
       properties:
         id:
@@ -905,114 +921,64 @@ components:
       - created_at
       - updated_at
       title: AgenticAnnotationResponse
-    EvalType:
-      type: string
-      enum:
-      - llm_eval
-      - ml_eval
-      title: EvalType
-    ListContinuousEvalsResponse:
+    UpdateContinuousEvalRequest:
       properties:
-        evals:
-          items:
-            $ref: '#/components/schemas/ContinuousEvalResponse'
-          type: array
-          title: Evals
-          description: List of continuous evals.
-        count:
-          type: integer
-          title: Count
-          description: Total number of evals
-      type: object
-      required:
-      - evals
-      - count
-      title: ListContinuousEvalsResponse
-    ContinuousEvalResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the transform.
         name:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Name
-          description: Name of the continuous eval.
+          description: Name of the continuous eval
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-          description: Description of the continuous eval.
-        task_id:
-          type: string
-          title: Task Id
-          description: ID of the parent task.
-        eval_type:
-          $ref: '#/components/schemas/EvalType'
-          description: 'Type of evaluator: ''llm_eval'' or ''ml_eval''.'
-          default: llm_eval
+          description: Description of the continuous eval
         llm_eval_name:
           anyOf:
           - type: string
           - type: 'null'
           title: Llm Eval Name
-          description: Name of the eval.
+          description: Name of the llm eval to create the continuous eval for
         llm_eval_version:
           anyOf:
+          - type: string
           - type: integer
           - type: 'null'
           title: Llm Eval Version
-          description: Version of the eval.
+          description: Version of the llm eval to create the continuous eval for. Can be 'latest', a version number (e.g. '1', '2', etc.), an ISO datetime string (e.g. '2025-01-01T00:00:00'), or a tag.
         transform_id:
-          type: string
-          format: uuid
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
           title: Transform Id
-          description: ID of the transform.
+          description: ID of the transform to create the continuous eval for
         transform_version_id:
           anyOf:
           - type: string
             format: uuid
           - type: 'null'
           title: Transform Version Id
-          description: ID of the pinned transform version. When set, the continuous eval will always execute using this version's configuration snapshot.
+          description: ID of the transform version to pin. When set, the continuous eval will always execute using this version's configuration snapshot.
         transform_variable_mapping:
-          items:
-            $ref: '#/components/schemas/ContinuousEvalTransformVariableMappingResponse'
-          type: array
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ContinuousEvalTransformVariableMappingRequest'
+            type: array
+          - type: 'null'
           title: Transform Variable Mapping
           description: Mapping of transform variables to eval variables.
         enabled:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
           title: Enabled
-          description: Whether the continuous eval is enabled.
-          default: true
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp representing the time the transform was added to the llm eval.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Timestamp representing the time the continuous eval was last updated.
+          description: Whether to enable or disable a continuous eval.
       type: object
-      required:
-      - id
-      - name
-      - task_id
-      - transform_id
-      - created_at
-      - updated_at
-      title: ContinuousEvalResponse
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
+      title: UpdateContinuousEvalRequest
+      description: Request schema for creating a continuous eval
     ContinuousEvalCreateRequest:
       properties:
         name:
@@ -1075,21 +1041,55 @@ components:
       - transform_variable_mapping
       title: ContinuousEvalCreateRequest
       description: Request schema for creating a continuous eval
-    VariableTemplateValue:
+    ListAgenticAnnotationsResponse:
       properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
+        annotations:
+          items:
+            $ref: '#/components/schemas/AgenticAnnotationResponse'
+          type: array
+          title: Annotations
+          description: List of annotations
+        count:
+          type: integer
+          title: Count
+          description: Total number of annotations
       type: object
       required:
-      - name
-      - value
-      title: VariableTemplateValue
+      - annotations
+      - count
+      title: ListAgenticAnnotationsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    ListContinuousEvalsResponse:
+      properties:
+        evals:
+          items:
+            $ref: '#/components/schemas/ContinuousEvalResponse'
+          type: array
+          title: Evals
+          description: List of continuous evals.
+        count:
+          type: integer
+          title: Count
+          description: Total number of evals
+      type: object
+      required:
+      - evals
+      - count
+      title: ListContinuousEvalsResponse
   securitySchemes:
     API_Key:
       type: http

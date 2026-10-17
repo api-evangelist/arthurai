@@ -284,46 +284,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    ResourceList_Project_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Project'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Project]
-    PatchProject:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
-      type: object
-      title: PatchProject
     Pagination:
       properties:
         page:
@@ -375,6 +335,22 @@ components:
       - msg
       - type
       title: ValidationError
+    PatchProject:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+      type: object
+      title: PatchProject
     HTTPValidationError:
       properties:
         detail:
@@ -384,14 +360,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
     Project:
       properties:
         created_at:
@@ -437,6 +405,44 @@ components:
       - workspace_id
       - total_artifacts
       title: Project
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    ResourceList_Project_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Project'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Project]
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     PostProject:
       properties:
         name:
@@ -453,12 +459,6 @@ components:
       required:
       - name
       title: PostProject
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
     ProjectSort:
       type: string
       enum:
@@ -466,14 +466,14 @@ components:
       - created_at
       - updated_at
       title: ProjectSort
-    BadRequestError:
+    NotFoundError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Bad Request
+          default: Resource not found
       type: object
-      title: BadRequestError
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

@@ -528,42 +528,11 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    PostGroup:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The name of the group.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The group's description.
-        identity_provider_mapping_name:
-          anyOf:
-          - type: string
-            minLength: 1
-          - type: 'null'
-          title: Identity Provider Mapping Name
-          description: Sets the mapping name of the group from an IDP. If set, the group will become managed by the IDP and user management will not be available in Arthur. This can only be set when the group is created.
-      type: object
-      required:
-      - name
-      title: PostGroup
-    ResourceList_User_:
+    ResourceList_GroupMembership_:
       properties:
         records:
           items:
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/GroupMembership'
           type: array
           title: Records
           description: List of records.
@@ -574,7 +543,65 @@ components:
       required:
       - records
       - pagination
-      title: ResourceList[User]
+      title: ResourceList[GroupMembership]
+    GroupMembership:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        group:
+          $ref: '#/components/schemas/Group'
+          description: Group info of the membership.
+        group_id:
+          type: string
+          format: uuid4
+          title: Group Id
+          description: The ID of the organization the group belongs to.
+        user_id:
+          type: string
+          format: uuid4
+          title: User Id
+          description: The ID of the user that belongs to the group.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - group
+      - group_id
+      - user_id
+      title: GroupMembership
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
     ValidationError:
       properties:
         loc:
@@ -601,33 +628,29 @@ components:
       - msg
       - type
       title: ValidationError
-    NotFoundError:
+    PostGroup:
       properties:
-        detail:
+        name:
           type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    PostGroupMembership:
-      properties:
-        user_ids:
-          items:
-            type: string
-            format: uuid4
-          type: array
-          title: User Ids
-          description: The ID of the user to add to the group.
+          title: Name
+          description: The name of the group.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The group's description.
+        identity_provider_mapping_name:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Identity Provider Mapping Name
+          description: Sets the mapping name of the group from an IDP. If set, the group will become managed by the IDP and user management will not be available in Arthur. This can only be set when the group is created.
       type: object
       required:
-      - user_ids
-      title: PostGroupMembership
+      - name
+      title: PostGroup
     DeleteGroupMembership:
       properties:
         user_ids:
@@ -641,79 +664,6 @@ components:
       required:
       - user_ids
       title: DeleteGroupMembership
-    PatchGroup:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: The group's name.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The group's description.
-      type: object
-      title: PatchGroup
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ResourceList_Group_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Group'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Group]
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    GroupSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: GroupSort
     BadRequestError:
       properties:
         detail:
@@ -722,6 +672,14 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     User:
       properties:
         created_at:
@@ -798,6 +756,26 @@ components:
       - user_type
       - organization_name
       title: User
+    GroupSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: GroupSort
+    PostGroupMembership:
+      properties:
+        user_ids:
+          items:
+            type: string
+            format: uuid4
+          type: array
+          title: User Ids
+          description: The ID of the user to add to the group.
+      type: object
+      required:
+      - user_ids
+      title: PostGroupMembership
     UserType:
       type: string
       enum:
@@ -805,6 +783,63 @@ components:
       - data_plane
       - service_account
       title: UserType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceList_Group_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Group'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Group]
+    ResourceList_User_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[User]
+    PatchGroup:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The group's name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The group's description.
+      type: object
+      title: PatchGroup
     Group:
       properties:
         name:
@@ -857,55 +892,12 @@ components:
       - organization_id
       - members
       title: Group
-    GroupMembership:
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        group:
-          $ref: '#/components/schemas/Group'
-          description: Group info of the membership.
-        group_id:
-          type: string
-          format: uuid4
-          title: Group Id
-          description: The ID of the organization the group belongs to.
-        user_id:
-          type: string
-          format: uuid4
-          title: User Id
-          description: The ID of the user that belongs to the group.
-      type: object
-      required:
-      - created_at
-      - updated_at
-      - group
-      - group_id
-      - user_id
-      title: GroupMembership
-    ResourceList_GroupMembership_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/GroupMembership'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[GroupMembership]
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     UserSort:
       type: string
       enum:
@@ -914,6 +906,14 @@ components:
       - created_at
       - updated_at
       title: UserSort
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

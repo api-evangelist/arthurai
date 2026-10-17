@@ -415,6 +415,125 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DataRetrievalStatus:
+      type: string
+      enum:
+      - pending_load
+      - loaded
+      - expired
+      title: DataRetrievalStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DataResultFilter:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+          description: Field name to use for filtering data.
+        op:
+          $ref: '#/components/schemas/DataResultFilterOp'
+          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
+        value:
+          title: Value
+          description: Value used filtering the metrics.
+      type: object
+      required:
+      - field_name
+      - op
+      - value
+      title: DataResultFilter
+    DataRetrievalOperation:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Operation ID used for tracking the state of the operation.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: Job ID executing the data retrieval.
+        status:
+          $ref: '#/components/schemas/DataRetrievalStatus'
+          description: Current status of the retrieval operation.
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/DataRetrievalData'
+          - type: 'null'
+          description: Data page of the read dataset. Null if data is not yet available or has expired.
+      type: object
+      required:
+      - id
+      - job_id
+      - status
+      title: DataRetrievalOperation
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    DataRetrievalData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+        data_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data Schema
+          description: Schema of the read dataset. Optional for available datasets, required for datasets.
+      type: object
+      required:
+      - content
+      - data_schema
+      title: DataRetrievalData
     PostDataRetrievalOperation:
       properties:
         start_timestamp:
@@ -442,13 +561,6 @@ components:
       - start_timestamp
       - end_timestamp
       title: PostDataRetrievalOperation
-    DataRetrievalStatus:
-      type: string
-      enum:
-      - pending_load
-      - loaded
-      - expired
-      title: DataRetrievalStatus
     InternalServerError:
       properties:
         detail:
@@ -479,85 +591,6 @@ components:
       - in
       - not_in
       title: DataResultFilterOp
-    DataRetrievalData:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Serialized content.
-        data_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Data Schema
-          description: Schema of the read dataset. Optional for available datasets, required for datasets.
-      type: object
-      required:
-      - content
-      - data_schema
-      title: DataRetrievalData
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DataRetrievalOperation:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Operation ID used for tracking the state of the operation.
-        job_id:
-          type: string
-          format: uuid
-          title: Job Id
-          description: Job ID executing the data retrieval.
-        status:
-          $ref: '#/components/schemas/DataRetrievalStatus'
-          description: Current status of the retrieval operation.
-        data:
-          anyOf:
-          - $ref: '#/components/schemas/DataRetrievalData'
-          - type: 'null'
-          description: Data page of the read dataset. Null if data is not yet available or has expired.
-      type: object
-      required:
-      - id
-      - job_id
-      - status
-      title: DataRetrievalOperation
     NotFoundError:
       properties:
         detail:
@@ -566,39 +599,6 @@ components:
           default: Resource not found
       type: object
       title: NotFoundError
-    DataResultFilter:
-      properties:
-        field_name:
-          type: string
-          title: Field Name
-          description: Field name to use for filtering data.
-        op:
-          $ref: '#/components/schemas/DataResultFilterOp'
-          description: Operation to filter data. One of 'greater_than', 'less_than', 'equals', 'not_equals', 'greater_than_or_equal', 'less_than_or_equal', 'in', 'not_in'.
-        value:
-          title: Value
-          description: Value used filtering the metrics.
-      type: object
-      required:
-      - field_name
-      - op
-      - value
-      title: DataResultFilter
-    ConnectorPaginationOptions:
-      properties:
-        page:
-          type: integer
-          minimum: 1.0
-          title: Page
-          default: 1
-        page_size:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Page Size
-          default: 25
-      type: object
-      title: ConnectorPaginationOptions
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

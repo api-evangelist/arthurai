@@ -377,51 +377,90 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationResult:
+    ObjectType:
       properties:
-        validation_description:
-          type: string
-          title: Validation Description
-          description: Description of validation requirement.
-        validation_outcome:
-          $ref: '#/components/schemas/ValidationOutcome'
-          description: Outcome of the validation requirement.
+        object:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/ScalarType'
+            - $ref: '#/components/schemas/ObjectType'
+            - $ref: '#/components/schemas/ListType'
+          type: object
+          title: Object
       type: object
       required:
-      - validation_description
-      - validation_outcome
-      title: ValidationResult
-      description: Generic class to indicate a single validation and its outcome.
-    PatchCustomAggregationSpecSchema:
+      - object
+      title: ObjectType
+    DType:
+      type: string
+      enum:
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
+    ScalarType:
       properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the updated custom aggregation.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Updated description of the custom aggregation.
+        dtype:
+          $ref: '#/components/schemas/DType'
       type: object
-      title: PatchCustomAggregationSpecSchema
+      required:
+      - dtype
+      title: ScalarType
     AggregationMetricType:
       type: string
       enum:
       - sketch
       - numeric
       title: AggregationMetricType
-    InternalServerError:
+    BaseDatasetParameterSchema:
       properties:
-        detail:
+        parameter_key:
           type: string
-          title: Detail
-          default: Internal server error
+          title: Parameter Key
+          description: Name of the parameter.
+        friendly_name:
+          type: string
+          title: Friendly Name
+          description: User facing name of the parameter.
+        description:
+          type: string
+          title: Description
+          description: Description of the parameter.
+        parameter_type:
+          type: string
+          const: dataset
+          title: Parameter Type
+          default: dataset
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type of the parameter. If not set, any model problem type is allowed.
       type: object
-      title: InternalServerError
+      required:
+      - parameter_key
+      - friendly_name
+      - description
+      title: BaseDatasetParameterSchema
+    ValidationResults:
+      properties:
+        validation_results:
+          items:
+            $ref: '#/components/schemas/ValidationResult'
+          type: array
+          title: Validation Results
+      type: object
+      required:
+      - validation_results
+      title: ValidationResults
+      description: This class is a generic class for any endpoints returning multiple validation errors.
     BaseColumnParameterSchema:
       properties:
         parameter_key:
@@ -475,74 +514,31 @@ components:
       - description
       - source_dataset_parameter_key
       title: BaseColumnParameterSchema
-    ResourceList_CustomAggregationSpecSchema_:
+    Pagination:
       properties:
-        records:
-          items:
-            $ref: '#/components/schemas/CustomAggregationSpecSchema'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[CustomAggregationSpecSchema]
-    CustomAggregationSpecSchema:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique identifier of the custom aggregation with version.
-        name:
-          type: string
-          title: Name
-          description: Name of the custom aggregation function.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the custom aggregation function and what it aggregates.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: Unique identifier of the custom aggregation's parent workspace.
-        versions:
-          items:
-            $ref: '#/components/schemas/CustomAggregationVersionSpecSchema'
-          type: array
-          title: Versions
-          description: List of versions of the custom aggregation configuration.
-        latest_version:
+        page:
           type: integer
-          title: Latest Version
-          description: Max/latest version of the custom aggregation that exists. This version may or may not be included in the list of versions depending on applied filters.
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-          description: Time of aggregation deletion.
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-          description: Flag indicating if the aggregation has been soft deleted.
-          default: false
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - id
-      - name
-      - workspace_id
-      - versions
-      - latest_version
-      title: CustomAggregationSpecSchema
+      - total_pages
+      - total_records
+      title: Pagination
     ValidationError:
       properties:
         loc:
@@ -569,109 +565,22 @@ components:
       - msg
       - type
       title: ValidationError
-    NotFoundError:
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Resource not found
+          default: Bad Request
       type: object
-      title: NotFoundError
-    ListType:
+      title: BadRequestError
+    InternalServerError:
       properties:
-        items:
-          anyOf:
-          - $ref: '#/components/schemas/ScalarType'
-          - $ref: '#/components/schemas/ObjectType'
-          - $ref: '#/components/schemas/ListType'
-          title: Items
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
       type: object
-      required:
-      - items
-      title: ListType
-    BaseLiteralParameterSchema:
-      properties:
-        parameter_key:
-          type: string
-          title: Parameter Key
-          description: Name of the parameter.
-        friendly_name:
-          type: string
-          title: Friendly Name
-          description: User facing name of the parameter.
-        description:
-          type: string
-          title: Description
-          description: Description of the parameter.
-        parameter_type:
-          type: string
-          const: literal
-          title: Parameter Type
-          default: literal
-        parameter_dtype:
-          $ref: '#/components/schemas/DType'
-          description: Data type of the parameter.
-      type: object
-      required:
-      - parameter_key
-      - friendly_name
-      - description
-      - parameter_dtype
-      title: BaseLiteralParameterSchema
-    ModelProblemType:
-      type: string
-      enum:
-      - regression
-      - binary_classification
-      - arthur_shield
-      - custom
-      - multiclass_classification
-      - agentic_trace
-      title: ModelProblemType
-    ScalarType:
-      properties:
-        dtype:
-          $ref: '#/components/schemas/DType'
-      type: object
-      required:
-      - dtype
-      title: ScalarType
-    ReportedCustomAggregation:
-      properties:
-        metric_name:
-          type: string
-          title: Metric Name
-          description: Name of the reported aggregation metric.
-        description:
-          type: string
-          title: Description
-          description: Description of the reported aggregation metric and what it aggregates.
-        value_column:
-          type: string
-          title: Value Column
-          description: Name of the column returned from the SQL query holding the metric value.
-        timestamp_column:
-          type: string
-          title: Timestamp Column
-          description: Name of the column returned from the SQL query holding the timestamp buckets.
-        metric_kind:
-          $ref: '#/components/schemas/AggregationMetricType'
-          description: Return type of the reported aggregation metric value.
-        dimension_columns:
-          items:
-            type: string
-          type: array
-          title: Dimension Columns
-          description: Name of any dimension columns returned from the SQL query. Max length is 1.
-      type: object
-      required:
-      - metric_name
-      - description
-      - value_column
-      - timestamp_column
-      - metric_kind
-      - dimension_columns
-      title: ReportedCustomAggregation
+      title: InternalServerError
     CustomAggregationVersionSpecSchema:
       properties:
         custom_aggregation_id:
@@ -723,120 +632,6 @@ components:
       - aggregate_args
       - sql
       title: CustomAggregationVersionSpecSchema
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    PostCustomAggregationSpecSchema:
-      properties:
-        reported_aggregations:
-          items:
-            $ref: '#/components/schemas/ReportedCustomAggregation'
-          type: array
-          title: Reported Aggregations
-          description: Metadata for every aggregation the custom aggregation reports.
-        aggregate_args:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/BaseDatasetParameterSchema'
-            - $ref: '#/components/schemas/BaseLiteralParameterSchema'
-            - $ref: '#/components/schemas/BaseColumnParameterSchema'
-            title: CustomAggregationVersionSpecSchemaAggregateArgsInner
-          type: array
-          title: Aggregate Args
-          description: List of parameters to the custom aggregation's query function.
-        sql:
-          type: string
-          title: Sql
-          description: DuckDBSQL query for the custom aggregation.
-        name:
-          type: string
-          title: Name
-          description: Name of the custom aggregation function.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the custom aggregation function and what it aggregates.
-      type: object
-      required:
-      - reported_aggregations
-      - aggregate_args
-      - sql
-      - name
-      title: PostCustomAggregationSpecSchema
-    ObjectType:
-      properties:
-        object:
-          additionalProperties:
-            anyOf:
-            - $ref: '#/components/schemas/ScalarType'
-            - $ref: '#/components/schemas/ObjectType'
-            - $ref: '#/components/schemas/ListType'
-          type: object
-          title: Object
-      type: object
-      required:
-      - object
-      title: ObjectType
-    ValidationResults:
-      properties:
-        validation_results:
-          items:
-            $ref: '#/components/schemas/ValidationResult'
-          type: array
-          title: Validation Results
-      type: object
-      required:
-      - validation_results
-      title: ValidationResults
-      description: This class is a generic class for any endpoints returning multiple validation errors.
-    ValidationOutcome:
-      type: string
-      enum:
-      - pass
-      - fail
-      title: ValidationOutcome
-      description: Generic class to indicate if a validation passed or failed.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     User:
       properties:
         created_at:
@@ -913,20 +708,86 @@ components:
       - user_type
       - organization_name
       title: User
-    DType:
+    ValidationResult:
+      properties:
+        validation_description:
+          type: string
+          title: Validation Description
+          description: Description of validation requirement.
+        validation_outcome:
+          $ref: '#/components/schemas/ValidationOutcome'
+          description: Outcome of the validation requirement.
+      type: object
+      required:
+      - validation_description
+      - validation_outcome
+      title: ValidationResult
+      description: Generic class to indicate a single validation and its outcome.
+    PostCustomAggregationSpecSchema:
+      properties:
+        reported_aggregations:
+          items:
+            $ref: '#/components/schemas/ReportedCustomAggregation'
+          type: array
+          title: Reported Aggregations
+          description: Metadata for every aggregation the custom aggregation reports.
+        aggregate_args:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/BaseDatasetParameterSchema'
+            - $ref: '#/components/schemas/BaseLiteralParameterSchema'
+            - $ref: '#/components/schemas/BaseColumnParameterSchema'
+            title: CustomAggregationVersionSpecSchemaAggregateArgsInner
+          type: array
+          title: Aggregate Args
+          description: List of parameters to the custom aggregation's query function.
+        sql:
+          type: string
+          title: Sql
+          description: DuckDBSQL query for the custom aggregation.
+        name:
+          type: string
+          title: Name
+          description: Name of the custom aggregation function.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the custom aggregation function and what it aggregates.
+      type: object
+      required:
+      - reported_aggregations
+      - aggregate_args
+      - sql
+      - name
+      title: PostCustomAggregationSpecSchema
+    ModelProblemType:
       type: string
       enum:
-      - undefined
-      - int
-      - float
-      - bool
-      - str
-      - uuid
-      - timestamp
-      - date
-      - json
-      - image
-      title: DType
+      - regression
+      - binary_classification
+      - arthur_shield
+      - custom
+      - multiclass_classification
+      - agentic_trace
+      title: ModelProblemType
+    PatchCustomAggregationSpecSchema:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the updated custom aggregation.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Updated description of the custom aggregation.
+      type: object
+      title: PatchCustomAggregationSpecSchema
     PutCustomAggregationSpecSchema:
       properties:
         reported_aggregations:
@@ -954,6 +815,36 @@ components:
       - aggregate_args
       - sql
       title: PutCustomAggregationSpecSchema
+    ResourceList_CustomAggregationSpecSchema_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/CustomAggregationSpecSchema'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[CustomAggregationSpecSchema]
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
     UserType:
       type: string
       enum:
@@ -961,7 +852,104 @@ components:
       - data_plane
       - service_account
       title: UserType
-    BaseDatasetParameterSchema:
+    ReportedCustomAggregation:
+      properties:
+        metric_name:
+          type: string
+          title: Metric Name
+          description: Name of the reported aggregation metric.
+        description:
+          type: string
+          title: Description
+          description: Description of the reported aggregation metric and what it aggregates.
+        value_column:
+          type: string
+          title: Value Column
+          description: Name of the column returned from the SQL query holding the metric value.
+        timestamp_column:
+          type: string
+          title: Timestamp Column
+          description: Name of the column returned from the SQL query holding the timestamp buckets.
+        metric_kind:
+          $ref: '#/components/schemas/AggregationMetricType'
+          description: Return type of the reported aggregation metric value.
+        dimension_columns:
+          items:
+            type: string
+          type: array
+          title: Dimension Columns
+          description: Name of any dimension columns returned from the SQL query. Max length is 1.
+      type: object
+      required:
+      - metric_name
+      - description
+      - value_column
+      - timestamp_column
+      - metric_kind
+      - dimension_columns
+      title: ReportedCustomAggregation
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CustomAggregationSpecSchema:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique identifier of the custom aggregation with version.
+        name:
+          type: string
+          title: Name
+          description: Name of the custom aggregation function.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the custom aggregation function and what it aggregates.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: Unique identifier of the custom aggregation's parent workspace.
+        versions:
+          items:
+            $ref: '#/components/schemas/CustomAggregationVersionSpecSchema'
+          type: array
+          title: Versions
+          description: List of versions of the custom aggregation configuration.
+        latest_version:
+          type: integer
+          title: Latest Version
+          description: Max/latest version of the custom aggregation that exists. This version may or may not be included in the list of versions depending on applied filters.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: Time of aggregation deletion.
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          description: Flag indicating if the aggregation has been soft deleted.
+          default: false
+      type: object
+      required:
+      - id
+      - name
+      - workspace_id
+      - versions
+      - latest_version
+      title: CustomAggregationSpecSchema
+    BaseLiteralParameterSchema:
       properties:
         parameter_key:
           type: string
@@ -977,34 +965,46 @@ components:
           description: Description of the parameter.
         parameter_type:
           type: string
-          const: dataset
+          const: literal
           title: Parameter Type
-          default: dataset
-        model_problem_type:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProblemType'
-          - type: 'null'
-          description: Model problem type of the parameter. If not set, any model problem type is allowed.
+          default: literal
+        parameter_dtype:
+          $ref: '#/components/schemas/DType'
+          description: Data type of the parameter.
       type: object
       required:
       - parameter_key
       - friendly_name
       - description
-      title: BaseDatasetParameterSchema
-    ScopeSchemaTag:
+      - parameter_dtype
+      title: BaseLiteralParameterSchema
+    ValidationOutcome:
       type: string
       enum:
-      - llm_context
-      - llm_prompt
-      - llm_response
-      - primary_timestamp
-      - categorical
-      - continuous
-      - prediction
-      - ground_truth
-      - pin_in_deep_dive
-      - possible_segmentation
-      title: ScopeSchemaTag
+      - pass
+      - fail
+      title: ValidationOutcome
+      description: Generic class to indicate if a validation passed or failed.
+    ListType:
+      properties:
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/ScalarType'
+          - $ref: '#/components/schemas/ObjectType'
+          - $ref: '#/components/schemas/ListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: ListType
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

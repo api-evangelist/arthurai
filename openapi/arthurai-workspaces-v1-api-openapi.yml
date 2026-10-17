@@ -312,24 +312,31 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PostWorkspace:
+    Pagination:
       properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the workspace.
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
       type: object
       required:
-      - name
-      title: PostWorkspace
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
+      - total_pages
+      - total_records
+      title: Pagination
     ValidationError:
       properties:
         loc:
@@ -356,13 +363,6 @@ components:
       - msg
       - type
       title: ValidationError
-    WorkspaceSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: WorkspaceSort
     Workspace:
       properties:
         created_at:
@@ -397,6 +397,16 @@ components:
       - name
       - organization_id
       title: Workspace
+    PostWorkspace:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+      type: object
+      required:
+      - name
+      title: PostWorkspace
     WorkspaceStatistics:
       properties:
         active_engine_count:
@@ -422,63 +432,21 @@ components:
       - custom_agg_count
       - workspace_user_count
       title: WorkspaceStatistics
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     SortOrder:
       type: string
       enum:
       - asc
       - desc
       title: SortOrder
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    PatchWorkspace:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the workspace.
-      type: object
-      required:
-      - name
-      title: PatchWorkspace
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     ResourceList_Workspace_:
       properties:
         records:
@@ -495,15 +463,47 @@ components:
       - records
       - pagination
       title: ResourceList[Workspace]
-    HTTPValidationError:
+    NotFoundError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Resource not found
       type: object
-      title: HTTPValidationError
+      title: NotFoundError
+    WorkspaceSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: WorkspaceSort
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PatchWorkspace:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the workspace.
+      type: object
+      required:
+      - name
+      title: PatchWorkspace
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2
