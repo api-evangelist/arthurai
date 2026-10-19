@@ -132,15 +132,14 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    InternalServerError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Internal server error
       type: object
-      title: HTTPValidationError
+      title: InternalServerError
     Organization:
       properties:
         created_at:
@@ -169,6 +168,14 @@ components:
       - id
       - name
       title: Organization
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     BadRequestError:
       properties:
         detail:
@@ -177,14 +184,6 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
     PatchOrganization:
       properties:
         name:
@@ -195,14 +194,15 @@ components:
           description: Name of the organization. Must be globally unique across all Arthur organizations.
       type: object
       title: PatchOrganization
-    NotFoundError:
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Resource not found
       type: object
-      title: NotFoundError
+      title: HTTPValidationError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

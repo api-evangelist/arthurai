@@ -809,91 +809,346 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AlertCheckJobSpec:
+    ResourceList_JobError_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobError'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobError]
+    JobErrors:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/JobError'
+          type: array
+          title: Errors
+          description: List of errors encountered during the job execution.
+      type: object
+      required:
+      - errors
+      title: JobErrors
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    FetchDiscoveredAgentsJobSpec:
       properties:
         job_type:
           type: string
-          const: alert_check
+          const: fetch_discovered_agents
           title: Job Type
-          default: alert_check
+          default: fetch_discovered_agents
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: The ID of the workspace the engine belongs to.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: The ID of the engine whose GenAI Engine holds the tasks.
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the discovery source whose tasks to fetch.
+        reported_since:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reported Since
+          description: Only fetch tasks the source reported on or after this time. Null fetches every task the source has ever reported, which is what the standalone schedule does so it reconciles tasks no recent scan touched.
+        scan_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scan Id
+          description: The manual scan whose leg chained this fetch, so the scan reads as complete only once the agents it found have reached the Platform. Null on standalone fetches, on fetches chained by scheduled scans, and on fetches from engines that predate it.
+      type: object
+      required:
+      - workspace_id
+      - data_plane_id
+      - discovery_source_id
+      title: FetchDiscoveredAgentsJobSpec
+      description: 'Surfaces one discovery source''s tasks on one engine to the Agents API (D-10).
+
+
+        Scoped to a source rather than to a config or a scan, because there is no DAG
+
+        runner: a job cannot wait on the N scan jobs that touched a source, so each scan
+
+        chains its own fetch and a standalone schedule catches whatever none of them did.
+
+        Scoped to an engine because the tasks live in that engine''s GenAI Engine.'
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    JobTrigger:
+      type: string
+      enum:
+      - user
+      - schedule
+      - event
+      title: JobTrigger
+    FetchModelTaskJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_model_task
+          title: Job Type
+          default: fetch_model_task
         scope_model_id:
           type: string
           format: uuid
           title: Scope Model Id
-          description: The id of the model to check alerts.
-        check_range_start_timestamp:
+          description: The id of the model to fetch its corresponding task.
+      type: object
+      required:
+      - scope_model_id
+      title: FetchModelTaskJobSpec
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    PutJobState:
+      properties:
+        job_state:
+          $ref: '#/components/schemas/JobState'
+          description: JobState to update the job to.
+      type: object
+      required:
+      - job_state
+      title: PutJobState
+    JobsBatch:
+      properties:
+        jobs:
+          items:
+            $ref: '#/components/schemas/Job'
+          type: array
+          title: Jobs
+          description: List of jobs.
+      type: object
+      required:
+      - jobs
+      title: JobsBatch
+    MetricsCalculationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: metrics_calculation
+          title: Job Type
+          default: metrics_calculation
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to calculate metrics.
+        start_timestamp:
           type: string
           format: date-time
-          title: Check Range Start Timestamp
-          description: The start timestamp to use for checking the alerts on the data.
-        check_range_end_timestamp:
+          title: Start Timestamp
+          description: The start timestamp to use for fetching data.
+        end_timestamp:
           type: string
           format: date-time
-          title: Check Range End Timestamp
-          description: The end timestamp to use for checking the alerts on the data.
+          title: End Timestamp
+          description: The end timestamp to use for fetching data.
         policy_assignment_id:
           anyOf:
           - type: string
             format: uuid
           - type: 'null'
           title: Policy Assignment Id
-          description: Optional policy assignment id propagated to the trailing compliance check job. When set, only this assignment is evaluated for compliance.
-      type: object
-      required:
-      - scope_model_id
-      - check_range_start_timestamp
-      - check_range_end_timestamp
-      title: AlertCheckJobSpec
-    ScheduleJobsJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: schedule_jobs
-          title: Job Type
-          default: schedule_jobs
-        scope_model_id:
-          type: string
-          format: uuid
-          title: Scope Model Id
-          description: The ID of the model to source the schedule from.
-        start_timestamp:
-          type: string
-          format: date-time
-          title: Start Timestamp
-          description: Inclusive timestamp marking the start of the job series.
+          description: Optional policy assignment id propagated through the Metrics → Alerts → Compliance chain. When set, the trailing compliance check evaluates only this assignment.
       type: object
       required:
       - scope_model_id
       - start_timestamp
-      title: ScheduleJobsJobSpec
-    PostJobBatch:
+      - end_timestamp
+      title: MetricsCalculationJobSpec
+    RegexConfig:
       properties:
-        jobs:
+        regex_patterns:
           items:
-            $ref: '#/components/schemas/PostJob'
+            type: string
           type: array
-          title: Jobs
-          description: List of jobs to create.
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
       type: object
       required:
-      - jobs
-      title: PostJobBatch
-    ListDatasetsJobSpec:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    RelevanceMetricConfig:
+      properties:
+        relevance_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relevance Threshold
+          description: Threshold for determining relevance when not using LLM judge
+        use_llm_judge:
+          type: boolean
+          title: Use Llm Judge
+          description: Whether to use LLM as a judge for relevance scoring
+          default: true
+      type: object
+      title: RelevanceMetricConfig
+      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
+    InfinitePagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+      type: object
+      title: InfinitePagination
+    ResourceList_JobLog_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobLog'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobLog]
+    ConnectorCheckJobSpec:
       properties:
         job_type:
           type: string
-          const: list_datasets
+          const: connector_check
           title: Job Type
-          default: list_datasets
+          default: connector_check
         connector_id:
           type: string
           format: uuid
           title: Connector Id
-          description: The id of the connector to list datasets.
+          description: The id of the connector to check.
       type: object
       required:
       - connector_id
-      title: ListDatasetsJobSpec
+      title: ConnectorCheckJobSpec
+    DiscoverAgentsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: discover_agents
+          title: Job Type
+          default: discover_agents
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: The ID of the workspace to discover agents for.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: The ID of the data plane to scan for agents.
+        project_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Project Id
+          description: Optional ID of the "Registered Applications" project for filtering against existing models.
+        lookback_hours:
+          type: integer
+          title: Lookback Hours
+          description: 'Number of hours to look back in trace history (default: 720 hours = 30 days).'
+          default: 720
+        discovery_source_config_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Discovery Source Config Id
+          description: ID of the discovery source config this scan runs. Exactly one config per job, so two configs on the same engine never share one.
+        discovery_source_config:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceConfigSpec'
+          - type: 'null'
+          description: The config as it read when the job was dispatched. Never contains credentials - the engine fetches those live from the Platform.
+        scan_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scan Id
+          description: Groups the jobs one manual scan fanned out, so the trigger can report per-source status and completion. Null on scheduled scans.
+      type: object
+      required:
+      - workspace_id
+      - data_plane_id
+      title: DiscoverAgentsJobSpec
     Job:
       properties:
         id:
@@ -922,6 +1177,8 @@ components:
           - $ref: '#/components/schemas/TestCustomAggregationJobSpec'
           - $ref: '#/components/schemas/DiscoverAgentsJobSpec'
           - $ref: '#/components/schemas/CompliancePolicyCheckJobSpec'
+          - $ref: '#/components/schemas/FetchDiscoveredAgentsJobSpec'
+          - $ref: '#/components/schemas/TestDiscoverySourceJobSpec'
           title: Job Spec
           description: Job specification for the job kind.
         state:
@@ -1026,49 +1283,44 @@ components:
       - memory_requirements_mb
       - job_priority
       title: Job
-    TaskType:
+    JobLogLevel:
       type: string
       enum:
-      - traditional
-      - agentic
-      title: TaskType
-    PIIConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
-        confidence_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Confidence Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
-          default: 0
-          deprecated: true
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: Optional. List of strings to pass PII validation.
-      additionalProperties: false
-      type: object
-      title: PIIConfig
-      example:
-        allow_list:
-        - arthur.ai
-        - Arthur
-        confidence_threshold: '0.5'
-        disabled_pii_entities:
-        - PERSON
-        - URL
+      - debug
+      - info
+      - warning
+      - error
+      - critical
+      title: JobLogLevel
+    JobKind:
+      type: string
+      enum:
+      - metrics_calculation
+      - connector_check
+      - list_datasets
+      - schema_inspection
+      - fetch_data
+      - alert_check
+      - schedule_jobs
+      - create_model_task
+      - create_model_link_task
+      - update_model_task_rules
+      - delete_model_task
+      - fetch_model_task
+      - regenerate_task_validation_key
+      - test_custom_aggregation
+      - discover_agents
+      - compliance_policy_check
+      - fetch_discovered_agents
+      - test_discovery_source
+      title: JobKind
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
     DataResultFilter:
       properties:
         field_name:
@@ -1087,87 +1339,6 @@ components:
       - op
       - value
       title: DataResultFilter
-    ConnectorPaginationOptions:
-      properties:
-        page:
-          type: integer
-          minimum: 1.0
-          title: Page
-          default: 1
-        page_size:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Page Size
-          default: 25
-      type: object
-      title: ConnectorPaginationOptions
-    TestCustomAggregationJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: test_custom_aggregation
-          title: Job Type
-          default: test_custom_aggregation
-        test_custom_aggregation_id:
-          type: string
-          format: uuid
-          title: Test Custom Aggregation Id
-          description: The id of the custom aggregation test.
-      type: object
-      required:
-      - test_custom_aggregation_id
-      title: TestCustomAggregationJobSpec
-    CreateModelTaskJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: create_model_task
-          title: Job Type
-          default: create_model_task
-        connector_id:
-          type: string
-          format: uuid
-          title: Connector Id
-          description: The id of the engine internal connector to use to create the task.
-        task_name:
-          type: string
-          title: Task Name
-          description: The name of the task.
-        onboarding_identifier:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Onboarding Identifier
-          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
-        initial_rules:
-          items:
-            $ref: '#/components/schemas/NewRuleRequest'
-          type: array
-          title: Initial Rules
-          description: The initial rules to apply to the created model.
-        task_type:
-          $ref: '#/components/schemas/TaskType'
-          description: The type of task to create.
-          default: traditional
-        initial_metrics:
-          items:
-            $ref: '#/components/schemas/NewMetricRequest'
-          type: array
-          title: Initial Metrics
-          description: The initial metrics to apply to agentic tasks.
-        agent_metadata:
-          anyOf:
-          - $ref: '#/components/schemas/AgentMetadata'
-          - type: 'null'
-          description: Metadata for registered agents.
-      type: object
-      required:
-      - connector_id
-      - task_name
-      - initial_rules
-      - initial_metrics
-      title: CreateModelTaskJobSpec
     GCPAgentMetadata:
       properties:
         project_id:
@@ -1188,428 +1359,178 @@ components:
       - region
       - resource_id
       title: GCPAgentMetadata
-    ResourceList_JobRun_:
+    JobLog:
       properties:
-        records:
-          items:
-            $ref: '#/components/schemas/JobRun'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
+        log_level:
+          $ref: '#/components/schemas/JobLogLevel'
+          description: Log level of the log.
+        log:
+          type: string
+          title: Log
+          description: Text of the log.
+        log_timestamp:
+          type: string
+          format: date-time
+          title: Log Timestamp
+          description: Timestamp of the log occurence.
       type: object
       required:
-      - records
-      - pagination
-      title: ResourceList[JobRun]
-    InfinitePagination:
+      - log_level
+      - log
+      - log_timestamp
+      title: JobLog
+    AgentMetadata:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-      type: object
-      title: InfinitePagination
-    JobsBatch:
-      properties:
-        jobs:
-          items:
-            $ref: '#/components/schemas/Job'
-          type: array
-          title: Jobs
-          description: List of jobs.
-      type: object
-      required:
-      - jobs
-      title: JobsBatch
-    NewMetricRequest:
-      properties:
-        type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
-          examples:
-          - UserQueryRelevance
-        name:
-          type: string
-          title: Name
-          description: Name of metric
-          examples:
-          - My User Query Relevance
-        metric_metadata:
-          type: string
-          title: Metric Metadata
-          description: Additional metadata for the metric
-        config:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
           anyOf:
-          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - $ref: '#/components/schemas/GCPAgentMetadata'
           - type: 'null'
-          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+          description: Metadata for the agent.
       type: object
       required:
-      - type
-      - name
-      - metric_metadata
-      title: NewMetricRequest
-      example1:
-        metric_metadata: This is a test metric metadata
-        name: My User Query Relevance
-        type: QueryRelevance
-      example2:
-        config:
-          relevance_threshold: 0.8
-          use_llm_judge: false
-        metric_metadata: This is a test metric metadata
-        name: My User Query Relevance with Config
-        type: QueryRelevance
-      example3:
-        config:
-          use_llm_judge: true
-        metric_metadata: This is a test metric metadata
-        name: My Response Relevance
-        type: ResponseRelevance
-    ConnectorCheckJobSpec:
+      - provider
+      title: AgentMetadata
+    JobRun:
       properties:
-        job_type:
-          type: string
-          const: connector_check
-          title: Job Type
-          default: connector_check
-        connector_id:
+        id:
           type: string
           format: uuid
-          title: Connector Id
-          description: The id of the connector to check.
-      type: object
-      required:
-      - connector_id
-      title: ConnectorCheckJobSpec
-    DeleteModelTaskJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: delete_model_task
-          title: Job Type
-          default: delete_model_task
-        scope_model_id:
+          title: Id
+          description: The unique ID for the job run.
+        job_id:
           type: string
           format: uuid
-          title: Scope Model Id
-          description: The id of the model to delete.
-      type: object
-      required:
-      - scope_model_id
-      title: DeleteModelTaskJobSpec
-    JobKind:
-      type: string
-      enum:
-      - metrics_calculation
-      - connector_check
-      - list_datasets
-      - schema_inspection
-      - fetch_data
-      - alert_check
-      - schedule_jobs
-      - create_model_task
-      - create_model_link_task
-      - update_model_task_rules
-      - delete_model_task
-      - fetch_model_task
-      - regenerate_task_validation_key
-      - test_custom_aggregation
-      - discover_agents
-      - compliance_policy_check
-      title: JobKind
-    Pagination:
-      properties:
-        page:
+          title: Job Id
+          description: The parent job for this job run.
+        state:
+          $ref: '#/components/schemas/JobState'
+          description: Current state of the job run.
+        job_attempt:
           type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DiscoverAgentsJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: discover_agents
-          title: Job Type
-          default: discover_agents
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: The ID of the workspace to discover agents for.
-        data_plane_id:
-          type: string
-          format: uuid
-          title: Data Plane Id
-          description: The ID of the data plane to scan for agents.
-        project_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Project Id
-          description: Optional ID of the "Registered Applications" project for filtering against existing models.
-        lookback_hours:
-          type: integer
-          title: Lookback Hours
-          description: 'Number of hours to look back in trace history (default: 720 hours = 30 days).'
-          default: 720
-      type: object
-      required:
-      - workspace_id
-      - data_plane_id
-      title: DiscoverAgentsJobSpec
-    FetchModelTaskJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: fetch_model_task
-          title: Job Type
-          default: fetch_model_task
-        scope_model_id:
-          type: string
-          format: uuid
-          title: Scope Model Id
-          description: The id of the model to fetch its corresponding task.
-      type: object
-      required:
-      - scope_model_id
-      title: FetchModelTaskJobSpec
-    FetchDataJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: fetch_data
-          title: Job Type
-          default: fetch_data
-        dataset_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Dataset Id
-          description: The id of the dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
-        available_dataset_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Available Dataset Id
-          description: The id of the available dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+          title: Job Attempt
+          description: The attempt number of the job.
         start_timestamp:
           type: string
           format: date-time
           title: Start Timestamp
-          description: The start timestamp to use for fetching data.
+          description: The timestamp this job run was started.
         end_timestamp:
-          type: string
-          format: date-time
-          title: End Timestamp
-          description: The end timestamp to use for fetching data.
-        operation_id:
-          type: string
-          format: uuid
-          title: Operation Id
-          description: The id of the data retrieval operation.
-        data_filters:
-          items:
-            $ref: '#/components/schemas/DataResultFilter'
-          type: array
-          title: Data Filters
-          description: Filters to apply to the metrics data.
-        pagination_options:
-          $ref: '#/components/schemas/ConnectorPaginationOptions'
-          description: Pagination options to use for fetching data.
-      type: object
-      required:
-      - start_timestamp
-      - end_timestamp
-      - operation_id
-      - data_filters
-      - pagination_options
-      title: FetchDataJobSpec
-    PostJobKind:
-      type: string
-      enum:
-      - metrics_calculation
-      - connector_check
-      - list_datasets
-      - schema_inspection
-      - alert_check
-      - schedule_jobs
-      - discover_agents
-      - compliance_policy_check
-      title: PostJobKind
-      description: 'The set of jobs that are available to submit via the PostJobs API
-
-        Notably, this does not include the fetch_data or test_custom_aggregation jobs, as there are
-
-        dedicated endpoints for those'
-    CreateModelLinkTaskJobSpec:
-      properties:
-        job_type:
-          type: string
-          const: link_model_task
-          title: Job Type
-          default: link_model_task
-        task_id:
-          type: string
-          format: uuid
-          title: Task Id
-          description: The id of the Shield task to link when creating the new model.
-        connector_id:
-          type: string
-          format: uuid
-          title: Connector Id
-          description: The id of the engine internal connector to use to link the task.
-        onboarding_identifier:
           anyOf:
           - type: string
+            format: date-time
           - type: 'null'
-          title: Onboarding Identifier
-          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+          title: End Timestamp
+          description: The timestamp this job run ended.
       type: object
       required:
-      - task_id
-      - connector_id
-      title: CreateModelLinkTaskJobSpec
-    CompliancePolicyCheckJobSpec:
+      - id
+      - job_id
+      - state
+      - job_attempt
+      - start_timestamp
+      title: JobRun
+    JobState:
+      type: string
+      enum:
+      - queued
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobState
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    PatchJob:
+      properties:
+        max_attempts:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Attempts
+          description: Max number of times the job can fail and be retried. Adjusting this number will only affect jobs in the Queued or Running states. Jobs in the Failed state will not be retried further by adjusting this number.
+      type: object
+      required:
+      - max_attempts
+      title: PatchJob
+    ScheduleJobsJobSpec:
       properties:
         job_type:
           type: string
-          const: compliance_policy_check
+          const: schedule_jobs
           title: Job Type
-          default: compliance_policy_check
+          default: schedule_jobs
         scope_model_id:
           type: string
           format: uuid
           title: Scope Model Id
-          description: The id of the model to run compliance policy checks on.
-        check_range_start_timestamp:
+          description: The ID of the model to source the schedule from.
+        start_timestamp:
           type: string
           format: date-time
-          title: Check Range Start Timestamp
-          description: Start of the window the compliance check evaluates.
-        check_range_end_timestamp:
-          type: string
-          format: date-time
-          title: Check Range End Timestamp
-          description: End of the window the compliance check evaluates.
-        policy_assignment_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Policy Assignment Id
-          description: Optional id of a specific policy assignment to check. If omitted, all assignments for the model are checked.
+          title: Start Timestamp
+          description: Inclusive timestamp marking the start of the job series.
       type: object
       required:
       - scope_model_id
-      - check_range_start_timestamp
-      - check_range_end_timestamp
-      title: CompliancePolicyCheckJobSpec
-    JobLogs:
+      - start_timestamp
+      title: ScheduleJobsJobSpec
+    ExamplesConfig:
       properties:
-        logs:
+        examples:
           items:
-            $ref: '#/components/schemas/JobLog'
+            $ref: '#/components/schemas/ExampleConfig'
           type: array
-          title: Logs
-          description: List of log statements pertaining to the job execution.
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
       type: object
       required:
-      - logs
-      title: JobLogs
-    ToxicityConfig:
-      properties:
-        threshold:
-          type: number
-          title: Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
-          default: 0.5
-      additionalProperties: false
-      type: object
-      title: ToxicityConfig
+      - examples
+      title: ExamplesConfig
       example:
-        threshold: 0.5
-    RegexConfig:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    ExampleConfig:
       properties:
-        regex_patterns:
-          items:
-            type: string
-          type: array
-          title: Regex Patterns
-          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
-      additionalProperties: false
-      type: object
-      required:
-      - regex_patterns
-      title: RegexConfig
-      example:
-        regex_patterns:
-        - \d{3}-\d{2}-\d{4}
-        - \d{5}-\d{6}-\d{7}
-    BadRequestError:
-      properties:
-        detail:
+        example:
           type: string
-          title: Detail
-          default: Bad Request
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
       type: object
-      title: BadRequestError
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    JobsSort:
+      type: string
+      enum:
+      - queued_at
+      - started_at
+      - finished_at
+      title: JobsSort
     JobError:
       properties:
         error:
@@ -1620,14 +1541,89 @@ components:
       required:
       - error
       title: JobError
-    JobPriority:
-      type: integer
-      enum:
-      - 100
-      - 200
-      - 300
-      - 400
-      title: JobPriority
+    TestDiscoverySourceJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: test_discovery_source
+          title: Job Type
+          default: test_discovery_source
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: The ID of the workspace the engine belongs to.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: The ID of the engine to test from.
+        discovery_source_config_id:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+          description: ID of the discovery source config under test.
+        discovery_source_config:
+          $ref: '#/components/schemas/DiscoverySourceConfigSpec'
+          description: The config as it read when the test was requested. Never contains credentials - the engine fetches those live from the Platform.
+        lookback_hours:
+          type: integer
+          title: Lookback Hours
+          description: The config's lookback window, rounded up to whole hours, exactly as a scan of the same config would use it.
+        test_id:
+          type: string
+          format: uuid
+          title: Test Id
+          description: Groups the per-engine jobs one test request fanned out.
+        preview_limit:
+          type: integer
+          title: Preview Limit
+          description: The most rows the engine reads and reports. The engine stops consuming the source once it has this many.
+      type: object
+      required:
+      - workspace_id
+      - data_plane_id
+      - discovery_source_config_id
+      - discovery_source_config
+      - lookback_hours
+      - test_id
+      - preview_limit
+      title: TestDiscoverySourceJobSpec
+      description: 'Runs one bounded preview of a discovery source config on one engine (D-12).
+
+
+        A sibling of the scan job rather than a flag on it, because a test must never
+
+        reach the paths a scan exists for: it publishes nothing to GenAI Engine, chains
+
+        no fetch, and writes no Discovery Run. What it produces is a preview the engine
+
+        reports back against this job''s attempt, read through the test that fanned it
+
+        out.
+
+
+        The config is snapshotted exactly as a scan snapshots it, so the engine runs
+
+        the query the user saw when they pressed the button. Credentials are absent
+
+        for the same reason they are absent from a scan: the engine fetches them live.'
+    RegenerateTaskValidationKeyJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: regenerate_validation_key
+          title: Job Type
+          default: regenerate_validation_key
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The ID of the model to regenerate the validation key for.
+      type: object
+      required:
+      - scope_model_id
+      title: RegenerateTaskValidationKeyJobSpec
     InternalServerError:
       properties:
         detail:
@@ -1636,15 +1632,6 @@ components:
           default: Internal server error
       type: object
       title: InternalServerError
-    PutJobState:
-      properties:
-        job_state:
-          $ref: '#/components/schemas/JobState'
-          description: JobState to update the job to.
-      type: object
-      required:
-      - job_state
-      title: PutJobState
     User:
       properties:
         created_at:
@@ -1721,97 +1708,72 @@ components:
       - user_type
       - organization_name
       title: User
-    JobState:
+    MetricType:
       type: string
       enum:
-      - queued
-      - running
-      - completed
-      - failed
-      - cancelled
-      title: JobState
-    SchemaInspectionJobSpec:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    UpdateModelTaskRulesJobSpec:
       properties:
         job_type:
           type: string
-          const: schema_inspection
+          const: update_model_task_rules
           title: Job Type
-          default: schema_inspection
-        connector_id:
+          default: update_model_task_rules
+        scope_model_id:
           type: string
           format: uuid
-          title: Connector Id
-          description: The id of the connector to list datasets.
-        available_dataset_id:
-          type: string
-          format: uuid
-          title: Available Dataset Id
-          description: The id of the dataset within the connector to inspect the schema.
+          title: Scope Model Id
+          description: The id of the model to update the task rules.
+        rules_to_enable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Enable
+          description: The list of rule IDs to enable on the task.
+        rules_to_disable:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Disable
+          description: The list of rule IDs to disable on the task.
+        rules_to_archive:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Rules To Archive
+          description: The list of rule IDs to archive on the task.
+        rules_to_add:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Rules To Add
+          description: The new rules to add to the task.
       type: object
       required:
-      - connector_id
-      - available_dataset_id
-      title: SchemaInspectionJobSpec
-    JobsSort:
-      type: string
-      enum:
-      - queued_at
-      - started_at
-      - finished_at
-      title: JobsSort
-    JobLog:
-      properties:
-        log_level:
-          $ref: '#/components/schemas/JobLogLevel'
-          description: Log level of the log.
-        log:
-          type: string
-          title: Log
-          description: Text of the log.
-        log_timestamp:
-          type: string
-          format: date-time
-          title: Log Timestamp
-          description: Timestamp of the log occurence.
-      type: object
-      required:
-      - log_level
-      - log
-      - log_timestamp
-      title: JobLog
+      - scope_model_id
+      title: UpdateModelTaskRulesJobSpec
     JobDequeueParameters:
       properties:
         memory_limit_mb:
           type: integer
           title: Memory Limit Mb
           description: Available memory in megabytes for job execution
+        discovery_source_test:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Discovery Source Test
+          description: Whether this engine can run TEST_DISCOVERY_SOURCE jobs. Stored as the engine's discovery_source_test capability; an engine is sent test jobs only once it has reported true. Omit to leave the stored value as is.
       type: object
       required:
       - memory_limit_mb
       title: JobDequeueParameters
-    JobTrigger:
-      type: string
-      enum:
-      - user
-      - schedule
-      - event
-      title: JobTrigger
-    ResourceList_JobLog_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/JobLog'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[JobLog]
     InfiniteResourceList_Job_:
       properties:
         records:
@@ -1828,6 +1790,64 @@ components:
       - records
       - pagination
       title: InfiniteResourceList[Job]
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    JobPriority:
+      type: integer
+      enum:
+      - 100
+      - 200
+      - 300
+      - 400
+      title: JobPriority
+    ListDatasetsJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: list_datasets
+          title: Job Type
+          default: list_datasets
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+      type: object
+      required:
+      - connector_id
+      title: ListDatasetsJobSpec
+    ResourceList_JobRun_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/JobRun'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[JobRun]
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
     PostJob:
       properties:
         kind:
@@ -1843,6 +1863,7 @@ components:
           - $ref: '#/components/schemas/AlertCheckJobSpec'
           - $ref: '#/components/schemas/DiscoverAgentsJobSpec'
           - $ref: '#/components/schemas/CompliancePolicyCheckJobSpec'
+          - $ref: '#/components/schemas/FetchDiscoveredAgentsJobSpec'
           title: Post Job Spec
           description: Job specification for the job kind.
         schedule_id:
@@ -1875,85 +1896,60 @@ components:
       - kind
       - job_spec
       title: PostJob
-    PatchJob:
+    CreateModelTaskJobSpec:
       properties:
-        max_attempts:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Attempts
-          description: Max number of times the job can fail and be retried. Adjusting this number will only affect jobs in the Queued or Running states. Jobs in the Failed state will not be retried further by adjusting this number.
-      type: object
-      required:
-      - max_attempts
-      title: PatchJob
-    JobRun:
-      properties:
-        id:
+        job_type:
+          type: string
+          const: create_model_task
+          title: Job Type
+          default: create_model_task
+        connector_id:
           type: string
           format: uuid
-          title: Id
-          description: The unique ID for the job run.
-        job_id:
+          title: Connector Id
+          description: The id of the engine internal connector to use to create the task.
+        task_name:
           type: string
-          format: uuid
-          title: Job Id
-          description: The parent job for this job run.
-        state:
-          $ref: '#/components/schemas/JobState'
-          description: Current state of the job run.
-        job_attempt:
-          type: integer
-          title: Job Attempt
-          description: The attempt number of the job.
-        start_timestamp:
-          type: string
-          format: date-time
-          title: Start Timestamp
-          description: The timestamp this job run was started.
-        end_timestamp:
+          title: Task Name
+          description: The name of the task.
+        onboarding_identifier:
           anyOf:
           - type: string
-            format: date-time
           - type: 'null'
-          title: End Timestamp
-          description: The timestamp this job run ended.
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
+        initial_rules:
+          items:
+            $ref: '#/components/schemas/NewRuleRequest'
+          type: array
+          title: Initial Rules
+          description: The initial rules to apply to the created model.
+        initial_metrics:
+          items:
+            $ref: '#/components/schemas/NewMetricRequest'
+          type: array
+          title: Initial Metrics
+          description: The initial metrics to apply to the created task.
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata for registered agents.
       type: object
       required:
-      - id
-      - job_id
-      - state
-      - job_attempt
-      - start_timestamp
-      title: JobRun
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    DataResultFilterOp:
-      type: string
-      enum:
-      - greater_than
-      - less_than
-      - equals
-      - not_equals
-      - greater_than_or_equal
-      - less_than_or_equal
-      - in
-      - not_in
-      title: DataResultFilterOp
-    JobLogLevel:
-      type: string
-      enum:
-      - debug
-      - info
-      - warning
-      - error
-      - critical
-      title: JobLogLevel
+      - connector_id
+      - task_name
+      - initial_rules
+      title: CreateModelTaskJobSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     NewRuleRequest:
       properties:
         name:
@@ -2094,93 +2090,412 @@ components:
             threshold: 0.5
           name: Toxicity Rule
           type: ToxicityRule
-    ExampleConfig:
+    PostJobBatch:
       properties:
-        example:
-          type: string
-          title: Example
-          description: Custom example for the sensitive data
-        result:
-          type: boolean
-          title: Result
-          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+        jobs:
+          items:
+            $ref: '#/components/schemas/PostJob'
+          type: array
+          title: Jobs
+          description: List of jobs to create.
       type: object
       required:
-      - example
-      - result
-      title: ExampleConfig
-      example:
-        example: John has O negative blood group
-        result: true
-    UpdateModelTaskRulesJobSpec:
+      - jobs
+      title: PostJobBatch
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    JobLogs:
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/JobLog'
+          type: array
+          title: Logs
+          description: List of log statements pertaining to the job execution.
+      type: object
+      required:
+      - logs
+      title: JobLogs
+    DeleteModelTaskJobSpec:
       properties:
         job_type:
           type: string
-          const: update_model_task_rules
+          const: delete_model_task
           title: Job Type
-          default: update_model_task_rules
+          default: delete_model_task
         scope_model_id:
           type: string
           format: uuid
           title: Scope Model Id
-          description: The id of the model to update the task rules.
-        rules_to_enable:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Rules To Enable
-          description: The list of rule IDs to enable on the task.
-        rules_to_disable:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Rules To Disable
-          description: The list of rule IDs to disable on the task.
-        rules_to_archive:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Rules To Archive
-          description: The list of rule IDs to archive on the task.
-        rules_to_add:
-          items:
-            $ref: '#/components/schemas/NewRuleRequest'
-          type: array
-          title: Rules To Add
-          description: The new rules to add to the task.
+          description: The id of the model to delete.
       type: object
       required:
       - scope_model_id
-      title: UpdateModelTaskRulesJobSpec
-    AgentMetadata:
-      properties:
-        provider:
-          $ref: '#/components/schemas/RegisteredAgentProvider'
-          description: Provider of the registered agent.
-        gcp_metadata:
-          anyOf:
-          - $ref: '#/components/schemas/GCPAgentMetadata'
-          - type: 'null'
-          description: Metadata for the agent.
-      type: object
-      required:
-      - provider
-      title: AgentMetadata
-    MetricsCalculationJobSpec:
+      title: DeleteModelTaskJobSpec
+    CompliancePolicyCheckJobSpec:
       properties:
         job_type:
           type: string
-          const: metrics_calculation
+          const: compliance_policy_check
           title: Job Type
-          default: metrics_calculation
+          default: compliance_policy_check
         scope_model_id:
           type: string
           format: uuid
           title: Scope Model Id
-          description: The id of the model to calculate metrics.
+          description: The id of the model to run compliance policy checks on.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: Start of the window the compliance check evaluates.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: End of the window the compliance check evaluates.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional id of a specific policy assignment to check. If omitted, all assignments for the model are checked.
+        errored_alert_rule_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Errored Alert Rule Ids
+          description: Ids of alert rules the preceding alert check could not evaluate.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: CompliancePolicyCheckJobSpec
+    AlertCheckJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: alert_check
+          title: Job Type
+          default: alert_check
+        scope_model_id:
+          type: string
+          format: uuid
+          title: Scope Model Id
+          description: The id of the model to check alerts.
+        check_range_start_timestamp:
+          type: string
+          format: date-time
+          title: Check Range Start Timestamp
+          description: The start timestamp to use for checking the alerts on the data.
+        check_range_end_timestamp:
+          type: string
+          format: date-time
+          title: Check Range End Timestamp
+          description: The end timestamp to use for checking the alerts on the data.
+        policy_assignment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Policy Assignment Id
+          description: Optional policy assignment id propagated to the trailing compliance check job. When set, only this assignment is evaluated for compliance.
+      type: object
+      required:
+      - scope_model_id
+      - check_range_start_timestamp
+      - check_range_end_timestamp
+      title: AlertCheckJobSpec
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
+    NewMetricRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
+          examples:
+          - UserQueryRelevance
+        name:
+          type: string
+          title: Name
+          description: Name of metric
+          examples:
+          - My User Query Relevance
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Additional metadata for the metric
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - type: 'null'
+          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+      type: object
+      required:
+      - type
+      - name
+      - metric_metadata
+      title: NewMetricRequest
+      example1:
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance
+        type: QueryRelevance
+      example2:
+        config:
+          relevance_threshold: 0.8
+          use_llm_judge: false
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance with Config
+        type: QueryRelevance
+      example3:
+        config:
+          use_llm_judge: true
+        metric_metadata: This is a test metric metadata
+        name: My Response Relevance
+        type: ResponseRelevance
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    TestCustomAggregationJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: test_custom_aggregation
+          title: Job Type
+          default: test_custom_aggregation
+        test_custom_aggregation_id:
+          type: string
+          format: uuid
+          title: Test Custom Aggregation Id
+          description: The id of the custom aggregation test.
+      type: object
+      required:
+      - test_custom_aggregation_id
+      title: TestCustomAggregationJobSpec
+    ConnectorPaginationOptions:
+      properties:
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+          default: 1
+        page_size:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Page Size
+          default: 25
+      type: object
+      title: ConnectorPaginationOptions
+    PostJobKind:
+      type: string
+      enum:
+      - metrics_calculation
+      - connector_check
+      - list_datasets
+      - schema_inspection
+      - alert_check
+      - schedule_jobs
+      - discover_agents
+      - compliance_policy_check
+      - fetch_discovered_agents
+      title: PostJobKind
+      description: 'The set of jobs that are available to submit via the PostJobs API
+
+        Notably, this does not include the fetch_data or test_custom_aggregation jobs, as there are
+
+        dedicated endpoints for those'
+    DiscoverySourceConfigSpec:
+      properties:
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the discovery source the config belongs to.
+        name:
+          type: string
+          title: Name
+          description: Name of the config, for logs and run reporting.
+        vendor:
+          type: string
+          title: Vendor
+          description: Vendor of the parent discovery source, e.g. splunk_enterprise.
+        query:
+          type: string
+          title: Query
+          description: Query text in the vendor's native language, stored and sent verbatim.
+        query_language:
+          type: string
+          title: Query Language
+          description: Language the query text is written in.
+        lookback_window_seconds:
+          type: integer
+          title: Lookback Window Seconds
+          description: The config's lookback window, in seconds. lookback_hours carries the same window rounded up to whole hours for the engine's window API.
+        source_fields:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Source Fields
+          description: The discovery source's non-sensitive fields, keyed by field name, as they read at dispatch - e.g. the vendor endpoint to connect to. Never contains a sensitive field. Null on jobs dispatched before sources were snapshotted.
+      type: object
+      required:
+      - discovery_source_id
+      - name
+      - vendor
+      - query
+      - query_language
+      - lookback_window_seconds
+      title: DiscoverySourceConfigSpec
+      description: 'One discovery source config, materialized into a scan job at dispatch.
+
+
+        The scheduler snapshots the config into the job rather than handing the
+
+        engine an ID to resolve, so a job describes the work it was created for even
+
+        after the config is edited or deleted, and so a run stays reproducible: the
+
+        query text here is the query that ran.
+
+
+        Credentials are deliberately absent. The engine fetches those live from the
+
+        Platform over an authenticated API at execution time (D-05) - a job payload
+
+        is persisted, logged and listed, and a secret has no business in one. The
+
+        source''s non-sensitive fields - where to connect, not how to authenticate -
+
+        are snapshotted with the config, because an engine cannot read the discovery
+
+        source itself: that takes an organization-level role, and an engine''s
+
+        account is bound to its workspace.'
+    SchemaInspectionJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: schema_inspection
+          title: Job Type
+          default: schema_inspection
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the connector to list datasets.
+        available_dataset_id:
+          type: string
+          format: uuid
+          title: Available Dataset Id
+          description: The id of the dataset within the connector to inspect the schema.
+      type: object
+      required:
+      - connector_id
+      - available_dataset_id
+      title: SchemaInspectionJobSpec
+    DataResultFilterOp:
+      type: string
+      enum:
+      - greater_than
+      - less_than
+      - equals
+      - not_equals
+      - greater_than_or_equal
+      - less_than_or_equal
+      - in
+      - not_in
+      title: DataResultFilterOp
+    FetchDataJobSpec:
+      properties:
+        job_type:
+          type: string
+          const: fetch_data
+          title: Job Type
+          default: fetch_data
+        dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Dataset Id
+          description: The id of the dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
+        available_dataset_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Available Dataset Id
+          description: The id of the available dataset to fetch data for. Exactly one of dataset_id and available_dataset_id should be set.
         start_timestamp:
           type: string
           format: date-time
@@ -2191,156 +2506,56 @@ components:
           format: date-time
           title: End Timestamp
           description: The end timestamp to use for fetching data.
-        policy_assignment_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Policy Assignment Id
-          description: Optional policy assignment id propagated through the Metrics → Alerts → Compliance chain. When set, the trailing compliance check evaluates only this assignment.
+        operation_id:
+          type: string
+          format: uuid
+          title: Operation Id
+          description: The id of the data retrieval operation.
+        data_filters:
+          items:
+            $ref: '#/components/schemas/DataResultFilter'
+          type: array
+          title: Data Filters
+          description: Filters to apply to the metrics data.
+        pagination_options:
+          $ref: '#/components/schemas/ConnectorPaginationOptions'
+          description: Pagination options to use for fetching data.
       type: object
       required:
-      - scope_model_id
       - start_timestamp
       - end_timestamp
-      title: MetricsCalculationJobSpec
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RegisteredAgentProvider:
-      type: string
-      enum:
-      - gcp
-      - external
-      title: RegisteredAgentProvider
-    RegenerateTaskValidationKeyJobSpec:
+      - operation_id
+      - data_filters
+      - pagination_options
+      title: FetchDataJobSpec
+    CreateModelLinkTaskJobSpec:
       properties:
         job_type:
           type: string
-          const: regenerate_validation_key
+          const: link_model_task
           title: Job Type
-          default: regenerate_validation_key
-        scope_model_id:
+          default: link_model_task
+        task_id:
           type: string
           format: uuid
-          title: Scope Model Id
-          description: The ID of the model to regenerate the validation key for.
-      type: object
-      required:
-      - scope_model_id
-      title: RegenerateTaskValidationKeyJobSpec
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    ExamplesConfig:
-      properties:
-        examples:
-          items:
-            $ref: '#/components/schemas/ExampleConfig'
-          type: array
-          title: Examples
-          description: List of all the examples for Sensitive Data Rule
-        hint:
+          title: Task Id
+          description: The id of the Shield task to link when creating the new model.
+        connector_id:
+          type: string
+          format: uuid
+          title: Connector Id
+          description: The id of the engine internal connector to use to link the task.
+        onboarding_identifier:
           anyOf:
           - type: string
           - type: 'null'
-          title: Hint
-          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+          title: Onboarding Identifier
+          description: An identifier to assign to the created model to make it easy to retrieve. Used by the UI during the GenAI model creation flow.
       type: object
       required:
-      - examples
-      title: ExamplesConfig
-      example:
-        examples:
-        - example: John has O negative blood group
-          result: true
-        - example: Most of the people have A positive blood group
-          result: false
-        hint: specific individual's blood type
-    KeywordsConfig:
-      properties:
-        keywords:
-          items:
-            type: string
-          type: array
-          title: Keywords
-          description: List of Keywords
-      type: object
-      required:
-      - keywords
-      title: KeywordsConfig
-      example:
-        keywords:
-        - Blocked_Keyword_1
-        - Blocked_Keyword_2
-    JobErrors:
-      properties:
-        errors:
-          items:
-            $ref: '#/components/schemas/JobError'
-          type: array
-          title: Errors
-          description: List of errors encountered during the job execution.
-      type: object
-      required:
-      - errors
-      title: JobErrors
-    RelevanceMetricConfig:
-      properties:
-        relevance_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Relevance Threshold
-          description: Threshold for determining relevance when not using LLM judge
-        use_llm_judge:
-          type: boolean
-          title: Use Llm Judge
-          description: Whether to use LLM as a judge for relevance scoring
-          default: true
-      type: object
-      title: RelevanceMetricConfig
-      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
-    MetricType:
-      type: string
-      enum:
-      - QueryRelevance
-      - ResponseRelevance
-      - ToolSelection
-      title: MetricType
-    ResourceList_JobError_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/JobError'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[JobError]
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
+      - task_id
+      - connector_id
+      title: CreateModelLinkTaskJobSpec
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

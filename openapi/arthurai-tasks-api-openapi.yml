@@ -606,92 +606,28 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    NewTaskRequest:
+    KeywordsConfig:
       properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-          description: Name of the task.
-        is_agentic:
-          type: boolean
-          title: Is Agentic
-          description: Whether the task is agentic or not.
-          default: false
-        agent_metadata:
-          anyOf:
-          - $ref: '#/components/schemas/AgentMetadata'
-          - type: 'null'
-          description: Metadata to describe the creation source/provider for registered agents.
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
       type: object
       required:
-      - name
-      title: NewTaskRequest
-    RuleType:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    RuleScope:
       type: string
       enum:
-      - KeywordRule
-      - ModelHallucinationRuleV2
-      - ModelSensitiveDataRule
-      - PIIDataRule
-      - PromptInjectionRule
-      - RegexRule
-      - ToxicityRule
-      title: RuleType
-    PIIConfig:
-      properties:
-        disabled_pii_entities:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Disabled Pii Entities
-          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
-        confidence_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Confidence Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
-          default: 0
-          deprecated: true
-        allow_list:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Allow List
-          description: Optional. List of strings to pass PII validation.
-      additionalProperties: false
-      type: object
-      title: PIIConfig
-      example:
-        allow_list:
-        - arthur.ai
-        - Arthur
-        confidence_threshold: '0.5'
-        disabled_pii_entities:
-        - PERSON
-        - URL
-    Tool:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the tool.
-        arguments:
-          items:
-            $ref: '#/components/schemas/ToolArgument'
-          type: array
-          title: Arguments
-          description: List of arguments for this tool.
-      type: object
-      required:
-      - name
-      title: Tool
-      description: Tool definition with arguments.
+      - default
+      - task
+      title: RuleScope
     InputAudio:
       properties:
         data:
@@ -707,216 +643,23 @@ components:
       - data
       - format
       title: InputAudio
-    GCPAgentMetadata:
+    RegexConfig:
       properties:
-        project_id:
-          type: string
-          title: Project Id
-          description: Project ID of the agent.
-        region:
-          type: string
-          title: Region
-          description: Region of the agent.
-        resource_id:
-          type: string
-          title: Resource Id
-          description: Resource ID of the agent.
-      type: object
-      required:
-      - project_id
-      - region
-      - resource_id
-      title: GCPAgentMetadata
-    OpenAIMessageItem:
-      properties:
-        type:
-          $ref: '#/components/schemas/OpenAIMessageType'
-          description: Type of the message (either 'text', 'image_url', or 'input_audio')
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-          description: Text content of the message if type is 'text'
-        image_url:
-          anyOf:
-          - $ref: '#/components/schemas/ImageURL'
-          - type: 'null'
-          description: Image URL content of the message if type is 'image_url'
-        input_audio:
-          anyOf:
-          - $ref: '#/components/schemas/InputAudio'
-          - type: 'null'
-          description: Input audio content of the message if type is 'input_audio'
-      type: object
-      required:
-      - type
-      title: OpenAIMessageItem
-    MetricResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the Metric
-        name:
-          type: string
-          title: Name
-          description: Name of the Metric
-        type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the Metric
-        metric_metadata:
-          type: string
-          title: Metric Metadata
-          description: Metadata of the Metric
-        config:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Config
-          description: JSON-serialized configuration for the Metric
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the Metric was created in unix milliseconds
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time the Metric was updated in unix milliseconds
-        enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Enabled
-          description: Whether the Metric is enabled
-      type: object
-      required:
-      - id
-      - name
-      - type
-      - metric_metadata
-      - created_at
-      - updated_at
-      title: MetricResponse
-    NewMetricRequest:
-      properties:
-        type:
-          $ref: '#/components/schemas/MetricType'
-          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
-          examples:
-          - UserQueryRelevance
-        name:
-          type: string
-          title: Name
-          description: Name of metric
-          examples:
-          - My User Query Relevance
-        metric_metadata:
-          type: string
-          title: Metric Metadata
-          description: Additional metadata for the metric
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/RelevanceMetricConfig'
-          - type: 'null'
-          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
-      type: object
-      required:
-      - type
-      - name
-      - metric_metadata
-      title: NewMetricRequest
-      example1:
-        metric_metadata: This is a test metric metadata
-        name: My User Query Relevance
-        type: QueryRelevance
-      example2:
-        config:
-          relevance_threshold: 0.8
-          use_llm_judge: false
-        metric_metadata: This is a test metric metadata
-        name: My User Query Relevance with Config
-        type: QueryRelevance
-      example3:
-        config:
-          use_llm_judge: true
-        metric_metadata: This is a test metric metadata
-        name: My Response Relevance
-        type: ResponseRelevance
-    UpdateMetricRequest:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-          description: 'Boolean value to enable or disable the metric. '
-      type: object
-      required:
-      - enabled
-      title: UpdateMetricRequest
-    OpenAIMessageType:
-      type: string
-      enum:
-      - text
-      - image_url
-      - input_audio
-      title: OpenAIMessageType
-    ManualAgentCreationSource:
-      properties:
-        type:
-          type: string
-          const: MANUAL
-          title: Type
-          default: MANUAL
-      type: object
-      title: ManualAgentCreationSource
-      description: Creation source for manually created tasks.
-    ToolCall:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: The type of tool call. Currently the only type supported is 'function'.
-          default: function
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the tool call
-        function:
-          $ref: '#/components/schemas/ToolCallFunction'
-          description: Function details
-      type: object
-      required:
-      - id
-      - function
-      title: ToolCall
-    ValidationError:
-      properties:
-        loc:
+        regex_patterns:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            type: string
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
     RuleResponse:
       properties:
         id:
@@ -976,6 +719,201 @@ components:
       - created_at
       - updated_at
       title: RuleResponse
+    RelevanceMetricConfig:
+      properties:
+        relevance_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relevance Threshold
+          description: Threshold for determining relevance when not using LLM judge
+        use_llm_judge:
+          type: boolean
+          title: Use Llm Judge
+          description: Whether to use LLM as a judge for relevance scoring
+          default: true
+      type: object
+      title: RelevanceMetricConfig
+      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
+    ManualAgentCreationSource:
+      properties:
+        type:
+          type: string
+          const: MANUAL
+          title: Type
+          default: MANUAL
+      type: object
+      title: ManualAgentCreationSource
+      description: Creation source for manually created tasks.
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    ToolArgument:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
+      type: object
+      required:
+      - name
+      - type
+      title: ToolArgument
+      description: Argument definition for a tool.
+    LLMModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+      type: object
+      required:
+      - name
+      title: LLMModel
+      description: Model used by an agent.
+    GCPAgentMetadata:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadata
+    AgentMetadata:
+      properties:
+        provider:
+          $ref: '#/components/schemas/RegisteredAgentProvider'
+          description: Provider of the registered agent.
+        gcp_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/GCPAgentMetadata'
+          - type: 'null'
+          description: Metadata for the agent.
+      type: object
+      required:
+      - provider
+      title: AgentMetadata
+    MetricResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the Metric
+        name:
+          type: string
+          title: Name
+          description: Name of the Metric
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the Metric
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Metadata of the Metric
+        config:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Config
+          description: JSON-serialized configuration for the Metric
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the Metric was created in unix milliseconds
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time the Metric was updated in unix milliseconds
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Whether the Metric is enabled
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - metric_metadata
+      - created_at
+      - updated_at
+      title: MetricResponse
+    RegisteredAgentProvider:
+      type: string
+      enum:
+      - gcp
+      - external
+      title: RegisteredAgentProvider
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
     OpenAIMessage-Input:
       properties:
         role:
@@ -1017,35 +955,38 @@ components:
       description: 'The message schema class for the prompts playground.
 
         This class adheres to OpenAI''s message schema.'
-    ToxicityConfig:
+    DataSource:
       properties:
-        threshold:
-          type: number
-          title: Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
-          default: 0.5
-      additionalProperties: false
-      type: object
-      title: ToxicityConfig
-      example:
-        threshold: 0.5
-    RegexConfig:
-      properties:
-        regex_patterns:
-          items:
-            type: string
-          type: array
-          title: Regex Patterns
-          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
-      additionalProperties: false
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
       type: object
       required:
-      - regex_patterns
-      title: RegexConfig
-      example:
-        regex_patterns:
-        - \d{3}-\d{2}-\d{4}
-        - \d{5}-\d{6}-\d{7}
+      - url
+      title: DataSource
+      description: Data source used by an agent.
+    GCPAgentMetadataResponse:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+          description: Project ID of the agent.
+        region:
+          type: string
+          title: Region
+          description: Region of the agent.
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Resource ID of the agent.
+      type: object
+      required:
+      - project_id
+      - region
+      - resource_id
+      title: GCPAgentMetadataResponse
+      description: GCP-specific agent metadata for responses.
     GCPAgentCreationSource:
       properties:
         type:
@@ -1078,6 +1019,27 @@ components:
       - gcp_reasoning_engine_id
       title: GCPAgentCreationSource
       description: Creation source for GCP-discovered agents.
+    NewTaskRequest:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Name of the task.
+        is_agentic:
+          type: boolean
+          title: Is Agentic
+          description: Whether the task is agentic or not.
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadata'
+          - type: 'null'
+          description: Metadata to describe the creation source/provider for registered agents.
+      type: object
+      required:
+      - name
+      title: NewTaskRequest
     ImageURL:
       properties:
         url:
@@ -1088,151 +1050,184 @@ components:
       required:
       - url
       title: ImageURL
-    TaskResponse:
+    MetricType:
+      type: string
+      enum:
+      - QueryRelevance
+      - ResponseRelevance
+      - ToolSelection
+      title: MetricType
+    MessageRole:
+      type: string
+      enum:
+      - developer
+      - system
+      - user
+      - assistant
+      - tool
+      title: MessageRole
+    ToolCall:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool call. Currently the only type supported is 'function'.
+          default: function
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the tool call
+        function:
+          $ref: '#/components/schemas/ToolCallFunction'
+          description: Function details
+      type: object
+      required:
+      - id
+      - function
+      title: ToolCall
+    EnrichedTaskResponse:
       properties:
         id:
           type: string
           title: Id
-          description: ' ID of the task'
+          description: Task ID
         name:
           type: string
           title: Name
-          description: Name of the task
+          description: Task name
         created_at:
-          type: integer
+          type: string
+          format: date-time
           title: Created At
-          description: Time the task was created in unix milliseconds
+          description: Task creation timestamp
         updated_at:
-          type: integer
+          type: string
+          format: date-time
           title: Updated At
-          description: Time the task was created in unix milliseconds
-        is_agentic:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Agentic
-          description: Whether the task is agentic or not
-        is_system_task:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is System Task
-          description: Whether this is a system-managed task (e.g., for traces without a task_id or service name, or for Arthur-created traces)
-          default: false
+          description: Task last update timestamp
         is_autocreated:
-          anyOf:
-          - type: boolean
-          - type: 'null'
+          type: boolean
           title: Is Autocreated
-          description: Whether this task was automatically created by Arthur
+          description: Whether this task was auto-created (vs manually created)
           default: false
-        is_archived:
+        creation_source:
           anyOf:
-          - type: boolean
+          - $ref: '#/components/schemas/AgentCreationSource'
           - type: 'null'
-          title: Is Archived
-          description: Whether this task is archived
-          default: false
-        agent_metadata:
+          description: Information about how this task/agent was created
+        last_fetched:
           anyOf:
-          - $ref: '#/components/schemas/AgentMetadataResponse'
+          - type: string
+            format: date-time
           - type: 'null'
-          description: Metadata to describe the creation source/provider for registered agents.
+          title: Last Fetched
+          description: Last time traces were fetched for this task (from task_polling_state)
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Tool'
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Tools used by this agent (computed from spans)
+        sub_agents:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SubAgent'
+            type: array
+          - type: 'null'
+          title: Sub Agents
+          description: Sub-agents used by this agent (computed from spans)
+        models:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LLMModel'
+            type: array
+          - type: 'null'
+          title: Models
+          description: Models used by this agent (computed from spans)
+        data_sources:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DataSource'
+            type: array
+          - type: 'null'
+          title: Data Sources
+          description: Data sources used by this agent (computed from spans)
+        num_spans:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Spans
+          description: Number of spans associated with this task
         rules:
           items:
             $ref: '#/components/schemas/RuleResponse'
           type: array
           title: Rules
-          description: List of all the rules for the task.
-        metrics:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/MetricResponse'
-            type: array
-          - type: 'null'
-          title: Metrics
-          description: List of all the metrics for the task.
+          description: Rules associated with this task
       type: object
       required:
       - id
       - name
       - created_at
       - updated_at
-      - rules
-      title: TaskResponse
-    UpdateRuleRequest:
+      title: EnrichedTaskResponse
+      description: Response model for agent-tasks endpoint with enriched metadata.
+    Tool:
       properties:
-        enabled:
-          type: boolean
-          title: Enabled
-          description: 'Boolean value to enable or disable the rule. '
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgument'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
       type: object
       required:
-      - enabled
-      title: UpdateRuleRequest
-    SearchTasksRequest:
+      - name
+      title: Tool
+      description: Tool definition with arguments.
+    OpenAIMessageItem:
       properties:
-        task_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Task Ids
-          description: List of tasks to query for.
-        task_name:
+        type:
+          $ref: '#/components/schemas/OpenAIMessageType'
+          description: Type of the message (either 'text', 'image_url', or 'input_audio')
+        text:
           anyOf:
           - type: string
           - type: 'null'
-          title: Task Name
-          description: Task name substring search string.
-        is_agentic:
+          title: Text
+          description: Text content of the message if type is 'text'
+        image_url:
           anyOf:
-          - type: boolean
+          - $ref: '#/components/schemas/ImageURL'
           - type: 'null'
-          title: Is Agentic
-          description: Filter tasks by agentic status. If not provided, returns both agentic and non-agentic tasks.
-        include_archived:
+          description: Image URL content of the message if type is 'image_url'
+        input_audio:
           anyOf:
-          - type: boolean
+          - $ref: '#/components/schemas/InputAudio'
           - type: 'null'
-          title: Include Archived
-          description: Include archived tasks in results. True returns both active and archived tasks, False or None returns only active tasks. If only_archived is True, this flag is ignored.
-        only_archived:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Only Archived
-          description: Return only archived tasks. True returns exclusively archived tasks, False or None has no effect. Takes precedence over include_archived when both are set.
-      type: object
-      title: SearchTasksRequest
-    SubAgent:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the sub-agent.
+          description: Input audio content of the message if type is 'input_audio'
       type: object
       required:
-      - name
-      title: SubAgent
-      description: Sub-agent definition.
-    ToolArgument:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the tool argument.
-        type:
-          type: string
-          title: Type
-          description: Type of the tool argument.
-      type: object
-      required:
-      - name
       - type
-      title: ToolArgument
-      description: Argument definition for a tool.
+      title: OpenAIMessageItem
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
     SearchTasksResponse:
       properties:
         count:
@@ -1250,67 +1245,15 @@ components:
       - count
       - tasks
       title: SearchTasksResponse
-    DataSource:
+    HTTPValidationError:
       properties:
-        url:
-          type: string
-          title: Url
-          description: URL of the data source.
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - url
-      title: DataSource
-      description: Data source used by an agent.
-    LLMModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the model.
-      type: object
-      required:
-      - name
-      title: LLMModel
-      description: Model used by an agent.
-    ExampleConfig:
-      properties:
-        example:
-          type: string
-          title: Example
-          description: Custom example for the sensitive data
-        result:
-          type: boolean
-          title: Result
-          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
-      type: object
-      required:
-      - example
-      - result
-      title: ExampleConfig
-      example:
-        example: John has O negative blood group
-        result: true
-    AgentCreationSource:
-      anyOf:
-      - $ref: '#/components/schemas/GCPAgentCreationSource'
-      - $ref: '#/components/schemas/OTELAgentCreationSource'
-      - $ref: '#/components/schemas/ManualAgentCreationSource'
-      title: AgentCreationSource
-    ToolCallFunction:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the function to call
-        arguments:
-          type: string
-          title: Arguments
-          description: JSON string of function arguments
-      type: object
-      required:
-      - name
-      - arguments
-      title: ToolCallFunction
+      title: HTTPValidationError
     NewRuleRequest:
       properties:
         name:
@@ -1451,81 +1394,48 @@ components:
             threshold: 0.5
           name: Toxicity Rule
           type: ToxicityRule
-    GCPAgentMetadataResponse:
+    UpdateRuleRequest:
       properties:
-        project_id:
-          type: string
-          title: Project Id
-          description: Project ID of the agent.
-        region:
-          type: string
-          title: Region
-          description: Region of the agent.
-        resource_id:
-          type: string
-          title: Resource Id
-          description: Resource ID of the agent.
+        enabled:
+          type: boolean
+          title: Enabled
+          description: 'Boolean value to enable or disable the rule. '
       type: object
       required:
-      - project_id
-      - region
-      - resource_id
-      title: GCPAgentMetadataResponse
-      description: GCP-specific agent metadata for responses.
-    HTTPValidationError:
+      - enabled
+      title: UpdateRuleRequest
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RegisteredAgentProvider:
-      type: string
-      enum:
-      - gcp
-      - external
-      title: RegisteredAgentProvider
-    AgentMetadata:
-      properties:
-        provider:
-          $ref: '#/components/schemas/RegisteredAgentProvider'
-          description: Provider of the registered agent.
-        gcp_metadata:
-          anyOf:
-          - $ref: '#/components/schemas/GCPAgentMetadata'
-          - type: 'null'
-          description: Metadata for the agent.
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - provider
-      title: AgentMetadata
-    ExamplesConfig:
-      properties:
-        examples:
-          items:
-            $ref: '#/components/schemas/ExampleConfig'
-          type: array
-          title: Examples
-          description: List of all the examples for Sensitive Data Rule
-        hint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hint
-          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
-      type: object
-      required:
-      - examples
-      title: ExamplesConfig
-      example:
-        examples:
-        - example: John has O negative blood group
-          result: true
-        - example: Most of the people have A positive blood group
-          result: false
-        hint: specific individual's blood type
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AgentCreationSource:
+      anyOf:
+      - $ref: '#/components/schemas/GCPAgentCreationSource'
+      - $ref: '#/components/schemas/OTELAgentCreationSource'
+      - $ref: '#/components/schemas/ManualAgentCreationSource'
+      title: AgentCreationSource
     OTELAgentCreationSource:
       properties:
         type:
@@ -1542,6 +1452,232 @@ components:
       type: object
       title: OTELAgentCreationSource
       description: Creation source for OTEL-discovered agents (auto-created from traces).
+    UpdateMetricRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: 'Boolean value to enable or disable the metric. '
+      type: object
+      required:
+      - enabled
+      title: UpdateMetricRequest
+    TaskResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ' ID of the task'
+        name:
+          type: string
+          title: Name
+          description: Name of the task
+        created_at:
+          type: integer
+          title: Created At
+          description: Time the task was created in unix milliseconds
+        updated_at:
+          type: integer
+          title: Updated At
+          description: Time the task was created in unix milliseconds
+        is_agentic:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Agentic
+          description: Whether the task is agentic or not
+        is_system_task:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is System Task
+          description: Whether this is a system-managed task (e.g., for traces without a task_id or service name, or for Arthur-created traces)
+          default: false
+        is_autocreated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Autocreated
+          description: Whether this task was automatically created by Arthur
+          default: false
+        is_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Archived
+          description: Whether this task is archived
+          default: false
+        agent_metadata:
+          anyOf:
+          - $ref: '#/components/schemas/AgentMetadataResponse'
+          - type: 'null'
+          description: Metadata to describe the creation source/provider for registered agents.
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: List of all the rules for the task.
+        metrics:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MetricResponse'
+            type: array
+          - type: 'null'
+          title: Metrics
+          description: List of all the metrics for the task.
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - rules
+      title: TaskResponse
+    NewMetricRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricType'
+          description: Type of the metric. It can only be one of QueryRelevance, ResponseRelevance, ToolSelection
+          examples:
+          - UserQueryRelevance
+        name:
+          type: string
+          title: Name
+          description: Name of metric
+          examples:
+          - My User Query Relevance
+        metric_metadata:
+          type: string
+          title: Metric Metadata
+          description: Additional metadata for the metric
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/RelevanceMetricConfig'
+          - type: 'null'
+          description: Configuration for the metric. Currently only applies to UserQueryRelevance and ResponseRelevance metric types.
+      type: object
+      required:
+      - type
+      - name
+      - metric_metadata
+      title: NewMetricRequest
+      example1:
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance
+        type: QueryRelevance
+      example2:
+        config:
+          relevance_threshold: 0.8
+          use_llm_judge: false
+        metric_metadata: This is a test metric metadata
+        name: My User Query Relevance with Config
+        type: QueryRelevance
+      example3:
+        config:
+          use_llm_judge: true
+        metric_metadata: This is a test metric metadata
+        name: My Response Relevance
+        type: ResponseRelevance
+    PIIConfig:
+      properties:
+        disabled_pii_entities:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disabled Pii Entities
+          description: 'Optional. List of PII entities to disable. Valid values are: CREDIT_CARD,CRYPTO,DATE_TIME,EMAIL_ADDRESS,IBAN_CODE,IP_ADDRESS,NRP,LOCATION,PERSON,PHONE_NUMBER,MEDICAL_LICENSE,URL,US_BANK_NUMBER,US_DRIVER_LICENSE,US_ITIN,US_PASSPORT,US_SSN'
+        confidence_threshold:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable PII to consider the rule passed or failed. Min: 0 (less confident) Max: 1 (very confident). Default: 0'
+          default: 0
+          deprecated: true
+        allow_list:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allow List
+          description: Optional. List of strings to pass PII validation.
+      additionalProperties: false
+      type: object
+      title: PIIConfig
+      example:
+        allow_list:
+        - arthur.ai
+        - Arthur
+        confidence_threshold: '0.5'
+        disabled_pii_entities:
+        - PERSON
+        - URL
+    ToolCallFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the function to call
+        arguments:
+          type: string
+          title: Arguments
+          description: JSON string of function arguments
+      type: object
+      required:
+      - name
+      - arguments
+      title: ToolCallFunction
+    SearchTasksRequest:
+      properties:
+        task_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Task Ids
+          description: List of tasks to query for.
+        task_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Name
+          description: Task name substring search string.
+        is_agentic:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Agentic
+          description: Filter tasks by agentic status. If not provided, returns both agentic and non-agentic tasks.
+        include_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Include Archived
+          description: Include archived tasks in results. True returns both active and archived tasks, False or None returns only active tasks. If only_archived is True, this flag is ignored.
+        only_archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Only Archived
+          description: Return only archived tasks. True returns exclusively archived tasks, False or None has no effect. Takes precedence over include_archived when both are set.
+      type: object
+      title: SearchTasksRequest
+    SubAgent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - name
+      title: SubAgent
+      description: Sub-agent definition.
     AgentMetadataResponse:
       properties:
         provider:
@@ -1565,37 +1701,6 @@ components:
       - provider
       title: AgentMetadataResponse
       description: Agent metadata for responses.
-    KeywordsConfig:
-      properties:
-        keywords:
-          items:
-            type: string
-          type: array
-          title: Keywords
-          description: List of Keywords
-      type: object
-      required:
-      - keywords
-      title: KeywordsConfig
-      example:
-        keywords:
-        - Blocked_Keyword_1
-        - Blocked_Keyword_2
-    MessageRole:
-      type: string
-      enum:
-      - developer
-      - system
-      - user
-      - assistant
-      - tool
-      title: MessageRole
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
     ChatbotRequest:
       properties:
         history:
@@ -1612,124 +1717,19 @@ components:
       required:
       - history
       title: ChatbotRequest
-    RelevanceMetricConfig:
-      properties:
-        relevance_threshold:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Relevance Threshold
-          description: Threshold for determining relevance when not using LLM judge
-        use_llm_judge:
-          type: boolean
-          title: Use Llm Judge
-          description: Whether to use LLM as a judge for relevance scoring
-          default: true
-      type: object
-      title: RelevanceMetricConfig
-      description: Configuration for relevance metrics including QueryRelevance and ResponseRelevance
-    MetricType:
+    OpenAIMessageType:
       type: string
       enum:
-      - QueryRelevance
-      - ResponseRelevance
-      - ToolSelection
-      title: MetricType
-    RuleScope:
+      - text
+      - image_url
+      - input_audio
+      title: OpenAIMessageType
+    PaginationSortMethod:
       type: string
       enum:
-      - default
-      - task
-      title: RuleScope
-    EnrichedTaskResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Task ID
-        name:
-          type: string
-          title: Name
-          description: Task name
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Task creation timestamp
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Task last update timestamp
-        is_autocreated:
-          type: boolean
-          title: Is Autocreated
-          description: Whether this task was auto-created (vs manually created)
-          default: false
-        creation_source:
-          anyOf:
-          - $ref: '#/components/schemas/AgentCreationSource'
-          - type: 'null'
-          description: Information about how this task/agent was created
-        last_fetched:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Fetched
-          description: Last time traces were fetched for this task (from task_polling_state)
-        tools:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Tool'
-            type: array
-          - type: 'null'
-          title: Tools
-          description: Tools used by this agent (computed from spans)
-        sub_agents:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/SubAgent'
-            type: array
-          - type: 'null'
-          title: Sub Agents
-          description: Sub-agents used by this agent (computed from spans)
-        models:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/LLMModel'
-            type: array
-          - type: 'null'
-          title: Models
-          description: Models used by this agent (computed from spans)
-        data_sources:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/DataSource'
-            type: array
-          - type: 'null'
-          title: Data Sources
-          description: Data sources used by this agent (computed from spans)
-        num_spans:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Num Spans
-          description: Number of spans associated with this task
-        rules:
-          items:
-            $ref: '#/components/schemas/RuleResponse'
-          type: array
-          title: Rules
-          description: Rules associated with this task
-      type: object
-      required:
-      - id
-      - name
-      - created_at
-      - updated_at
-      title: EnrichedTaskResponse
-      description: Response model for agent-tasks endpoint with enriched metadata.
+      - asc
+      - desc
+      title: PaginationSortMethod
   securitySchemes:
     API_Key:
       type: http

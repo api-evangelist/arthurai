@@ -1,0 +1,748 @@
+openapi: 3.2.0
+info:
+  title: Arthur Scope Dashboards V1 API
+  version: 0.1.0
+tags:
+- name: Dashboards V1
+paths:
+  /api/v1/workspaces/{workspace_id}/dashboards:
+    post:
+      tags:
+      - Dashboards V1
+      summary: Create Dashboard
+      description: Creates a new custom dashboard in a workspace. Requires workspace_create_dashboard on the home workspace, read permission on every workspace, project and policy member, and model_query_metrics on every application member.
+      operationId: workspace_create_dashboard
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_create_dashboard
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDashboard'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Dashboards V1
+      summary: List Dashboards
+      description: Lists dashboards in a workspace that the caller can read (workspace-shared dashboards plus the caller's own private ones, resolved via dashboard_read). Requires workspace_list_dashboards.
+      operationId: workspace_list_dashboards
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_dashboards
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order (by updated_at).
+          default: desc
+        description: Override the sort order (by updated_at).
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search term to filter dashboards by name.
+          title: Name
+        description: Search term to filter dashboards by name.
+      - name: visibility
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DashboardVisibility'
+          - type: 'null'
+          description: Filter dashboards by visibility.
+          title: Visibility
+        description: Filter dashboards by visibility.
+      - name: owner_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter dashboards by owner user ID.
+          title: Owner User Id
+        description: Filter dashboards by owner user ID.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_Dashboard_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dashboards/{dashboard_id}:
+    get:
+      tags:
+      - Dashboards V1
+      summary: Get Dashboard
+      description: 'Returns a dashboard by ID. Requires dashboard_read: the caller must be the owner or, if the dashboard is workspace-shared, hold the permission on the home workspace.'
+      operationId: get_dashboard
+      security:
+      - OAuth2AuthorizationCode:
+        - dashboard_read
+      parameters:
+      - name: dashboard_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dashboard Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Dashboards V1
+      summary: Update Dashboard
+      description: Updates a dashboard's metadata, visibility, or member set. Requires dashboard_update (owner-only). Member lists are full-replacement; only newly added members are validated against the caller's read permissions, and a dashboard must always retain at least one member (removing all members returns 400).
+      operationId: update_dashboard
+      security:
+      - OAuth2AuthorizationCode:
+        - dashboard_update
+      parameters:
+      - name: dashboard_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dashboard Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchDashboard'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Dashboards V1
+      summary: Delete Dashboard
+      description: 'Deletes a dashboard. Requires dashboard_delete: allowed for the owner or anyone with workspace_delete on the home workspace (admin cleanup escape hatch).'
+      operationId: delete_dashboard
+      security:
+      - OAuth2AuthorizationCode:
+        - dashboard_delete
+      parameters:
+      - name: dashboard_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dashboard Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dashboards/{dashboard_id}/upsolve-token:
+    post:
+      tags:
+      - Dashboards V1
+      summary: Get Upsolve Jwt For A Dashboard
+      description: Returns an Upsolve JWT scoped to this dashboard's resolved member set (intersected with the caller's MODEL_QUERY_METRICS access). Tenant identity is stable for the lifetime of the dashboard, so customizations persist across membership and visibility changes. Requires dashboard_read. Fails with the standard authorization error when the caller has access to none of the dashboard's data sources.
+      operationId: get_dashboard_upsolve_token
+      security:
+      - OAuth2AuthorizationCode:
+        - dashboard_read
+      parameters:
+      - name: dashboard_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Dashboard Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsolveToken'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    PostDashboard:
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          title: Name
+          description: Human-readable dashboard name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Optional description of the dashboard.
+        visibility:
+          $ref: '#/components/schemas/DashboardVisibility'
+          description: Sharing mode for the dashboard. PRIVATE = visible only to the owner. WORKSPACE = visible to anyone with read access on the home workspace.
+        workspace_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Workspace Ids
+          description: Workspace IDs whose models contribute to this dashboard's data scope.
+        project_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Project Ids
+          description: Project IDs whose models contribute to this dashboard's data scope.
+        policy_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Policy Ids
+          description: Policy IDs whose assigned models contribute to this dashboard's data scope.
+        model_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Model Ids
+          description: Individual model IDs included directly in this dashboard's data scope.
+        template:
+          anyOf:
+          - $ref: '#/components/schemas/DashboardTemplate'
+          - type: 'null'
+          description: Built-in template to seed the dashboard's charts from. Omitted = the dashboard starts empty.
+      type: object
+      required:
+      - name
+      - visibility
+      title: PostDashboard
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PatchDashboard:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Name
+          description: Human-readable dashboard name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Optional description of the dashboard.
+        visibility:
+          anyOf:
+          - $ref: '#/components/schemas/DashboardVisibility'
+          - type: 'null'
+          description: Sharing mode for the dashboard. PRIVATE = visible only to the owner. WORKSPACE = visible to anyone with read access on the home workspace.
+        workspace_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Workspace Ids
+          description: Workspace IDs whose models contribute to this dashboard's data scope.
+        project_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Project Ids
+          description: Project IDs whose models contribute to this dashboard's data scope.
+        policy_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Policy Ids
+          description: Policy IDs whose assigned models contribute to this dashboard's data scope.
+        model_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Model Ids
+          description: Individual model IDs included directly in this dashboard's data scope.
+      type: object
+      title: PatchDashboard
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    UpsolveToken:
+      properties:
+        token:
+          type: string
+          title: Token
+          description: JWT for use with Upsolve API.
+        application_count:
+          type: integer
+          title: Application Count
+          description: Number of applications included in this token's prefilters.
+        total_application_count:
+          type: integer
+          title: Total Application Count
+          description: Total applications the caller can access in this scope, before the ARTHUR_UPSOLVE_MAX_DASHBOARD_APPLICATIONS cap is applied. Greater than application_count when the dashboard is showing a truncated view.
+      type: object
+      required:
+      - token
+      - application_count
+      - total_application_count
+      title: UpsolveToken
+    Dashboard:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dashboard ID. Stable for the lifetime of the dashboard.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: Home workspace; cleanup boundary.
+        name:
+          type: string
+          title: Name
+          description: Human-readable dashboard name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Optional description of the dashboard.
+        visibility:
+          $ref: '#/components/schemas/DashboardVisibility'
+          description: Sharing mode for the dashboard. PRIVATE = visible only to the owner. WORKSPACE = visible to anyone with read access on the home workspace.
+        owner_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: The user who owns the dashboard. Null if the owning user was deleted.
+        workspace_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Workspace Ids
+          description: Workspace IDs whose models contribute to this dashboard's data scope.
+        project_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Project Ids
+          description: Project IDs whose models contribute to this dashboard's data scope.
+        policy_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Policy Ids
+          description: Policy IDs whose assigned models contribute to this dashboard's data scope.
+        model_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Model Ids
+          description: Individual model IDs included directly in this dashboard's data scope.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: The user who last updated the dashboard.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - workspace_id
+      - name
+      - visibility
+      - workspace_ids
+      - project_ids
+      - policy_ids
+      - model_ids
+      title: Dashboard
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    ResourceList_Dashboard_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Dashboard'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Dashboard]
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DashboardVisibility:
+      type: string
+      enum:
+      - PRIVATE
+      - WORKSPACE
+      title: DashboardVisibility
+    DashboardTemplate:
+      type: string
+      enum:
+      - WORKSPACE
+      - PROJECT
+      title: DashboardTemplate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

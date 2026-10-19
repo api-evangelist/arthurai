@@ -245,12 +245,6 @@ components:
       - msg
       - type
       title: ValidationError
-    AgenticAnnotationType:
-      type: string
-      enum:
-      - human
-      - continuous_eval
-      title: AgenticAnnotationType
     TestRunStatus:
       type: string
       enum:
@@ -259,15 +253,6 @@ components:
       - partial_failure
       - error
       title: TestRunStatus
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AgenticAnnotationResponse:
       properties:
         id:
@@ -359,6 +344,90 @@ components:
       - created_at
       - updated_at
       title: AgenticAnnotationResponse
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
+    EvalType:
+      type: string
+      enum:
+      - llm_eval
+      - ml_eval
+      title: EvalType
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    CreateTestRunRequest:
+      properties:
+        trace_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: Trace Ids
+          description: List of trace IDs to test the continuous eval against
+      type: object
+      required:
+      - trace_ids
+      title: CreateTestRunRequest
+      description: Request schema for creating a continuous eval test run
+    ListAgenticAnnotationsResponse:
+      properties:
+        annotations:
+          items:
+            $ref: '#/components/schemas/AgenticAnnotationResponse'
+          type: array
+          title: Annotations
+          description: List of annotations
+        count:
+          type: integer
+          title: Count
+          description: Total number of annotations
+      type: object
+      required:
+      - annotations
+      - count
+      title: ListAgenticAnnotationsResponse
+    AgenticAnnotationType:
+      type: string
+      enum:
+      - human
+      - continuous_eval
+      title: AgenticAnnotationType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ContinuousEvalRunStatus:
+      type: string
+      enum:
+      - pending
+      - passed
+      - running
+      - failed
+      - skipped
+      - error
+      title: ContinuousEvalRunStatus
     ListContinuousEvalTestRunsResponse:
       properties:
         test_runs:
@@ -376,52 +445,6 @@ components:
       - test_runs
       - count
       title: ListContinuousEvalTestRunsResponse
-    ContinuousEvalRunStatus:
-      type: string
-      enum:
-      - pending
-      - passed
-      - running
-      - failed
-      - skipped
-      - error
-      title: ContinuousEvalRunStatus
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    CreateTestRunRequest:
-      properties:
-        trace_ids:
-          items:
-            type: string
-          type: array
-          maxItems: 50
-          minItems: 1
-          title: Trace Ids
-          description: List of trace IDs to test the continuous eval against
-      type: object
-      required:
-      - trace_ids
-      title: CreateTestRunRequest
-      description: Request schema for creating a continuous eval test run
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
     ContinuousEvalTestRunResponse:
       properties:
         id:
@@ -490,29 +513,6 @@ components:
       - created_at
       - updated_at
       title: ContinuousEvalTestRunResponse
-    ListAgenticAnnotationsResponse:
-      properties:
-        annotations:
-          items:
-            $ref: '#/components/schemas/AgenticAnnotationResponse'
-          type: array
-          title: Annotations
-          description: List of annotations
-        count:
-          type: integer
-          title: Count
-          description: Total number of annotations
-      type: object
-      required:
-      - annotations
-      - count
-      title: ListAgenticAnnotationsResponse
-    EvalType:
-      type: string
-      enum:
-      - llm_eval
-      - ml_eval
-      title: EvalType
   securitySchemes:
     API_Key:
       type: http

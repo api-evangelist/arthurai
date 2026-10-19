@@ -85,81 +85,17 @@ paths:
       - API Key: []
 components:
   schemas:
-    OpenAIMessageType:
+    ModelProvider:
       type: string
       enum:
-      - text
-      - image_url
-      - input_audio
-      title: OpenAIMessageType
-    ToolCall:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: The type of tool call. Currently the only type supported is 'function'.
-          default: function
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the tool call
-        function:
-          $ref: '#/components/schemas/ToolCallFunction'
-          description: Function details
-      type: object
-      required:
-      - id
-      - function
-      title: ToolCall
-    ToolCallFunction:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the function to call
-        arguments:
-          type: string
-          title: Arguments
-          description: JSON string of function arguments
-      type: object
-      required:
-      - name
-      - arguments
-      title: ToolCallFunction
-    ImageURL:
-      properties:
-        url:
-          type: string
-          title: Url
-          description: URL of the image
-      type: object
-      required:
-      - url
-      title: ImageURL
-    ChatbotConfigResponse:
-      properties:
-        model_provider:
-          $ref: '#/components/schemas/ModelProvider'
-        model_name:
-          type: string
-          title: Model Name
-        blacklist_endpoints:
-          items:
-            type: string
-          type: array
-          title: Blacklist Endpoints
-          default: []
-        available_endpoints:
-          items:
-            type: string
-          type: array
-          title: Available Endpoints
-          default: []
-      type: object
-      required:
-      - model_provider
-      - model_name
-      title: ChatbotConfigResponse
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
     ValidationError:
       properties:
         loc:
@@ -186,15 +122,143 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    ImageURL:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        url:
+          type: string
+          title: Url
+          description: URL of the image
       type: object
-      title: HTTPValidationError
+      required:
+      - url
+      title: ImageURL
+    ChatbotConfigUpdateRequest:
+      properties:
+        model_provider:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProvider'
+          - type: 'null'
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+        blacklist_endpoints:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blacklist Endpoints
+      type: object
+      title: ChatbotConfigUpdateRequest
+    MessageRole:
+      type: string
+      enum:
+      - developer
+      - system
+      - user
+      - assistant
+      - tool
+      title: MessageRole
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+          description: Base64 encoded audio data
+        format:
+          type: string
+          title: Format
+          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
+      type: object
+      required:
+      - data
+      - format
+      title: InputAudio
+    ToolCall:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: The type of tool call. Currently the only type supported is 'function'.
+          default: function
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the tool call
+        function:
+          $ref: '#/components/schemas/ToolCallFunction'
+          description: Function details
+      type: object
+      required:
+      - id
+      - function
+      title: ToolCall
+    OpenAIMessageItem:
+      properties:
+        type:
+          $ref: '#/components/schemas/OpenAIMessageType'
+          description: Type of the message (either 'text', 'image_url', or 'input_audio')
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+          description: Text content of the message if type is 'text'
+        image_url:
+          anyOf:
+          - $ref: '#/components/schemas/ImageURL'
+          - type: 'null'
+          description: Image URL content of the message if type is 'image_url'
+        input_audio:
+          anyOf:
+          - $ref: '#/components/schemas/InputAudio'
+          - type: 'null'
+          description: Input audio content of the message if type is 'input_audio'
+      type: object
+      required:
+      - type
+      title: OpenAIMessageItem
+    ToolCallFunction:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the function to call
+        arguments:
+          type: string
+          title: Arguments
+          description: JSON string of function arguments
+      type: object
+      required:
+      - name
+      - arguments
+      title: ToolCallFunction
+    ChatbotConfigResponse:
+      properties:
+        model_provider:
+          $ref: '#/components/schemas/ModelProvider'
+        model_name:
+          type: string
+          title: Model Name
+        blacklist_endpoints:
+          items:
+            type: string
+          type: array
+          title: Blacklist Endpoints
+          default: []
+        available_endpoints:
+          items:
+            type: string
+          type: array
+          title: Available Endpoints
+          default: []
+      type: object
+      required:
+      - model_provider
+      - model_name
+      title: ChatbotConfigResponse
     OpenAIMessage-Input:
       properties:
         role:
@@ -236,55 +300,6 @@ components:
       description: 'The message schema class for the prompts playground.
 
         This class adheres to OpenAI''s message schema.'
-    InputAudio:
-      properties:
-        data:
-          type: string
-          title: Data
-          description: Base64 encoded audio data
-        format:
-          type: string
-          title: Format
-          description: audio format (e.g. 'mp3', 'wav', 'flac', etc.)
-      type: object
-      required:
-      - data
-      - format
-      title: InputAudio
-    OpenAIMessageItem:
-      properties:
-        type:
-          $ref: '#/components/schemas/OpenAIMessageType'
-          description: Type of the message (either 'text', 'image_url', or 'input_audio')
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-          description: Text content of the message if type is 'text'
-        image_url:
-          anyOf:
-          - $ref: '#/components/schemas/ImageURL'
-          - type: 'null'
-          description: Image URL content of the message if type is 'image_url'
-        input_audio:
-          anyOf:
-          - $ref: '#/components/schemas/InputAudio'
-          - type: 'null'
-          description: Input audio content of the message if type is 'input_audio'
-      type: object
-      required:
-      - type
-      title: OpenAIMessageItem
-    MessageRole:
-      type: string
-      enum:
-      - developer
-      - system
-      - user
-      - assistant
-      - tool
-      title: MessageRole
     ChatbotRequest:
       properties:
         history:
@@ -301,37 +316,22 @@ components:
       required:
       - history
       title: ChatbotRequest
-    ModelProvider:
+    OpenAIMessageType:
       type: string
       enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
-    ChatbotConfigUpdateRequest:
+      - text
+      - image_url
+      - input_audio
+      title: OpenAIMessageType
+    HTTPValidationError:
       properties:
-        model_provider:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProvider'
-          - type: 'null'
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-        blacklist_endpoints:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Blacklist Endpoints
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      title: ChatbotConfigUpdateRequest
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: http

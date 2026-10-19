@@ -70,15 +70,14 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    InternalServerError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Internal server error
       type: object
-      title: HTTPValidationError
+      title: InternalServerError
     RegisterUser:
       properties:
         email:
@@ -104,14 +103,15 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
-    InternalServerError:
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Internal server error
       type: object
-      title: InternalServerError
+      title: HTTPValidationError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

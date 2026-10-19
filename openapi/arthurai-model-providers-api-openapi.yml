@@ -108,22 +108,17 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ModelProviderModelList:
-      properties:
-        provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: Provider of the models
-        available_models:
-          items:
-            type: string
-          type: array
-          title: Available Models
-          description: Available models from the provider
-      type: object
-      required:
-      - provider
-      - available_models
-      title: ModelProviderModelList
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
     ValidationError:
       properties:
         loc:
@@ -150,27 +145,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ModelProviderList:
-      properties:
-        providers:
-          items:
-            $ref: '#/components/schemas/ModelProviderResponse'
-          type: array
-          title: Providers
-          description: List of model providers
-      type: object
-      required:
-      - providers
-      title: ModelProviderList
     GCPServiceAccountCredentialsRequest:
       properties:
         type:
@@ -242,20 +216,6 @@ components:
       - client_x509_cert_url
       - universe_domain
       title: GCPServiceAccountCredentialsRequest
-    ModelProviderResponse:
-      properties:
-        provider:
-          $ref: '#/components/schemas/ModelProvider'
-          description: The model provider
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether the provider is enabled with credentials
-      type: object
-      required:
-      - provider
-      - enabled
-      title: ModelProviderResponse
     PutModelProviderCredentials:
       properties:
         api_key:
@@ -339,17 +299,57 @@ components:
           description: Optional GCP service account credentials JSON
       type: object
       title: PutModelProviderCredentials
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
+    ModelProviderList:
+      properties:
+        providers:
+          items:
+            $ref: '#/components/schemas/ModelProviderResponse'
+          type: array
+          title: Providers
+          description: List of model providers
+      type: object
+      required:
+      - providers
+      title: ModelProviderList
+    ModelProviderModelList:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: Provider of the models
+        available_models:
+          items:
+            type: string
+          type: array
+          title: Available Models
+          description: Available models from the provider
+      type: object
+      required:
+      - provider
+      - available_models
+      title: ModelProviderModelList
+    ModelProviderResponse:
+      properties:
+        provider:
+          $ref: '#/components/schemas/ModelProvider'
+          description: The model provider
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the provider is enabled with credentials
+      type: object
+      required:
+      - provider
+      - enabled
+      title: ModelProviderResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: http

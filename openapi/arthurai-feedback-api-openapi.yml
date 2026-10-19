@@ -214,6 +214,13 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    InferenceFeedbackTarget:
+      type: string
+      enum:
+      - context
+      - response_results
+      - prompt_results
+      title: InferenceFeedbackTarget
     ValidationError:
       properties:
         loc:
@@ -240,6 +247,38 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    FeedbackRequest:
+      properties:
+        target:
+          $ref: '#/components/schemas/InferenceFeedbackTarget'
+        score:
+          type: integer
+          title: Score
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      type: object
+      required:
+      - target
+      - score
+      - reason
+      title: FeedbackRequest
     InferenceFeedbackResponse:
       properties:
         id:
@@ -280,51 +319,6 @@ components:
       - created_at
       - updated_at
       title: InferenceFeedbackResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    InferenceFeedbackTarget:
-      type: string
-      enum:
-      - context
-      - response_results
-      - prompt_results
-      title: InferenceFeedbackTarget
-    FeedbackRequest:
-      properties:
-        target:
-          $ref: '#/components/schemas/InferenceFeedbackTarget'
-        score:
-          type: integer
-          title: Score
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-      type: object
-      required:
-      - target
-      - score
-      - reason
-      title: FeedbackRequest
     QueryFeedbackResponse:
       properties:
         feedback:
@@ -379,6 +373,12 @@ components:
         page_size: 10
         total_count: 2
         total_pages: 1
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
   securitySchemes:
     API_Key:
       type: http

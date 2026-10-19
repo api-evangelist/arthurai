@@ -59,15 +59,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -94,16 +85,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_upload_certificate_api_v2_demo_certificate_post:
-      properties:
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-      type: object
-      required:
-      - file
-      title: Body_upload_certificate_api_v2_demo_certificate_post
     CertificateUploadResponse:
       properties:
         certificate_id:
@@ -117,6 +98,25 @@ components:
       - certificate_id
       - certificate_url
       title: CertificateUploadResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_upload_certificate_api_v2_demo_certificate_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_upload_certificate_api_v2_demo_certificate_post
   securitySchemes:
     API_Key:
       type: http

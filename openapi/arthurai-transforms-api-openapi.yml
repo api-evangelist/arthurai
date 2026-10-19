@@ -409,38 +409,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    TraceTransformVersionResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the version.
-        transform_id:
-          type: string
-          format: uuid
-          title: Transform Id
-          description: ID of the parent transform.
-        version_number:
-          type: integer
-          title: Version Number
-          description: Monotonically increasing version number.
-        definition:
-          $ref: '#/components/schemas/TraceTransformDefinition'
-          description: Snapshot of the transform definition at the time of this version.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when this version was created.
-      type: object
-      required:
-      - id
-      - transform_id
-      - version_number
-      - definition
-      - created_at
-      title: TraceTransformVersionResponse
     ValidationError:
       properties:
         loc:
@@ -467,26 +435,12 @@ components:
       - msg
       - type
       title: ValidationError
-    NewTraceTransformRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the transform.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the transform.
-        definition:
-          $ref: '#/components/schemas/TraceTransformDefinition'
-          description: Transform definition specifying extraction rules.
-      type: object
-      required:
-      - name
-      - definition
-      title: NewTraceTransformRequest
+    PaginationSortMethod:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: PaginationSortMethod
     TransformExtractionResponseList:
       properties:
         variables:
@@ -513,15 +467,59 @@ components:
       - missing_variables
       - missing_spans
       title: TransformExtractionResponseList
-    HTTPValidationError:
+    TraceTransformUpdateRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          anyOf:
+          - $ref: '#/components/schemas/TraceTransformDefinition'
+          - type: 'null'
+          description: Transform definition specifying extraction rules.
       type: object
-      title: HTTPValidationError
+      title: TraceTransformUpdateRequest
+    VariableTemplateValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the variable
+        value:
+          type: string
+          title: Value
+          description: Value of the variable
+      type: object
+      required:
+      - name
+      - value
+      title: VariableTemplateValue
+    ListTraceTransformsResponse:
+      properties:
+        transforms:
+          items:
+            $ref: '#/components/schemas/TraceTransformResponse'
+          type: array
+          title: Transforms
+          description: List of transforms for the task.
+        count:
+          type: integer
+          title: Count
+          description: Total number of transforms matching filters
+      type: object
+      required:
+      - transforms
+      - count
+      title: ListTraceTransformsResponse
     TraceTransformDefinition:
       properties:
         variables:
@@ -534,6 +532,58 @@ components:
       required:
       - variables
       title: TraceTransformDefinition
+    ListTraceTransformVersionsResponse:
+      properties:
+        versions:
+          items:
+            $ref: '#/components/schemas/TraceTransformVersionResponse'
+          type: array
+          title: Versions
+          description: List of versions for the transform, ordered by version_number descending.
+        count:
+          type: integer
+          title: Count
+          description: Total number of versions.
+      type: object
+      required:
+      - versions
+      - count
+      title: ListTraceTransformVersionsResponse
+    TransformDependentRef:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: ID of the dependent resource.
+        name:
+          type: string
+          title: Name
+          description: Name of the dependent resource.
+      type: object
+      required:
+      - id
+      - name
+      title: TransformDependentRef
+    NewTraceTransformRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the transform.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the transform.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Transform definition specifying extraction rules.
+      type: object
+      required:
+      - name
+      - definition
+      title: NewTraceTransformRequest
     TraceTransformVariableDefinition:
       properties:
         variable_name:
@@ -582,97 +632,6 @@ components:
           description: Agentic notebooks that reference this transform.
       type: object
       title: TransformDependents
-    TraceTransformUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the transform.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the transform.
-        definition:
-          anyOf:
-          - $ref: '#/components/schemas/TraceTransformDefinition'
-          - type: 'null'
-          description: Transform definition specifying extraction rules.
-      type: object
-      title: TraceTransformUpdateRequest
-    PaginationSortMethod:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: PaginationSortMethod
-    ListTraceTransformVersionsResponse:
-      properties:
-        versions:
-          items:
-            $ref: '#/components/schemas/TraceTransformVersionResponse'
-          type: array
-          title: Versions
-          description: List of versions for the transform, ordered by version_number descending.
-        count:
-          type: integer
-          title: Count
-          description: Total number of versions.
-      type: object
-      required:
-      - versions
-      - count
-      title: ListTraceTransformVersionsResponse
-    ListTraceTransformsResponse:
-      properties:
-        transforms:
-          items:
-            $ref: '#/components/schemas/TraceTransformResponse'
-          type: array
-          title: Transforms
-          description: List of transforms for the task.
-        count:
-          type: integer
-          title: Count
-          description: Total number of transforms matching filters
-      type: object
-      required:
-      - transforms
-      - count
-      title: ListTraceTransformsResponse
-    TransformDependentRef:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: ID of the dependent resource.
-        name:
-          type: string
-          title: Name
-          description: Name of the dependent resource.
-      type: object
-      required:
-      - id
-      - name
-      title: TransformDependentRef
-    VariableTemplateValue:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the variable
-        value:
-          type: string
-          title: Value
-          description: Value of the variable
-      type: object
-      required:
-      - name
-      - value
-      title: VariableTemplateValue
     TraceTransformResponse:
       properties:
         id:
@@ -716,6 +675,47 @@ components:
       - created_at
       - updated_at
       title: TraceTransformResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TraceTransformVersionResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the version.
+        transform_id:
+          type: string
+          format: uuid
+          title: Transform Id
+          description: ID of the parent transform.
+        version_number:
+          type: integer
+          title: Version Number
+          description: Monotonically increasing version number.
+        definition:
+          $ref: '#/components/schemas/TraceTransformDefinition'
+          description: Snapshot of the transform definition at the time of this version.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when this version was created.
+      type: object
+      required:
+      - id
+      - transform_id
+      - version_number
+      - definition
+      - created_at
+      title: TraceTransformVersionResponse
   securitySchemes:
     API_Key:
       type: http

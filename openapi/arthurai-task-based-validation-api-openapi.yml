@@ -120,103 +120,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    RuleType:
-      type: string
-      enum:
-      - KeywordRule
-      - ModelHallucinationRuleV2
-      - ModelSensitiveDataRule
-      - PIIDataRule
-      - PromptInjectionRule
-      - RegexRule
-      - ToxicityRule
-      title: RuleType
-    PIIEntityTypes:
-      type: string
-      enum:
-      - CREDIT_CARD
-      - CRYPTO
-      - DATE_TIME
-      - EMAIL_ADDRESS
-      - IBAN_CODE
-      - IP_ADDRESS
-      - NRP
-      - LOCATION
-      - PERSON
-      - PHONE_NUMBER
-      - MEDICAL_LICENSE
-      - URL
-      - US_BANK_NUMBER
-      - US_DRIVER_LICENSE
-      - US_ITIN
-      - US_PASSPORT
-      - US_SSN
-      title: PIIEntityTypes
-    PIIDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        pii_entities:
-          items:
-            $ref: '#/components/schemas/PIIEntitySpanResponse'
-          type: array
-          title: Pii Entities
-      type: object
-      required:
-      - pii_entities
-      title: PIIDetailsResponse
-    ResponseValidationRequest:
-      properties:
-        response:
-          type: string
-          title: Response
-          description: LLM Response to be validated by GenAI Engine
-        context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Context
-          description: Optional data provided as context for the validation.
-        model_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Name
-          description: The model name and version being used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
-      type: object
-      required:
-      - response
-      title: ResponseValidationRequest
-    RegexDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        regex_matches:
-          items:
-            $ref: '#/components/schemas/RegexSpanResponse'
-          type: array
-          title: Regex Matches
-          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
-          default: []
-      additionalProperties: false
-      type: object
-      title: RegexDetailsResponse
     ExternalRuleResult:
       properties:
         id:
@@ -264,6 +167,166 @@ components:
         id: 90f18c69-d793-4913-9bde-a0c7f3643de0
         name: PII Rule
         result: Pass
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    PIIEntityTypes:
+      type: string
+      enum:
+      - CREDIT_CARD
+      - CRYPTO
+      - DATE_TIME
+      - EMAIL_ADDRESS
+      - IBAN_CODE
+      - IP_ADDRESS
+      - NRP
+      - LOCATION
+      - PERSON
+      - PHONE_NUMBER
+      - MEDICAL_LICENSE
+      - URL
+      - US_BANK_NUMBER
+      - US_DRIVER_LICENSE
+      - US_ITIN
+      - US_PASSPORT
+      - US_SSN
+      title: PIIEntityTypes
+    RegexDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        regex_matches:
+          items:
+            $ref: '#/components/schemas/RegexSpanResponse'
+          type: array
+          title: Regex Matches
+          description: Each string in this list corresponds to a matching span from the input text that matches the configured regex rule.
+          default: []
+      additionalProperties: false
+      type: object
+      title: RegexDetailsResponse
+    KeywordDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        keyword_matches:
+          items:
+            $ref: '#/components/schemas/KeywordSpanResponse'
+          type: array
+          title: Keyword Matches
+          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
+          default: []
+      additionalProperties: false
+      type: object
+      title: KeywordDetailsResponse
+    HallucinationDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        claims:
+          items:
+            $ref: '#/components/schemas/HallucinationClaimResponse'
+          type: array
+          title: Claims
+      type: object
+      required:
+      - claims
+      title: HallucinationDetailsResponse
+    ResponseValidationRequest:
+      properties:
+        response:
+          type: string
+          title: Response
+          description: LLM Response to be validated by GenAI Engine
+        context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Context
+          description: Optional data provided as context for the validation.
+        model_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Name
+          description: The model name and version being used for this response (e.g., 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus', 'gemini-pro').
+      type: object
+      required:
+      - response
+      title: ResponseValidationRequest
+    HTTPError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: HTTPError
+      example:
+        detail: HTTPException raised.
+    RuleType:
+      type: string
+      enum:
+      - KeywordRule
+      - ModelHallucinationRuleV2
+      - ModelSensitiveDataRule
+      - PIIDataRule
+      - PromptInjectionRule
+      - RegexRule
+      - ToxicityRule
+      title: RuleType
+    HallucinationClaimResponse:
+      properties:
+        claim:
+          type: string
+          title: Claim
+        valid:
+          type: boolean
+          title: Valid
+        reason:
+          type: string
+          title: Reason
+        order_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order Number
+          description: This field is a helper for ordering the claims
+          default: -1
+      type: object
+      required:
+      - claim
+      - valid
+      - reason
+      title: HallucinationClaimResponse
     PromptValidationRequest:
       properties:
         prompt:
@@ -286,6 +349,98 @@ components:
       required:
       - prompt
       title: PromptValidationRequest
+    BaseDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      title: BaseDetailsResponse
+    ToxicityDetailsResponse:
+      properties:
+        score:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Score
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        toxicity_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Toxicity Score
+        toxicity_violation_type:
+          $ref: '#/components/schemas/ToxicityViolationType'
+      additionalProperties: false
+      type: object
+      required:
+      - toxicity_violation_type
+      title: ToxicityDetailsResponse
+    RegexSpanResponse:
+      properties:
+        matching_text:
+          type: string
+          title: Matching Text
+          description: The subtext within the input string that matched the regex rule.
+        pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern
+          description: Pattern that yielded the match.
+      type: object
+      required:
+      - matching_text
+      title: RegexSpanResponse
+    RuleResultEnum:
+      type: string
+      enum:
+      - Pass
+      - Fail
+      - Skipped
+      - Unavailable
+      - Partially Unavailable
+      - Model Not Available
+      title: RuleResultEnum
+    KeywordSpanResponse:
+      properties:
+        keyword:
+          type: string
+          title: Keyword
+          description: The keyword from the rule that matched within the input string.
+      type: object
+      required:
+      - keyword
+      title: KeywordSpanResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ToxicityViolationType:
+      type: string
+      enum:
+      - benign
+      - harmful_request
+      - toxic_content
+      - profanity
+      - unknown
+      title: ToxicityViolationType
     ValidationError:
       properties:
         loc:
@@ -312,17 +467,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: HTTPError
-      example:
-        detail: HTTPException raised.
     ValidationResult:
       properties:
         inference_id:
@@ -362,7 +506,7 @@ components:
         - id: 946c4a44-b367-4229-84d4-1a8e461cb132
           name: Sensitive Data Check
           result: Pass
-    HallucinationDetailsResponse:
+    PIIDetailsResponse:
       properties:
         score:
           anyOf:
@@ -374,84 +518,15 @@ components:
           - type: string
           - type: 'null'
           title: Message
-        claims:
+        pii_entities:
           items:
-            $ref: '#/components/schemas/HallucinationClaimResponse'
+            $ref: '#/components/schemas/PIIEntitySpanResponse'
           type: array
-          title: Claims
+          title: Pii Entities
       type: object
       required:
-      - claims
-      title: HallucinationDetailsResponse
-    ToxicityViolationType:
-      type: string
-      enum:
-      - benign
-      - harmful_request
-      - toxic_content
-      - profanity
-      - unknown
-      title: ToxicityViolationType
-    RuleResultEnum:
-      type: string
-      enum:
-      - Pass
-      - Fail
-      - Skipped
-      - Unavailable
-      - Partially Unavailable
-      - Model Not Available
-      title: RuleResultEnum
-    KeywordSpanResponse:
-      properties:
-        keyword:
-          type: string
-          title: Keyword
-          description: The keyword from the rule that matched within the input string.
-      type: object
-      required:
-      - keyword
-      title: KeywordSpanResponse
-    RegexSpanResponse:
-      properties:
-        matching_text:
-          type: string
-          title: Matching Text
-          description: The subtext within the input string that matched the regex rule.
-        pattern:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pattern
-          description: Pattern that yielded the match.
-      type: object
-      required:
-      - matching_text
-      title: RegexSpanResponse
-    HallucinationClaimResponse:
-      properties:
-        claim:
-          type: string
-          title: Claim
-        valid:
-          type: boolean
-          title: Valid
-        reason:
-          type: string
-          title: Reason
-        order_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Order Number
-          description: This field is a helper for ordering the claims
-          default: -1
-      type: object
-      required:
-      - claim
-      - valid
-      - reason
-      title: HallucinationClaimResponse
+      - pii_entities
+      title: PIIDetailsResponse
     PIIEntitySpanResponse:
       properties:
         entity:
@@ -471,81 +546,6 @@ components:
       - entity
       - span
       title: PIIEntitySpanResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    KeywordDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        keyword_matches:
-          items:
-            $ref: '#/components/schemas/KeywordSpanResponse'
-          type: array
-          title: Keyword Matches
-          description: Each keyword in this list corresponds to a keyword that was both configured in the rule that was run and found in the input text.
-          default: []
-      additionalProperties: false
-      type: object
-      title: KeywordDetailsResponse
-    ToxicityDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        toxicity_score:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Toxicity Score
-        toxicity_violation_type:
-          $ref: '#/components/schemas/ToxicityViolationType'
-      additionalProperties: false
-      type: object
-      required:
-      - toxicity_violation_type
-      title: ToxicityDetailsResponse
-    BaseDetailsResponse:
-      properties:
-        score:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Score
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      title: BaseDetailsResponse
-    RuleScope:
-      type: string
-      enum:
-      - default
-      - task
-      title: RuleScope
   securitySchemes:
     API_Key:
       type: http

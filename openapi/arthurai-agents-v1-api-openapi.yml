@@ -147,6 +147,122 @@ paths:
           default: 20
           title: Page Size
         description: The number of records per page. The max is 1000.
+      - name: source_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents that any discovery source in this list reported.
+          title: Source Ids
+        description: Filter agents that any discovery source in this list reported.
+      - name: data_plane_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents found by any engine in this list.
+          title: Data Plane Ids
+        description: Filter agents found by any engine in this list.
+      - name: has_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+          title: Has Source
+        description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+      - name: external_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+          title: External Ids
+        description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+      - name: source_classes
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/SourceClass'
+          - type: 'null'
+          description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+          title: Source Classes
+        description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+      - name: evidence_levels
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/EvidenceLevel'
+          - type: 'null'
+          description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+          title: Evidence Levels
+        description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+      - name: first_seen_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+          title: First Seen After
+        description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+      - name: first_seen_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or before this time.
+          title: First Seen Before
+        description: Filter agents a source first saw at or before this time.
+      - name: created_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+          title: Created After
+        description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+      - name: created_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents first reported to Arthur at or before this time.
+          title: Created Before
+        description: Filter agents first reported to Arthur at or before this time.
       responses:
         '200':
           description: Successful Response
@@ -166,6 +282,221 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/unregistered_agents/summary:
+    get:
+      tags:
+      - Agents V1
+      summary: Summarize Organization Unregistered Agents
+      description: 'Fleet-scale totals for the unregistered agents across every workspace in the organization, independent of pagination: the coverage hero counts, the coverage-by-class grid with each source''s health and agent counts, and the blind spots. Requires organization_list_unregistered_agents permission; sources and source-derived blind spots are included only when the caller can also list the organization''s discovery sources.'
+      operationId: get_unregistered_agents_summary_for_organization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnregisteredAgentsSummary'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_unregistered_agents
+  /api/v1/organization/unregistered_agents/engines:
+    get:
+      tags:
+      - Agents V1
+      summary: List The Engines Behind The Organization'S Unregistered Agents
+      description: 'The engines that found at least one unregistered agent in any workspace of the organization, with each engine''s workspace, for the list''s engine filter. Requires organization_list_unregistered_agents and organization_list_data_planes permission: the options name the engines, which the list itself does not.'
+      operationId: list_unregistered_agent_engines_for_organization
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_unregistered_agents
+        - organization_list_data_planes
+      parameters:
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Only engines of muted agents when true, of unmuted agents when false, of all agents when absent.
+          title: Show Muted
+        description: Only engines of muted agents when true, of unmuted agents when false, of all agents when absent.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_UnregisteredAgentEngine_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/unregistered_agents/discovery_sources:
+    get:
+      tags:
+      - Agents V1
+      summary: List The Discovery Sources Behind The Organization'S Unregistered Agents
+      description: 'The discovery sources that reported at least one unregistered agent in any workspace of the organization, deleted sources included, for the list''s source filter. Requires organization_list_unregistered_agents and organization_list_discovery_sources permission: the options name the sources, which the summary withholds from a caller who cannot list them.'
+      operationId: list_unregistered_agent_discovery_sources_for_organization
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_unregistered_agents
+        - organization_list_discovery_sources
+      parameters:
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Only sources of muted agents when true, of unmuted agents when false, of all agents when absent.
+          title: Show Muted
+        description: Only sources of muted agents when true, of unmuted agents when false, of all agents when absent.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_UnregisteredAgentDiscoverySource_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/unregistered_agents/mute:
+    post:
+      tags:
+      - Agents V1
+      summary: Mute Organization Unregistered Agents
+      description: Mute unregistered agents across every workspace in the organization, named by id or by the filters the organization list shows, until a timestamp and for a reason. The selection resolves when the action runs. The audit trail is per workspace, so the one action leaves one entry in each workspace it changed an agent in. Requires unregistered_agent_patch permission on the organization.
+      operationId: mute_unregistered_agents_for_organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MuteUnregisteredAgentsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationBulkUnregisteredAgentsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode: []
+  /api/v1/organization/unregistered_agents/unmute:
+    post:
+      tags:
+      - Agents V1
+      summary: Unmute Organization Unregistered Agents
+      description: Unmute unregistered agents across every workspace in the organization, named by id or by the filters the organization list shows. Agents that are not muted are left as they are and reported as skipped. The audit trail is per workspace, so the one action leaves one entry in each workspace it lifted a mute in. Requires unregistered_agent_patch permission on the organization.
+      operationId: unmute_unregistered_agents_for_organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnmuteUnregisteredAgentsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationBulkUnregisteredAgentsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode: []
   /api/v1/organization/agent_llm_models:
     get:
       tags:
@@ -526,7 +857,7 @@ paths:
       tags:
       - Agents V1
       summary: Update An Unregistered Agent
-      description: Update an unregistered agent. Requires unregistered_agent_patch permission.
+      description: 'Update an unregistered agent: mute it, with a reason, or unmute it. Either is recorded as an action on the workspace. Requires unregistered_agent_patch permission.'
       operationId: update_unregistered_agent
       security:
       - OAuth2AuthorizationCode:
@@ -722,6 +1053,122 @@ paths:
           default: 20
           title: Page Size
         description: The number of records per page. The max is 1000.
+      - name: source_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents that any discovery source in this list reported.
+          title: Source Ids
+        description: Filter agents that any discovery source in this list reported.
+      - name: data_plane_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents found by any engine in this list.
+          title: Data Plane Ids
+        description: Filter agents found by any engine in this list.
+      - name: has_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+          title: Has Source
+        description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+      - name: external_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+          title: External Ids
+        description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+      - name: source_classes
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/SourceClass'
+          - type: 'null'
+          description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+          title: Source Classes
+        description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+      - name: evidence_levels
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/EvidenceLevel'
+          - type: 'null'
+          description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+          title: Evidence Levels
+        description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+      - name: first_seen_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+          title: First Seen After
+        description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+      - name: first_seen_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or before this time.
+          title: First Seen Before
+        description: Filter agents a source first saw at or before this time.
+      - name: created_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+          title: Created After
+        description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+      - name: created_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents first reported to Arthur at or before this time.
+          title: Created Before
+        description: Filter agents first reported to Arthur at or before this time.
       responses:
         '200':
           description: Successful Response
@@ -890,6 +1337,122 @@ paths:
           default: 20
           title: Page Size
         description: The number of records per page. The max is 1000.
+      - name: source_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents that any discovery source in this list reported.
+          title: Source Ids
+        description: Filter agents that any discovery source in this list reported.
+      - name: data_plane_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              format: uuid
+          - type: 'null'
+          description: Filter agents found by any engine in this list.
+          title: Data Plane Ids
+        description: Filter agents found by any engine in this list.
+      - name: has_source
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+          title: Has Source
+        description: 'True for agents at least one discovery source reported, false for agents no discovery source reported. Sent with source_ids, false is combined with source_ids by OR rather than AND: agents with no source plus agents any of those sources reported.'
+      - name: external_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+          title: External Ids
+        description: 'Filter agents by the source''s own identifier for them. Canonical identity: never re-derived or reconciled across sources.'
+      - name: source_classes
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/SourceClass'
+          - type: 'null'
+          description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+          title: Source Classes
+        description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+      - name: evidence_levels
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/EvidenceLevel'
+          - type: 'null'
+          description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+          title: Evidence Levels
+        description: Filter agents by evidence level -- full, limited or stale -- as rolled up over all their evidence.
+      - name: first_seen_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+          title: First Seen After
+        description: Filter agents a source first saw at or after this time. An agent's first_seen is its earliest evidence first_seen, or its created_at. On the source's clock, so not what 'new this scan' means; see created_after.
+      - name: first_seen_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents a source first saw at or before this time.
+          title: First Seen Before
+        description: Filter agents a source first saw at or before this time.
+      - name: created_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+          title: Created After
+        description: 'Filter agents first reported to Arthur at or after this time: the agent''s created_at, set when it is first uploaded and never changed. ''New this scan'' is created_after the scan''s start.'
+      - name: created_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: Filter agents first reported to Arthur at or before this time.
+          title: Created Before
+        description: Filter agents first reported to Arthur at or before this time.
       responses:
         '200':
           description: Successful Response
@@ -897,6 +1460,179 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceList_AgentResponse_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/summary:
+    get:
+      tags:
+      - Agents V1
+      summary: Summarize A Workspace'S Unregistered Agents
+      description: 'Fleet-scale totals for a workspace''s unregistered agents, independent of pagination: the coverage hero counts (needs triage, discovered, muted, new this scan), the coverage-by-class grid with each source''s health and agent counts, and the blind spots. Requires workspace_list_unregistered_agents permission; sources and source-derived blind spots are included only when the caller can also list the organization''s discovery sources.'
+      operationId: get_unregistered_agents_summary_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnregisteredAgentsSummary'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/engines:
+    get:
+      tags:
+      - Agents V1
+      summary: List The Engines Behind A Workspace'S Unregistered Agents
+      description: 'The engines that found at least one unregistered agent in the workspace, for the list''s engine filter. Requires workspace_list_unregistered_agents permission, and either workspace_list_data_planes on the workspace or organization_list_data_planes on its organization: the options name the engines, which the list itself does not.'
+      operationId: list_unregistered_agent_engines_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Only engines of muted agents when true, of unmuted agents when false, of all agents when absent.
+          title: Show Muted
+        description: Only engines of muted agents when true, of unmuted agents when false, of all agents when absent.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_UnregisteredAgentEngine_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/discovery_sources:
+    get:
+      tags:
+      - Agents V1
+      summary: List The Discovery Sources Behind A Workspace'S Unregistered Agents
+      description: 'The discovery sources that reported at least one unregistered agent in the workspace, deleted sources included, for the list''s source filter. Requires workspace_list_unregistered_agents and organization_list_discovery_sources permission: the options name the sources, which the summary withholds from a caller who cannot list them.'
+      operationId: list_unregistered_agent_discovery_sources_for_workspace
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: show_muted
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Only sources of muted agents when true, of unmuted agents when false, of all agents when absent.
+          title: Show Muted
+        description: Only sources of muted agents when true, of unmuted agents when false, of all agents when absent.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_UnregisteredAgentDiscoverySource_'
         '500':
           content:
             application/json:
@@ -1572,7 +2308,7 @@ paths:
       tags:
       - Agents V1
       summary: Upsert Agents
-      description: Create or update agents in the workspace. Deduplicates by (workspace_id, data_plane_id, task_id). Performs full replacement on match. Requires workspace_upsert_agents permission.
+      description: 'Create or update agents in the workspace. Deduplicates by (workspace_id, data_plane_id, task_id). Performs full replacement on match. Each agent is validated on its own: one that fails validation, names a data plane outside the workspace, or names a model not in it is returned in `rejected` with the reason, and the rest are stored. Requires workspace_upsert_agents permission.'
       operationId: put_agents
       security:
       - OAuth2AuthorizationCode:
@@ -1623,8 +2359,1314 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/mute:
+    post:
+      tags:
+      - Agents V1
+      summary: Mute Unregistered Agents
+      description: Mute unregistered agents, named by id or by the filters a list view shows, until a timestamp and for a reason. One action and one audit entry however many agents it covers; a filter is resolved when the action runs and the ids it resolved to are recorded on the entry. Requires unregistered_agent_patch permission on the workspace.
+      operationId: mute_unregistered_agents
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MuteUnregisteredAgentsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkUnregisteredAgentsResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/unmute:
+    post:
+      tags:
+      - Agents V1
+      summary: Unmute Unregistered Agents
+      description: Unmute unregistered agents, named by id or by the filters a list view shows. Agents that are not muted are left as they are and reported as skipped. One action and one audit entry however many agents it covers. Requires unregistered_agent_patch permission on the workspace.
+      operationId: unmute_unregistered_agents
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnmuteUnregisteredAgentsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkUnregisteredAgentsResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/actions:
+    get:
+      tags:
+      - Agents V1
+      summary: List Mute And Unmute Actions On A Workspace'S Unregistered Agents
+      description: 'The audit trail of mutes and unmutes on this workspace''s unregistered agents, newest first: who, when, why, the filter given and the agents it resolved to. Requires workspace_list_unregistered_agents permission.'
+      operationId: list_unregistered_agent_actions
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_UnregisteredAgentActionResponse_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/{agent_id}/register:
+    post:
+      tags:
+      - Agents V1
+      summary: Register An Unregistered Agent As An Application
+      description: 'Register an unregistered agent as an application, in one call: the project is found or created, the agent''s engine associated with it, and the job that creates the application from the agent''s task submitted. The agent is bound to the application when the engine delivers it; poll the returned registration for the outcome. Requires workspace_upsert_agents permission, and project_create_model_link_task on the project the application is created in.'
+      operationId: register_unregistered_agent
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_upsert_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the unregistered agent to register.
+          title: Agent Id
+        description: The ID of the unregistered agent to register.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/RegisterUnregisteredAgentRequest'
+              - type: 'null'
+              description: Where and as what to register the agent. Absent, the workspace's "Registered Applications" project and the agent's task name.
+              title: Request
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRegistrationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/registrations/{registration_id}:
+    get:
+      tags:
+      - Agents V1
+      summary: Get An Agent Registration
+      description: 'How far a registration has got: pending, completed with the application it bound the agent to, or failed with why. Requires workspace_list_unregistered_agents permission.'
+      operationId: get_agent_registration
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: registration_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the registration.
+          title: Registration Id
+        description: The ID of the registration.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRegistrationResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/workspaces/{workspace_id}/agents/unregistered/{agent_id}:
+    get:
+      tags:
+      - Agents V1
+      summary: Get An Unregistered Agent
+      description: One unregistered agent with every evidence record its sources reported, typed per source class -- what an evidence drawer shows. 404 for an agent that is registered or not in this workspace. Requires workspace_list_unregistered_agents permission.
+      operationId: get_unregistered_agent
+      security:
+      - OAuth2AuthorizationCode:
+        - workspace_list_unregistered_agents
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Workspace Id
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the unregistered agent.
+          title: Agent Id
+        description: The ID of the unregistered agent.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentResponse'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    RuleScope:
+      type: string
+      enum:
+      - default
+      - task
+      title: RuleScope
+    UnregisteredAgentEngine:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the engine.
+        name:
+          type: string
+          title: Name
+          description: Name of the engine.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the engine's workspace.
+        workspace_name:
+          type: string
+          title: Workspace Name
+          description: Name of the engine's workspace.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+      type: object
+      required:
+      - id
+      - name
+      - workspace_id
+      - workspace_name
+      - infrastructure
+      title: UnregisteredAgentEngine
+    Detection:
+      type: string
+      enum:
+      - observed
+      - inferred
+      title: Detection
+      description: 'How a source came to know the agent is there.
+
+
+        NOT RANKABLE AGAINST VISIBILITY, which is why they are two fields. An earlier
+
+        single band ordered "traced, inferred, thin" strongest to weakest, which put an
+
+        osquery-confirmed binary on disk *below* a name lifted from a log field --
+
+        inverted, because it was sorting two different questions on one scale.'
+    Infrastructure:
+      type: string
+      enum:
+      - AWS
+      - Azure
+      - GCP
+      - Docker
+      - Kubernetes
+      title: Infrastructure
+    RegisterUnregisteredAgentRequest:
+      properties:
+        project_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Project Id
+          description: Project to create the application in. Absent, the workspace's "Registered Applications" project is used, and created if it does not exist.
+        name:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Name
+          description: Name for the application. Absent, the agent's task name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description for the application.
+      type: object
+      title: RegisterUnregisteredAgentRequest
+      description: 'Register an unregistered agent as an application, in one call.
+
+
+        The Platform finds or creates the project, associates the agent''s engine with
+
+        it, and submits the job that creates the application from the agent''s task; the
+
+        agent is bound to the application when it arrives. Poll the returned
+
+        registration for the outcome.'
+    LLMModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the model.
+      type: object
+      required:
+      - name
+      title: LLMModel
+      description: Model used by an agent.
+    RunsOn:
+      type: string
+      enum:
+      - aws
+      - azure
+      - gcp
+      - endpoint
+      - unknown
+      title: RunsOn
+      description: 'Where the machine hosting a discovered agent is. ONE AXIS: location.
+
+
+        Lives on Provenance rather than being derived from the source type: a Jamf record
+
+        runs on a laptop, not on the cloud hosting the engine that reported it.
+
+
+        Deliberately NOT a place for `docker` or `kubernetes`. Those answer a different
+
+        question -- how the agent is packaged on the machine -- and mixing the two makes
+
+        the common case lossy: an agent in an EKS pod is both `aws` and orchestrated, and
+
+        one field can only say one. They are also values nothing can currently fill. In the
+
+        endpoint collector Docker is a detection ROUTE (`docker_images`, surfaced as
+
+        ``resource_kind=image``), and in app_plane `Infrastructure.Docker` describes how
+
+        the ENGINE was deployed. Neither is a statement about where a discovered agent
+
+        runs. If the packaging axis starts mattering, it wants its own field.
+
+
+        ``on_prem`` is the natural next member on this axis and is left out only because
+
+        nothing in v1 can fill it: on-prem records arrive through a SIEM, which cannot see
+
+        the machine, so UNKNOWN is already the honest answer there.'
+    CoverageClass:
+      type: string
+      enum:
+      - otel
+      - cloud
+      - siem
+      - endpoint
+      - network_gateway
+      title: CoverageClass
+      description: 'A card on the coverage grid.
+
+
+        The source classes agents are observed from, minus `manual`, plus Network &
+
+        Gateway: a class no source can report today, listed so the gap is named rather
+
+        than left out.'
+    ResourceList_AgentResponse_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AgentResponse]
+    ExampleConfig:
+      properties:
+        example:
+          type: string
+          title: Example
+          description: Custom example for the sensitive data
+        result:
+          type: boolean
+          title: Result
+          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
+      type: object
+      required:
+      - example
+      - result
+      title: ExampleConfig
+      example:
+        example: John has O negative blood group
+        result: true
+    ResourceList_UnregisteredAgentEngine_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/UnregisteredAgentEngine'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[UnregisteredAgentEngine]
+    DataSourceResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the data source entry.
+        url:
+          type: string
+          title: Url
+          description: URL of the data source.
+      type: object
+      required:
+      - id
+      - url
+      title: DataSourceResponse
+      description: Response model for a data source with assigned ID.
+    UnregisteredAgentActionResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the action.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: Workspace the action was taken in.
+        action:
+          $ref: '#/components/schemas/UnregisteredAgentAction'
+          description: Mute or unmute.
+        actor_user_id:
+          type: string
+          format: uuid
+          title: Actor User Id
+          description: The user who took the action.
+        performed_at:
+          type: string
+          format: date-time
+          title: Performed At
+          description: When the action ran.
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+          description: 'Why: the mute reason, or the optional unmute reason.'
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: For a mute, the timestamp the agents are muted until.
+        filters:
+          anyOf:
+          - $ref: '#/components/schemas/UnregisteredAgentFilter'
+          - type: 'null'
+          description: The filter the action was given, as given. Null when the action named agents by id.
+        agent_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Agent Ids
+          description: The agents the action changed, resolved when it ran. For a filter, this snapshot is what keeps the entry readable after the agents have moved on.
+        affected_count:
+          type: integer
+          title: Affected Count
+          description: How many agents the action changed.
+      type: object
+      required:
+      - id
+      - workspace_id
+      - action
+      - actor_user_id
+      - performed_at
+      - agent_ids
+      - affected_count
+      title: UnregisteredAgentActionResponse
+      description: 'One mute or unmute, over one agent or many: the audit entry it left.'
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    SourceAddress:
+      properties:
+        instance:
+          type: string
+          minLength: 1
+          title: Instance
+          description: 'Instance that was scanned: an account, project, SIEM workspace or device. Part of the address, so two instances of one vendor stay distinct.'
+        scope:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope
+          description: 'Subdivision queried, where the source has one: a cloud region, a Splunk index, a Sentinel table, an Elastic data stream. Optional here because endpoints have no subdivision and a SIEM query may span every index, but required for CLOUD sources, which enforce it: there the region is part of the agent''s identity rather than of the query.'
+        resource_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Kind
+          description: 'Namespace `resource_id` lives in: a bundle id, npm package, launchd label, listening port, browser extension id. Identity rather than observation, and needed because ''8788'' and ''openclaw'' are otherwise indistinguishable strings from colliding namespaces. Absent for sources with one kind of resource, which is every cloud and SIEM vendor -- there the vendor implies the kind, so carrying it would duplicate `vendor`. Free text: the vocabulary belongs to the collector''s route registry, not to this schema.'
+        resource_id:
+          type: string
+          minLength: 1
+          title: Resource Id
+          description: The resource within that instance, in the namespace `resource_kind` names. For endpoints this is the software, with the device in `instance` -- the grain is per (software, device).
+        query:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: Query text that produced this record, so it can be explained and reproduced. Absent for sources that are enumerated rather than searched. Never parsed here -- only the output columns are contracted.
+      type: object
+      required:
+      - instance
+      - resource_id
+      title: SourceAddress
+      description: 'How to find a discovered agent again in the system that reported it.
+
+
+        One shape for every source, widest to narrowest:
+
+
+        ==============  ================  ==================  ==========  ============
+
+        source          instance          scope               kind        resource_id
+
+        ==============  ================  ==================  ==========  ============
+
+        Bedrock         AWS account       region              --          agent id
+
+        Vertex          GCP project       region              --          engine id
+
+        Splunk          instance          index+sourcetype    --          record id
+
+        Sentinel        LA workspace      table               --          record id
+
+        Elastic         deployment        data stream         --          record id
+
+        Jamf / osquery  device key        --                  npm, app…   software key
+
+        ==============  ================  ==================  ==========  ============
+
+
+        Only endpoints fill ``resource_kind``: they are the one source whose ids come from
+
+        several namespaces at once. Every cloud and SIEM vendor addresses exactly one kind
+
+        of resource, so the kind is implied by the vendor and stays absent.
+
+
+        ``scope`` carries two readings this one name does not separate. For a cloud source
+
+        it addresses the *agent*: us-east-1 and us-west-2 hold different agents, so
+
+        ``CloudAgentCreationSource`` requires it. For a SIEM it addresses the *sighting*,
+
+        and one agent may surface under two indexes, so it stays optional there. Code
+
+        comparing addresses across sources has to read `source_class` to know which it is
+
+        looking at.
+
+
+        Reused by Provenance rather than re-declared there, so a record and the task it
+
+        resolves to address the upstream system identically. A vendor needing to address a
+
+        sub-resource -- a Bedrock alias, a Vertex version -- is one more optional field
+
+        here, not a new shape.'
+    AgentRegistrationResponse:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the registration.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: Workspace of the agent.
+        agent_id:
+          type: string
+          format: uuid
+          title: Agent Id
+          description: The agent being registered.
+        project_id:
+          type: string
+          format: uuid
+          title: Project Id
+          description: Project the application is created in.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: The job creating the application; its logs and errors say why a registration failed.
+        status:
+          $ref: '#/components/schemas/AgentRegistrationStatus'
+          description: pending until the application exists and the agent is bound to it; then completed, or failed with `error` set.
+        model_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Model Id
+          description: The application the agent was registered to, once completed.
+        requested_by_user_id:
+          type: string
+          format: uuid
+          title: Requested By User Id
+          description: Who asked for the registration.
+        requested_at:
+          type: string
+          format: date-time
+          title: Requested At
+          description: When.
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+          description: When the registration completed or failed.
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+          description: Why the registration failed, when it did.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - workspace_id
+      - agent_id
+      - project_id
+      - job_id
+      - status
+      - requested_by_user_id
+      - requested_at
+      title: AgentRegistrationResponse
+      description: One request to register an agent, and how far it has got.
+    AgentObservations:
+      properties:
+        install_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Install Path
+          description: Install location, shaped to '~/...' rather than '/Users/<name>/...' so a username does not travel in a path.
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+          description: Version read statically, never by executing the discovered binary.
+        host_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host Name
+          description: Host the agent was observed on, e.g. 'MBP-4471'.
+        host_group:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host Group
+          description: 'Grouping the host belongs to: a Jamf site or smart group, a cloud resource group.'
+        os_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Os Version
+          description: Guest OS version, e.g. 'macOS 15.3 (24D60)'.
+        assigned_user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned User
+          description: 'User the source attributes the host to. PERSONAL DATA: this is the field that makes a record attributable to an individual, and is subject to works-council and DPIA review before EU deployment. Omit it where that review has not happened.'
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
+          description: Capabilities the agent declared for itself, e.g. a browser extension's manifest permissions ('tabs', 'nativeMessaging', '<all_urls>'). A cloud agent's action groups or service-account scopes answer the same question, which is why this is shared rather than endpoint-only.
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names this agent emits telemetry under. What links a discovered agent to traces already arriving.
+        classification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Classification
+          description: Short catalog label shown beside the name, e.g. 'Personal agent'. Free text so the catalog can add one without a schema release. Absent for uncatalogued software, which must still render.
+      type: object
+      title: AgentObservations
+      description: 'What a source could see about an agent. Shared across categories, all optional.
+
+
+        An absent field means the source cannot see it, not that collection failed. That
+
+        promise is kept by each source declaring ``observable_fields()``, which is also
+
+        what lets visibility be computed without a per-vendor branch in consumers.'
+    CoverageClassSummary:
+      properties:
+        coverage_class:
+          $ref: '#/components/schemas/CoverageClass'
+          description: The card.
+        agents_discovered:
+          type: integer
+          title: Agents Discovered
+          description: Unregistered agents in scope with any evidence of this class. An agent seen from two classes counts in both, so the classes can sum past total_discovered.
+        agents_needing_triage:
+          type: integer
+          title: Agents Needing Triage
+          description: Of those, the ones not currently muted.
+        sources:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CoverageSourceSummary'
+            type: array
+          - type: 'null'
+          title: Sources
+          description: The organization's sources of this class, deleted ones left out. Null when the caller cannot list discovery sources; always empty for otel and network_gateway, which have no configurable sources.
+      type: object
+      required:
+      - coverage_class
+      - agents_discovered
+      - agents_needing_triage
+      - sources
+      title: CoverageClassSummary
+    EvidenceResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the evidence record.
+        creation_source:
+          $ref: '#/components/schemas/AgentCreationSource'
+          description: The reporting source, its upstream address and what it observed.
+        external_id:
+          type: string
+          title: External Id
+          description: The source's own identifier for this agent, and the canonical identity for the record. Never re-derived or reconciled across sources.
+        source_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Source Id
+          description: The Discovery Source behind this evidence. Absent for agents predating discovery, and retained after a source is deleted.
+        detection:
+          anyOf:
+          - $ref: '#/components/schemas/Detection'
+          - type: 'null'
+          description: How this source knows the agent is there -- observed directly, or inferred from indirect evidence. Fixed by the source class. None for manual tasks, which are not records.
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+          description: How much of the agent this source can see. Computed server-side from which fields it could actually fill, never a UI heuristic.
+        is_stale:
+          type: boolean
+          title: Is Stale
+          description: 'Whether this source has gone quiet -- `last_scanned` is older than the freshness window for its discovery source. Derived on read rather than stored: a stored flag is wrong the moment time passes without a write. Independent of `detection` and `visibility`, so an expiring credential does not downgrade what the source was able to see.'
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+          description: When the evidence itself was observed.
+        last_scanned:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scanned
+          description: When this source was last read successfully for this record. Separate from `last_seen` because they fail separately, and per-record because a fleet pull returns records of wildly differing freshness.
+        first_seen:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: First Seen
+          description: 'The earliest time this source reported seeing the agent: the earliest `last_seen` it has reported, derived by the Platform as reports arrive and never moved forward. Per-source: a record can be new to a Splunk source and months old to the endpoint one.'
+        discovered_in_run:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Discovered In Run
+          description: 'The scan run that produced this evidence. Meant to be what ''new this scan'' derives from -- there is deliberately no ''new'' status field to fall out of date. `first_seen` cannot serve for it: it is the source''s own sighting, which can predate the scan that first reported the record.'
+      type: object
+      required:
+      - id
+      - creation_source
+      - external_id
+      - visibility
+      - is_stale
+      - last_seen
+      title: EvidenceResponse
+      description: 'One source''s report of one agent, as the API serves it.
+
+
+        Declared standalone rather than as a subclass of `arthur_common`''s `Evidence`, and
+
+        with `detection` as a plain field rather than the computed one it carries. The reason
+
+        is FastAPI''s `separate_input_output_schemas`: a model with computed fields is emitted
+
+        as a separate `-Input`/`-Output` pair, and a model nested inside another does not get
+
+        the Output variant -- so every list endpoint''s generated client would have silently
+
+        dropped the computed fields. The values are still derived rather than accepted; the
+
+        derivation just moved into the translator, which is the one place that builds these.
+
+
+        The three axes a record is graded on are separate fields on purpose. `detection`
+
+        says how the agent was found, `visibility` how much of it can be seen, and
+
+        `is_stale` whether the source is still reporting. Collapsing any pair loses
+
+        something: an osquery-confirmed binary ranks below a name lifted from a log field on
+
+        a single band, and a Traced record stops being Traced the moment its credential
+
+        expires.'
+    AgentCreationSource:
+      oneOf:
+      - $ref: '#/components/schemas/GCPAgentCreationSource-Input'
+      - $ref: '#/components/schemas/OTELAgentCreationSource-Input'
+      - $ref: '#/components/schemas/ManualAgentCreationSource-Input'
+      - $ref: '#/components/schemas/CloudAgentCreationSource'
+      - $ref: '#/components/schemas/SIEMAgentCreationSource'
+      - $ref: '#/components/schemas/EndpointAgentCreationSource'
+      title: AgentCreationSource
+      discriminator:
+        propertyName: type
+        mapping:
+          CLOUD: '#/components/schemas/CloudAgentCreationSource'
+          ENDPOINT: '#/components/schemas/EndpointAgentCreationSource'
+          GCP: '#/components/schemas/GCPAgentCreationSource-Input'
+          MANUAL: '#/components/schemas/ManualAgentCreationSource-Input'
+          OTEL: '#/components/schemas/OTELAgentCreationSource-Input'
+          SIEM: '#/components/schemas/SIEMAgentCreationSource'
+    ProvenanceSource:
+      properties:
+        source_class:
+          $ref: '#/components/schemas/SourceClass'
+          description: Where this contribution was observed from.
+        source_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Source Id
+          description: The Discovery Source behind it. Absent for agents predating discovery, and retained after a source is deleted.
+        vendor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vendor
+          description: Upstream product behind this contribution, e.g. 'splunk_enterprise'. Same value and same registry as the record's `vendor`. Absent for OTEL and manual agents, which have no upstream product.
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/SourceAddress'
+          - type: 'null'
+          description: Where upstream this came from -- the same type the creation source carries, so a record and its task address the system identically. Absent for OTEL and manual agents.
+        last_seen:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Seen
+          description: 'When this source last observed the agent -- the discovered record''s own `last_seen`, not when a scan last reported it. Evidence recency rather than scan recency: a source can keep reporting an agent it has not actually seen for weeks. Only ever moves forward, so an out-of-order batch cannot make an agent look staler than it is. Absent for OTEL, manual and legacy GCP agents, which carry no discovery record.'
+        external_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: External Id
+          description: The source's own identifier for the record behind this entry -- the record's `external_id`, canonical and never reconciled across sources. With `source_id` it names exactly one record, which is what a consumer keys that record's evidence on. Absent for OTEL, manual and legacy GCP agents, which carry no discovery record, and from producers that predate it.
+        last_scanned:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scanned
+          description: 'When a scan of this source last reported the record: scan recency on the reporting engine''s clock, where `last_seen` is evidence recency on the source''s. The same fact as `Evidence.last_scanned`, which staleness is derived from. Absent for OTEL, manual and legacy GCP agents, and from producers that predate it.'
+      type: object
+      required:
+      - source_class
+      title: ProvenanceSource
+      description: 'One source''s contribution to a task''s provenance.
+
+
+        Provenance holds a list of these rather than scalars beside a list of source
+
+        classes: with scalars, an agent corroborated by two sources has two entries in
+
+        found_by but one address, and nothing says which source it belongs to.'
+    CoverageBlindSpot:
+      properties:
+        coverage_class:
+          $ref: '#/components/schemas/CoverageClass'
+          description: The class with the gap.
+        source_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Source Id
+          description: The source with the gap, for source_failed, not_yet_reported and source_stale; null for a gap in a whole class.
+        reason:
+          $ref: '#/components/schemas/BlindSpotReason'
+          description: Why nothing is reporting.
+        description:
+          type: string
+          title: Description
+          description: The gap in words, for display.
+      type: object
+      required:
+      - coverage_class
+      - source_id
+      - reason
+      - description
+      title: CoverageBlindSpot
+    CoverageSourceSummary:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the discovery source.
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source.
+        vendor:
+          type: string
+          title: Vendor
+          description: The source's vendor.
+        display_name:
+          type: string
+          title: Display Name
+          description: The vendor's display name.
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+          description: False when the source is paused.
+        health:
+          $ref: '#/components/schemas/DiscoverySourceHealth'
+          description: The source's health.
+        health_details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Health Details
+          description: Why the source is in that state, in the vendor's own words.
+        last_successful_run_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Successful Run At
+          description: When a scan on this source last succeeded.
+        consecutive_failures:
+          type: integer
+          title: Consecutive Failures
+          description: Scans on this source that have failed in a row.
+        agents_discovered:
+          type: integer
+          title: Agents Discovered
+          description: Unregistered agents in scope with evidence from this source.
+        agents_needing_triage:
+          type: integer
+          title: Agents Needing Triage
+          description: Of those, the ones not currently muted.
+      type: object
+      required:
+      - id
+      - name
+      - vendor
+      - display_name
+      - is_enabled
+      - health
+      - health_details
+      - last_successful_run_at
+      - consecutive_failures
+      - agents_discovered
+      - agents_needing_triage
+      title: CoverageSourceSummary
+    KeywordsConfig:
+      properties:
+        keywords:
+          items:
+            type: string
+          type: array
+          title: Keywords
+          description: List of Keywords
+      type: object
+      required:
+      - keywords
+      title: KeywordsConfig
+      example:
+        keywords:
+        - Blocked_Keyword_1
+        - Blocked_Keyword_2
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    UnregisteredAgentsSummary:
+      properties:
+        counts:
+          $ref: '#/components/schemas/UnregisteredAgentsHeroCounts'
+          description: The hero line.
+        classes:
+          items:
+            $ref: '#/components/schemas/CoverageClassSummary'
+          type: array
+          title: Classes
+          description: 'One entry per coverage class, in grid order: otel, cloud, siem, endpoint, network_gateway.'
+        blind_spots:
+          items:
+            $ref: '#/components/schemas/CoverageBlindSpot'
+          type: array
+          title: Blind Spots
+          description: Classes and sources with no sensor reporting. Network & Gateway is always here. Gaps derived from sources are listed only when the caller can list discovery sources.
+        can_list_sources:
+          type: boolean
+          title: Can List Sources
+          description: Whether the caller can list the organization's discovery sources. When false, classes[].sources is null and source-derived blind spots are left out; the agent counts are unaffected.
+      type: object
+      required:
+      - counts
+      - classes
+      - blind_spots
+      - can_list_sources
+      title: UnregisteredAgentsSummary
+      description: 'Fleet-scale totals for the unregistered agents in scope, independent of any page
+
+        of the list.'
+    MuteUnregisteredAgentsRequest:
+      properties:
+        agent_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+            minItems: 1
+          - type: 'null'
+          title: Agent Ids
+          description: The agents to act on. Exactly one of agent_ids and filters.
+        filters:
+          anyOf:
+          - $ref: '#/components/schemas/UnregisteredAgentFilter'
+          - type: 'null'
+          description: The agents to act on, as the filters a list view was showing. Resolved when the action runs; the ids it resolved to are recorded on the action. Exactly one of agent_ids and filters.
+        muted_until:
+          type: string
+          format: date-time
+          title: Muted Until
+          description: Timestamp to mute the agent until. Must be in the future.
+        mute_reason:
+          type: string
+          maxLength: 1000
+          minLength: 1
+          title: Mute Reason
+          description: Why the agent is muted. Required to mute, so a suppressed agent is never a silent one; kept on the agent and on the action's audit entry.
+      type: object
+      required:
+      - muted_until
+      - mute_reason
+      title: MuteUnregisteredAgentsRequest
+      description: Mute unregistered agents, by id or by filter, as one action.
+    SubAgentResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the sub-agent.
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - id
+      - name
+      title: SubAgentResponse
+      description: Response model for a sub-agent with assigned ID.
+    UnregisteredAgentsHeroCounts:
+      properties:
+        total_discovered:
+          type: integer
+          title: Total Discovered
+          description: Unregistered agents in scope, muted or not. Equals needs_triage plus muted.
+        needs_triage:
+          type: integer
+          title: Needs Triage
+          description: 'Unregistered agents not currently muted: what the list shows with show_muted=false.'
+        muted:
+          type: integer
+          title: Muted
+          description: 'Unregistered agents muted until a time still in the future: what the list shows with show_muted=true.'
+        new_this_scan:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New This Scan
+          description: Unregistered agents first stored (created_at, not a source's first_seen) at or after their own workspace's latest scan start, muted or not. Per workspace, so the organization figure is the sum of its workspaces' figures. Null when no workspace in scope has started a scan. In workspace scope, the list's created_after=latest_scan_started_at returns the same agents.
+        latest_scan_started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Latest Scan Started At
+          description: 'When the workspace''s latest scan started: the earliest started_at among the discover-agents jobs of its latest ''Scan now'', or its latest scheduled scan job''s own started_at. In organization scope, the most recent of its workspaces'' scan starts. Null when no scan has started.'
+      type: object
+      required:
+      - total_discovered
+      - needs_triage
+      - muted
+      - new_this_scan
+      - latest_scan_started_at
+      title: UnregisteredAgentsHeroCounts
+    UnregisteredAgentAction:
+      type: string
+      enum:
+      - mute
+      - unmute
+      title: UnregisteredAgentAction
     RuleType:
       type: string
       enum:
@@ -1636,6 +3678,152 @@ components:
       - RegexRule
       - ToxicityRule
       title: RuleType
+    ResourceList_LLMModel_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/LLMModel'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[LLMModel]
+    UnmuteUnregisteredAgentsRequest:
+      properties:
+        agent_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+            minItems: 1
+          - type: 'null'
+          title: Agent Ids
+          description: The agents to act on. Exactly one of agent_ids and filters.
+        filters:
+          anyOf:
+          - $ref: '#/components/schemas/UnregisteredAgentFilter'
+          - type: 'null'
+          description: The agents to act on, as the filters a list view was showing. Resolved when the action runs; the ids it resolved to are recorded on the action. Exactly one of agent_ids and filters.
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 1000
+          - type: 'null'
+          title: Reason
+          description: Why the agents are unmuted. Optional; kept on the action's audit entry.
+      type: object
+      title: UnmuteUnregisteredAgentsRequest
+      description: 'Unmute unregistered agents, by id or by filter, as one action. Agents that are
+
+        not muted are left as they are and reported as skipped.'
+    GCPAgentCreationSource-Input:
+      properties:
+        type:
+          type: string
+          const: GCP
+          title: Type
+          default: GCP
+        gcp_project_id:
+          type: string
+          title: Gcp Project Id
+          description: GCP project ID
+        gcp_region:
+          type: string
+          title: Gcp Region
+          description: GCP region
+        gcp_reasoning_engine_id:
+          type: string
+          title: Gcp Reasoning Engine Id
+          description: GCP Vertex AI Reasoning Engine ID
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent. Deprecated and will be removed; use observations.service_names, which is the one read path for every variant. Populated at query time from service_name_task_mappings.
+          deprecated: true
+      type: object
+      required:
+      - gcp_project_id
+      - gcp_region
+      - gcp_reasoning_engine_id
+      title: GCPAgentCreationSource
+      description: "DEPRECATED. Use ``CloudAgentCreationSource`` with ``cloud=gcp_vertex``.\n\nDeprecated and to be removed. A Vertex record is a cloud record, and nothing\nabout GCP warrants its own union member now that Cloud exists.\n\nIt cannot go yet because ``tasks_repository.find_by_gcp_engine_id`` reads\n``task_metadata->'creation_source'->>'gcp_reasoning_engine_id'`` directly, and that\nis step 4 of the task-resolution ladder. Removal, in four safe steps rather than\none risky one -- which is what serializing ``address`` below buys:\n\n1. Backfill ``address``; rows rewritten through this model gain it for free.\n2. Repoint that query at ``address->>'resource_id'``.\n3. Move the three prod call sites to ``CloudAgentCreationSource``\n   with ``vendor=\"gcp_vertex\"``.\n4. Delete this class and its ``service_names`` field."
+      deprecated: true
+    ResourceList_SubAgent_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/SubAgent'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[SubAgent]
+    Tool:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgument'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - name
+      title: Tool
+      description: Tool definition with arguments.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     PIIConfig:
       properties:
         disabled_pii_entities:
@@ -1673,122 +3861,86 @@ components:
         disabled_pii_entities:
         - PERSON
         - URL
-    Tool:
+    EndpointAgentCreationSource:
       properties:
-        name:
+        vendor:
           type: string
-          title: Name
-          description: Name of the tool.
-        arguments:
-          items:
-            $ref: '#/components/schemas/ToolArgument'
-          type: array
-          title: Arguments
-          description: List of arguments for this tool.
-      type: object
-      required:
-      - name
-      title: Tool
-      description: Tool definition with arguments.
-    ToolArgumentResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the tool argument.
-        name:
-          type: string
-          title: Name
-          description: Name of the tool argument.
+          title: Vendor
+          description: 'Upstream product this came from, e.g. ''splunk_enterprise'', ''jamf_pro'', ''aws_bedrock''. FREE TEXT, and deliberately not enumerated here: nothing in this package branches on the vendor -- capability and evidence ceilings are declared per source class -- so enumerating it would make every new vendor a release of this package plus a repin in three services. The registry is app_plane''s discovery source type catalog, which is also where the display name lives. Values are `<platform>_<product>`, always, so a vendor shipping a second product that could be a source does not force a rename of the first.'
+        address:
+          $ref: '#/components/schemas/SourceAddress'
+          description: 'Where to find this agent again upstream. Required: a discovered agent that cannot be located again is not actionable.'
+        observations:
+          $ref: '#/components/schemas/AgentObservations'
+          description: What the source could see. Only fields in `observable_fields()` are ever populated by this category.
         type:
           type: string
+          const: ENDPOINT
           title: Type
-          description: Type of the tool argument.
+          default: ENDPOINT
       type: object
       required:
-      - id
-      - name
-      - type
-      title: ToolArgumentResponse
-      description: Response model for a tool argument with assigned ID.
-    ResourceList_AgentResponse_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/AgentResponse'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[AgentResponse]
-    ManualAgentCreationSource:
-      properties:
-        type:
-          type: string
-          const: MANUAL
-          title: Type
-          default: MANUAL
-      type: object
-      title: ManualAgentCreationSource
-      description: Creation source for manually created tasks.
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - vendor
+      - address
+      title: EndpointAgentCreationSource
+      description: 'One agent observed on one managed endpoint.
+
+
+        Grain is per (software, device): ``address.instance`` is the device and
+
+        ``address.resource_id`` the software, because the Discovery list shows a row per
+
+        machine.
+
+
+        What it fills comes from three places: the collector''s on-disk output, the MDM''s
+
+        device record, and the collector''s catalog.
+
+
+        Where the collector''s six output columns land, so none is unaccounted for:
+
+
+        ========  =============================================
+
+        column    carried as
+
+        ========  =============================================
+
+        kind      ``address.resource_kind``
+
+        id        ``address.resource_id``
+
+        ver       ``observations.version``
+
+        loc       ``observations.install_path``
+
+        perms     ``observations.permissions``
+
+        extra     nothing -- see below
+
+        ========  =============================================
+
+
+        ``extra`` means a different thing per kind (browser type, image size, deb arch,
+
+        unit state, listening address) and a field here means one thing for every source.
+
+        The listening address is the one value in it worth its own field eventually.
+
+
+        ``scan`` rows must never arrive: that kind marks a branch that could not look, not
+
+        an agent that was found.
+
+
+        A one-shot scan sees the machine, not behaviour over time. Anything needing
+
+        persistent event capture -- outbound destinations, connection counts -- is out of
+
+        reach until osqueryd runs with the audit subsystem, which would put code signing,
+
+        notarization and PPPC on the critical path.'
     PutAgents:
       properties:
         agents:
@@ -1801,7 +3953,75 @@ components:
       required:
       - agents
       title: PutAgents
-      description: Request body for creating or updating agents.
+      description: 'Request body for creating or updating agents.
+
+
+        EACH AGENT IS VALIDATED ON ITS OWN. A body is refused only if it is not a list
+
+        of agents at all; an agent that fails validation is set aside with its errors,
+
+        and the rest are stored. Validating the list as a whole meant one bad task kept
+
+        every unregistered agent off the Platform (UP-5069). Done in a wrap validator so
+
+        the request schema, and every client generated from it, is unchanged.'
+    SourceClass:
+      type: string
+      enum:
+      - cloud
+      - siem
+      - endpoint
+      - otel
+      - manual
+      title: SourceClass
+      description: 'Where a source observes from. One name for this concept everywhere.
+
+
+        The design docs'' "source class"; earlier API drafts called it ``vantage_point``.
+
+        Used on a configured discovery source and on a task''s provenance alike, so the two
+
+        are the same vocabulary rather than two that have to be reconciled.
+
+
+        Consumers branch on this -- capability and evidence ceilings are declared per class
+
+        -- which is why it is a closed enum while the vendor is not.'
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    AgentSort:
+      type: string
+      enum:
+      - created_at
+      - name
+      - evidence_level
+      - discovery_source
+      - source_class
+      - first_seen
+      - engine
+      title: AgentSort
+    BulkUnregisteredAgentsResponse:
+      properties:
+        action:
+          $ref: '#/components/schemas/UnregisteredAgentActionResponse'
+          description: The action taken and its audit entry.
+        skipped_agent_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Skipped Agent Ids
+          description: 'IDs named in agent_ids that were not acted on: not an unregistered agent in this workspace, or, for an unmute, not muted. Empty for an action given a filter.'
+      type: object
+      required:
+      - action
+      title: BulkUnregisteredAgentsResponse
     RuleResponse:
       properties:
         id:
@@ -1861,144 +4081,54 @@ components:
       - created_at
       - updated_at
       title: RuleResponse
-    ToxicityConfig:
+    SIEMAgentCreationSource:
       properties:
-        threshold:
-          type: number
-          title: Threshold
-          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
-          default: 0.5
-      additionalProperties: false
-      type: object
-      title: ToxicityConfig
-      example:
-        threshold: 0.5
-    RegexConfig:
-      properties:
-        regex_patterns:
-          items:
-            type: string
-          type: array
-          title: Regex Patterns
-          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
-      additionalProperties: false
-      type: object
-      required:
-      - regex_patterns
-      title: RegexConfig
-      example:
-        regex_patterns:
-        - \d{3}-\d{2}-\d{4}
-        - \d{5}-\d{6}-\d{7}
-    GCPAgentCreationSource:
-      properties:
+        vendor:
+          type: string
+          title: Vendor
+          description: 'Upstream product this came from, e.g. ''splunk_enterprise'', ''jamf_pro'', ''aws_bedrock''. FREE TEXT, and deliberately not enumerated here: nothing in this package branches on the vendor -- capability and evidence ceilings are declared per source class -- so enumerating it would make every new vendor a release of this package plus a repin in three services. The registry is app_plane''s discovery source type catalog, which is also where the display name lives. Values are `<platform>_<product>`, always, so a vendor shipping a second product that could be a source does not force a rename of the first.'
+        address:
+          $ref: '#/components/schemas/SourceAddress'
+          description: 'Where to find this agent again upstream. Required: a discovered agent that cannot be located again is not actionable.'
+        observations:
+          $ref: '#/components/schemas/AgentObservations'
+          description: What the source could see. Only fields in `observable_fields()` are ever populated by this category.
         type:
           type: string
-          const: GCP
+          const: SIEM
           title: Type
-          default: GCP
-        gcp_project_id:
-          type: string
-          title: Gcp Project Id
-          description: GCP project ID
-        gcp_region:
-          type: string
-          title: Gcp Region
-          description: GCP region
-        gcp_reasoning_engine_id:
-          type: string
-          title: Gcp Reasoning Engine Id
-          description: GCP Vertex AI Reasoning Engine ID
-        service_names:
-          items:
-            type: string
-          type: array
-          title: Service Names
-          description: Service names associated with this agent
+          default: SIEM
       type: object
       required:
-      - gcp_project_id
-      - gcp_region
-      - gcp_reasoning_engine_id
-      title: GCPAgentCreationSource
-      description: Creation source for GCP-discovered agents.
-    LLMModelResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the LLM model entry.
-        name:
-          type: string
-          title: Name
-          description: Name of the LLM model.
-      type: object
-      required:
-      - id
-      - name
-      title: LLMModelResponse
-      description: Response model for an LLM model with assigned ID.
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    SubAgentResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the sub-agent.
-        name:
-          type: string
-          title: Name
-          description: Name of the sub-agent.
-      type: object
-      required:
-      - id
-      - name
-      title: SubAgentResponse
-      description: Response model for a sub-agent with assigned ID.
-    SubAgent:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the sub-agent.
-      type: object
-      required:
-      - name
-      title: SubAgent
-      description: Sub-agent definition.
-    ResourceList_DataSource_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/DataSource'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[DataSource]
+      - vendor
+      - address
+      title: SIEMAgentCreationSource
+      description: 'An agent surfaced by a query against the customer''s security stack.
+
+
+        One variant for all three SIEMs, discriminated by ``siem``: the payload is
+
+        identical in every case and only the query language differs, which belongs to the
+
+        connector that runs the query.
+
+
+        HOW MUCH IT OBSERVES DEPENDS ON WHAT THE CUSTOMER INDEXES, not on the vendor. A
+
+        query over proxy or DNS logs sees a destination and little else, which is what
+
+        every v1 example query does. One over host-enriched data can carry the OS and the
+
+        cloud -- ECS has ``host.os.platform``, ``host.os.version`` and ``cloud.provider``;
+
+        Sentinel''s Heartbeat table has ``OSName`` and ``ComputerEnvironment``. Since the
+
+        customer''s own query controls the output columns, either is reachable.
+
+
+        OBSERVABLE_FIELDS below is therefore a ceiling in the fullest sense: it says what a
+
+        SIEM query *can* project, and most will project almost none of it.'
     ToolArgument:
       properties:
         name:
@@ -2015,49 +4145,102 @@ components:
       - type
       title: ToolArgument
       description: Argument definition for a tool.
-    ToolResponse:
+    ManualAgentCreationSource-Input:
+      properties:
+        type:
+          type: string
+          const: MANUAL
+          title: Type
+          default: MANUAL
+      type: object
+      title: ManualAgentCreationSource
+      description: A hand-created task. Nothing to address, nothing observed, no evidence to grade.
+    AgentRegistrationStatus:
+      type: string
+      enum:
+      - pending
+      - completed
+      - failed
+      title: AgentRegistrationStatus
+    RejectedAgent:
+      properties:
+        index:
+          type: integer
+          title: Index
+          description: Position of the agent in the request's `agents` list.
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Task Id
+          description: The agent's task ID, when the request carried a readable one.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The agent's name, when the request carried a readable one.
+        reason:
+          type: string
+          title: Reason
+          description: Why the agent was rejected.
+      type: object
+      required:
+      - index
+      - reason
+      title: RejectedAgent
+      description: An agent from a PUT that was not stored, and why.
+    PutAgentsResponse:
+      properties:
+        agents:
+          items:
+            $ref: '#/components/schemas/AgentResponse'
+          type: array
+          title: Agents
+          description: List of agents that were created or updated.
+        rejected:
+          items:
+            $ref: '#/components/schemas/RejectedAgent'
+          type: array
+          title: Rejected
+          description: Agents from the request that were not stored, with the reason for each, in request order. One invalid agent does not stop the rest from being stored, so a publisher has to read this to know what landed.
+      type: object
+      required:
+      - agents
+      title: PutAgentsResponse
+      description: Response body for creating or updating agents.
+    BlindSpotReason:
+      type: string
+      enum:
+      - no_sensor
+      - not_configured
+      - all_sources_disabled
+      - source_failed
+      - not_yet_reported
+      - source_stale
+      title: BlindSpotReason
+    ToolArgumentResponse:
       properties:
         id:
           type: string
           format: uuid
           title: Id
-          description: ID of the tool.
+          description: ID of the tool argument.
         name:
           type: string
           title: Name
-          description: Name of the tool.
-        arguments:
-          items:
-            $ref: '#/components/schemas/ToolArgumentResponse'
-          type: array
-          title: Arguments
-          description: List of arguments for this tool.
+          description: Name of the tool argument.
+        type:
+          type: string
+          title: Type
+          description: Type of the tool argument.
       type: object
       required:
       - id
       - name
-      title: ToolResponse
-      description: Response model for a tool with assigned ID.
-    Infrastructure:
-      type: string
-      enum:
-      - AWS
-      - Azure
-      - GCP
-      - Docker
-      - Kubernetes
-      title: Infrastructure
-    LLMModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the model.
-      type: object
-      required:
-      - name
-      title: LLMModel
-      description: Model used by an agent.
+      - type
+      title: ToolArgumentResponse
+      description: Response model for a tool argument with assigned ID.
     DataSource:
       properties:
         url:
@@ -2069,254 +4252,40 @@ components:
       - url
       title: DataSource
       description: Data source used by an agent.
-    ExampleConfig:
-      properties:
-        example:
-          type: string
-          title: Example
-          description: Custom example for the sensitive data
-        result:
-          type: boolean
-          title: Result
-          description: 'Boolean value representing if the example passes or fails the the sensitive data rule '
-      type: object
-      required:
-      - example
-      - result
-      title: ExampleConfig
-      example:
-        example: John has O negative blood group
-        result: true
-    AgentCreationSource:
-      anyOf:
-      - $ref: '#/components/schemas/GCPAgentCreationSource'
-      - $ref: '#/components/schemas/OTELAgentCreationSource'
-      - $ref: '#/components/schemas/ManualAgentCreationSource'
-      title: AgentCreationSource
-    PutAgentsResponse:
-      properties:
-        agents:
-          items:
-            $ref: '#/components/schemas/AgentResponse'
-          type: array
-          title: Agents
-          description: List of agents that were created or updated.
-      type: object
-      required:
-      - agents
-      title: PutAgentsResponse
-      description: Response body for creating or updating agents.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PatchUnregisteredAgentRequest:
-      properties:
-        muted_until:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Muted Until
-          description: Timestamp to mute the agent until. Setting a timestamp in the past will instantly unmute this agent.
-      type: object
-      title: PatchUnregisteredAgentRequest
-      description: Request body for partially updating an unregistered agent.
-    AgentSort:
-      type: string
-      enum:
-      - created_at
-      - name
-      title: AgentSort
-    DataSourceResponse:
+    UnregisteredAgentDiscoverySource:
       properties:
         id:
           type: string
           format: uuid
           title: Id
-          description: ID of the data source entry.
-        url:
-          type: string
-          title: Url
-          description: URL of the data source.
-      type: object
-      required:
-      - id
-      - url
-      title: DataSourceResponse
-      description: Response model for a data source with assigned ID.
-    ExamplesConfig:
-      properties:
-        examples:
-          items:
-            $ref: '#/components/schemas/ExampleConfig'
-          type: array
-          title: Examples
-          description: List of all the examples for Sensitive Data Rule
-        hint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hint
-          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
-      type: object
-      required:
-      - examples
-      title: ExamplesConfig
-      example:
-        examples:
-        - example: John has O negative blood group
-          result: true
-        - example: Most of the people have A positive blood group
-          result: false
-        hint: specific individual's blood type
-    OTELAgentCreationSource:
-      properties:
-        type:
-          type: string
-          const: OTEL
-          title: Type
-          default: OTEL
-        service_names:
-          items:
-            type: string
-          type: array
-          title: Service Names
-          description: Service names associated with this agent
-      type: object
-      title: OTELAgentCreationSource
-      description: Creation source for OTEL-discovered agents (auto-created from traces).
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    KeywordsConfig:
-      properties:
-        keywords:
-          items:
-            type: string
-          type: array
-          title: Keywords
-          description: List of Keywords
-      type: object
-      required:
-      - keywords
-      title: KeywordsConfig
-      example:
-        keywords:
-        - Blocked_Keyword_1
-        - Blocked_Keyword_2
-    Agent:
-      properties:
+          description: ID of the discovery source.
         name:
           type: string
           title: Name
-          description: Name of the agent.
-        data_plane_id:
+          description: Name of the discovery source.
+        vendor:
           type: string
-          format: uuid
-          title: Data Plane Id
-          description: UUID of the data plane where this agent was detected.
-        task_id:
+          title: Vendor
+          description: The source's vendor.
+        vendor_display_name:
           type: string
-          format: uuid
-          title: Task Id
-          description: UUID of the associated task.
-        creation_source:
-          $ref: '#/components/schemas/AgentCreationSource'
-          description: Information about how this agent was created.
-        model_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Model Id
-          description: Optional UUID of the model spec associated with this agent.
-        num_spans:
-          type: integer
-          title: Num Spans
-          description: Number of spans associated with this agent.
-          default: 0
-        is_autocreated:
-          type: boolean
-          title: Is Autocreated
-          description: Whether this agent was auto-created from traces.
-          default: true
-        rules:
-          items:
-            $ref: '#/components/schemas/RuleResponse'
-          type: array
-          title: Rules
-          description: Rules associated with this agent's task.
-        last_fetched:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Fetched
-          description: Last time traces were fetched for this agent's task.
-        muted_until:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Muted Until
-          description: Timestamp until which this agent is muted.
-        tools:
-          items:
-            $ref: '#/components/schemas/Tool'
-          type: array
-          title: Tools
-          description: Tools used by this agent.
-        sub_agents:
-          items:
-            $ref: '#/components/schemas/SubAgent'
-          type: array
-          title: Sub Agents
-          description: Sub-agents used by this agent.
-        llm_models:
-          items:
-            $ref: '#/components/schemas/LLMModel'
-          type: array
-          title: Llm Models
-          description: LLM models used by this agent.
-        data_sources:
-          items:
-            $ref: '#/components/schemas/DataSource'
-          type: array
-          title: Data Sources
-          description: Data sources used by this agent.
+          title: Vendor Display Name
+          description: The vendor's display name.
       type: object
       required:
+      - id
       - name
-      - data_plane_id
-      - task_id
-      - creation_source
-      title: Agent
-      description: Request model for agent upsert - nested entities without IDs.
-    ResourceList_LLMModel_:
+      - vendor
+      - vendor_display_name
+      title: UnregisteredAgentDiscoverySource
+    InternalServerError:
       properties:
-        records:
-          items:
-            $ref: '#/components/schemas/LLMModel'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
       type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[LLMModel]
+      title: InternalServerError
     AgentResponse:
       properties:
         created_at:
@@ -2337,15 +4306,17 @@ components:
           type: string
           format: uuid
           title: Data Plane Id
-          description: UUID of the data plane where this agent was detected.
+          description: ID of the engine this agent was detected on. Data plane is the legacy API name for an engine.
         task_id:
           type: string
           format: uuid
           title: Task Id
           description: UUID of the associated task.
-        creation_source:
-          $ref: '#/components/schemas/AgentCreationSource'
-          description: Information about how this agent was created.
+        provenance:
+          anyOf:
+          - $ref: '#/components/schemas/Provenance-Input'
+          - type: 'null'
+          description: Where this agent was found and what it runs on, carried through from the task. The single source of truth for both -- `infrastructure` is served from `provenance.runs_on`, so a Jamf record reports the laptop rather than the cloud hosting the engine that reported it.
         model_id:
           anyOf:
           - type: string
@@ -2393,6 +4364,16 @@ components:
           format: uuid
           title: Workspace Id
           description: UUID of the workspace this agent belongs to.
+        evidence:
+          items:
+            $ref: '#/components/schemas/EvidenceResponse'
+          type: array
+          title: Evidence
+          description: 'Every source''s report of this agent, one record each. A list rather than the singular creation_source it replaces: two sources disagree about how much they can see, when they last looked and whether they are still reporting, and flattening them would make one of those answers win arbitrarily. Merged per source on upsert rather than replaced, so a fetch job scoped to one discovery source cannot wipe another source''s evidence.'
+        creation_source:
+          $ref: '#/components/schemas/AgentCreationSource'
+          description: 'DEPRECATED -- use `evidence`. Retained so publishers that predate the evidence model keep working: on write it is wrapped into a single evidence record, and on read it is served from the agent''s primary evidence record.'
+          deprecated: true
         tools:
           items:
             $ref: '#/components/schemas/ToolResponse'
@@ -2418,8 +4399,60 @@ components:
           title: Data Sources
           description: Data sources used by this agent.
         infrastructure:
-          $ref: '#/components/schemas/Infrastructure'
-          description: Infrastructure where this agent is running (derived from creation_source).
+          $ref: '#/components/schemas/RunsOn'
+          description: Where the machine hosting this agent is, served from `provenance.runs_on`. Typed as RunsOn rather than the data plane's Infrastructure enum because that enum describes how the ENGINE was deployed and cannot say `endpoint` or `unknown` -- so a Jamf record used to report the engine's cloud. Agents with no provenance fall back to their data plane's infrastructure, which is what it has always meant for them.
+        mute_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mute Reason
+          description: Why this agent is muted, as given when it was muted. Null when it is not muted, and on mutes that predate the reason being required.
+        muted_by:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Muted By
+          description: The user who muted this agent. Null when it is not muted.
+        muted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted At
+          description: When this agent was muted. Null when it is not muted.
+        is_stale:
+          type: boolean
+          title: Is Stale
+          description: 'Whether every source reporting this agent has gone quiet. An AND across evidence, not an OR: a record corroborated by a live Splunk query is not stale because a decommissioned Jamf source stopped answering. False for an agent with no evidence, which is every agent predating discovery.'
+          default: false
+        source_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Source Ids
+          description: Discovery sources behind this agent, in evidence order. Backs the inventory's "Found by" column and the source_id filter. Evidence with no configured source behind it -- OTEL, manual, anything predating discovery -- contributes nothing here.
+        external_ids:
+          items:
+            type: string
+          type: array
+          title: External Ids
+          description: The sources' own identifiers for this agent, in evidence order. Canonical identity, never reconciled across sources, so an agent seen by two sources legitimately carries two different values.
+        source_classes:
+          items:
+            $ref: '#/components/schemas/SourceClass'
+          type: array
+          title: Source Classes
+          description: Where this agent has been observed from -- cloud, siem, endpoint, otel or manual -- in evidence order. Backs the "Found by" column and the source_classes filter.
+        evidence_level:
+          $ref: '#/components/schemas/EvidenceLevel'
+          description: 'How much of this agent its sources can see right now: full when a source still reporting sees the whole agent, limited when sources still report but none sees it whole, stale when every source has gone quiet. Rolled up over all evidence, whatever the list is filtered to; backs the evidence_levels filter and the evidence_level sort.'
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+          description: 'The earliest time any source reported seeing this agent: the earliest evidence first_seen, or the agent''s created_at when no evidence records one. Backs the first_seen sort and the first_seen_after/before filters.'
       type: object
       required:
       - created_at
@@ -2427,10 +4460,12 @@ components:
       - name
       - data_plane_id
       - task_id
-      - creation_source
       - id
       - workspace_id
+      - creation_source
       - infrastructure
+      - evidence_level
+      - first_seen
       title: AgentResponse
       description: 'Response model for a registered agent.
 
@@ -2438,6 +4473,488 @@ components:
         Extends the structure of EnrichedTaskResponse with agent-specific fields
 
         and database-assigned IDs for nested entities.'
+    UnregisteredAgentFilter:
+      properties:
+        name_filter:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Filter
+          description: Filter agents by name (substring match).
+        agent_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Agent Ids
+          description: Filter agents by agent IDs.
+        task_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Task Ids
+          description: Filter agents by task IDs.
+        sub_agent_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Sub Agent Names
+          description: Filter agents that use any of these sub-agent names.
+        tool_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tool Names
+          description: Filter agents that use any of these tool names.
+        llm_model_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Llm Model Names
+          description: Filter agents that use any of these llm model names.
+        data_source_urls:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Data Source Urls
+          description: Filter agents that use any of these data source URLs.
+        show_muted:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Show Muted
+          description: True for muted agents only, false for unmuted only, absent for both.
+        source_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Source Ids
+          description: Filter agents that any discovery source in this list reported.
+        data_plane_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Data Plane Ids
+          description: Filter agents found by any engine in this list.
+        has_source:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Has Source
+          description: True for agents a discovery source reported, false for agents none did. False is combined with source_ids by OR.
+        external_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: External Ids
+          description: Filter agents by the source's own identifier for them.
+        source_classes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SourceClass'
+            type: array
+          - type: 'null'
+          title: Source Classes
+          description: Filter agents by where they were observed from -- cloud, siem, endpoint, otel or manual.
+        evidence_levels:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/EvidenceLevel'
+            type: array
+          - type: 'null'
+          title: Evidence Levels
+          description: Filter agents by evidence level -- full, limited or stale.
+        first_seen_after:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: First Seen After
+          description: Filter agents a source first saw at or after this time.
+        first_seen_before:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: First Seen Before
+          description: Filter agents a source first saw at or before this time.
+        created_after:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created After
+          description: Filter agents first reported to Arthur at or after this time.
+        created_before:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created Before
+          description: Filter agents first reported to Arthur at or before this time.
+      type: object
+      title: UnregisteredAgentFilter
+      description: 'The filters the unregistered agents list takes, as a request body.
+
+
+        A bulk action given one of these covers exactly the agents a list view with the
+
+        same filters shows, resolved when the action runs.'
+    DiscoverySourceHealth:
+      type: string
+      enum:
+      - unknown
+      - healthy
+      - degraded
+      - failed
+      title: DiscoverySourceHealth
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OTELAgentCreationSource-Input:
+      properties:
+        type:
+          type: string
+          const: OTEL
+          title: Type
+          default: OTEL
+        service_names:
+          items:
+            type: string
+          type: array
+          title: Service Names
+          description: Service names associated with this agent. Deprecated and will be removed; use observations.service_names. The class is not deprecated, only this flattened accessor.
+          deprecated: true
+      type: object
+      title: OTELAgentCreationSource
+      description: 'An agent that instrumented itself; its traces arrived.
+
+
+        Not a discovery source and not deprecated. There is no upstream system to address.'
+    OrganizationBulkUnregisteredAgentsResponse:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/UnregisteredAgentActionResponse'
+          type: array
+          title: Actions
+          description: The audit entries recorded, one per workspace the action changed an agent in. Empty when the action changed nothing.
+        affected_count:
+          type: integer
+          title: Affected Count
+          description: How many agents the action changed, across every workspace.
+        skipped_agent_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Skipped Agent Ids
+          description: 'IDs named in agent_ids that were not acted on: not an unregistered agent in this organization, or, for an unmute, not muted. Empty for an action given a filter.'
+      type: object
+      required:
+      - actions
+      - affected_count
+      title: OrganizationBulkUnregisteredAgentsResponse
+      description: 'What an organization-scoped bulk mute or unmute did.
+
+
+        The audit trail is kept per workspace, so one organization-wide action leaves one
+
+        entry in each workspace it touched; a workspace''s own action list shows the entry
+
+        whether the action came from the workspace view or the organization view.'
+    ResourceList_UnregisteredAgentActionResponse_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/UnregisteredAgentActionResponse'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[UnregisteredAgentActionResponse]
+    SubAgent:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the sub-agent.
+      type: object
+      required:
+      - name
+      title: SubAgent
+      description: Sub-agent definition.
+    PatchUnregisteredAgentRequest:
+      properties:
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: Timestamp to mute the agent until. A timestamp in the past unmutes the agent. Absent, nothing changes.
+        mute_reason:
+          anyOf:
+          - type: string
+            maxLength: 1000
+          - type: 'null'
+          title: Mute Reason
+          description: Why the agent is muted. Recorded on the agent and on the action's audit entry when given; the bulk mute endpoint requires it.
+      type: object
+      title: PatchUnregisteredAgentRequest
+      description: 'Request body for partially updating an unregistered agent.
+
+
+        The single-agent route the inventory has always called. It does not require a
+
+        reason to mute: the deployed UI sends `muted_until` alone, and requiring one here
+
+        broke every mute from it (UP-5089). The bulk endpoints, which the inventory moves
+
+        to with a reason prompt, are where a reason is required.'
+    CloudAgentCreationSource:
+      properties:
+        vendor:
+          type: string
+          title: Vendor
+          description: 'Upstream product this came from, e.g. ''splunk_enterprise'', ''jamf_pro'', ''aws_bedrock''. FREE TEXT, and deliberately not enumerated here: nothing in this package branches on the vendor -- capability and evidence ceilings are declared per source class -- so enumerating it would make every new vendor a release of this package plus a repin in three services. The registry is app_plane''s discovery source type catalog, which is also where the display name lives. Values are `<platform>_<product>`, always, so a vendor shipping a second product that could be a source does not force a rename of the first.'
+        address:
+          $ref: '#/components/schemas/SourceAddress'
+          description: 'Where to find this agent again upstream. Required: a discovered agent that cannot be located again is not actionable.'
+        observations:
+          $ref: '#/components/schemas/AgentObservations'
+          description: What the source could see. Only fields in `observable_fields()` are ever populated by this category.
+        type:
+          type: string
+          const: CLOUD
+          title: Type
+          default: CLOUD
+      type: object
+      required:
+      - vendor
+      - address
+      title: CloudAgentCreationSource
+      description: 'An agent read out of a cloud provider''s agent runtime.
+
+
+        Enumerated rather than searched, so ``address.query`` is absent. Account and region
+
+        are part of the address because scanning is multi-account and multi-region.'
+    RegexConfig:
+      properties:
+        regex_patterns:
+          items:
+            type: string
+          type: array
+          title: Regex Patterns
+          description: List of Regex patterns to be used for validation. Be sure to encode requests in JSON and account for escape characters.
+      additionalProperties: false
+      type: object
+      required:
+      - regex_patterns
+      title: RegexConfig
+      example:
+        regex_patterns:
+        - \d{3}-\d{2}-\d{4}
+        - \d{5}-\d{6}-\d{7}
+    ResourceList_UnregisteredAgentDiscoverySource_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/UnregisteredAgentDiscoverySource'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[UnregisteredAgentDiscoverySource]
+    Platform:
+      type: string
+      enum:
+      - darwin
+      - linux
+      - windows
+      title: Platform
+      description: 'Which OS the agent runs on.
+
+
+        A COMPANION TO RunsOn, not a widening of it. ``runs_on`` answers where the machine
+
+        is, this answers which OS it runs. Neither implies the other: a darwin machine can
+
+        be a managed laptop (``runs_on=ENDPOINT``) or an EC2 Mac instance
+
+        (``runs_on=AWS``), and a linux machine can be either a laptop or a cloud VM.
+
+
+        Enumerated, unlike ``vendor``: this set is bounded and stable, and a typo like
+
+        "macos" for "darwin" would silently break a filter. Vendors are open and growing,
+
+        which is why they are free text.'
+    Provenance-Input:
+      properties:
+        sources:
+          items:
+            $ref: '#/components/schemas/ProvenanceSource'
+          type: array
+          minItems: 1
+          title: Sources
+          description: Every source that has reported this agent, one entry each. Grows as sources corroborate.
+        runs_on:
+          $ref: '#/components/schemas/RunsOn'
+          description: 'Deployment substrate the agent runs on. Scalar, unlike sources: where an agent runs is one fact even when several sources report it, and the more specific answer wins. Defaults to UNKNOWN, which for a SIEM row is usually the honest answer and for a managed laptop is simply correct.'
+          default: unknown
+        platform:
+          anyOf:
+          - $ref: '#/components/schemas/Platform'
+          - type: 'null'
+          description: 'OS the agent runs on, paired with `runs_on` rather than folded into it: neither implies the other, since a darwin machine can be a managed laptop or an EC2 Mac instance. Not endpoint-only -- a SIEM query over host-enriched data can project it, ECS calls it `host.os.platform` with these same values, though a proxy-log query cannot. Absent when the query did not carry it: a column always populated with a guess is worse than one honestly empty.'
+      type: object
+      required:
+      - sources
+      title: Provenance
+      description: 'Where an agent was found and what it runs on.
+
+
+        The single source of truth for both: there is no flat ``infrastructure`` enum
+
+        beside it and no standalone ``location`` object. Set on the task at resolution
+
+        time and served through the API intact.'
+    ToolResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the tool.
+        name:
+          type: string
+          title: Name
+          description: Name of the tool.
+        arguments:
+          items:
+            $ref: '#/components/schemas/ToolArgumentResponse'
+          type: array
+          title: Arguments
+          description: List of arguments for this tool.
+      type: object
+      required:
+      - id
+      - name
+      title: ToolResponse
+      description: Response model for a tool with assigned ID.
+    ExamplesConfig:
+      properties:
+        examples:
+          items:
+            $ref: '#/components/schemas/ExampleConfig'
+          type: array
+          title: Examples
+          description: List of all the examples for Sensitive Data Rule
+        hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hint
+          description: Optional. Hint added to describe what Sensitive Data Rule should be checking for
+      type: object
+      required:
+      - examples
+      title: ExamplesConfig
+      example:
+        examples:
+        - example: John has O negative blood group
+          result: true
+        - example: Most of the people have A positive blood group
+          result: false
+        hint: specific individual's blood type
+    ResourceList_DataSource_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DataSource'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DataSource]
+    Visibility:
+      type: string
+      enum:
+      - full
+      - limited
+      title: Visibility
+      description: 'How much of the agent the source can actually see.
+
+
+        Independent of Detection: a certain detection can carry almost no depth, which is
+
+        the normal case for an endpoint scan, and is exactly the pairing the old single
+
+        band could not express.
+
+
+        Staleness is NOT a member; it is a separate ``is_stale`` flag on the evidence
+
+        record, so full visibility does not become limited when a credential expires.'
+    ToxicityConfig:
+      properties:
+        threshold:
+          type: number
+          title: Threshold
+          description: 'Optional. Float (0, 1) indicating the level of tolerable toxicity to consider the rule passed or failed. Min: 0 (no toxic language) Max: 1 (very toxic language). Default: 0.5'
+          default: 0.5
+      additionalProperties: false
+      type: object
+      title: ToxicityConfig
+      example:
+        threshold: 0.5
     ResourceList_Tool_:
       properties:
         records:
@@ -2454,36 +4971,233 @@ components:
       - records
       - pagination
       title: ResourceList[Tool]
-    ResourceList_SubAgent_:
+    Agent:
       properties:
-        records:
+        name:
+          type: string
+          title: Name
+          description: Name of the agent.
+        data_plane_id:
+          type: string
+          format: uuid
+          title: Data Plane Id
+          description: ID of the engine this agent was detected on. Data plane is the legacy API name for an engine.
+        task_id:
+          type: string
+          format: uuid
+          title: Task Id
+          description: UUID of the associated task.
+        provenance:
+          anyOf:
+          - $ref: '#/components/schemas/Provenance-Input'
+          - type: 'null'
+          description: Where this agent was found and what it runs on, carried through from the task. The single source of truth for both -- `infrastructure` is served from `provenance.runs_on`, so a Jamf record reports the laptop rather than the cloud hosting the engine that reported it.
+        model_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Model Id
+          description: Optional UUID of the model spec associated with this agent.
+        num_spans:
+          type: integer
+          title: Num Spans
+          description: Number of spans associated with this agent.
+          default: 0
+        is_autocreated:
+          type: boolean
+          title: Is Autocreated
+          description: Whether this agent was auto-created from traces.
+          default: true
+        rules:
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+          type: array
+          title: Rules
+          description: Rules associated with this agent's task.
+        last_fetched:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Fetched
+          description: Last time traces were fetched for this agent's task.
+        muted_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Muted Until
+          description: Timestamp until which this agent is muted.
+        evidence:
+          items:
+            $ref: '#/components/schemas/Evidence'
+          type: array
+          title: Evidence
+          description: 'Every source''s report of this agent, one record each. A list rather than the singular creation_source it replaces: two sources disagree about how much they can see, when they last looked and whether they are still reporting, and flattening them would make one of those answers win arbitrarily. Merged per source on upsert rather than replaced, so a fetch job scoped to one discovery source cannot wipe another source''s evidence.'
+        creation_source:
+          anyOf:
+          - $ref: '#/components/schemas/AgentCreationSource'
+          - type: 'null'
+          description: 'DEPRECATED -- use `evidence`. Retained so publishers that predate the evidence model keep working: on write it is wrapped into a single evidence record, and on read it is served from the agent''s primary evidence record.'
+          deprecated: true
+        tools:
+          items:
+            $ref: '#/components/schemas/Tool'
+          type: array
+          title: Tools
+          description: Tools used by this agent.
+        sub_agents:
           items:
             $ref: '#/components/schemas/SubAgent'
           type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
+          title: Sub Agents
+          description: Sub-agents used by this agent.
+        llm_models:
+          items:
+            $ref: '#/components/schemas/LLMModel'
+          type: array
+          title: Llm Models
+          description: LLM models used by this agent.
+        data_sources:
+          items:
+            $ref: '#/components/schemas/DataSource'
+          type: array
+          title: Data Sources
+          description: Data sources used by this agent.
       type: object
       required:
-      - records
-      - pagination
-      title: ResourceList[SubAgent]
-    RuleScope:
+      - name
+      - data_plane_id
+      - task_id
+      title: Agent
+      description: Request model for agent upsert - nested entities without IDs.
+    LLMModelResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the LLM model entry.
+        name:
+          type: string
+          title: Name
+          description: Name of the LLM model.
+      type: object
+      required:
+      - id
+      - name
+      title: LLMModelResponse
+      description: Response model for an LLM model with assigned ID.
+    EvidenceLevel:
       type: string
       enum:
-      - default
-      - task
-      title: RuleScope
-    NotFoundError:
+      - full
+      - limited
+      - stale
+      title: EvidenceLevel
+      description: 'How much of an agent its sources can see right now, as one word.
+
+
+        Rolled up over every evidence record, whatever a list is filtered to: `full` when
+
+        a source that is still reporting sees the whole agent, `limited` when sources are
+
+        still reporting but none sees it whole, `stale` when every source has gone quiet.
+
+        An agent with no evidence at all reads as limited, not stale -- nothing has gone
+
+        quiet, which is what `is_stale` says too. Ordered strongest first, which is what a
+
+        sort on it means.'
+    Evidence:
       properties:
-        detail:
+        creation_source:
+          $ref: '#/components/schemas/AgentCreationSource'
+          description: The reporting source, its upstream address and what it observed.
+        external_id:
           type: string
-          title: Detail
-          default: Resource not found
+          title: External Id
+          description: The source's own identifier for this agent, and the canonical identity for the record. Never re-derived or reconciled across sources -- whatever the source returned is what it is.
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+          description: How much of the agent this source can see. Computed server-side from which fields it could actually fill -- see the source class's ``observable_fields()`` and ``visibility_ceiling()`` -- never a UI heuristic.
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+          description: When the evidence itself was observed.
+        last_scanned:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scanned
+          description: 'When this source was last read successfully FOR THIS RECORD. Separate from `last_seen` because they fail separately, and per-record because a fleet pull returns records of wildly differing freshness -- Jamf''s own reportDate is per device for the same reason, so a run-level timestamp cannot answer ''when did we last actually see this device''. Staleness is derived from this rather than stored: see the class docstring.'
+        first_seen:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: First Seen
+          description: 'The earliest time this source reported seeing it: the earliest `last_seen` the source has reported. Derived by the Platform as reports arrive and never moved forward; a value sent in a request is ignored. Per-source rather than per-agent: a record can be new to a Splunk source and months old to the endpoint one.'
+        discovered_in_run:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Discovered In Run
+          description: 'The scan run that produced this evidence. Meant to be what ''new this scan'' derives from -- there is deliberately no ''new'' status field to fall out of date. `first_seen` cannot serve for it: it is the source''s own sighting, which can predate the scan that first reported the record.'
+        source_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Source Id
+          description: The Discovery Source behind this evidence. Per-record because two sources of the same vendor can both report one agent.
       type: object
-      title: NotFoundError
+      required:
+      - creation_source
+      - external_id
+      - visibility
+      - last_seen
+      title: Evidence
+      description: 'One source''s report of one agent.
+
+
+        An agent can hold SEVERAL of these, from different sources, which is why evidence
+
+        is a record rather than a set of fields on the agent: two sources disagree about how
+
+        much they know, when they last looked, and whether they are still reporting, and
+
+        flattening them would force one of those answers to win arbitrarily.
+
+
+        Deliberately not one score. ``detection`` says how the agent was found and is
+
+        derived from the creation source, since the source class fixes it. ``visibility``
+
+        says how much of it can be seen and is stored, because it depends on what actually
+
+        arrived. ``last_scanned`` says when the source was last read for this record.
+
+
+        THERE IS NO STORED ``is_stale``. Staleness is a function of ``last_scanned``, a
+
+        threshold, and the current time, so a stored flag would be wrong the moment time
+
+        passed without a write, and would need a sweeper job that exists only because the
+
+        flag is stored. The threshold is also not this package''s to hold: stale for a Jamf
+
+        fleet reporting daily is not stale for a SIEM query running hourly, and the source
+
+        config carries the schedule and lookback that decide it. app_plane derives it and
+
+        serves it in the response, so it stays out of the UI -- the same principle as
+
+        visibility.'
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

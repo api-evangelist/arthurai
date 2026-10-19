@@ -101,6 +101,16 @@ paths:
           description: Search term to filter workspaces by name.
           title: Name
         description: Search term to filter workspaces by name.
+      - name: system_project
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Return only the workspace's system project (true) or only user-created projects (false). Optional.
+          title: System Project
+        description: Return only the workspace's system project (true) or only user-created projects (false). Optional.
       - name: page
         in: query
         required: false
@@ -284,31 +294,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
     ValidationError:
       properties:
         loc:
@@ -335,31 +320,63 @@ components:
       - msg
       - type
       title: ValidationError
-    PatchProject:
+    ResourceList_Project_:
       properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the project.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the project.
+        records:
+          items:
+            $ref: '#/components/schemas/Project'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
-      title: PatchProject
-    HTTPValidationError:
+      required:
+      - records
+      - pagination
+      title: ResourceList[Project]
+    InternalServerError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Internal server error
       type: object
-      title: HTTPValidationError
+      title: InternalServerError
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     Project:
       properties:
         created_at:
@@ -396,6 +413,10 @@ components:
           type: integer
           title: Total Artifacts
           description: 'Count of artifacts in the project. Current supported artifacts are: models, including shield tasks and bench test suites.'
+        system_project:
+          type: boolean
+          title: System Project
+          description: 'Whether this is the workspace''s system project: created with the workspace, one per workspace, and the project its discovery jobs run under.'
       type: object
       required:
       - created_at
@@ -404,37 +425,8 @@ components:
       - name
       - workspace_id
       - total_artifacts
+      - system_project
       title: Project
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    ResourceList_Project_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Project'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Project]
     BadRequestError:
       properties:
         detail:
@@ -443,6 +435,28 @@ components:
           default: Bad Request
       type: object
       title: BadRequestError
+    PatchProject:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the project.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the project.
+      type: object
+      title: PatchProject
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     PostProject:
       properties:
         name:
@@ -466,14 +480,15 @@ components:
       - created_at
       - updated_at
       title: ProjectSort
-    NotFoundError:
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Resource not found
       type: object
-      title: NotFoundError
+      title: HTTPValidationError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

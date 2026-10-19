@@ -441,22 +441,14 @@ components:
       - msg
       - type
       title: ValidationError
-    DataRetrievalStatus:
-      type: string
-      enum:
-      - pending_load
-      - loaded
-      - expired
-      title: DataRetrievalStatus
-    HTTPValidationError:
+    InternalServerError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Internal server error
       type: object
-      title: HTTPValidationError
+      title: InternalServerError
     DataResultFilter:
       properties:
         field_name:
@@ -475,6 +467,39 @@ components:
       - op
       - value
       title: DataResultFilter
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    DataRetrievalData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+        data_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data Schema
+          description: Schema of the read dataset. Optional for available datasets, required for datasets.
+      type: object
+      required:
+      - content
+      - data_schema
+      title: DataRetrievalData
+    DataRetrievalStatus:
+      type: string
+      enum:
+      - pending_load
+      - loaded
+      - expired
+      title: DataRetrievalStatus
     DataRetrievalOperation:
       properties:
         id:
@@ -516,24 +541,6 @@ components:
           default: 25
       type: object
       title: ConnectorPaginationOptions
-    DataRetrievalData:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Serialized content.
-        data_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Data Schema
-          description: Schema of the read dataset. Optional for available datasets, required for datasets.
-      type: object
-      required:
-      - content
-      - data_schema
-      title: DataRetrievalData
     PostDataRetrievalOperation:
       properties:
         start_timestamp:
@@ -561,24 +568,6 @@ components:
       - start_timestamp
       - end_timestamp
       title: PostDataRetrievalOperation
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    PutRetrievedData:
-      properties:
-        content:
-          type: string
-          title: Content
-          description: Serialized content.
-      type: object
-      required:
-      - content
-      title: PutRetrievedData
     DataResultFilterOp:
       type: string
       enum:
@@ -591,14 +580,25 @@ components:
       - in
       - not_in
       title: DataResultFilterOp
-    NotFoundError:
+    HTTPValidationError:
       properties:
         detail:
-          type: string
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
           title: Detail
-          default: Resource not found
       type: object
-      title: NotFoundError
+      title: HTTPValidationError
+    PutRetrievedData:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Serialized content.
+      type: object
+      required:
+      - content
+      title: PutRetrievedData
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

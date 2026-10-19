@@ -325,6 +325,214 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    EvalVariableMapping-Output:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    DatasetRef:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Dataset ID
+        version:
+          type: integer
+          title: Version
+          description: Dataset version number
+        name:
+          type: string
+          title: Name
+          description: Dataset name
+      type: object
+      required:
+      - id
+      - version
+      - name
+      title: DatasetRef
+      description: Reference to a dataset and version (with name)
+    SetNotebookStateRequest:
+      properties:
+        state:
+          $ref: '#/components/schemas/NotebookState-Input'
+          description: New state for the notebook
+      type: object
+      required:
+      - state
+      title: SetNotebookStateRequest
+      description: Request to set the notebook state
+    UpdateNotebookRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: New name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: New description
+      type: object
+      title: UpdateNotebookRequest
+      description: Request to update a notebook
+    DatasetColumnSource:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the dataset column
+      type: object
+      required:
+      - name
+      title: DatasetColumnSource
+      description: Reference to a dataset column
+    ExperimentOutputSource:
+      properties:
+        json_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Json Path
+          description: Optional JSON path to extract from experiment output. Should use dot notation for array indexing (eg. response.objects.0.properties.category)
+      type: object
+      title: ExperimentOutputSource
+      description: Reference to experiment output
+    EvalVariableMapping-Input:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the eval variable
+        source:
+          oneOf:
+          - $ref: '#/components/schemas/DatasetColumnVariableSource'
+          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
+          title: Source
+          description: Source of the variable value
+          discriminator:
+            propertyName: type
+            mapping:
+              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
+              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
+      type: object
+      required:
+      - variable_name
+      - source
+      title: EvalVariableMapping
+      description: Mapping of an eval variable to its source (dataset column or experiment output)
+    DatasetColumnVariableSource:
+      properties:
+        type:
+          type: string
+          const: dataset_column
+          title: Type
+          description: 'Type of source: ''dataset_column'''
+        dataset_column:
+          $ref: '#/components/schemas/DatasetColumnSource'
+          description: Dataset column source
+      type: object
+      required:
+      - type
+      - dataset_column
+      title: DatasetColumnVariableSource
+      description: Variable source from a dataset column
+    PromptVariableMapping-Output:
+      properties:
+        variable_name:
+          type: string
+          title: Variable Name
+          description: Name of the prompt variable
+        source:
+          $ref: '#/components/schemas/DatasetColumnVariableSource'
+          description: Dataset column source
+      type: object
+      required:
+      - variable_name
+      - source
+      title: PromptVariableMapping
+      description: Mapping of a prompt variable to a dataset column source
+    NotebookState-Input:
+      properties:
+        prompt_configs:
+          anyOf:
+          - items:
+              oneOf:
+              - $ref: '#/components/schemas/SavedPromptConfig'
+              - $ref: '#/components/schemas/UnsavedPromptConfig'
+              discriminator:
+                propertyName: type
+                mapping:
+                  saved: '#/components/schemas/SavedPromptConfig'
+                  unsaved: '#/components/schemas/UnsavedPromptConfig'
+            type: array
+          - type: 'null'
+          title: Prompt Configs
+          description: List of prompt configurations
+        prompt_variable_mapping:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PromptVariableMapping-Input'
+            type: array
+          - type: 'null'
+          title: Prompt Variable Mapping
+          description: Variable mappings for prompts
+        dataset_ref:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetRef'
+          - type: 'null'
+          description: Dataset reference (includes name)
+        dataset_row_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Dataset Row Filter
+          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included.
+        eval_list:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/EvalRef-Input'
+            type: array
+          - type: 'null'
+          title: Eval List
+          description: List of evaluations
+      type: object
+      title: NotebookState
+      description: Draft state of a notebook - mirrors experiment config but all fields optional.
+    ModelProvider:
+      type: string
+      enum:
+      - anthropic
+      - openai
+      - gemini
+      - bedrock
+      - vertex_ai
+      - hosted_vllm
+      - azure
+      title: ModelProvider
     PromptExperimentSummary:
       properties:
         id:
@@ -413,119 +621,78 @@ components:
       - prompt_configs
       title: PromptExperimentSummary
       description: Summary of a prompt experiment
-    NotebookState-Output:
+    EvalRef-Output:
       properties:
-        prompt_configs:
-          anyOf:
-          - items:
-              oneOf:
-              - $ref: '#/components/schemas/SavedPromptConfig'
-              - $ref: '#/components/schemas/UnsavedPromptConfig'
-              discriminator:
-                propertyName: type
-                mapping:
-                  saved: '#/components/schemas/SavedPromptConfig'
-                  unsaved: '#/components/schemas/UnsavedPromptConfig'
-            type: array
-          - type: 'null'
-          title: Prompt Configs
-          description: List of prompt configurations
-        prompt_variable_mapping:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PromptVariableMapping-Output'
-            type: array
-          - type: 'null'
-          title: Prompt Variable Mapping
-          description: Variable mappings for prompts
-        dataset_ref:
-          anyOf:
-          - $ref: '#/components/schemas/DatasetRef'
-          - type: 'null'
-          description: Dataset reference (includes name)
-        dataset_row_filter:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-            type: array
-          - type: 'null'
-          title: Dataset Row Filter
-          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included.
-        eval_list:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/EvalRef-Output'
-            type: array
-          - type: 'null'
-          title: Eval List
-          description: List of evaluations
-      type: object
-      title: NotebookState
-      description: Draft state of a notebook - mirrors experiment config but all fields optional.
-    PromptVariableMapping-Output:
-      properties:
-        variable_name:
+        name:
           type: string
-          title: Variable Name
-          description: Name of the prompt variable
-        source:
-          $ref: '#/components/schemas/DatasetColumnVariableSource'
-          description: Dataset column source
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Output'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
       type: object
       required:
-      - variable_name
-      - source
-      title: PromptVariableMapping
-      description: Mapping of a prompt variable to a dataset column source
-    NotebookState-Input:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    NewDatasetVersionRowColumnItemRequest:
       properties:
-        prompt_configs:
-          anyOf:
-          - items:
-              oneOf:
-              - $ref: '#/components/schemas/SavedPromptConfig'
-              - $ref: '#/components/schemas/UnsavedPromptConfig'
-              discriminator:
-                propertyName: type
-                mapping:
-                  saved: '#/components/schemas/SavedPromptConfig'
-                  unsaved: '#/components/schemas/UnsavedPromptConfig'
-            type: array
-          - type: 'null'
-          title: Prompt Configs
-          description: List of prompt configurations
-        prompt_variable_mapping:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PromptVariableMapping-Input'
-            type: array
-          - type: 'null'
-          title: Prompt Variable Mapping
-          description: Variable mappings for prompts
-        dataset_ref:
-          anyOf:
-          - $ref: '#/components/schemas/DatasetRef'
-          - type: 'null'
-          description: Dataset reference (includes name)
-        dataset_row_filter:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
-            type: array
-          - type: 'null'
-          title: Dataset Row Filter
-          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included.
-        eval_list:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/EvalRef-Input'
-            type: array
-          - type: 'null'
-          title: Eval List
-          description: List of evaluations
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column.
+        column_value:
+          type: string
+          title: Column Value
+          description: Value of column for the row.
       type: object
-      title: NotebookState
-      description: Draft state of a notebook - mirrors experiment config but all fields optional.
+      required:
+      - column_name
+      - column_value
+      title: NewDatasetVersionRowColumnItemRequest
+      description: Represents a single column-value pair in a dataset row.
+    NotebookListResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/NotebookSummary'
+          type: array
+          title: Data
+          description: List of notebook summaries
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of notebooks
+      type: object
+      required:
+      - data
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      title: NotebookListResponse
+      description: Paginated list of notebooks
     NotebookSummary:
       properties:
         id:
@@ -579,6 +746,106 @@ components:
       - run_count
       title: NotebookSummary
       description: Summary of a notebook
+    ExperimentStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - failed
+      - completed
+      title: ExperimentStatus
+      description: Status of an experiment
+    SavedPromptConfig:
+      properties:
+        type:
+          type: string
+          const: saved
+          title: Type
+          default: saved
+        name:
+          type: string
+          title: Name
+          description: Name of the saved prompt
+        version:
+          type: integer
+          title: Version
+          description: Version of the saved prompt
+      type: object
+      required:
+      - name
+      - version
+      title: SavedPromptConfig
+      description: Configuration for a saved prompt
+    CreateNotebookRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the notebook
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/NotebookState-Input'
+          - type: 'null'
+          description: Initial state
+      type: object
+      required:
+      - name
+      title: CreateNotebookRequest
+      description: Request to create a new notebook
+    EvalRef-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the evaluation
+        version:
+          type: integer
+          title: Version
+          description: Version of the evaluation
+        variable_mapping:
+          items:
+            $ref: '#/components/schemas/EvalVariableMapping-Input'
+          type: array
+          title: Variable Mapping
+          description: Mapping of eval variables to data sources
+      type: object
+      required:
+      - name
+      - version
+      - variable_mapping
+      title: EvalRef
+      description: Reference to an evaluation configuration
+    ExperimentOutputVariableSource:
+      properties:
+        type:
+          type: string
+          const: experiment_output
+          title: Type
+          description: 'Type of source: ''experiment_output'''
+        experiment_output:
+          $ref: '#/components/schemas/ExperimentOutputSource'
+          description: Experiment output source
+      type: object
+      required:
+      - type
+      - experiment_output
+      title: ExperimentOutputVariableSource
+      description: Variable source from experiment output
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     UnsavedPromptConfig:
       properties:
         type:
@@ -663,48 +930,88 @@ components:
       - msg
       - type
       title: ValidationError
-    CreateNotebookRequest:
+    PromptExperimentListResponse:
       properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the notebook
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description
-        state:
-          anyOf:
-          - $ref: '#/components/schemas/NotebookState-Input'
-          - type: 'null'
-          description: Initial state
+        page:
+          type: integer
+          title: Page
+          description: Current page number (0-indexed)
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of records
+        data:
+          items:
+            $ref: '#/components/schemas/PromptExperimentSummary'
+          type: array
+          title: Data
+          description: List of prompt experiment summaries
       type: object
       required:
-      - name
-      title: CreateNotebookRequest
-      description: Request to create a new notebook
-    ExperimentStatus:
-      type: string
-      enum:
-      - queued
-      - running
-      - failed
-      - completed
-      title: ExperimentStatus
-      description: Status of an experiment
-    ModelProvider:
-      type: string
-      enum:
-      - anthropic
-      - openai
-      - gemini
-      - bedrock
-      - vertex_ai
-      - hosted_vllm
-      - azure
-      title: ModelProvider
+      - page
+      - page_size
+      - total_pages
+      - total_count
+      - data
+      title: PromptExperimentListResponse
+      description: Paginated list of prompt experiments
+    NotebookState-Output:
+      properties:
+        prompt_configs:
+          anyOf:
+          - items:
+              oneOf:
+              - $ref: '#/components/schemas/SavedPromptConfig'
+              - $ref: '#/components/schemas/UnsavedPromptConfig'
+              discriminator:
+                propertyName: type
+                mapping:
+                  saved: '#/components/schemas/SavedPromptConfig'
+                  unsaved: '#/components/schemas/UnsavedPromptConfig'
+            type: array
+          - type: 'null'
+          title: Prompt Configs
+          description: List of prompt configurations
+        prompt_variable_mapping:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PromptVariableMapping-Output'
+            type: array
+          - type: 'null'
+          title: Prompt Variable Mapping
+          description: Variable mappings for prompts
+        dataset_ref:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetRef'
+          - type: 'null'
+          description: Dataset reference (includes name)
+        dataset_row_filter:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NewDatasetVersionRowColumnItemRequest'
+            type: array
+          - type: 'null'
+          title: Dataset Row Filter
+          description: Optional list of column name and value filters. Only rows matching ALL specified column name-value pairs (AND condition) will be included.
+        eval_list:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/EvalRef-Output'
+            type: array
+          - type: 'null'
+          title: Eval List
+          description: List of evaluations
+      type: object
+      title: NotebookState
+      description: Draft state of a notebook - mirrors experiment config but all fields optional.
     NotebookDetail:
       properties:
         id:
@@ -753,39 +1060,6 @@ components:
       - experiments
       title: NotebookDetail
       description: Detailed notebook information
-    DatasetRef:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Dataset ID
-        version:
-          type: integer
-          title: Version
-          description: Dataset version number
-        name:
-          type: string
-          title: Name
-          description: Dataset name
-      type: object
-      required:
-      - id
-      - version
-      - name
-      title: DatasetRef
-      description: Reference to a dataset and version (with name)
-    DatasetColumnSource:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the dataset column
-      type: object
-      required:
-      - name
-      title: DatasetColumnSource
-      description: Reference to a dataset column
     PromptVariableMapping-Input:
       properties:
         variable_name:
@@ -801,286 +1075,12 @@ components:
       - source
       title: PromptVariableMapping
       description: Mapping of a prompt variable to a dataset column source
-    EvalVariableMapping-Input:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the eval variable
-        source:
-          oneOf:
-          - $ref: '#/components/schemas/DatasetColumnVariableSource'
-          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
-          title: Source
-          description: Source of the variable value
-          discriminator:
-            propertyName: type
-            mapping:
-              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
-              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
-      type: object
-      required:
-      - variable_name
-      - source
-      title: EvalVariableMapping
-      description: Mapping of an eval variable to its source (dataset column or experiment output)
-    UpdateNotebookRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: New name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: New description
-      type: object
-      title: UpdateNotebookRequest
-      description: Request to update a notebook
-    DatasetColumnVariableSource:
-      properties:
-        type:
-          type: string
-          const: dataset_column
-          title: Type
-          description: 'Type of source: ''dataset_column'''
-        dataset_column:
-          $ref: '#/components/schemas/DatasetColumnSource'
-          description: Dataset column source
-      type: object
-      required:
-      - type
-      - dataset_column
-      title: DatasetColumnVariableSource
-      description: Variable source from a dataset column
-    NotebookListResponse:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/NotebookSummary'
-          type: array
-          title: Data
-          description: List of notebook summaries
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of notebooks
-      type: object
-      required:
-      - data
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      title: NotebookListResponse
-      description: Paginated list of notebooks
-    EvalRef-Output:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/EvalVariableMapping-Output'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources
-      type: object
-      required:
-      - name
-      - version
-      - variable_mapping
-      title: EvalRef
-      description: Reference to an evaluation configuration
-    EvalRef-Input:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the evaluation
-        version:
-          type: integer
-          title: Version
-          description: Version of the evaluation
-        variable_mapping:
-          items:
-            $ref: '#/components/schemas/EvalVariableMapping-Input'
-          type: array
-          title: Variable Mapping
-          description: Mapping of eval variables to data sources
-      type: object
-      required:
-      - name
-      - version
-      - variable_mapping
-      title: EvalRef
-      description: Reference to an evaluation configuration
-    PromptExperimentListResponse:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number (0-indexed)
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of records
-        data:
-          items:
-            $ref: '#/components/schemas/PromptExperimentSummary'
-          type: array
-          title: Data
-          description: List of prompt experiment summaries
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_count
-      - data
-      title: PromptExperimentListResponse
-      description: Paginated list of prompt experiments
-    SetNotebookStateRequest:
-      properties:
-        state:
-          $ref: '#/components/schemas/NotebookState-Input'
-          description: New state for the notebook
-      type: object
-      required:
-      - state
-      title: SetNotebookStateRequest
-      description: Request to set the notebook state
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ExperimentOutputSource:
-      properties:
-        json_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Json Path
-          description: Optional JSON path to extract from experiment output. Should use dot notation for array indexing (eg. response.objects.0.properties.category)
-      type: object
-      title: ExperimentOutputSource
-      description: Reference to experiment output
     PaginationSortMethod:
       type: string
       enum:
       - asc
       - desc
       title: PaginationSortMethod
-    ExperimentOutputVariableSource:
-      properties:
-        type:
-          type: string
-          const: experiment_output
-          title: Type
-          description: 'Type of source: ''experiment_output'''
-        experiment_output:
-          $ref: '#/components/schemas/ExperimentOutputSource'
-          description: Experiment output source
-      type: object
-      required:
-      - type
-      - experiment_output
-      title: ExperimentOutputVariableSource
-      description: Variable source from experiment output
-    NewDatasetVersionRowColumnItemRequest:
-      properties:
-        column_name:
-          type: string
-          title: Column Name
-          description: Name of column.
-        column_value:
-          type: string
-          title: Column Value
-          description: Value of column for the row.
-      type: object
-      required:
-      - column_name
-      - column_value
-      title: NewDatasetVersionRowColumnItemRequest
-      description: Represents a single column-value pair in a dataset row.
-    SavedPromptConfig:
-      properties:
-        type:
-          type: string
-          const: saved
-          title: Type
-          default: saved
-        name:
-          type: string
-          title: Name
-          description: Name of the saved prompt
-        version:
-          type: integer
-          title: Version
-          description: Version of the saved prompt
-      type: object
-      required:
-      - name
-      - version
-      title: SavedPromptConfig
-      description: Configuration for a saved prompt
-    EvalVariableMapping-Output:
-      properties:
-        variable_name:
-          type: string
-          title: Variable Name
-          description: Name of the eval variable
-        source:
-          oneOf:
-          - $ref: '#/components/schemas/DatasetColumnVariableSource'
-          - $ref: '#/components/schemas/ExperimentOutputVariableSource'
-          title: Source
-          description: Source of the variable value
-          discriminator:
-            propertyName: type
-            mapping:
-              dataset_column: '#/components/schemas/DatasetColumnVariableSource'
-              experiment_output: '#/components/schemas/ExperimentOutputVariableSource'
-      type: object
-      required:
-      - variable_name
-      - source
-      title: EvalVariableMapping
-      description: Mapping of an eval variable to its source (dataset column or experiment output)
   securitySchemes:
     API_Key:
       type: http

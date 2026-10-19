@@ -157,6 +157,122 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/data_planes/list:
+    get:
+      tags:
+      - Data Planes V1
+      summary: List Organization Data Planes
+      description: Lists engines across all workspaces in the organization, without credentials. Requires organization_list_data_planes permission; workspace membership is not required.
+      operationId: list_organization_data_planes
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_data_planes
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/DataPlaneSort'
+          description: Override the field used for sorting the returned list. Optional.
+          default: name
+        description: Override the field used for sorting the returned list. Optional.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used. Optional.
+          default: asc
+        description: Override the sort order used. Optional.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive engine name search.
+          title: Name
+        description: Case-insensitive engine name search.
+      - name: gen_ai_enabled
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter to only return engines enabled with the GenAI capability
+          title: Gen Ai Enabled
+        description: Filter to only return engines enabled with the GenAI capability
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_DataPlane_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organization/data_planes:
+    get:
+      tags:
+      - Data Planes V1
+      summary: Get Organization Data Planes
+      description: 'Reports whether the organization has at least one data plane (engine) in any of its workspaces. Returns only a boolean existence flag, never any data plane record data, so no potentially sensitive engine fields are exposed. Gate-only: the org permission gate is the entire access boundary, so the result is independent of the caller''s per-workspace membership. Requires organization_read permission.'
+      operationId: get_organization_data_planes
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPlaneExists'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_read
   /api/v1/data_planes/{data_plane_id}:
     delete:
       tags:
@@ -365,31 +481,16 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Pagination:
+    DataPlaneExists:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
+        exists:
+          type: boolean
+          title: Exists
+          description: Whether the organization has at least one data plane (engine).
       type: object
       required:
-      - total_pages
-      - total_records
-      title: Pagination
+      - exists
+      title: DataPlaneExists
     ValidationError:
       properties:
         loc:
@@ -416,6 +517,156 @@ components:
       - msg
       - type
       title: ValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    PatchDataPlane:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of data plane.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of data plane.
+        infrastructure:
+          anyOf:
+          - $ref: '#/components/schemas/Infrastructure'
+          - type: 'null'
+          description: Optional. If set will update the infrastructure for the engine. Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        capabilities:
+          anyOf:
+          - $ref: '#/components/schemas/PatchDataPlaneCapabilities'
+          - type: 'null'
+          description: Capabilities for this data plane.
+      type: object
+      title: PatchDataPlane
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    DataPlane:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the engine. Data plane is the legacy API name for an engine.
+        name:
+          type: string
+          title: Name
+          description: Name of data plane.
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+          description: ID of the parent workspace.
+        description:
+          type: string
+          title: Description
+          description: Description of data plane.
+        user_id:
+          type: string
+          format: uuid
+          title: User Id
+          description: ID of the data plane's underlying user.
+        infrastructure:
+          $ref: '#/components/schemas/Infrastructure'
+          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
+        last_check_in_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Check In Time
+          description: Last time the data plane was confirmed to be connected.
+        capabilities:
+          $ref: '#/components/schemas/DataPlaneCapabilities'
+          description: Capabilities for this data plane.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - name
+      - workspace_id
+      - description
+      - user_id
+      - infrastructure
+      - last_check_in_time
+      - capabilities
+      title: DataPlane
+    DataPlaneCapabilities:
+      properties:
+        gen_ai_enabled:
+          type: boolean
+          title: Gen Ai Enabled
+          description: Field that records if the engine was installed with GenAI capabilities.
+          default: false
+        discovery_source_test:
+          type: boolean
+          title: Discovery Source Test
+          description: Whether the engine can run TEST_DISCOVERY_SOURCE jobs; reported by the engine when it asks for work.
+          default: false
+      type: object
+      title: DataPlaneCapabilities
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    BadRequestError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Bad Request
+      type: object
+      title: BadRequestError
     PostDataPlane:
       properties:
         name:
@@ -438,15 +689,12 @@ components:
       - name
       - description
       title: PostDataPlane
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
     ResourceList_DataPlane_:
       properties:
         records:
@@ -463,6 +711,19 @@ components:
       - records
       - pagination
       title: ResourceList[DataPlane]
+    InfrastructureList:
+      properties:
+        infrastructures:
+          items:
+            $ref: '#/components/schemas/Infrastructure'
+          type: array
+          title: Infrastructures
+          description: List of supported infrastructure values.
+      type: object
+      required:
+      - infrastructures
+      title: InfrastructureList
+      description: List of supported infrastructure values for engines.
     SensitiveDataPlane:
       properties:
         created_at:
@@ -479,7 +740,7 @@ components:
           type: string
           format: uuid
           title: Id
-          description: ID of the data plane.
+          description: ID of the engine. Data plane is the legacy API name for an engine.
         name:
           type: string
           title: Name
@@ -538,67 +799,6 @@ components:
       - client_id
       - client_secret
       title: SensitiveDataPlane
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    SortOrder:
-      type: string
-      enum:
-      - asc
-      - desc
-      title: SortOrder
-    InfrastructureList:
-      properties:
-        infrastructures:
-          items:
-            $ref: '#/components/schemas/Infrastructure'
-          type: array
-          title: Infrastructures
-          description: List of supported infrastructure values.
-      type: object
-      required:
-      - infrastructures
-      title: InfrastructureList
-      description: List of supported infrastructure values for engines.
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    PatchDataPlane:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of data plane.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of data plane.
-        infrastructure:
-          anyOf:
-          - $ref: '#/components/schemas/Infrastructure'
-          - type: 'null'
-          description: Optional. If set will update the infrastructure for the engine. Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
-        capabilities:
-          anyOf:
-          - $ref: '#/components/schemas/PatchDataPlaneCapabilities'
-          - type: 'null'
-          description: Capabilities for this data plane.
-      type: object
-      title: PatchDataPlane
     DataPlaneSort:
       type: string
       enum:
@@ -606,15 +806,6 @@ components:
       - created_at
       - updated_at
       title: DataPlaneSort
-    DataPlaneCapabilities:
-      properties:
-        gen_ai_enabled:
-          type: boolean
-          title: Gen Ai Enabled
-          description: Field that records if the engine was installed with GenAI capabilities.
-          default: false
-      type: object
-      title: DataPlaneCapabilities
     Infrastructure:
       type: string
       enum:
@@ -624,67 +815,15 @@ components:
       - Docker
       - Kubernetes
       title: Infrastructure
-    DataPlane:
+    HTTPValidationError:
       properties:
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time of record creation.
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-          description: Time of last record update.
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of the data plane.
-        name:
-          type: string
-          title: Name
-          description: Name of data plane.
-        workspace_id:
-          type: string
-          format: uuid
-          title: Workspace Id
-          description: ID of the parent workspace.
-        description:
-          type: string
-          title: Description
-          description: Description of data plane.
-        user_id:
-          type: string
-          format: uuid
-          title: User Id
-          description: ID of the data plane's underlying user.
-        infrastructure:
-          $ref: '#/components/schemas/Infrastructure'
-          description: Infrastructure where the engine is running (e.g., AWS, GCP, Azure, Docker, Kubernetes).
-        last_check_in_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Check In Time
-          description: Last time the data plane was confirmed to be connected.
-        capabilities:
-          $ref: '#/components/schemas/DataPlaneCapabilities'
-          description: Capabilities for this data plane.
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - created_at
-      - updated_at
-      - id
-      - name
-      - workspace_id
-      - description
-      - user_id
-      - infrastructure
-      - last_check_in_time
-      - capabilities
-      title: DataPlane
+      title: HTTPValidationError
     PatchDataPlaneCapabilities:
       properties:
         gen_ai_enabled:
@@ -695,14 +834,6 @@ components:
           description: Optional. If set will update the gen_ai_enabled capability for the engine.
       type: object
       title: PatchDataPlaneCapabilities
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

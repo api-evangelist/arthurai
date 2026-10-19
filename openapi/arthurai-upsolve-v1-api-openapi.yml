@@ -73,16 +73,64 @@ components:
       - msg
       - type
       title: ValidationError
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
     UpsolveToken:
       properties:
         token:
           type: string
           title: Token
           description: JWT for use with Upsolve API.
+        application_count:
+          type: integer
+          title: Application Count
+          description: Number of applications included in this token's prefilters.
+        total_application_count:
+          type: integer
+          title: Total Application Count
+          description: Total applications the caller can access in this scope, before the ARTHUR_UPSOLVE_MAX_DASHBOARD_APPLICATIONS cap is applied. Greater than application_count when the dashboard is showing a truncated view.
       type: object
       required:
       - token
+      - application_count
+      - total_application_count
       title: UpsolveToken
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    PostUpsolveTenant:
+      properties:
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKind'
+          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+          description: ID of the resource.
+        prefilter_project_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Prefilter Project Id
+          description: 'Narrow the token''s data to a single project inside the workspace, without changing which Upsolve tenant the token belongs to. Only valid when resource_kind is workspace, and the project must belong to that workspace. Use this for a project view of a workspace-owned dashboard: the tenant identity (and therefore the saved dashboard customizations) stays with the workspace while the applications embedded in the token are just the project''s, so the ARTHUR_UPSOLVE_MAX_DASHBOARD_APPLICATIONS cap applies per project rather than across the whole workspace.'
+      type: object
+      required:
+      - resource_kind
+      - resource_id
+      title: PostUpsolveTenant
     ResourceKind:
       type: string
       enum:
@@ -109,6 +157,9 @@ components:
       - policy_alert_rule
       - policy_attestation_rule
       - policy_assignment
+      - dashboard
+      - discovery_source
+      - discovery_source_config
       title: ResourceKind
     HTTPValidationError:
       properties:
@@ -119,37 +170,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    PostUpsolveTenant:
-      properties:
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKind'
-          description: Kind of the resource the user wants a JWT to access data for in Upsolve. Supports model, project, workspace, and policy resource kinds.
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-          description: ID of the resource.
-      type: object
-      required:
-      - resource_kind
-      - resource_id
-      title: PostUpsolveTenant
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

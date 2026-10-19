@@ -1,0 +1,2499 @@
+openapi: 3.2.0
+info:
+  title: Arthur Scope Discovery Sources V1 API
+  version: 0.1.0
+tags:
+- name: Discovery Sources V1
+paths:
+  /api/v1/discovery_source_types:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: List Discovery Source Types
+      description: Returns every vendor's display name and field schema, where it observes from, which query language its configs use, and whether it is generally available, in preview, or unavailable. The frontend renders each vendor's config form and its label in the vendor picker from this response, so no vendor-specific frontend code is needed.
+      operationId: list_discovery_source_types
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_DiscoverySourceTypeSchema_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_types/{vendor}:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: Get Discovery Source Type By Vendor
+      description: Returns a single vendor's discovery source schema.
+      operationId: get_discovery_source_type
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: vendor
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DiscoverySourceVendor'
+          description: The vendor to fetch.
+        description: The vendor to fetch.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceTypeSchema'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_sources:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Create Discovery Source
+      description: Creates an organization-scoped discovery source. Sensitive credential fields are stored outside Postgres and never returned. Requires organization_create_discovery_source permission.
+      operationId: create_discovery_source
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_create_discovery_source
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDiscoverySource'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySource'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: List Discovery Sources
+      description: Lists the organization's discovery sources. Requires organization_list_discovery_sources permission.
+      operationId: list_discovery_sources
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_discovery_sources
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/DiscoverySourceSort'
+          description: Override the field used for sorting the returned list.
+          default: created_at
+        description: Override the field used for sorting the returned list.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used.
+          default: desc
+        description: Override the sort order used.
+      - name: vendor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceVendor'
+          - type: 'null'
+          description: Filter sources by vendor.
+          title: Vendor
+        description: Filter sources by vendor.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter sources by name (case-insensitive partial match).
+          title: Name
+        description: Filter sources by name (case-insensitive partial match).
+      - name: health
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceHealth'
+          - type: 'null'
+          description: Filter sources by connection health.
+          title: Health
+        description: Filter sources by connection health.
+      - name: is_enabled
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter sources by whether they are enabled. Left off, both enabled and paused sources are returned.
+          title: Is Enabled
+        description: Filter sources by whether they are enabled. Left off, both enabled and paused sources are returned.
+      - name: include_deleted
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, include soft-deleted records. Deleted sources are retained so findings already collected keep resolving to them.
+          default: false
+          title: Include Deleted
+        description: When true, include soft-deleted records. Deleted sources are retained so findings already collected keep resolving to them.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_DiscoverySource_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_sources/{discovery_source_id}:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: Get Discovery Source
+      description: Returns a single discovery source by ID. Deleted sources are returned with is_deleted set, so evidence pointing at one still resolves. Requires discovery_source_read permission.
+      operationId: get_discovery_source
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_read
+      parameters:
+      - name: discovery_source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySource'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Discovery Sources V1
+      summary: Update Discovery Source
+      description: Updates a discovery source's name or credential fields. Fields left out keep their current value. Requires discovery_source_update permission.
+      operationId: update_discovery_source
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_update
+      parameters:
+      - name: discovery_source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchDiscoverySource'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySource'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Discovery Sources V1
+      summary: Delete Discovery Source
+      description: Deletes a discovery source and its configs. Findings already collected are retained, and the source is kept in a deleted state so their evidence resolves as originating from a deleted source. The source's credentials are dropped. Requires discovery_source_delete permission.
+      operationId: delete_discovery_source
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_delete
+      parameters:
+      - name: discovery_source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_sources/{discovery_source_id}/test:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Test Discovery Source Connection
+      description: Runs one of this source's configs from each selected engine as a real, bounded query and reports the first rows it returns, mapped onto the discovery output contract, together with any columns the contract does not describe and the vendor's error if it failed. Nothing is published to inventory. Returns at once with one job per engine; poll the returned test for each engine's result. Requires organization_trigger_discovery_scan permission.
+      operationId: test_discovery_source
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: discovery_source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the discovery source.
+          title: Discovery Source Id
+        description: The ID of the discovery source.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDiscoverySourceTest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceTest'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_sources/{discovery_source_id}/tests/{test_id}:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: Get Discovery Source Test
+      description: 'Returns one Test Connection request and each engine''s result: whether the source was reachable from that engine, the preview rows, the output-column check and the vendor''s error, credentials removed. Complete once every engine has reported or its job has ended. Requires organization_trigger_discovery_scan permission.'
+      operationId: get_discovery_source_test
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: discovery_source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the discovery source.
+          title: Discovery Source Id
+        description: The ID of the discovery source.
+      - name: test_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the test.
+          title: Test Id
+        description: The ID of the test.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceTest'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_configs/{discovery_source_config_id}/credentials:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Retrieve Source Credentials
+      description: Returns current sensitive fields only to an authenticated data-plane account assigned to this config in the same organization. Disabled or deleted sources/configs are denied. Never place the result in job parameters.
+      operationId: retrieve_discovery_source_credentials
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceCredentials'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_configs:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Create Discovery Source Config
+      description: 'Creates an organization-scoped discovery source config: the query text, its schedule, and the engines it runs on. The query text is stored verbatim and never parsed. Requires organization_create_discovery_source_config permission.'
+      operationId: create_discovery_source_config
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_create_discovery_source_config
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDiscoverySourceConfig'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceConfig'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: List Discovery Source Configs
+      description: Lists the organization's discovery source configs. Requires organization_list_discovery_source_configs permission.
+      operationId: list_discovery_source_configs
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_list_discovery_source_configs
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/DiscoverySourceConfigSort'
+          description: Override the field used for sorting the returned list.
+          default: created_at
+        description: Override the field used for sorting the returned list.
+      - name: order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: Override the sort order used.
+          default: desc
+        description: Override the sort order used.
+      - name: discovery_source_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter configs by the discovery source they belong to.
+          title: Discovery Source Id
+        description: Filter configs by the discovery source they belong to.
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter configs by name (case-insensitive partial match).
+          title: Name
+        description: Filter configs by name (case-insensitive partial match).
+      - name: engine_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          description: Filter configs by an engine they are assigned to.
+          title: Engine Id
+        description: Filter configs by an engine they are assigned to.
+      - name: is_enabled
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter configs by whether they are scheduled. Left off, both scheduled and paused configs are returned.
+          title: Is Enabled
+        description: Filter configs by whether they are scheduled. Left off, both scheduled and paused configs are returned.
+      - name: include_deleted
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When true, include soft-deleted records. Deleted sources are retained so findings already collected keep resolving to them.
+          default: false
+          title: Include Deleted
+        description: When true, include soft-deleted records. Deleted sources are retained so findings already collected keep resolving to them.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList_DiscoverySourceConfig_'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_configs/{discovery_source_config_id}:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: Get Discovery Source Config
+      description: Returns a single discovery source config by ID. Requires discovery_source_config_read permission.
+      operationId: get_discovery_source_config
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_config_read
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceConfig'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Discovery Sources V1
+      summary: Update Discovery Source Config
+      description: Updates a discovery source config. Passing engine_ids replaces the config's engine list; use the engines endpoint to append instead. Requires discovery_source_config_update permission.
+      operationId: update_discovery_source_config
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_config_update
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchDiscoverySourceConfig'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceConfig'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Discovery Sources V1
+      summary: Delete Discovery Source Config
+      description: Deletes a discovery source config. The config is retained in a deleted state so runs already attributed to it keep resolving. Requires discovery_source_config_delete permission.
+      operationId: delete_discovery_source_config
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_config_delete
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      responses:
+        '204':
+          description: Successful Response
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_configs/{discovery_source_config_id}/engines:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Assign Discovery Source Config To Engines
+      description: 'Appends engines to the config''s engine list. There is no join resource: assigning a config to an engine is an append. One config can run on engines in different workspaces. Requires discovery_source_config_update permission.'
+      operationId: add_discovery_source_config_engines
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_config_update
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDiscoverySourceConfigEngines'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceConfig'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_source_configs/{discovery_source_config_id}/engines/{engine_id}:
+    delete:
+      tags:
+      - Discovery Sources V1
+      summary: Unassign Discovery Source Config From An Engine
+      description: Removes one engine from the config's engine list. Requires discovery_source_config_update permission.
+      operationId: remove_discovery_source_config_engine
+      security:
+      - OAuth2AuthorizationCode:
+        - discovery_source_config_update
+      parameters:
+      - name: discovery_source_config_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+      - name: engine_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the engine to unassign.
+          title: Engine Id
+        description: The ID of the engine to unassign.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceConfig'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_scans:
+    post:
+      tags:
+      - Discovery Sources V1
+      summary: Scan Now
+      description: Runs every enabled discovery source config assigned to one engine, right now, without waiting for its schedule. One scan job is enqueued per config - the same fan-out the schedule performs - so one source failing leaves its siblings untouched. The response reports each config separately and is complete only once every job has finished; poll the returned scan ID for that. Requires organization_trigger_discovery_scan permission.
+      operationId: trigger_discovery_scan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDiscoveryScan'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryScan'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+  /api/v1/discovery_scans/{scan_id}:
+    get:
+      tags:
+      - Discovery Sources V1
+      summary: Get Discovery Scan
+      description: 'Returns one on-demand scan and the status of each config it dispatched. The scan reads as completed only once every one of those jobs has stopped, and reports per-source status rather than a single verdict: a source that failed while its siblings collected normally is the part worth seeing. Requires organization_trigger_discovery_scan permission.'
+      operationId: get_discovery_scan
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The ID of the scan.
+          title: Scan Id
+        description: The ID of the scan.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryScan'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/jobs/{job_id}/runs/{job_run_id}/discovery_source_test_result:
+    put:
+      tags:
+      - Discovery Sources V1
+      summary: Put Discovery Source Test Result
+      description: Stores one engine's Test Connection result for an attempt of a test job dispatched to that engine. Only that engine's own account may call it. Identical retries are idempotent; a different report for the same attempt conflicts. Does not update job state.
+      operationId: put_discovery_source_test_result
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Run Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutDiscoverySourceTestResult'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverySourceTestResult'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DiscoverySourceTestError:
+      properties:
+        category:
+          $ref: '#/components/schemas/DiscoverySourceTestErrorCategory'
+          description: What kind of failure this was, so a 401 reads differently from a DNS failure without parsing the message.
+        message:
+          type: string
+          maxLength: 2000
+          title: Message
+          description: The vendor's or engine's error, with credentials removed by the engine before it left the customer's network. Never a raw response body.
+        vendor_status_code:
+          anyOf:
+          - type: integer
+            maximum: 599.0
+            minimum: 100.0
+          - type: 'null'
+          title: Vendor Status Code
+          description: The HTTP status the vendor answered with, when it answered.
+      type: object
+      required:
+      - category
+      - message
+      title: DiscoverySourceTestError
+    PostDiscoverySourceConfig:
+      properties:
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the parent discovery source.
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source config.
+        query:
+          type: string
+          title: Query
+          description: Query or filter text in the source's native language. Arthur stores this verbatim and never parses or validates it - only the columns a run returns are contracted. Each record a run produces carries this text back in its provenance, so a record can be explained and reproduced.
+        query_language:
+          $ref: '#/components/schemas/DiscoveryQueryLanguage'
+          description: Language the query text is written in. Must match the vendor's language.
+        schedule_cron:
+          type: string
+          title: Schedule Cron
+          description: Cron expression describing how often the config runs. Standard five-field syntax.
+        schedule_timezone:
+          type: string
+          title: Schedule Timezone
+          description: IANA timezone the cron expression is evaluated in.
+          default: UTC
+        lookback_window_seconds:
+          type: integer
+          title: Lookback Window Seconds
+          description: How far back each run looks, in seconds. Should comfortably exceed the gap between two scheduled runs.
+        engine_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Engine Ids
+          description: IDs of the engines (data planes) this config runs on. One config can run on several engines across different workspaces.
+          default: []
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+          description: 'Whether this config is scheduled. Disabling one config stops that query alone: the other configs on the same source keep running, which is the difference between this switch and the source''s. Disabling the source pauses every config it backs regardless of this flag.'
+          default: true
+      type: object
+      required:
+      - discovery_source_id
+      - name
+      - query
+      - query_language
+      - schedule_cron
+      - lookback_window_seconds
+      title: PostDiscoverySourceConfig
+    DiscoverySourceNonSensitiveField:
+      properties:
+        key:
+          type: string
+          title: Key
+          description: Name of the discovery source field.
+        value:
+          type: string
+          title: Value
+          description: Value of the discovery source field.
+        d_type:
+          $ref: '#/components/schemas/DiscoverySourceFieldDataType'
+          description: Data type of the value stored by the field.
+      type: object
+      required:
+      - key
+      - value
+      - d_type
+      title: DiscoverySourceNonSensitiveField
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    DiscoveryScan:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the scan.
+        engine_id:
+          type: string
+          format: uuid
+          title: Engine Id
+          description: Engine (data plane) the scan was run on.
+        state:
+          $ref: '#/components/schemas/DiscoveryScanState'
+          description: Whether every leg of the scan, and every fetch those legs chained, has finished. Completed means what the scan found is in the Platform's agents.
+        triggered_at:
+          type: string
+          format: date-time
+          title: Triggered At
+          description: When the scan was triggered.
+        source_statuses:
+          items:
+            $ref: '#/components/schemas/DiscoveryScanSourceStatus'
+          type: array
+          title: Source Statuses
+          description: 'One entry per config the scan dispatched, including configs that returned nothing. A config is reported whatever its outcome: two sources contributing nothing is the coverage story, not an error to hide.'
+        fetch_statuses:
+          items:
+            $ref: '#/components/schemas/DiscoveryScanFetchStatus'
+          type: array
+          title: Fetch Statuses
+          description: One entry per fetch the scan's legs chained so far. Empty while no leg has finished, and always empty for scans run on engines that do not yet tag their fetches with the scan.
+      type: object
+      required:
+      - id
+      - engine_id
+      - state
+      - triggered_at
+      - source_statuses
+      title: DiscoveryScan
+      description: A manual "Scan now" against one engine, and how each of its legs is doing.
+    DiscoverySourceReachability:
+      type: string
+      enum:
+      - reachable
+      - unreachable
+      - unknown
+      title: DiscoverySourceReachability
+      description: 'Whether the engine got an answer from the source''s host.
+
+
+        Any response counts, including a 401: a vendor that rejected the credentials
+
+        was reached. Unknown means the test failed before it tried - a missing field,
+
+        an unsupported vendor - which says nothing about the network either way.'
+    DiscoverySourceTestState:
+      type: string
+      enum:
+      - in_progress
+      - completed
+      title: DiscoverySourceTestState
+      description: 'Whether every engine''s leg of a test has reported.
+
+
+        No pass/fail arm, for the reason a scan has none: one engine can reach a
+
+        source another cannot, and a single verdict would hide which.'
+    OutputColumnCheckResult:
+      properties:
+        outcome:
+          $ref: '#/components/schemas/ValidationOutcome'
+          description: Whether the column check passed.
+        missing_columns:
+          items:
+            type: string
+          type: array
+          title: Missing Columns
+          description: Contract columns the source did not supply.
+          default: []
+        unmapped_columns:
+          items:
+            type: string
+          type: array
+          title: Unmapped Columns
+          description: Columns the source supplied that the contract does not describe.
+          default: []
+        checked_at:
+          type: string
+          format: date-time
+          title: Checked At
+          description: When the check ran.
+      type: object
+      required:
+      - outcome
+      - checked_at
+      title: OutputColumnCheckResult
+      description: 'Result of checking a config''s output columns against the D-02 contract.
+
+
+        The contract is ``arthur_common.DiscoveryOutputRecord``, read off the model
+
+        rather than restated here: app_plane checks it on every run and ML Engine
+
+        checks it again, and a hand-written copy in one repo is how the two silently
+
+        stop describing the same thing.
+
+
+        The query text is never parsed. Only the set of column names a run actually
+
+        returned is compared, so a config is judged on what it produces rather than on
+
+        Arthur''s reading of a language it does not speak.
+
+
+        Recorded per config rather than per source: one source can back several
+
+        configs, and it is a config''s query that either satisfies the contract or
+
+        does not.'
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    DiscoveryQueryLanguage:
+      type: string
+      enum:
+      - kql
+      - spl
+      - esql
+      - none
+      title: DiscoveryQueryLanguage
+      description: 'The language a vendor''s query text is written in.
+
+
+        NONE covers vendors swept through a list API rather than a query.'
+    DiscoverySourceTestEngineResult:
+      properties:
+        engine_id:
+          type: string
+          format: uuid
+          title: Engine Id
+          description: Engine this leg ran on.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: ID of this leg's test job, whose logs explain a failure the result cannot - one that ended before it could report.
+        job_state:
+          $ref: '#/components/schemas/JobState'
+          description: Raw state of this leg's job, as the engine last reported it. It can read running for a short while after the result is stored, until the engine's job agent reports the job's end; `state` and `finished_at` describe the leg.
+        state:
+          $ref: '#/components/schemas/DiscoverySourceTestEngineState'
+          description: Whether this leg is pending, and how it ended if not. A leg whose engine is offline stays pending with its job queued.
+        queued_at:
+          type: string
+          format: date-time
+          title: Queued At
+          description: When this leg was enqueued.
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+          description: 'When this leg finished, if it has: when its result was stored, or, for a job that ended without reporting, when the job ended.'
+        result:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceTestResult'
+          - type: 'null'
+          description: What the engine reported. Null until it reports, and for a job that ended without reporting.
+      type: object
+      required:
+      - engine_id
+      - job_id
+      - job_state
+      - state
+      - queued_at
+      title: DiscoverySourceTestEngineResult
+      description: One engine's leg of a test.
+    DiscoverySourceTestOutcome:
+      type: string
+      enum:
+      - succeeded
+      - failed
+      title: DiscoverySourceTestOutcome
+    PostDiscoverySource:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source.
+        vendor:
+          $ref: '#/components/schemas/DiscoverySourceVendor'
+          description: Vendor to connect to.
+        fields:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceField'
+          type: array
+          title: Fields
+          description: List of non-sensitive and sensitive credential fields for the source.
+      type: object
+      required:
+      - name
+      - vendor
+      - fields
+      title: PostDiscoverySource
+    DiscoverySource:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Discovery source ID.
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+          description: ID of the parent organization.
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source.
+        vendor:
+          $ref: '#/components/schemas/DiscoverySourceVendor'
+          description: Vendor the source connects to.
+        source_class:
+          $ref: '#/components/schemas/DiscoverySourceClass'
+          description: Where this source observes from. Derived from the vendor catalog.
+        fields:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceNonSensitiveField'
+          type: array
+          title: Fields
+          description: Non-sensitive credential fields. Sensitive values are never returned.
+        health:
+          $ref: '#/components/schemas/DiscoverySourceHealth'
+          description: Current health of the connection.
+        health_details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Health Details
+          description: 'Human-readable detail about why the source is in its current health state - the vendor''s error text, a rate-limit notice, or whatever the last run had to say. Free text and never parsed: health itself stays an enum so it can be filtered and rendered, and this carries the part of the story an enum cannot. Empty when the state speaks for itself, as a healthy source''s does.'
+        last_successful_run_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Successful Run At
+          description: When a scheduled run last completed successfully against this source.
+        consecutive_failures:
+          type: integer
+          title: Consecutive Failures
+          description: How many scheduled runs have failed back to back.
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+          description: Whether scheduled runs may be dispatched against this source. A disabled source keeps its configs and its records - it is paused rather than removed, so re-enabling it resumes collection instead of starting a new source.
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          description: Whether the source has been deleted. Deleted sources are retained so records already collected keep resolving, and so their evidence can be marked as originating from a deleted source.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: When the source was deleted, if it was.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for the user who last updated the source.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - organization_id
+      - name
+      - vendor
+      - source_class
+      - fields
+      - health
+      - consecutive_failures
+      - is_enabled
+      - is_deleted
+      title: DiscoverySource
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    ResourceList_DiscoverySourceConfig_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceConfig'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DiscoverySourceConfig]
+    DiscoverySourceTypeSchema:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        vendor:
+          $ref: '#/components/schemas/DiscoverySourceVendor'
+          description: Vendor the schema describes.
+        display_name:
+          type: string
+          title: Display Name
+          description: 'Human-readable name for the vendor, spelled the way the product spells it - "AWS Bedrock", not a title-cased "Aws Bedrock". Declared here rather than derived from the enum value on the frontend because no mechanical rule gets every vendor right: acronyms, internal capitals and punctuation all survive in a product name but not in a wire value.'
+        source_class:
+          $ref: '#/components/schemas/DiscoverySourceClass'
+          description: Where sources of this vendor observe from.
+        availability:
+          $ref: '#/components/schemas/DiscoverySourceAvailability'
+          description: Whether this vendor is generally available, in preview, or unavailable.
+        query_language:
+          $ref: '#/components/schemas/DiscoveryQueryLanguage'
+          description: Language a config's query text must be written in for this vendor.
+        fields:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceTypeSchemaField'
+          type: array
+          title: Fields
+          description: Metadata for optional and required discovery source fields.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - vendor
+      - display_name
+      - source_class
+      - availability
+      - query_language
+      - fields
+      title: DiscoverySourceTypeSchema
+      description: 'One vendor''s entry in the catalog that drives the config UI.
+
+
+        Everything the frontend needs to render this vendor''s form: the name to show
+
+        for it, its fields with their types and sensitivity, whether the vendor may be
+
+        selected at all, and which query language its configs are written in.'
+    PutDiscoverySourceTestResult:
+      properties:
+        outcome:
+          $ref: '#/components/schemas/DiscoverySourceTestOutcome'
+          description: Whether the query ran, returned, and its rows satisfy the output contract.
+        reachability:
+          $ref: '#/components/schemas/DiscoverySourceReachability'
+          description: Whether this engine got an answer from the source's host.
+        rows:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Rows
+          description: Up to preview_limit rows, as the connector mapped them onto the output contract - or, when the connector returned unmapped rows, as the source returned them, so the columns that failed are visible.
+          default: []
+        truncated:
+          type: boolean
+          title: Truncated
+          description: Whether reading stopped at the preview limit, size bound or deadline before the source was exhausted, so more rows may exist. The engine does not read past the limit to find out.
+          default: false
+        output_column_check:
+          anyOf:
+          - $ref: '#/components/schemas/OutputColumnCheckResult'
+          - type: 'null'
+          description: The output-column check over the rows read. Null when no row was read, which is not the same answer as a check that passed.
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceTestError'
+          - type: 'null'
+          description: Why the test failed. Null when it succeeded.
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+          description: When the engine started the test.
+        finished_at:
+          type: string
+          format: date-time
+          title: Finished At
+          description: When the engine finished the test.
+      type: object
+      required:
+      - outcome
+      - reachability
+      - started_at
+      - finished_at
+      title: PutDiscoverySourceTestResult
+      description: What one engine's test job found, as that engine reports it.
+    JobState:
+      type: string
+      enum:
+      - queued
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobState
+    DiscoverySourceTestErrorCategory:
+      type: string
+      enum:
+      - authentication
+      - authorization
+      - network
+      - timeout
+      - configuration
+      - unsupported_vendor
+      - credentials_unavailable
+      - output_contract
+      - vendor_error
+      - internal
+      title: DiscoverySourceTestErrorCategory
+    DiscoverySourceField:
+      properties:
+        key:
+          type: string
+          title: Key
+          description: Name of the discovery source field.
+        value:
+          type: string
+          title: Value
+          description: Value of the discovery source field.
+      type: object
+      required:
+      - key
+      - value
+      title: DiscoverySourceField
+    DiscoverySourceConfigSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: DiscoverySourceConfigSort
+    DiscoverySourceSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: DiscoverySourceSort
+    PostDiscoveryScan:
+      properties:
+        engine_id:
+          type: string
+          format: uuid
+          title: Engine Id
+          description: Engine (data plane) to scan. Every enabled config assigned to this engine is dispatched, one job each.
+      type: object
+      required:
+      - engine_id
+      title: PostDiscoveryScan
+    DiscoverySourceClass:
+      type: string
+      enum:
+      - cloud
+      - siem
+      - endpoint
+      title: DiscoverySourceClass
+      description: 'Where a source observes from.
+
+
+        One name for this concept everywhere: UP-4976 called it "source type", the
+
+        design docs "source class", earlier API drafts "vantage_point", and D-02
+
+        briefly "found_by". Settled as **source class**, matching
+
+        ``arthur_common.SourceClass`` - found_by reads wrong on a configured source,
+
+        which does the record rather than getting found. An inventory column can
+
+        still be labelled "Found by"; that is a display string.
+
+
+        This is the configurable subset. ``SourceClass`` also has ``otel`` and
+
+        ``manual``, which a task''s provenance has to name but which nobody
+
+        configures, and arthur_common exports exactly this subset as
+
+        ``DISCOVERY_SOURCE_CLASSES``.
+
+
+        Declared here rather than aliased to ``SourceClass`` because the API must
+
+        reject ``otel`` and ``manual`` on a catalog entry: nothing configures those,
+
+        so accepting one would create a source no scan could ever run. A test pins
+
+        this set against ``DISCOVERY_SOURCE_CLASSES`` so the two cannot drift.
+
+
+        Distinct from a "discovery source type", which is one vendor''s catalog entry -
+
+        the two words no longer name the same thing.
+
+
+        Choosing a class for a vendor has a downstream consequence worth knowing:
+
+        D-02 fixes how a record is graded from the class alone. SIEM records are
+
+        ``inferred`` - a name lifted from a log field - while cloud and endpoint are
+
+        ``observed``, a row from a provider''s list API or a binary seen on disk. That
+
+        is derived per record rather than stored here, so this catalog does not
+
+        restate it; a stored copy could only disagree with the record it sits on.'
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        organization_id:
+          type: string
+          format: uuid4
+          title: Organization Id
+          description: The ID of the Arthur organization the user belongs to.
+        id:
+          type: string
+          format: uuid4
+          title: Id
+          description: Unique user ID assigned by Arthur.
+        first_name:
+          type: string
+          title: First Name
+          description: The user's first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: The user's last name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The user's email, if provided.
+        picture:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Picture
+          description: A url to the user's profile picture, if one exists.
+        user_type:
+          $ref: '#/components/schemas/UserType'
+          description: The type of user.
+        data_plane_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Data Plane Id
+          description: Arthur data plane ID. Only set for data plane users.
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+          description: Arthur client ID for this user. Only set for service account type users.
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Name of user's Arthur organization.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - organization_id
+      - id
+      - first_name
+      - last_name
+      - user_type
+      - organization_name
+      title: User
+    DiscoverySourceAvailability:
+      type: string
+      enum:
+      - generally_available
+      - preview
+      - unavailable
+      title: DiscoverySourceAvailability
+      description: 'How ready a vendor is for customer use.
+
+
+        Declared by the server so the frontend renders preview gates (for example
+
+        Bedrock AgentCore) without hardcoding vendor knowledge.'
+    DiscoverySourceVendor:
+      type: string
+      enum:
+      - microsoft_sentinel
+      - splunk_enterprise
+      - elastic_security
+      - aws_bedrock
+      - jamf_pro
+      - gcp_vertex
+      - gcp_compute_engine
+      title: DiscoverySourceVendor
+      description: 'The upstream product a discovery source connects to.
+
+
+        THIS IS THE REGISTRY. D-02 (UP-4974) deliberately does not enumerate vendors:
+
+        ``DiscoveryAgentCreationSource.vendor`` is a plain ``str``, because nothing in
+
+        that package branches on the vendor - observable fields, detection and the
+
+        visibility ceiling are all declared per source class - so enumerating it there
+
+        would make every new vendor a release of arthur_common plus a repin in three
+
+        services. This enum
+
+        plus its catalog entry is what a vendor *is*, and the display name and
+
+        availability live alongside it.
+
+
+        A value is still a wire value: it lands verbatim in a record''s ``vendor``
+
+        and in its provenance, in JSONB, in two services. So it is not free text at
+
+        this end, and renaming one later is a data migration rather than an edit.
+
+
+        Adding CrowdStrike Falcon once D-20 decides is therefore one member here and
+
+        one bootstrap module - and nothing at all in arthur_common.
+
+
+        Values follow ``<platform>_<product>`` mechanically per D-02, rather than
+
+        shortest-unambiguous, because the ambiguity is not hypothetical: Jamf ships
+
+        Protect alongside Pro, Elastic Fleet is already named in the design docs as a
+
+        possible second Elastic source, and Microsoft and Google each ship more than
+
+        one product that could become one. Under shortest-unambiguous most of these
+
+        would need a later rename, and a rename here breaks the wire.'
+    ValidationOutcome:
+      type: string
+      enum:
+      - pass
+      - fail
+      title: ValidationOutcome
+      description: Generic class to indicate if a validation passed or failed.
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DiscoverySourceCredentials:
+      additionalProperties:
+        type: string
+      type: object
+      title: DiscoverySourceCredentials
+      description: A discovery source config's sensitive fields, keyed by field name.
+    ResourceList_DiscoverySourceTypeSchema_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceTypeSchema'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DiscoverySourceTypeSchema]
+    DiscoverySourceFieldDataType:
+      type: string
+      enum:
+      - string
+      - dict
+      - enum
+      - int
+      title: DiscoverySourceFieldDataType
+    DiscoveryScanSourceState:
+      type: string
+      enum:
+      - pending
+      - succeeded
+      - failed
+      title: DiscoveryScanSourceState
+      description: 'How one config''s leg of a scan ended, or that it has not.
+
+
+        Derived from the job rather than restating it: a leg is still pending only
+
+        while its job can still run. A job that failed its last allowed attempt is
+
+        left queued by the retry machinery but will never be picked up again, so
+
+        reporting it as pending would leave a scan in progress forever.'
+    DiscoveryScanFetchStatus:
+      properties:
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the discovery source whose tasks this fetch uploads.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: ID of the fetch job.
+        state:
+          $ref: '#/components/schemas/DiscoveryScanSourceState'
+          description: Whether this fetch is still pending, and how it ended if not.
+        job_state:
+          $ref: '#/components/schemas/JobState'
+          description: Raw state of the fetch job.
+        queued_at:
+          type: string
+          format: date-time
+          title: Queued At
+          description: When the leg enqueued this fetch.
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+          description: When this fetch finished, or null if it has not.
+      type: object
+      required:
+      - discovery_source_id
+      - job_id
+      - state
+      - job_state
+      - queued_at
+      title: DiscoveryScanFetchStatus
+      description: 'One fetch a leg of the scan chained: the job that carries what the leg found
+
+        from the engine''s GenAI Engine to the Platform''s agents.
+
+
+        A leg is chained a fetch when it succeeds, and when it fails after publishing
+
+        something. A leg that failed before publishing anything chains none, so there
+
+        is nothing here to wait for on its behalf.'
+    DiscoveryScanSourceStatus:
+      properties:
+        discovery_source_config_id:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+          description: ID of the config this leg of the scan ran.
+        discovery_source_config_name:
+          type: string
+          title: Discovery Source Config Name
+          description: Name the config had when the scan was dispatched.
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the discovery source the config belongs to.
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+          description: ID of the scan job for this config.
+        state:
+          $ref: '#/components/schemas/DiscoveryScanSourceState'
+          description: Whether this leg is still pending, and how it ended if not.
+        job_state:
+          $ref: '#/components/schemas/JobState'
+          description: Raw state of this config's scan job, for detail the scan state flattens - a job left queued with no attempts remaining reads as queued here and as failed above.
+        queued_at:
+          type: string
+          format: date-time
+          title: Queued At
+          description: When this leg was enqueued.
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+          description: When this leg finished, or null if it has not.
+        error_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Error Count
+          description: Errors this leg flagged, or null if it has not finished.
+      type: object
+      required:
+      - discovery_source_config_id
+      - discovery_source_config_name
+      - discovery_source_id
+      - job_id
+      - state
+      - job_state
+      - queued_at
+      title: DiscoveryScanSourceStatus
+      description: 'One config''s leg of a scan.
+
+
+        Named per *source* config rather than per job because that is the unit an
+
+        operator recognizes - "Splunk prod returned nothing, Bedrock failed auth" -
+
+        and it is the unit D-11''s run store will record. The job ID is carried so the
+
+        logs of a failed leg are one request away.'
+    DiscoverySourceHealth:
+      type: string
+      enum:
+      - unknown
+      - healthy
+      - degraded
+      - failed
+      title: DiscoverySourceHealth
+    ResourceList_DiscoverySource_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DiscoverySource'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[DiscoverySource]
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostDiscoverySourceConfigEngines:
+      properties:
+        engine_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Engine Ids
+          description: Engine IDs to append to the config's existing engine list.
+      type: object
+      required:
+      - engine_ids
+      title: PostDiscoverySourceConfigEngines
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PatchDiscoverySource:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the discovery source.
+        is_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Enabled
+          description: Whether scheduled runs may be dispatched against this source. A disabled source keeps its configs and its records - it is paused rather than removed, so re-enabling it resumes collection instead of starting a new source.
+        fields:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceField'
+          type: array
+          title: Fields
+          description: Credential fields to update. Fields left out keep their current value.
+          default: []
+      type: object
+      title: PatchDiscoverySource
+    PatchDiscoverySourceConfig:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the discovery source config.
+        query:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: Query or filter text in the source's native language. Arthur stores this verbatim and never parses or validates it - only the columns a run returns are contracted. Each record a run produces carries this text back in its provenance, so a record can be explained and reproduced.
+        query_language:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoveryQueryLanguage'
+          - type: 'null'
+          description: Language the query text is written in. Must match the vendor's language.
+        schedule_cron:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schedule Cron
+          description: Cron expression describing how often the config runs. Standard five-field syntax.
+        schedule_timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schedule Timezone
+          description: IANA timezone the cron expression is evaluated in.
+        lookback_window_seconds:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Lookback Window Seconds
+          description: How far back each run looks, in seconds. Should comfortably exceed the gap between two scheduled runs.
+        engine_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Engine Ids
+          description: Replaces the config's engine list wholesale. Use the engines endpoint to append instead.
+        is_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Enabled
+          description: 'Whether this config is scheduled. Disabling one config stops that query alone: the other configs on the same source keep running, which is the difference between this switch and the source''s. Disabling the source pauses every config it backs regardless of this flag.'
+      type: object
+      title: PatchDiscoverySourceConfig
+    DiscoverySourceTestResult:
+      properties:
+        outcome:
+          $ref: '#/components/schemas/DiscoverySourceTestOutcome'
+          description: Whether the query ran, returned, and its rows satisfy the output contract.
+        reachability:
+          $ref: '#/components/schemas/DiscoverySourceReachability'
+          description: Whether this engine got an answer from the source's host.
+        rows:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Rows
+          description: Up to preview_limit rows, as the connector mapped them onto the output contract - or, when the connector returned unmapped rows, as the source returned them, so the columns that failed are visible.
+          default: []
+        truncated:
+          type: boolean
+          title: Truncated
+          description: Whether reading stopped at the preview limit, size bound or deadline before the source was exhausted, so more rows may exist. The engine does not read past the limit to find out.
+          default: false
+        output_column_check:
+          anyOf:
+          - $ref: '#/components/schemas/OutputColumnCheckResult'
+          - type: 'null'
+          description: The output-column check over the rows read. Null when no row was read, which is not the same answer as a check that passed.
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoverySourceTestError'
+          - type: 'null'
+          description: Why the test failed. Null when it succeeded.
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+          description: When the engine started the test.
+        finished_at:
+          type: string
+          format: date-time
+          title: Finished At
+          description: When the engine finished the test.
+        received_at:
+          type: string
+          format: date-time
+          title: Received At
+          description: When the Platform stored the result.
+      type: object
+      required:
+      - outcome
+      - reachability
+      - started_at
+      - finished_at
+      - received_at
+      title: DiscoverySourceTestResult
+    DiscoveryScanState:
+      type: string
+      enum:
+      - in_progress
+      - completed
+      title: DiscoveryScanState
+      description: 'Where a manual scan is as a whole.
+
+
+        A scan is not a job, it is the fan-out of N of them - one per config bound to
+
+        the chosen engine. It is complete only once every one of those jobs has
+
+        stopped, which is why this has no pass/fail arm: some sources routinely fail
+
+        while their siblings succeed, and collapsing that into one verdict throws
+
+        away the only part anybody can act on. The per-source statuses carry the
+
+        outcome; this says whether they are all in yet.'
+    DiscoverySourceTest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: ID of the test.
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: Discovery source under test.
+        discovery_source_config_id:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+          description: Config under test.
+        discovery_source_config_name:
+          type: string
+          title: Discovery Source Config Name
+          description: Name the config had when the test was requested.
+        preview_limit:
+          type: integer
+          title: Preview Limit
+          description: The most rows each engine returns.
+        state:
+          $ref: '#/components/schemas/DiscoverySourceTestState'
+          description: Whether every engine's leg has finished.
+        triggered_at:
+          type: string
+          format: date-time
+          title: Triggered At
+          description: When the test was requested.
+        engine_results:
+          items:
+            $ref: '#/components/schemas/DiscoverySourceTestEngineResult'
+          type: array
+          title: Engine Results
+          description: One entry per engine the test was dispatched to.
+      type: object
+      required:
+      - id
+      - discovery_source_id
+      - discovery_source_config_id
+      - discovery_source_config_name
+      - preview_limit
+      - state
+      - triggered_at
+      - engine_results
+      title: DiscoverySourceTest
+      description: One Test Connection request, reported per engine.
+    DiscoverySourceTestEngineState:
+      type: string
+      enum:
+      - pending
+      - succeeded
+      - failed
+      title: DiscoverySourceTestEngineState
+      description: 'How one engine''s leg ended, or that it has not.
+
+
+        Succeeded means the query ran and returned - possibly zero rows. Failed means
+
+        it did not, or the rows it returned do not satisfy the output contract, or the
+
+        job ended without reporting at all; the result or the job logs say which.'
+    DiscoverySourceTypeSchemaField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source field.
+        is_sensitive:
+          type: boolean
+          title: Is Sensitive
+          description: If field stores sensitive data.
+        is_optional:
+          type: boolean
+          title: Is Optional
+          description: If field is optional or required.
+        d_type:
+          $ref: '#/components/schemas/DiscoverySourceFieldDataType'
+          description: Data type of the value stored by the field.
+        description:
+          type: string
+          title: Description
+          description: Description of the discovery source field.
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+          description: List of allowed values for field. Relevant to enum data type fields.
+      type: object
+      required:
+      - name
+      - is_sensitive
+      - is_optional
+      - d_type
+      - description
+      title: DiscoverySourceTypeSchemaField
+    DiscoverySourceConfig:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time of record creation.
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Time of last record update.
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Discovery source config ID.
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+          description: ID of the parent organization.
+        discovery_source_id:
+          type: string
+          format: uuid
+          title: Discovery Source Id
+          description: ID of the parent discovery source.
+        name:
+          type: string
+          title: Name
+          description: Name of the discovery source config.
+        query:
+          type: string
+          title: Query
+          description: Query or filter text in the source's native language. Arthur stores this verbatim and never parses or validates it - only the columns a run returns are contracted. Each record a run produces carries this text back in its provenance, so a record can be explained and reproduced.
+        query_language:
+          $ref: '#/components/schemas/DiscoveryQueryLanguage'
+          description: Language the query text is written in.
+        schedule_cron:
+          type: string
+          title: Schedule Cron
+          description: Cron expression describing how often the config runs. Standard five-field syntax.
+        schedule_timezone:
+          type: string
+          title: Schedule Timezone
+          description: IANA timezone the cron expression is evaluated in.
+        lookback_window_seconds:
+          type: integer
+          title: Lookback Window Seconds
+          description: How far back each run looks, in seconds. Should comfortably exceed the gap between two scheduled runs.
+        engine_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Engine Ids
+          description: IDs of the engines (data planes) this config runs on. One config can run on several engines across different workspaces.
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+          description: 'Whether this config is scheduled. Disabling one config stops that query alone: the other configs on the same source keep running, which is the difference between this switch and the source''s. Disabling the source pauses every config it backs regardless of this flag.'
+        output_column_check_result:
+          anyOf:
+          - $ref: '#/components/schemas/OutputColumnCheckResult'
+          - type: 'null'
+          description: Result of the last output-column check against the D-02 contract.
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          description: Whether the config has been deleted. Deleted configs are retained.
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+          description: When the config was deleted, if it was.
+        last_updated_by_user:
+          anyOf:
+          - $ref: '#/components/schemas/User'
+          - type: 'null'
+          description: Information for the user who last updated the config.
+      type: object
+      required:
+      - created_at
+      - updated_at
+      - id
+      - organization_id
+      - discovery_source_id
+      - name
+      - query
+      - query_language
+      - schedule_cron
+      - schedule_timezone
+      - lookback_window_seconds
+      - engine_ids
+      - is_enabled
+      - is_deleted
+      title: DiscoverySourceConfig
+    PostDiscoverySourceTest:
+      properties:
+        discovery_source_config_id:
+          type: string
+          format: uuid
+          title: Discovery Source Config Id
+          description: Config of this source whose query to test. Must belong to the source in the path.
+        engine_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Engine Ids
+          description: Engines to test from. Each must be assigned to the config, because an engine can only read a config's credentials through that assignment. Defaults to every engine the config is assigned to.
+        preview_limit:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Preview Limit
+          description: The most rows each engine reads and returns.
+          default: 10
+      type: object
+      required:
+      - discovery_source_config_id
+      title: PostDiscoverySourceTest
+  securitySchemes:
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

@@ -1,0 +1,666 @@
+openapi: 3.2.0
+info:
+  title: Arthur Scope Discovery Runs V1 API
+  version: 0.1.0
+tags:
+- name: Discovery Runs V1
+paths:
+  /api/v1/jobs/{job_id}/runs/{job_run_id}/discovery_outcome:
+    put:
+      tags:
+      - Discovery Runs V1
+      summary: Put Discovery Run Outcome
+      description: Persist one immutable outcome for an owned discovery job attempt. Identical retries are idempotent; changed reports conflict. Does not update job state.
+      operationId: put_discovery_run_outcome
+      security:
+      - OAuth2AuthorizationCode: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: job_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Run Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutDiscoveryRunOutcome'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryRun'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_runs:
+    get:
+      tags:
+      - Discovery Runs V1
+      summary: List Discovery Runs
+      description: Organization-scoped attempt history. Requires organization_trigger_discovery_scan. Counts are per attempt, not deduplicated across retries.
+      operationId: list_discovery_runs
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: source_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Source Id
+      - name: scan_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scan Id
+      - name: job_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Job Id
+      - name: engine_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Engine Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DiscoveryRunStatus'
+          - type: 'null'
+          title: Status
+      - name: finished_after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished After
+      - name: finished_before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished Before
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryRunList'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_runs/{run_id}:
+    get:
+      tags:
+      - Discovery Runs V1
+      summary: Get Discovery Run
+      description: Attempt outcome detail. Requires organization_trigger_discovery_scan. Job and job-run IDs identify the existing permission-gated log route.
+      operationId: get_discovery_run
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryRun'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/discovery_sources/{source_id}/runs:
+    get:
+      tags:
+      - Discovery Runs V1
+      summary: List Discovery Source Runs
+      description: Attempt history including deleted sources. Requires organization_trigger_discovery_scan. Unknown or inaccessible source IDs produce an empty history.
+      operationId: list_discovery_source_runs
+      security:
+      - OAuth2AuthorizationCode:
+        - organization_trigger_discovery_scan
+      parameters:
+      - name: source_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Source Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: The page to return starting from 1 up to total_pages.
+          default: 1
+          title: Page
+        description: The page to return starting from 1 up to total_pages.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: The number of records per page. The max is 1000.
+          default: 20
+          title: Page Size
+        description: The number of records per page. The max is 1000.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryRunList'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DiscoveryDeviceCoverage:
+      properties:
+        devices_read:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices Read
+          description: 'Devices the MDM returned for this run: the lookback window, or the whole roster for a full enumeration. Not the fleet''s total size.'
+          default: 0
+        devices_in_scope:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices In Scope
+          description: Devices read that the source's group scope let in.
+          default: 0
+        devices_decoded:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices Decoded
+          description: In-scope devices whose inventory payload was read.
+          default: 0
+        devices_unreadable:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices Unreadable
+          description: In-scope devices whose inventory payload could not be read.
+          default: 0
+        unreadable_by_reason:
+          patternProperties:
+            ^[a-z][a-z0-9-]{0,63}$:
+              type: integer
+              maximum: 9007199254740991.0
+              minimum: 0.0
+          type: object
+          maxProperties: 100
+          title: Unreadable By Reason
+          description: Unreadable devices by why, e.g. never-reported, no-cache, oversize, malformed, conflicting-attributes. See Discovery Run API documentation.
+        devices_excluded:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices Excluded
+          description: Devices kept out by an excluded group.
+          default: 0
+        excluded_by_group:
+          additionalProperties:
+            type: integer
+            maximum: 9007199254740991.0
+            minimum: 0.0
+          propertyNames:
+            maxLength: 512
+            minLength: 1
+          type: object
+          maxProperties: 1000
+          title: Excluded By Group
+          description: Excluded group name to the devices it kept out. A device in several counts toward each, so these can sum to more than devices_excluded.
+        devices_outside_included_groups:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Devices Outside Included Groups
+          description: Devices in none of the included groups, when included groups are set.
+          default: 0
+        included_by_group:
+          additionalProperties:
+            type: integer
+            maximum: 9007199254740991.0
+            minimum: 0.0
+          propertyNames:
+            maxLength: 512
+            minLength: 1
+          type: object
+          maxProperties: 1000
+          title: Included By Group
+          description: Included group name to the in-scope devices it let in.
+      additionalProperties: false
+      type: object
+      title: DiscoveryDeviceCoverage
+      description: 'Which managed devices an endpoint scan read, and which of them it could use.
+
+
+        The denominator a record count needs: 12 devices with agents out of 4,000 read
+
+        and 900 excluded by policy is a different report from 12 out of 12. Counts are
+
+        as the engine reported them, not checked against each other.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DiscoveryRun:
+      properties:
+        schema_version:
+          type: integer
+          const: 1
+          title: Schema Version
+          default: 1
+        status:
+          $ref: '#/components/schemas/DiscoveryRunStatus'
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        finished_at:
+          type: string
+          format: date-time
+          title: Finished At
+        records_published:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Records Published
+          default: 0
+        batches_published:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Batches Published
+          default: 0
+        error_count:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Error Count
+          default: 0
+        error_code:
+          type:
+          - string
+          - 'null'
+          pattern: ^(invalid_job|unsupported_vendor|not_configured|credentials_unavailable|authentication_failed|permission_denied|provider_error|publication_failed|cancelled|internal_error)$
+          title: Error Code
+          description: Defined safe error code, not raw exception text. See Discovery Run API documentation.
+        denied_scopes:
+          items:
+            $ref: '#/components/schemas/DiscoveryDeniedScope'
+          type: array
+          maxItems: 1000
+          title: Denied Scopes
+        device_coverage:
+          $ref: '#/components/schemas/DiscoveryDeviceCoverage'
+          description: Set by sources that read managed devices (MDMs); null for query-language sources.
+        id:
+          type: string
+          format: uuid
+          title: Id
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        job_run_id:
+          type: string
+          format: uuid
+          title: Job Run Id
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+        workspace_id:
+          type: string
+          format: uuid
+          title: Workspace Id
+        engine_id:
+          type: string
+          format: uuid
+          title: Engine Id
+        scan_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scan Id
+        discovery_source_config_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Discovery Source Config Id
+        discovery_source_config_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Discovery Source Config Name
+        discovery_source_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Discovery Source Id
+        vendor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vendor
+        lookback_hours:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Lookback Hours
+        received_at:
+          type: string
+          format: date-time
+          title: Received At
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      - started_at
+      - finished_at
+      - id
+      - job_id
+      - job_run_id
+      - organization_id
+      - workspace_id
+      - engine_id
+      - scan_id
+      - discovery_source_config_id
+      - discovery_source_config_name
+      - discovery_source_id
+      - vendor
+      - lookback_hours
+      - received_at
+      title: DiscoveryRun
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    DiscoveryDeniedScope:
+      properties:
+        scope:
+          type: string
+          maxLength: 512
+          minLength: 1
+          title: Scope
+          description: Account/project/region identifier only; never credentials or a response body.
+        reason:
+          type: string
+          enum:
+          - permission_denied
+          - unreachable
+          title: Reason
+      additionalProperties: false
+      type: object
+      required:
+      - scope
+      - reason
+      title: DiscoveryDeniedScope
+    DiscoveryRunStatus:
+      type: string
+      enum:
+      - done
+      - failed
+      - skipped
+      title: DiscoveryRunStatus
+    DiscoveryRunList:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/DiscoveryRun'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: DiscoveryRunList
+    PutDiscoveryRunOutcome:
+      properties:
+        schema_version:
+          type: integer
+          const: 1
+          title: Schema Version
+          default: 1
+        status:
+          $ref: '#/components/schemas/DiscoveryRunStatus'
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        finished_at:
+          type: string
+          format: date-time
+          title: Finished At
+        records_published:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Records Published
+          default: 0
+        batches_published:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Batches Published
+          default: 0
+        error_count:
+          type: integer
+          maximum: 9007199254740991.0
+          minimum: 0.0
+          title: Error Count
+          default: 0
+        error_code:
+          type:
+          - string
+          - 'null'
+          pattern: ^(invalid_job|unsupported_vendor|not_configured|credentials_unavailable|authentication_failed|permission_denied|provider_error|publication_failed|cancelled|internal_error)$
+          title: Error Code
+          description: Defined safe error code, not raw exception text. See Discovery Run API documentation.
+        denied_scopes:
+          items:
+            $ref: '#/components/schemas/DiscoveryDeniedScope'
+          type: array
+          maxItems: 1000
+          title: Denied Scopes
+        device_coverage:
+          $ref: '#/components/schemas/DiscoveryDeviceCoverage'
+          description: Set by sources that read managed devices (MDMs); null for query-language sources.
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      - started_at
+      - finished_at
+      title: PutDiscoveryRunOutcome
+      description: Validate new submissions without applying write policy to history.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2AuthorizationCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          refreshUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token
+          scopes: {}
+          authorizationUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/auth
+          tokenUrl: https://platform-auth.arthur.ai/realms/arthur/protocol/openid-connect/token

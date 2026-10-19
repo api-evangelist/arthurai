@@ -989,148 +989,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    DatasetLocatorField:
-      properties:
-        key:
-          type: string
-          title: Key
-          description: Name of dataset locator field.
-        value:
-          type: string
-          title: Value
-          description: Value of dataset locator field.
-      type: object
-      required:
-      - key
-      - value
-      title: DatasetLocatorField
-    PutDatasetSchema:
-      properties:
-        alias_mask:
-          additionalProperties:
-            type: string
-          propertyNames:
-            format: uuid
-          type: object
-          title: Alias Mask
-        columns:
-          items:
-            $ref: '#/components/schemas/DatasetColumn'
-          type: array
-          title: Columns
-      type: object
-      required:
-      - alias_mask
-      - columns
-      title: PutDatasetSchema
-    AvailableDatasetsSort:
-      type: string
-      enum:
-      - created_at
-      - updated_at
-      - name
-      title: AvailableDatasetsSort
-    DType:
-      type: string
-      enum:
-      - undefined
-      - int
-      - float
-      - bool
-      - str
-      - uuid
-      - timestamp
-      - date
-      - json
-      - image
-      title: DType
-    PatchDataset:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the dataset.
-        dataset_locator:
-          anyOf:
-          - $ref: '#/components/schemas/PatchDatasetLocator'
-          - type: 'null'
-          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
-        model_problem_type:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProblemType'
-          - type: 'null'
-          description: Model problem type associated with the dataset.
-      type: object
-      title: PatchDataset
-    JoinedDataset:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: ID of dataset.
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of dataset.
-        column_id:
-          type: string
-          format: uuid
-          title: Column Id
-          description: Column ID to use as the join key.
-        column_name:
-          type: string
-          title: Column Name
-          description: Name of column used as join key.
-      type: object
-      required:
-      - id
-      - name
-      - column_id
-      - column_name
-      title: JoinedDataset
-    PutAvailableDatasets:
-      properties:
-        available_datasets:
-          items:
-            $ref: '#/components/schemas/PutAvailableDataset'
-          type: array
-          title: Available Datasets
-          description: List of available datasets to overwrite.
-      type: object
-      required:
-      - available_datasets
-      title: PutAvailableDatasets
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     Pagination:
       properties:
         page:
@@ -1156,7 +1014,57 @@ components:
       - total_pages
       - total_records
       title: Pagination
-    PostDataset:
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
+    DatasetSchema:
+      properties:
+        alias_mask:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Alias Mask
+        columns:
+          items:
+            $ref: '#/components/schemas/DatasetColumn'
+          type: array
+          title: Columns
+        column_names:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Column Names
+          readOnly: true
+      type: object
+      required:
+      - alias_mask
+      - columns
+      - column_names
+      title: DatasetSchema
+    ScopeSchemaTag:
+      type: string
+      enum:
+      - llm_context
+      - llm_prompt
+      - llm_response
+      - primary_timestamp
+      - categorical
+      - continuous
+      - prediction
+      - ground_truth
+      - pin_in_deep_dive
+      - possible_segmentation
+      title: ScopeSchemaTag
+    PatchDataset:
       properties:
         name:
           anyOf:
@@ -1166,51 +1074,16 @@ components:
           description: Name of the dataset.
         dataset_locator:
           anyOf:
-          - $ref: '#/components/schemas/DatasetLocator'
+          - $ref: '#/components/schemas/PatchDatasetLocator'
           - type: 'null'
           description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
-        dataset_schema:
-          anyOf:
-          - $ref: '#/components/schemas/PutDatasetSchema'
-          - type: 'null'
-          description: Schema definition of the dataset.
-        dataset_join_spec:
-          anyOf:
-          - $ref: '#/components/schemas/PostDatasetJoinSpec'
-          - type: 'null'
-          description: Field for defining a dataset as a join between two other datasets.
         model_problem_type:
-          $ref: '#/components/schemas/ModelProblemType'
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
           description: Model problem type associated with the dataset.
-        is_static:
-          type: boolean
-          title: Is Static
-          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
-          default: false
       type: object
-      required:
-      - model_problem_type
-      title: PostDataset
-    DatasetConnector:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Connector ID associated with the dataset.
-        name:
-          type: string
-          title: Name
-          description: Connector name associated with the dataset.
-        connector_type:
-          $ref: '#/components/schemas/ConnectorType'
-          description: Type of connector associated with the dataset.
-      type: object
-      required:
-      - id
-      - name
-      - connector_type
-      title: DatasetConnector
+      title: PatchDataset
     DatasetJoinSpec:
       properties:
         left_joined_dataset:
@@ -1228,22 +1101,12 @@ components:
       - left_joined_dataset
       - right_joined_dataset
       title: DatasetJoinSpec
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
-    InternalServerError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Internal server error
-      type: object
-      title: InternalServerError
+    DatasetsSort:
+      type: string
+      enum:
+      - created_at
+      - updated_at
+      title: DatasetsSort
     AvailableDataset:
       properties:
         created_at:
@@ -1317,57 +1180,20 @@ components:
       - project_id
       - data_plane_id
       title: AvailableDataset
-    DatasetsSort:
+    DType:
       type: string
       enum:
-      - created_at
-      - updated_at
-      title: DatasetsSort
-    DatasetListType:
-      properties:
-        tag_hints:
-          items:
-            $ref: '#/components/schemas/ScopeSchemaTag'
-          type: array
-          title: Tag Hints
-          default: []
-        nullable:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Nullable
-          default: true
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique ID of the schema node.
-        items:
-          anyOf:
-          - $ref: '#/components/schemas/DatasetScalarType'
-          - $ref: '#/components/schemas/DatasetObjectType'
-          - $ref: '#/components/schemas/DatasetListType'
-          title: Items
-      type: object
-      required:
-      - items
-      title: DatasetListType
-    ResourceList_AvailableDataset_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/AvailableDataset'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[AvailableDataset]
+      - undefined
+      - int
+      - float
+      - bool
+      - str
+      - uuid
+      - timestamp
+      - date
+      - json
+      - image
+      title: DType
     ModelProblemType:
       type: string
       enum:
@@ -1378,63 +1204,18 @@ components:
       - multiclass_classification
       - agentic_trace
       title: ModelProblemType
-    DatasetJoinKind:
-      type: string
-      enum:
-      - inner
-      - left_outer
-      - outer
-      - right_outer
-      title: DatasetJoinKind
-    PutAvailableDataset:
+    PutAvailableDatasets:
       properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the dataset.
-        dataset_locator:
-          anyOf:
-          - $ref: '#/components/schemas/DatasetLocator'
-          - type: 'null'
-          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
-        dataset_schema:
-          anyOf:
-          - $ref: '#/components/schemas/PutDatasetSchema'
-          - type: 'null'
-          description: Schema definition of the dataset.
-        model_problem_type:
-          anyOf:
-          - $ref: '#/components/schemas/ModelProblemType'
-          - type: 'null'
-          description: Model problem type associated with the dataset.
-        dataset_join_spec:
-          anyOf:
-          - $ref: '#/components/schemas/PostDatasetJoinSpec'
-          - type: 'null'
-          description: Field for defining a dataset as a join between two other datasets.
-        is_static:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Static
-          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+        available_datasets:
+          items:
+            $ref: '#/components/schemas/PutAvailableDataset'
+          type: array
+          title: Available Datasets
+          description: List of available datasets to overwrite.
       type: object
-      title: PutAvailableDataset
-    ConnectorType:
-      type: string
-      enum:
-      - shield
-      - S3
-      - GCS
-      - BigQuery
-      - engine_internal
-      - odbc
-      - snowflake
-      - databricks
-      - AzureBlob
-      title: ConnectorType
+      required:
+      - available_datasets
+      title: PutAvailableDatasets
     DatasetScalarType:
       properties:
         tag_hints:
@@ -1460,20 +1241,166 @@ components:
       required:
       - dtype
       title: DatasetScalarType
-    ScopeSchemaTag:
+    DatasetJoinKind:
       type: string
       enum:
-      - llm_context
-      - llm_prompt
-      - llm_response
-      - primary_timestamp
-      - categorical
-      - continuous
-      - prediction
-      - ground_truth
-      - pin_in_deep_dive
-      - possible_segmentation
-      title: ScopeSchemaTag
+      - inner
+      - left_outer
+      - outer
+      - right_outer
+      title: DatasetJoinKind
+    DatasetConnector:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Connector ID associated with the dataset.
+        name:
+          type: string
+          title: Name
+          description: Connector name associated with the dataset.
+        connector_type:
+          $ref: '#/components/schemas/ConnectorType'
+          description: Type of connector associated with the dataset.
+      type: object
+      required:
+      - id
+      - name
+      - connector_type
+      title: DatasetConnector
+    ConnectorType:
+      type: string
+      enum:
+      - shield
+      - S3
+      - GCS
+      - BigQuery
+      - engine_internal
+      - odbc
+      - snowflake
+      - databricks
+      - AzureBlob
+      title: ConnectorType
+    ResourceList_AvailableDataset_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/AvailableDataset'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[AvailableDataset]
+    PostDatasetJoinSpec:
+      properties:
+        left_dataset_id:
+          type: string
+          format: uuid
+          title: Left Dataset Id
+          description: ID of the first dataset.
+        right_dataset_id:
+          type: string
+          format: uuid
+          title: Right Dataset Id
+          description: ID of the second dataset.
+        left_dataset_join_key:
+          type: string
+          format: uuid
+          title: Left Dataset Join Key
+          description: Column ID from the left dataset to use as a join key.
+        right_dataset_join_key:
+          type: string
+          format: uuid
+          title: Right Dataset Join Key
+          description: Column ID from the right dataset to use as a join key.
+        join_type:
+          $ref: '#/components/schemas/DatasetJoinKind'
+          description: Kind of SQL join to perform
+          default: left_outer
+      type: object
+      required:
+      - left_dataset_id
+      - right_dataset_id
+      - left_dataset_join_key
+      - right_dataset_join_key
+      title: PostDatasetJoinSpec
+    PutDatasetSchema:
+      properties:
+        alias_mask:
+          additionalProperties:
+            type: string
+          propertyNames:
+            format: uuid
+          type: object
+          title: Alias Mask
+        columns:
+          items:
+            $ref: '#/components/schemas/DatasetColumn'
+          type: array
+          title: Columns
+      type: object
+      required:
+      - alias_mask
+      - columns
+      title: PutDatasetSchema
+    DatasetObjectType:
+      properties:
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          default: []
+        nullable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Nullable
+          default: true
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the schema node.
+        object:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/DatasetScalarType'
+            - $ref: '#/components/schemas/DatasetObjectType'
+            - $ref: '#/components/schemas/DatasetListType'
+          type: object
+          title: Object
+      type: object
+      required:
+      - object
+      title: DatasetObjectType
+    InternalServerError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Internal server error
+      type: object
+      title: InternalServerError
+    DatasetLocator:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/DatasetLocatorField'
+          type: array
+          title: Fields
+          description: Fields directing to the location of the dataset within the connector. Schema defined on connector schema.
+      type: object
+      required:
+      - fields
+      title: DatasetLocator
     Dataset:
       properties:
         created_at:
@@ -1544,6 +1471,127 @@ components:
       - project_id
       - model_problem_type
       title: Dataset
+    PutAvailableDataset:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          anyOf:
+          - $ref: '#/components/schemas/PutDatasetSchema'
+          - type: 'null'
+          description: Schema definition of the dataset.
+        model_problem_type:
+          anyOf:
+          - $ref: '#/components/schemas/ModelProblemType'
+          - type: 'null'
+          description: Model problem type associated with the dataset.
+        dataset_join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/PostDatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        is_static:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+      type: object
+      title: PutAvailableDataset
+    SortOrder:
+      type: string
+      enum:
+      - asc
+      - desc
+      title: SortOrder
+    DatasetLocatorField:
+      properties:
+        key:
+          type: string
+          title: Key
+          description: Name of dataset locator field.
+        value:
+          type: string
+          title: Value
+          description: Value of dataset locator field.
+      type: object
+      required:
+      - key
+      - value
+      title: DatasetLocatorField
+    DatasetListType:
+      properties:
+        tag_hints:
+          items:
+            $ref: '#/components/schemas/ScopeSchemaTag'
+          type: array
+          title: Tag Hints
+          default: []
+        nullable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Nullable
+          default: true
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique ID of the schema node.
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetScalarType'
+          - $ref: '#/components/schemas/DatasetObjectType'
+          - $ref: '#/components/schemas/DatasetListType'
+          title: Items
+      type: object
+      required:
+      - items
+      title: DatasetListType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     PatchDatasetLocator:
       properties:
         fields:
@@ -1556,43 +1604,49 @@ components:
           description: Fields directing to the location of the dataset within the connector. Schema defined on connector schema.
       type: object
       title: PatchDatasetLocator
-    DatasetLocator:
+    PostDataset:
       properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/DatasetLocatorField'
-          type: array
-          title: Fields
-          description: Fields directing to the location of the dataset within the connector. Schema defined on connector schema.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the dataset.
+        dataset_locator:
+          anyOf:
+          - $ref: '#/components/schemas/DatasetLocator'
+          - type: 'null'
+          description: Metadata specifying the location of the dataset within the connector. Schema defined on connector schema.
+        dataset_schema:
+          anyOf:
+          - $ref: '#/components/schemas/PutDatasetSchema'
+          - type: 'null'
+          description: Schema definition of the dataset.
+        dataset_join_spec:
+          anyOf:
+          - $ref: '#/components/schemas/PostDatasetJoinSpec'
+          - type: 'null'
+          description: Field for defining a dataset as a join between two other datasets.
+        model_problem_type:
+          $ref: '#/components/schemas/ModelProblemType'
+          description: Model problem type associated with the dataset.
+        is_static:
+          type: boolean
+          title: Is Static
+          description: Whether this dataset has no time dimension. Static datasets are fully loaded on each metrics run.
+          default: false
       type: object
       required:
-      - fields
-      title: DatasetLocator
-    ResourceList_Dataset_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Dataset'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Dataset]
-    HTTPValidationError:
+      - model_problem_type
+      title: PostDataset
+    BadRequestError:
       properties:
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+          default: Bad Request
       type: object
-      title: HTTPValidationError
+      title: BadRequestError
     DatasetColumn:
       properties:
         id:
@@ -1614,112 +1668,58 @@ components:
       - source_name
       - definition
       title: DatasetColumn
-    SortOrder:
+    ResourceList_Dataset_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Dataset'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Dataset]
+    AvailableDatasetsSort:
       type: string
       enum:
-      - asc
-      - desc
-      title: SortOrder
-    DatasetSchema:
+      - created_at
+      - updated_at
+      - name
+      title: AvailableDatasetsSort
+    JoinedDataset:
       properties:
-        alias_mask:
-          additionalProperties:
-            type: string
-          propertyNames:
-            format: uuid
-          type: object
-          title: Alias Mask
-        columns:
-          items:
-            $ref: '#/components/schemas/DatasetColumn'
-          type: array
-          title: Columns
-        column_names:
-          additionalProperties:
-            type: string
-          propertyNames:
-            format: uuid
-          type: object
-          title: Column Names
-          readOnly: true
-      type: object
-      required:
-      - alias_mask
-      - columns
-      - column_names
-      title: DatasetSchema
-    PostDatasetJoinSpec:
-      properties:
-        left_dataset_id:
-          type: string
-          format: uuid
-          title: Left Dataset Id
-          description: ID of the first dataset.
-        right_dataset_id:
-          type: string
-          format: uuid
-          title: Right Dataset Id
-          description: ID of the second dataset.
-        left_dataset_join_key:
-          type: string
-          format: uuid
-          title: Left Dataset Join Key
-          description: Column ID from the left dataset to use as a join key.
-        right_dataset_join_key:
-          type: string
-          format: uuid
-          title: Right Dataset Join Key
-          description: Column ID from the right dataset to use as a join key.
-        join_type:
-          $ref: '#/components/schemas/DatasetJoinKind'
-          description: Kind of SQL join to perform
-          default: left_outer
-      type: object
-      required:
-      - left_dataset_id
-      - right_dataset_id
-      - left_dataset_join_key
-      - right_dataset_join_key
-      title: PostDatasetJoinSpec
-    DatasetObjectType:
-      properties:
-        tag_hints:
-          items:
-            $ref: '#/components/schemas/ScopeSchemaTag'
-          type: array
-          title: Tag Hints
-          default: []
-        nullable:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Nullable
-          default: true
         id:
           type: string
           format: uuid
           title: Id
-          description: Unique ID of the schema node.
-        object:
-          additionalProperties:
-            anyOf:
-            - $ref: '#/components/schemas/DatasetScalarType'
-            - $ref: '#/components/schemas/DatasetObjectType'
-            - $ref: '#/components/schemas/DatasetListType'
-          type: object
-          title: Object
+          description: ID of dataset.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of dataset.
+        column_id:
+          type: string
+          format: uuid
+          title: Column Id
+          description: Column ID to use as the join key.
+        column_name:
+          type: string
+          title: Column Name
+          description: Name of column used as join key.
       type: object
       required:
-      - object
-      title: DatasetObjectType
-    NotFoundError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Resource not found
-      type: object
-      title: NotFoundError
+      - id
+      - name
+      - column_id
+      - column_name
+      title: JoinedDataset
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2

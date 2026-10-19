@@ -544,6 +544,39 @@ components:
       - records
       - pagination
       title: ResourceList[GroupMembership]
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: The current page number. Page 1 is the first page.
+          default: 1
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of records per page.
+          default: 20
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages.
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records across all pages.
+      type: object
+      required:
+      - total_pages
+      - total_records
+      title: Pagination
+    NotFoundError:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: Resource not found
+      type: object
+      title: NotFoundError
     GroupMembership:
       properties:
         created_at:
@@ -577,57 +610,68 @@ components:
       - group_id
       - user_id
       title: GroupMembership
-    Pagination:
+    ResourceList_User_:
       properties:
-        page:
-          type: integer
-          title: Page
-          description: The current page number. Page 1 is the first page.
-          default: 1
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of records per page.
-          default: 20
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages.
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records across all pages.
-      type: object
-      required:
-      - total_pages
-      - total_records
-      title: Pagination
-    ValidationError:
-      properties:
-        loc:
+        records:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/User'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - records
+      - pagination
+      title: ResourceList[User]
+    PatchGroup:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The group's name.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The group's description.
+      type: object
+      title: PatchGroup
+    UserType:
+      type: string
+      enum:
+      - user
+      - data_plane
+      - service_account
+      title: UserType
+    ResourceList_Group_:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Group'
+          type: array
+          title: Records
+          description: List of records.
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information.
+      type: object
+      required:
+      - records
+      - pagination
+      title: ResourceList[Group]
+    GroupSort:
+      type: string
+      enum:
+      - name
+      - created_at
+      - updated_at
+      title: GroupSort
     PostGroup:
       properties:
         name:
@@ -651,6 +695,27 @@ components:
       required:
       - name
       title: PostGroup
+    UserSort:
+      type: string
+      enum:
+      - name
+      - email
+      - created_at
+      - updated_at
+      title: UserSort
+    PostGroupMembership:
+      properties:
+        user_ids:
+          items:
+            type: string
+            format: uuid4
+          type: array
+          title: User Ids
+          description: The ID of the user to add to the group.
+      type: object
+      required:
+      - user_ids
+      title: PostGroupMembership
     DeleteGroupMembership:
       properties:
         user_ids:
@@ -664,14 +729,6 @@ components:
       required:
       - user_ids
       title: DeleteGroupMembership
-    BadRequestError:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: Bad Request
-      type: object
-      title: BadRequestError
     InternalServerError:
       properties:
         detail:
@@ -756,90 +813,6 @@ components:
       - user_type
       - organization_name
       title: User
-    GroupSort:
-      type: string
-      enum:
-      - name
-      - created_at
-      - updated_at
-      title: GroupSort
-    PostGroupMembership:
-      properties:
-        user_ids:
-          items:
-            type: string
-            format: uuid4
-          type: array
-          title: User Ids
-          description: The ID of the user to add to the group.
-      type: object
-      required:
-      - user_ids
-      title: PostGroupMembership
-    UserType:
-      type: string
-      enum:
-      - user
-      - data_plane
-      - service_account
-      title: UserType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ResourceList_Group_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/Group'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[Group]
-    ResourceList_User_:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/User'
-          type: array
-          title: Records
-          description: List of records.
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information.
-      type: object
-      required:
-      - records
-      - pagination
-      title: ResourceList[User]
-    PatchGroup:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: The group's name.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The group's description.
-      type: object
-      title: PatchGroup
     Group:
       properties:
         name:
@@ -898,22 +871,49 @@ components:
       - asc
       - desc
       title: SortOrder
-    UserSort:
-      type: string
-      enum:
-      - name
-      - email
-      - created_at
-      - updated_at
-      title: UserSort
-    NotFoundError:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BadRequestError:
       properties:
         detail:
           type: string
           title: Detail
-          default: Resource not found
+          default: Bad Request
       type: object
-      title: NotFoundError
+      title: BadRequestError
   securitySchemes:
     OAuth2AuthorizationCode:
       type: oauth2
